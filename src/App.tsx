@@ -1,32 +1,46 @@
 import { useEffect, useState } from 'react';
 
 function App() {
-    const [data, setData] = useState('');
-
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await fetch('/apples', {
-                    method: 'GET',
-                });
-                if (response.ok) {
-                    const result = await response.text();
-                    console.log('Result: ', result);
-                    setData(result);
-                }
-            } catch (error) {
-                console.error('Error', error);
+        const Oauth = async () => {
+            const response = await fetch('/api/v1/oauth2/status', {
+                method: 'GET',
+                headers: {
+                    Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+                },
+            });
+            if (response.ok) {
+                const data = await response.json();
+                console.log('Oauth status', data);
             }
         };
+        Oauth();
 
-        fetchData();
+        const login = async () => {
+            const body = {
+                email: 'user@example.com',
+                password: 'password123',
+            };
+            const response = await fetch('/api/v1/oauth2/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(body),
+                credentials: 'include',
+            });
+            if (response.ok) {
+                const data = await response.json();
+                console.log('login', data);
+            } else {
+                console.error('에러');
+            }
+        };
+        login();
     }, []);
     return (
         <div>
             <div>MSW로 받아온 데이터</div>
-            <div>
-                <pre>{data}</pre>
-            </div>
         </div>
     );
 }
