@@ -6,7 +6,7 @@ function App() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch('/resource', {
+                const response = await fetch('/apples', {
                     method: 'GET',
                 });
                 if (response.ok) {
