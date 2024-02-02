@@ -4,6 +4,7 @@ function App() {
     const [memberId, setMemberId] = useState<string>();
     const [status, setStatus] = useState<string>();
     const [nickname, setNickname] = useState<string>();
+    const [projectId, setProjectId] = useState<string>();
 
     useEffect(() => {
         //회원 전체 조회
@@ -94,12 +95,48 @@ function App() {
             console.error('에러');
         }
     };
-
     const handleNickname: ChangeEventHandler<HTMLInputElement> = (e) => {
         setNickname(e.target.value);
     };
     const SeeNickname = () => {
         Nickname();
+    };
+    // 프로젝트 보관 or 삭제
+    type HttpMethod = 'POST' | 'DELETE';
+    const handleStorage = async (method: HttpMethod) => {
+        const response = await fetch(`/v1/members/storage/${projectId}`, {
+            method: method,
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+            },
+            body: JSON.stringify({ projectId: projectId }),
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            console.log(`프로젝트 ${method}`, data);
+        } else {
+            console.error('에러');
+        }
+    };
+
+    const ProjectStorage = async () => {
+        await handleStorage('POST');
+    };
+
+    const ProjectDelete = async () => {
+        await handleStorage('DELETE');
+    };
+
+    const handleProjectStorage: ChangeEventHandler<HTMLInputElement> = (e) => {
+        setProjectId(e.target.value);
+    };
+    const SeeProjectStorage = () => {
+        ProjectStorage();
+    };
+    const SeeProjectDelete = () => {
+        ProjectDelete();
     };
 
     return (
@@ -114,6 +151,10 @@ function App() {
             <br />
             <input value={nickname} onChange={handleNickname}></input>
             <button onClick={SeeNickname}>닉네임 변경</button>
+            <br />
+            <input value={projectId} onChange={handleProjectStorage}></input>
+            <button onClick={SeeProjectStorage}>프로젝트 보관</button>
+            <button onClick={SeeProjectDelete}>프로젝트 삭제</button>
         </div>
     );
 }
