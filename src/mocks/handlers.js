@@ -90,7 +90,11 @@ export const handlers = [
     //Member//
     //회원 전체 조회
     http.get('/v1/members/all', () => {
-        return HttpResponse.json({ List });
+        return HttpResponse.json({
+            status: 'SUCCESS',
+            message: '회원 전체 조회 성공',
+            data: List,
+        });
     }),
     //회원 정보 조회
     http.get('/v1/members/:memberId', (request) => {
