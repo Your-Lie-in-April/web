@@ -104,7 +104,7 @@ export const handlers = [
     http.put('/v1/members/:status', (request) => {
         const Status = request.params.status;
         return HttpResponse.json({
-            commonResponse: 'SUCCESS',
+            status: 'SUCCESS',
             message: '상태메세지 설정 성공',
             data: Status,
         });
@@ -114,7 +114,7 @@ export const handlers = [
         const newNickname = await request.json();
         const { projectId, nickname } = newNickname;
         return HttpResponse.json({
-            commonResponse: 'SUCCESS',
+            status: 'SUCCESS',
             message: '닉네임 재설정 성공',
             data: nickname + '으로 변경 완료',
         });
@@ -123,7 +123,7 @@ export const handlers = [
     http.post('/v1/members/storage/:projectId', (request) => {
         const projectId = request.params.projectId;
         return HttpResponse.json({
-            commonResponse: 'SUCCESS',
+            status: 'SUCCESS',
             message: `${projectId}번 프로젝트 보관 성공`,
             data: projectId,
         });
@@ -132,7 +132,7 @@ export const handlers = [
     http.delete('/v1/members/storage/:projectId', (request) => {
         const projectId = request.params.projectId;
         return HttpResponse.json({
-            commonResponse: 'SUCCESS',
+            status: 'SUCCESS',
             message: `${projectId}번 프로젝트 삭제 성공`,
             data: null,
         });
@@ -163,7 +163,7 @@ export const handlers = [
         const newSchedule = await response.json();
         const { projectId, schedule } = newSchedule;
         return HttpResponse.json({
-            commonResponse: 'SUCCESS',
+            status: 'SUCCESS',
             message: `${projectId}번 프로젝트 시간표 생성 성공`,
             data: schedule,
         });
@@ -173,7 +173,7 @@ export const handlers = [
         const newSchedule = await response.json();
         const { projectId, schedule } = newSchedule;
         return HttpResponse.json({
-            commonResponse: 'SUCCESS',
+            status: 'SUCCESS',
             message: `${projectId}번 프로젝트 시간표 수정 성공`,
             data: schedule,
         });
@@ -183,7 +183,7 @@ export const handlers = [
         const deleteSchedule = await response.json();
         const { projectId, startDate, endDate } = deleteSchedule;
         return HttpResponse.json({
-            commonResponse: 'SUCCESS',
+            status: 'SUCCESS',
             message: `${projectId}번 프로젝트 시간표 삭제 성공`,
             data: null,
         });
