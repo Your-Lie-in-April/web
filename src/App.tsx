@@ -28,6 +28,7 @@ function App() {
                 console.log('프로젝트목록', data);
             }
         };
+        Projects();
         //스케쥴 전체 조회
         const Schedules = async () => {
             const response = await fetch('/v1/schedules/all', {
