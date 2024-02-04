@@ -18,6 +18,16 @@ function App() {
             }
         };
         Members();
+        //프로젝트 전체 조회
+        const Projects = async () => {
+            const response = await fetch('/v1/projects/all', {
+                method: 'GET',
+            });
+            if (response.ok) {
+                const data = await response.json();
+                console.log('프로젝트목록', data);
+            }
+        };
         //스케쥴 전체 조회
         const Schedules = async () => {
             const response = await fetch('/v1/schedules/all', {
