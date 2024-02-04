@@ -101,7 +101,11 @@ export const handlers = [
         const MemberId = request.params.memberId;
         const MemberResponse = List.find((member) => member.memberId === parseInt(MemberId));
         if (MemberResponse) {
-            return HttpResponse.json(MemberResponse);
+            return HttpResponse.json({
+                status: 'SUCCESS',
+                message: '회원 정보 조회 성공',
+                data: MemberResponse,
+            });
         }
     }),
     //상태메시지 설정
@@ -110,7 +114,7 @@ export const handlers = [
         return HttpResponse.json({
             status: 'SUCCESS',
             message: '상태메세지 설정 성공',
-            data: Status,
+            data: null,
         });
     }),
     //닉네임 재설정
@@ -120,7 +124,7 @@ export const handlers = [
         return HttpResponse.json({
             status: 'SUCCESS',
             message: '닉네임 재설정 성공',
-            data: nickname + '으로 변경 완료',
+            data: null,
         });
     }),
     //프로젝트 보관
@@ -129,7 +133,7 @@ export const handlers = [
         return HttpResponse.json({
             status: 'SUCCESS',
             message: `${projectId}번 프로젝트 보관 성공`,
-            data: projectId,
+            data: null,
         });
     }),
     //프로젝트 삭제
@@ -145,7 +149,11 @@ export const handlers = [
     //Schedule
     //시간표 전체 조회
     http.get('/v1/schedules/all', () => {
-        return HttpResponse.json(ScheduleList);
+        return HttpResponse.json({
+            status: 'SUCCESS',
+            message: '시간표 전체 조회 성공',
+            data: ScheduleList,
+        });
     }),
     //프로젝트 내 모든 사용자 시간표 조회
     http.get('/v1/projects/:projectId/schedules', () => {
@@ -154,13 +162,24 @@ export const handlers = [
             ...schedule,
             schedule: schedule.schedule.filter((item) => item.startAt >= startdata && item.endAt <= enddata),
         }));
-        return HttpResponse.json(filteredSchedules);
+        return HttpResponse.json({
+            status: 'SUCCESS',
+            message: '프로젝트 내 모든 사용자 시간표 조회 성공',
+            data: filteredSchedules,
+        });
     }),
     //사용자 시간표 조회
     http.get('/v1/projects/:projectId/members/:memberId/schedules', () => {
         const projectId = request.params.projcetId;
         const memberId = request.params.memberId;
-        return HttpResponse.json(ScheduleList);
+        const filteredSchedules = ScheduleList.filter(
+            (schedule) => (schedule.projcetId === schedule.memberId) === memberId
+        );
+        return HttpResponse.json({
+            status: 'SUCCESS',
+            message: '사용자 시간표 조회 성공',
+            data: filteredSchedules,
+        });
     }),
     //시간표 생성
     http.post('/v1/projects/:projectId/schedules', async ({ request }) => {
@@ -169,7 +188,7 @@ export const handlers = [
         return HttpResponse.json({
             status: 'SUCCESS',
             message: `${projectId}번 프로젝트 시간표 생성 성공`,
-            data: schedule,
+            data: null,
         });
     }),
     //시간표 수정
@@ -179,7 +198,7 @@ export const handlers = [
         return HttpResponse.json({
             status: 'SUCCESS',
             message: `${projectId}번 프로젝트 시간표 수정 성공`,
-            data: schedule,
+            data: null,
         });
     }),
     //시간표 삭제
