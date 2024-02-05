@@ -8,7 +8,6 @@ const AlarmDiv = styled.div`
     width: 312px;
     height: 918px;
     background-color: #f5f5f5;
-    margin-left: 100px;
     border-radius: 10px;
 `;
 
