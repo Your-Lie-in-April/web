@@ -1,22 +1,29 @@
-import { useEffect, useState, FC } from 'react';
+import { FC } from 'react';
 import styled from 'styled-components';
 
 const defaultImg = 'src/pics/default.png';
 const LoginDiv = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     width: 312px;
     height: 218px;
     border-radius: 10px;
+    margin-left: 50px;
 `;
+
 const ImageDiv = styled.div`
     width: 112px;
     height: 112px;
-    margintop: 16px;
+    margin-top: 16px;
 `;
-const Text = styled.text`
-    font: pretendard;
+
+const Text = styled.div`
+    font-family: 'pretendard';
     font-weight: 500;
     font-size: 14px;
-    margintop: 16px;
+    color: #a4a4a4;
+    margin-top: 16px;
 `;
 
 const Login: FC = () => {
@@ -25,7 +32,7 @@ const Login: FC = () => {
             <ImageDiv>
                 <img src={defaultImg} alt="Default Image" />
             </ImageDiv>
-            <Text></Text>
+            <Text>로그인 되어 있지 않음</Text>
         </LoginDiv>
     );
 };
