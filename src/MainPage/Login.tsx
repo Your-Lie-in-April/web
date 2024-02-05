@@ -1,7 +1,11 @@
-import { useEffect, useState } from 'react';
-const defaultImg = 'C:UsersadminOneDrive - inu.ac.kr그림타임피스 사진들기본이미지.png';
+import { useEffect, useState, FC } from 'react';
+import styled from 'styled-components';
 
-function Login() {
-    const [image, setImage];
-    return <img src="defaultImg" />;
-}
+const defaultImg = 'src/pics/default.png';
+const Login: FC = () => {
+    const [image, setImage] = useState<boolean>(false);
+
+    return <img src={defaultImg} alt="Default Image" />;
+};
+
+export default Login;
