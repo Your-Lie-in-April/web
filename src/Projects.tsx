@@ -26,23 +26,32 @@ const DetailBox = styled.div`
   width: 300px;
   height: 96px;
   border-radius: 0px 0px 16px 16px;
-  background-color: #c0c0c0;
+  background-color: #ffffff;
 `;
 
 const ProjectName = styled.div`
   margin: 8px;
   width: 284px;
-  font-family: "pretendard";
-  font-weight: 500;
+  font-family: Pretendard;
+  font-weight: 700;
   font-size: 24px;
+  font-style: normal;
+  line-height: normal;
+  text-transform: uppercase;
+  color: #000000;
 `;
 
-const DetailText = styled.text`
+const DetailText = styled.div`
   margin: 0px 8px 8px 8px;
   width: 284px;
+  height: 43px;
   font-family: "pretendard";
-  font-weight: 500;
+  font-weight: 400;
   font-size: 16px;
+  font-style: normal;
+  line-height: normal;
+  text-transform: uppercase;
+  color: #000000;
 `;
 
 const StyledMoreBtn = styled(MoreVertIcon)`
@@ -74,10 +83,15 @@ const MoreItem = styled.div`
   cursor: pointer;
 `;
 
-const MoreText = styled.text`
-  font-family: "pretendard";
-  font-weight: 500;
+const MoreText = styled.div`
+  font-family: Pretendard;
+  font-weight: 400;
   font-size: 10px;
+  font-style: normal;
+  line-height: normal;
+  text-transform: uppercase;
+  margin: auto;
+  margin-top: 0px;
 `;
 
 const StyledPushPin = styled(PushPinOutlinedIcon)`
@@ -126,7 +140,10 @@ const ProjectComponent: React.FC<ProjectComponentProps> = ({
 
 const Projects = () => {
   const projects = [
-    { name: "앱센터 1", description: "앱센터 1 프로젝트" },
+    {
+      name: "2023 여름방학 프로젝트",
+      description: "2023 앱센터 프로젝트 입니다.",
+    },
     { name: "앱센터 2", description: "앱센터 2 프로젝트" },
     { name: "앱센터 3", description: "앱센터 3 프로젝트" },
     { name: "앱센터 4", description: "앱센터 4 프로젝트" },

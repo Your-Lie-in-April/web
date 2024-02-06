@@ -24,16 +24,19 @@ const ProjectText = styled.div`
   height: 76px;
   margin-top: 148px;
   margin-left: 24px;
-  font-family: "pretendard";
+  font-family: Pretendard;
   font-weight: 800;
   font-size: 32px;
+  line-height: normal;
 `;
 
 const DetailText = styled.div`
   position: absolute;
-  font-family: "pretendard";
+  font-family: Pretendard;
   font-weight: 500;
   font-size: 16px;
+  line-height: normal;
+  font-style: normal;
 `;
 
 const MemberText = styled(DetailText)`
