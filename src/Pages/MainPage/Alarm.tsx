@@ -12,7 +12,7 @@ const AlarmDiv = styled.div`
 `;
 
 const AlarmText = styled.div`
-    width: 50px;
+    width: 39px;
     height: 26px;
     font-family: 'Pretendard';
     font-style: normal;
@@ -21,6 +21,9 @@ const AlarmText = styled.div`
     line-height: 26px;
     color: #a4a4a4;
     margin: 24px auto;
+    margin-top: 24px;
+    opacity: 0.9;
+    white-space: nowrap;
 `;
 
 const CommingSoon = styled.div`

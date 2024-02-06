@@ -9,6 +9,7 @@ const LoginDiv = styled.div`
     width: 312px;
     height: 218px;
     border-radius: 10px;
+    background-color: #ffffff;
 `;
 
 const ImageDiv = styled.div`
@@ -22,7 +23,7 @@ const Text = styled.div`
     font-weight: 500;
     font-size: 14px;
     color: #a4a4a4;
-    margin-top: 16px;
+    margin-top: 12px;
 `;
 
 const Login: FC = () => {

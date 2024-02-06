@@ -6,10 +6,11 @@ const SearchDiv = styled.div`
     height: 70px;
     left: 650px;
     top: 470px;
-    background: black;
+    background: #ffffff;
     border-radius: 40px;
     align-items: center;
     display: flex;
+    position: absolute;
 `;
 const SearchInput = styled.input`
     margin-left: 28px;
@@ -20,6 +21,7 @@ const SearchInput = styled.input`
     border: none;
     outline: none;
     background: transparent;
+    opacity: 0.9;
 `;
 const Search: FC = () => {
     return (

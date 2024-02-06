@@ -2,7 +2,7 @@ import { FC } from 'react';
 import styled from 'styled-components';
 
 const AfterLoginDiv = styled.div`
-    width: 1920px;
+    width: 100%;
     height: 100px;
     background-color: #f1f1f1;
     display: flex;
@@ -21,7 +21,7 @@ const Logo = styled.div`
 const LogIn = styled.div`
     font-family: 'Pretendard';
     font-style: normal;
-    font-weight: 500;
+    font-weight: 800;
     font-size: 22px;
     margin-right: 319.41px;
     margin-top: 55px;

@@ -7,18 +7,31 @@ const NewProjectDiv = styled.div`
     border-radius: 40px;
     background-color: #633ae2;
     text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    left: 1451px;
+    top: 470px;
 `;
-const NewProjectText = styled.text`
+
+const NewProjectText = styled.div`
     color: #ffffff;
     font-size: 22px;
     font-weight: 800;
     font-family: 'Pretendard';
-    margin: auto 0;
+    letter-spacing: 0px;
+    line-height: 1;
 `;
+
 const NewProject: FC = () => {
     return (
         <NewProjectDiv>
-            <NewProjectText>NEW PROJECT</NewProjectText>
+            <NewProjectText>
+                NEW
+                <br />
+                PROJECT
+            </NewProjectText>
         </NewProjectDiv>
     );
 };

@@ -14,25 +14,27 @@ const Logo = styled.div`
     font-weight: 700;
     width: 173px;
     font-size: 32px;
+    line-height: 38px;
     margin-top: 49px;
-    margin: auto;
+    margin-left: 873.5px;
     margin-bottom: 13px;
 `;
 const LogIn = styled.div`
     font-family: 'Pretendard';
     font-style: normal;
-    font-weight: 500;
+    font-weight: 550;
     font-size: 22px;
-    margin-right: 319.33px;
     margin-top: 55px;
-    margin-bottom: 19px;
+    margin-bottom: 21px;
 `;
 
 const BeforeLogin: FC = () => {
     return (
         <BeforeLoginDiv>
             <Logo>TIME PIECE</Logo>
-            <LogIn>Log in</LogIn>
+            <div style={{ marginLeft: '493.17px' }}>
+                <LogIn>Log in</LogIn>
+            </div>
         </BeforeLoginDiv>
     );
 };
