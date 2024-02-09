@@ -5,6 +5,7 @@ import Alarm from './Alarm';
 import NewProject from './NewProject';
 import Search from './Search';
 import BeforeLogin from '../Layouts/BeforeLogin';
+import Banner from './Banner';
 const MainPageContainer = styled.div`
     position: relative;
     margin-left: auto;
@@ -17,6 +18,7 @@ const MainPage: FC = () => {
     return (
         <MainPageContainer>
             <BeforeLogin />
+            <Banner />
             <div style={{ backgroundColor: '#212121' }}>
                 <div style={{ marginLeft: '320px', marginTop: '370px' }}>
                     <Login />
