@@ -34,19 +34,19 @@ const slideAnimation = keyframes`
 `;
 
 const Container = styled.div`
-    width: 100vw;
+    width: 100%;
     overflow: hidden;
 `;
 
 const BannerWrapper = styled.div`
     display: flex;
-    width: 300%; /* BannerDiv가 3개이므로 너비는 3배로 설정 */
+    width: 300%;
 `;
 
 const BannerDiv = styled.div`
     flex: 1;
     white-space: nowrap;
-    animation: ${slideAnimation} 30s linear infinite; /* 애니메이션 적용 (30초 동안 왼쪽에서 오른쪽으로 이동, 무한 반복) */
+    animation: ${slideAnimation} 30s linear infinite;
 `;
 
 const BannerText = styled.div`
