@@ -24,7 +24,7 @@ const ProjectText = styled.div`
   height: 76px;
   margin-top: 148px;
   margin-left: 24px;
-  font-family: Pretendard;
+  font-family: "Pretendard";
   font-weight: 800;
   font-size: 32px;
   line-height: normal;
@@ -32,7 +32,7 @@ const ProjectText = styled.div`
 
 const DetailText = styled.div`
   position: absolute;
-  font-family: Pretendard;
+  font-family: "Pretendard";
   font-weight: 500;
   font-size: 16px;
   line-height: normal;
