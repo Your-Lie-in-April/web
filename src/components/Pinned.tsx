@@ -48,28 +48,21 @@ const DetailText = styled.text`
 `;
 
 const Pinned = () => {
-  const projects: ProjectData[] = usePinProject();
   return (
     <PinnedBox>
-      {projects.length > 0 && (
-        <>
-          <StyledPushPin sx={{ fontSize: 36 }} />
-          {projects.map((project) => (
-            <TextDiv key={project.projectId}>
-              <ProjectText>
-                {project.title}
-                <br />
-                {project.title}
-              </ProjectText>
-              <DetailText>{project.description}</DetailText>
-              <DetailText>
-                프로젝트 기간 <br />
-                {project.startDate} ~{project.endDate}
-              </DetailText>
-            </TextDiv>
-          ))}
-        </>
-      )}
+      <StyledPushPin sx={{ fontSize: 36 }} />
+      <TextDiv>
+        <ProjectText>
+          프로젝트명
+          <br />
+          프로젝트명
+        </ProjectText>
+        <DetailText>멤버 00명</DetailText>
+        <DetailText>
+          프로젝트 기간 <br />
+          20xx.xx.xx ~20xx.xx.xx
+        </DetailText>
+      </TextDiv>
     </PinnedBox>
   );
 };

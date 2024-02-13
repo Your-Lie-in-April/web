@@ -104,7 +104,7 @@ const StyledInBox = styled(InboxOutlinedIcon)`
   fontsize: 32;
 `;
 
-const Project = ({ title, description }: ProjectData) => {
+const Project = () => {
   const [showMore, setShowMore] = useState(false);
   const toggleMoreBtn = () => {
     setShowMore(!showMore);
@@ -127,10 +127,10 @@ const Project = ({ title, description }: ProjectData) => {
       )}
       <TextBox>
         <DetailDiv>
-          <ProjectName>{title}</ProjectName>
+          <ProjectName>2023 여름방학 프로젝트</ProjectName>
         </DetailDiv>
         <DetailDiv>
-          <DetailText>{description}</DetailText>
+          <DetailText>2023 앱센터 프로젝트 입니다.</DetailText>
         </DetailDiv>
       </TextBox>
     </ProjectBox>

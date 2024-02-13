@@ -10,22 +10,13 @@ const GridContainer = styled.div`
 `;
 
 const ProjectList = () => {
-  const projects: ProjectData[] = useProjectList();
-
-  if (projects.length === 0) {
-    return <div>No projects available.</div>;
-  }
-
   return (
     <GridContainer>
-      {projects.map((project) => (
-        <Project
-          key={project.projectId}
-          projectId={project.projectId}
-          title={project.title}
-          description={project.description}
-        />
-      ))}
+      <Project />
+      <Project />
+      <Project />
+      <Project />
+      <Project />
     </GridContainer>
   );
 };
