@@ -3,8 +3,8 @@ import Info from './Pages/ProjectPage/Info';
 function App() {
     return (
         <div>
-            <MainPage />
-            {/* <Info /> */}
+            {/* <MainPage /> */}
+            <Info />
         </div>
     );
 }

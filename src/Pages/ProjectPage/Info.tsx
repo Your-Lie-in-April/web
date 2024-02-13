@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useState, ChangeEvent } from 'react';
 import styled from 'styled-components';
 
 const Container = styled.div`
@@ -27,7 +27,7 @@ const Title = styled.div`
 `;
 const TitleText = styled.input`
     display: flex;
-    width: 765px;
+    width: 730px;
     padding: 8px;
     font-weight: bold;
     font-size: 32px;
@@ -53,7 +53,7 @@ const Content = styled.div`
     gap: 8px;
 `;
 
-const ContentText = styled.input`
+const ContentText = styled.textarea`
     color: #7d7d7d;
     text-align: center;
     font-family: Pretendard;
@@ -64,10 +64,12 @@ const ContentText = styled.input`
     line-height: normal;
     border: transparent;
     outline: none;
-
+    resize: none;
+    max-height: 68px;
     &:focus {
         outline: none;
     }
+    overflow: hidden;
 `;
 
 const Make = styled.div`
@@ -89,13 +91,36 @@ const Make = styled.div`
 `;
 
 const Info: FC = () => {
+    const [content, setContent] = useState<string>('');
+    const [isTitleClicked, setIsTitleClicked] = useState<boolean>(false);
+    const [isContentClicked, setIsContentClicked] = useState<boolean>(false);
+    const handleTextareaChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+        const inputText = e.target.value;
+        const limitedText = inputText.slice(0, 58);
+        const lines = limitedText.split('\n');
+        if (lines.length <= 2) {
+            setContent(limitedText);
+        }
+    };
+
     return (
         <Container>
             <Title>
-                <TitleText type="text" placeholder="프로젝트 제목을 작성해주세요"></TitleText>
+                <TitleText
+                    type="text"
+                    onFocus={() => setIsTitleClicked(true)}
+                    onBlur={() => setIsTitleClicked(false)}
+                    placeholder={isTitleClicked === true ? '' : '프로젝트 제목을 작성해주세요'}
+                ></TitleText>
             </Title>
             <Content>
-                <ContentText type="text" placeholder="프로젝트 내용을 작성해주세요"></ContentText>
+                <ContentText
+                    value={content}
+                    onChange={handleTextareaChange}
+                    onFocus={() => setIsContentClicked(true)}
+                    onBlur={() => setIsContentClicked(false)}
+                    placeholder={isContentClicked === true ? '' : '프로젝트 내용을 작성해주세요'}
+                />
             </Content>
             <Make>커버만들기</Make>
         </Container>
