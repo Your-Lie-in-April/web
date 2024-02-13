@@ -59,10 +59,10 @@ const ContentText = styled.input`
     font-family: Pretendard;
     font-size: 28px;
     font-style: normal;
+    width: 1500px;
     font-weight: 400;
     line-height: normal;
     border: transparent;
-    //color: ${(props) => (props.value ? '#000000' : '#7d7d7d')};
     outline: none;
 
     &:focus {
