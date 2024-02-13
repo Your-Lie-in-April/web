@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import PushPinOutlinedIcon from "@mui/icons-material/PushPinOutlined";
+import usePinProject, { ProjectData } from "../hook/usePinProject";
 
 const PinnedBox = styled.div`
   width: 950px;
@@ -13,57 +14,62 @@ const PinnedBox = styled.div`
 
 const StyledPushPin = styled(PushPinOutlinedIcon)`
   position: absolute;
-  margin-top: 16px;
-  margin-left: 16px;
+  top: 16px;
+  left: 16px;
   color: #ffffff;
 `;
 
-const ProjectText = styled.div`
+const TextDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  top: 148px;
+  left: 24px;
   position: absolute;
+`;
+
+const ProjectText = styled.text`
   width: 201px;
-  height: 76px;
-  margin-top: 148px;
-  margin-left: 24px;
+  color: #ffffff;
   font-family: "Pretendard";
-  font-weight: 800;
   font-size: 32px;
-  line-height: normal;
-`;
-
-const DetailText = styled.div`
-  position: absolute;
-  font-family: "Pretendard";
-  font-weight: 500;
-  font-size: 16px;
-  line-height: normal;
   font-style: normal;
+  font-weight: 800;
+  line-height: normal;
 `;
 
-const MemberText = styled(DetailText)`
-  margin-top: 8px;
-  position: relative;
-`;
-
-const PeriodText = styled(DetailText)`
-  margin-top: 8px;
-  white-space: nowrap;
+const DetailText = styled.text`
+  color: #ffffff;
+  font-family: "Pretendard";
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
 `;
 
 const Pinned = () => {
+  const projects: ProjectData[] = usePinProject();
   return (
     <PinnedBox>
-      <StyledPushPin sx={{ fontSize: 36 }} />
-      <ProjectText>
-        프로젝트명 프로젝트명
-        <MemberText>
-          멤버 00 명
-          <PeriodText>
-            프로젝트 기간
-            <br />
-            20XX.XX.XX ~20XX.XX.XX
-          </PeriodText>
-        </MemberText>
-      </ProjectText>
+      {projects.length > 0 && (
+        <>
+          <StyledPushPin sx={{ fontSize: 36 }} />
+          {projects.map((project) => (
+            <TextDiv key={project.projectId}>
+              <ProjectText>
+                {project.title}
+                <br />
+                {project.title}
+              </ProjectText>
+              <DetailText>{project.description}</DetailText>
+              <DetailText>
+                프로젝트 기간 <br />
+                {project.startDate} ~{project.endDate}
+              </DetailText>
+            </TextDiv>
+          ))}
+        </>
+      )}
     </PinnedBox>
   );
 };

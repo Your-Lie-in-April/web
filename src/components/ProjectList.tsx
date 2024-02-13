@@ -20,6 +20,7 @@ const ProjectList = () => {
     <GridContainer>
       {projects.map((project) => (
         <Project
+          key={project.projectId}
           projectId={project.projectId}
           title={project.title}
           description={project.description}

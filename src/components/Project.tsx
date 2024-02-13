@@ -129,7 +129,7 @@ const Project = ({ title, description }: ProjectData) => {
         <DetailDiv>
           <ProjectName>{title}</ProjectName>
         </DetailDiv>
-        <DetailDiv style={{ margin: "0px 8px 8px 4px" }}>
+        <DetailDiv>
           <DetailText>{description}</DetailText>
         </DetailDiv>
       </TextBox>
