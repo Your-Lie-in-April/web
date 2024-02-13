@@ -10,6 +10,8 @@ const LoginDiv = styled.div`
     height: 218px;
     border-radius: 10px;
     background-color: #ffffff;
+    position: absolute;
+    top: 470px;
 `;
 
 const ImageDiv = styled.div`
