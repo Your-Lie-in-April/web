@@ -2,7 +2,6 @@ import styled from "styled-components";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import PushPinOutlinedIcon from "@mui/icons-material/PushPinOutlined";
 import InboxOutlinedIcon from "@mui/icons-material/InboxOutlined";
-import { ProjectData } from "../hook/useProjectList";
 import { useState } from "react";
 
 const ProjectBox = styled.div`
@@ -75,11 +74,12 @@ const MoreBox = styled.div`
   position: absolute;
   top: 166px;
   right: 40px;
+  align-items: center;
+  justify-content: space-evenly;
 `;
 
 const MoreItem = styled.div`
   display: flex;
-  flex: 1;
   flex-direction: column;
   align-items: center;
   cursor: pointer;
@@ -95,15 +95,6 @@ const MoreText = styled.div`
   margin-top: 0px;
 `;
 
-const StyledPushPin = styled(PushPinOutlinedIcon)`
-  margin: 4px 12px 0px 12px;
-`;
-
-const StyledInBox = styled(InboxOutlinedIcon)`
-  margin: 4px 12px 0px 12px;
-  fontsize: 32;
-`;
-
 const Project = () => {
   const [showMore, setShowMore] = useState(false);
   const toggleMoreBtn = () => {
@@ -116,11 +107,11 @@ const Project = () => {
       {showMore && (
         <MoreBox>
           <MoreItem>
-            <StyledPushPin sx={{ fontSize: 18 }} />
+            <PushPinOutlinedIcon sx={{ fontSize: 18 }} />
             <MoreText>상단고정</MoreText>
           </MoreItem>
           <MoreItem>
-            <StyledInBox sx={{ fontSize: 18 }} />
+            <InboxOutlinedIcon sx={{ fontSize: 18 }} />
             <MoreText>보관함</MoreText>
           </MoreItem>
         </MoreBox>

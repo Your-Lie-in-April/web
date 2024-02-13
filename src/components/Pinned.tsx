@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import PushPinOutlinedIcon from "@mui/icons-material/PushPinOutlined";
-import usePinProject, { ProjectData } from "../hook/usePinProject";
 
 const PinnedBox = styled.div`
   width: 950px;
