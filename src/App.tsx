@@ -1,20 +1,11 @@
 import styled from "styled-components";
-import Pinned from "./components/Pinned";
-import ProjectList from "./components/ProjectList";
-
-const FlexProject = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 32px;
-`;
+import Info from "./Pages/ProjectPage/Info";
 
 function App() {
   return (
     <div>
-      <FlexProject>
-        <Pinned />
-        <ProjectList />
-      </FlexProject>
+      {/* <MainPage /> */}
+      <Info />
     </div>
   );
 }

@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import Project from "./Project";
-import useProjectList, { ProjectData } from "../hook/useProjectList";
 
 const GridContainer = styled.div`
   display: grid;
