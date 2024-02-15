@@ -5,7 +5,8 @@ const GridContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-auto-rows: minmax(auto, auto);
-  gap: 25px;
+  column-gap: 25px;
+  row-gap: 24px;
 `;
 
 const ProjectList = () => {
