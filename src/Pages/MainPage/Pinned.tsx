@@ -25,6 +25,7 @@ const TextDiv = styled.div`
   top: 148px;
   left: 24px;
   position: absolute;
+  margin-top: ;
 `;
 
 const ProjectText = styled.text`

@@ -1,35 +1,76 @@
-import { FC } from 'react';
-import styled from 'styled-components';
-import Login from './Login';
-import Alarm from './Alarm';
-import NewProject from './NewProject';
-import Search from './Search';
-import BeforeLogin from '../Layouts/BeforeLogin';
-import Banner from './Banner';
+import { FC } from "react";
+import styled from "styled-components";
+import Login from "./Login";
+import Alarm from "./Alarm";
+import NewProject from "./NewProject";
+import Search from "./Search";
+import BeforeLogin from "../Layouts/BeforeLogin";
+import Banner from "./Banner";
+import ProjectList from "./ProjectList";
+import Pinned from "./Pinned";
+
 const MainPageContainer = styled.div`
-    position: relative;
-    margin-left: auto;
-    margin-right: auto;
-    max-width: 1920px; /* 원하는 최대 너비 설정 */
-    background-color: #212121;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 1920px;
+  max-height: 1080px;
+  background-color: #212121;
+  overflow: auto;
+`;
+
+const Main = styled.div`
+  display: flex;
+  flex-direction: row;
+  margin-top: 126px;
+  justify-content: center;
 `;
 
 const MainPage: FC = () => {
-    return (
-        <MainPageContainer>
-            <BeforeLogin />
-            <Banner />
-            <div style={{ backgroundColor: '#212121' }}>
-                <div style={{ marginLeft: '320px', marginTop: '370px' }}>
-                    <Login />
-                    <div style={{ marginTop: '14px' }}>
-                        <Alarm />
-                    </div>
-                </div>
-                <Search />
-                <NewProject />
+  return (
+    <MainPageContainer>
+      <BeforeLogin />
+      <Banner />
+      <Main>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "flex-start",
+            marginRight: 20,
+          }}
+        >
+          <Login />
+          <Alarm />
+        </div>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "flex-start",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "flex-start",
+              marginBottom: 21,
+            }}
+          >
+            <div style={{ marginRight: 16 }}>
+              <Search />
             </div>
-        </MainPageContainer>
-    );
+            <NewProject />
+          </div>
+          <div style={{ marginBottom: 32 }}>
+            <Pinned />
+          </div>
+          <ProjectList />
+        </div>
+      </Main>
+      <div style={{ height: "300px" }} />
+    </MainPageContainer>
+  );
 };
+
 export default MainPage;
