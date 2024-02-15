@@ -1,12 +1,13 @@
-import MainPage from './Pages/MainPage/MainPage';
-import Info from './Pages/ProjectPage/Info';
+import styled from "styled-components";
+import Info from "./Pages/ProjectPage/Info";
+
 function App() {
-    return (
-        <div>
-            {/* <MainPage /> */}
-            <Info />
-        </div>
-    );
+  return (
+    <div>
+      {/* <MainPage /> */}
+      <Info />
+    </div>
+  );
 }
 
 export default App;
