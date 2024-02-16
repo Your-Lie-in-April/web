@@ -16,6 +16,7 @@ const MainPageContainer = styled.div`
     max-height: 1080px;
     background-color: #212121;
     overflow: auto;
+
     body {
         -ms-overflow-style: none;
     }
@@ -34,7 +35,7 @@ const Main = styled.div`
 
 const MainPage: FC = () => {
     return (
-        <MainPageContainer style={{}}>
+        <MainPageContainer>
             <BeforeLogin />
             <Banner />
             <Main>
