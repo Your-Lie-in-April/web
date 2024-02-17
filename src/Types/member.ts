@@ -1,5 +1,3 @@
-import { ProjectEntity } from './project';
-
 export type MemberEntity = {
     id: number;
     email: string;
@@ -7,6 +5,7 @@ export type MemberEntity = {
     state: string;
     profileImageUrl: string;
 };
+import { ProjectEntity } from './project';
 
 /**
  * GET members/all
