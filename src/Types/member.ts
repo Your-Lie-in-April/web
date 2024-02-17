@@ -39,3 +39,4 @@ export type ProjectStoreResDto = Pick<ProjectEntity, 'projcetId'>;
  * DELETE /members/storage/${projectId}
  */
 export type ProjectDeleteResDto = Pick<ProjectEntity, 'projcetId'>;
+//
