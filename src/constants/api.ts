@@ -13,12 +13,10 @@ export const API = {
   PROJECT_THUMBNAIL: (id?: Id) => `/projects/members/${id ?? ":id"}`,
   PROJECT_PIN: (id?: Id) => `/projects/members/${id ?? ":id"}/pin`,
   PROJECT_SEARCH: (id?: Id, keyword?: String) =>
-    `projects/members/${id}/${keyword}`,
+    `/projects/members/${id ?? ":id"}/${keyword ?? ":keyword"}`,
   PROJECT_MEMBERS: (id?: Id) => `/projects/${id ?? ":id"}/members`,
   PROJECT_ID: (id?: Id) => `/projects/${id ?? ":id"}`,
   PROJECT_INVITATION: (id?: Id) => `/projects/${id ?? `:id`}/invitation`,
   PROJECT_REMOVE_MEMBER: (projectId?: Id, memberId?: Id) =>
-    `/v1/projects/${projectId ?? ":projectId"}/members/${
-      memberId ?? ":memberId"
-    }`,
+    `/projects/${projectId ?? ":projectId"}/members/${memberId ?? ":memberId"}`,
 } as const;

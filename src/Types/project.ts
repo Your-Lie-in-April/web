@@ -7,6 +7,8 @@ export type ProjectEntity = {
   description: string;
   startDate: Date;
   endDate: Date;
+  startTime: Date;
+  endTime: Date;
   mon: boolean;
   tue: boolean;
   wed: boolean;
@@ -51,27 +53,25 @@ export type PinProjectResponse = {
 export type ProjectResDto = ProjectEntity;
 
 // GET projects/members/{memberId}
-export type ProjectMemberResDto = ProjectThumbnailResponse;
+export type ProjectThumbnailResDto = ProjectThumbnailResponse;
 
 // GET projects/members/{memberId}/pin
-export type PinProjectMemberResDto = PinProjectResponse;
+export type PinProjectResDto = PinProjectResponse;
 
 // GET projects/members/{memberId}/{keyword}
-export type ProjectSearchMemberResDto = Pick<ProjectEntity, "title">;
+export type ProjectSearchResDto = Pick<ProjectEntity, "title">;
 
 // GET projects/{projectId}/members
 export type ProjectMembersResDto = MemberEntity;
 
 // POST projects
-export type ProjectCreateReqDto = Omit<ProjectEntity, "isStored">;
+export type ProjectPostReqDto = Omit<ProjectEntity, "projectId">;
 
 // PUT projects/{projectId}
-export type ProjectUpdateReqDto = ProjectCreateReqDto;
+export type ProjectPutReqDto = ProjectPostReqDto;
 
 // DELETE projects/{projectId}
-export type ProjectDeleteReqDto = {
-  projectId: number;
-};
+export type ProjectDeleteReqDto = Pick<ProjectEntity, "projectId">;
 
 // POST projects/{projectId}/invitation
 export type ProjectInvitationReqDto = {
@@ -79,6 +79,6 @@ export type ProjectInvitationReqDto = {
 };
 
 // DELETE projects/{projectId}/members/{memberId}
-export type ProjectRemoveMemberReqDto = {
+export type ProjectDeleteMemberReqDto = {
   memberId: number;
 };
