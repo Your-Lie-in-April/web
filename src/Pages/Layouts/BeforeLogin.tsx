@@ -2,12 +2,13 @@ import { FC } from 'react';
 import styled from 'styled-components';
 
 const BeforeLoginDiv = styled.div`
-    width: 1920px;
+    width: 100%;
     height: 100px;
     background-color: #f1f1f1;
     display: flex;
     align-items: center;
 `;
+
 const Logo = styled.div`
     font-family: 'Pretendard';
     font-style: normal;
