@@ -5,8 +5,7 @@ import { DayPicker } from 'react-day-picker';
 import 'react-day-picker/dist/style.css';
 import styled from 'styled-components';
 import { ko } from 'date-fns/locale';
-import ArrowLeftIcon from '@mui/icons-material/ArrowLeft';
-import ArrowRightIcon from '@mui/icons-material/ArrowRight';
+import { IoTriangleSharp } from 'react-icons/io5';
 
 const Calendar = styled.div`
     width: 390px;
@@ -106,23 +105,25 @@ const ProjectDate: FC = () => {
     return (
         <Calendar>
             <CalendarHeader>
-                <ArrowLeftIcon
+                <IoTriangleSharp
                     style={{
-                        fontSize: '50',
+                        fontSize: '22',
                         color: '#D9D9D9',
                         marginLeft: '22px',
                         marginTop: '24px',
                         margin: '0 16px',
+                        rotate: '-90deg',
                     }}
                 />
                 <Month>{format(currentDate, 'yyyy년 MM월', { locale: ko })}</Month>
-                <ArrowRightIcon
+                <IoTriangleSharp
                     style={{
-                        fontSize: '50',
+                        fontSize: '22',
                         color: '#D9D9D9',
                         marginRight: '22px',
                         marginTop: '24px',
                         margin: '0 16px',
+                        rotate: '90deg',
                     }}
                 />
             </CalendarHeader>
