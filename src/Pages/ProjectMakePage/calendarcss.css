@@ -94,6 +94,27 @@
     text-decoration: none;
     font-weight: 600;
     content: attr(data-day);
+    &[data-day='일']::after {
+        content: 'S';
+    }
+    &[data-day='월']::after {
+        content: 'M';
+    }
+    &[data-day='화']::after {
+        content: 'T';
+    }
+    &[data-day='수']::after {
+        content: 'W';
+    }
+    &[data-day='목']::after {
+        content: 'T';
+    }
+    &[data-day='금']::after {
+        content: 'F';
+    }
+    &[data-day='토']::after {
+        content: 'S';
+    }
 }
 
 .react-calendar__month-view__days__day--neighboringMonth,

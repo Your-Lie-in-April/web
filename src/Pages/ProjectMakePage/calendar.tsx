@@ -7,15 +7,11 @@ export const StyledCalendarWrapper = styled.div`
     display: flex;
     justify-content: center;
     position: relative;
+    display: flex;
     font-size: 32px;
 
     .react-calendar__tile {
         padding: 8px;
-    }
-    .react-calendar__month-view__weekdays__weekday span,
-    .react-calendar__month-view__days__day span {
-        letter-spacing: 2px;
-        display: inline-block;
     }
 `;
 
