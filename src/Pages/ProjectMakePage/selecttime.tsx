@@ -19,10 +19,6 @@ const SelectTime: FC = () => {
         setDate(newDate);
     };
 
-    function getTileContent(date: Date) {
-        return date.getDate();
-    }
-
     return (
         <StyledCalendarWrapper style={{ display: 'flex', textAlign: 'center' }}>
             <StyledCalendar
@@ -36,7 +32,6 @@ const SelectTime: FC = () => {
                 next2Label={null}
                 prev2Label={null}
                 minDetail="year"
-                getTileContent={getTileContent}
             />
         </StyledCalendarWrapper>
     );

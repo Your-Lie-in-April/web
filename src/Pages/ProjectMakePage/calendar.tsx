@@ -7,24 +7,16 @@ export const StyledCalendarWrapper = styled.div`
     display: flex;
     justify-content: center;
     position: relative;
-
-    .react-calendar {
-        width: 390px;
-        padding: 3% 5%;
-        background-color: white;
-    }
+    font-size: 32px;
 
     .react-calendar__tile {
         padding: 8px;
     }
-
-    .react-calendar__weekday {
-        color: black;
+    .react-calendar__month-view__weekdays__weekday span,
+    .react-calendar__month-view__days__day span {
+        letter-spacing: 2px;
+        display: inline-block;
     }
 `;
 
-export const StyledCalendar = styled(Calendar)`
-    .react-calendar__tile {
-        padding: 10px;
-    }
-`;
+export const StyledCalendar = styled(Calendar)``;
