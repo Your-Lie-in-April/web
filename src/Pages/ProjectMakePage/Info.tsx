@@ -90,6 +90,23 @@ const Make = styled.div`
     margin-left: 1150px;
 `;
 
+const initalState = {
+    zoom: true,
+    active: false,
+    date: {
+        DATE: new Date(),
+        YEAR: new Date().getFullYear(),
+        MONTH: new Date().getMonth() + 1,
+        TODAY: new Date().getDate(),
+    },
+    changeMonth: new Date().getMonth() + 1,
+    changeYear: new Date().getFullYear(),
+
+    totalDate: [],
+    calendar: {},
+    select: {},
+};
+
 const Info: FC = () => {
     const [content, setContent] = useState<string>('');
     const [isTitleClicked, setIsTitleClicked] = useState<boolean>(false);

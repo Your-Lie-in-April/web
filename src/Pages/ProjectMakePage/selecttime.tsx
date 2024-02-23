@@ -19,14 +19,12 @@ const SelectTime: FC = () => {
         setDate(newDate);
     };
 
-    const handleTodayClick = () => {
-        const today = new Date();
-        setActiveStartDate(today);
-        setDate(today);
-    };
+    function getTileContent(date: Date) {
+        return date.getDate();
+    }
 
     return (
-        <StyledCalendarWrapper>
+        <StyledCalendarWrapper style={{ display: 'flex', textAlign: 'center' }}>
             <StyledCalendar
                 value={date}
                 onChange={handleDateChange}
@@ -38,6 +36,7 @@ const SelectTime: FC = () => {
                 next2Label={null}
                 prev2Label={null}
                 minDetail="year"
+                getTileContent={getTileContent}
             />
         </StyledCalendarWrapper>
     );
