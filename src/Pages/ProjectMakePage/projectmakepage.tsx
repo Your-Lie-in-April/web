@@ -1,8 +1,6 @@
 import { FC } from 'react';
 import styled from 'styled-components';
-import Info from './Info';
-import AfterLogin from '../Layouts/AfterLogin';
-import SelectTime from './selecttime';
+import SelectTime from './projectcalendar';
 const ProjectMakePageContainer = styled.div`
     margin-left: auto;
     margin-right: auto;
