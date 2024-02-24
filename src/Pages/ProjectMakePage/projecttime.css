@@ -90,7 +90,6 @@
 .react-datepicker-time__header,
 .react-datepicker-year-header {
     margin-top: 0;
-    color: #000;
     font-weight: bold;
     font-size: 0.944rem;
 }
@@ -99,6 +98,9 @@
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
+}
+input {
+    border: none;
 }
 
 .react-datepicker__navigation {
@@ -635,9 +637,6 @@
     padding: 4px;
     align-items: flex-start;
     gap: 8px;
-    outline: none !important;
-    border: none !important;
-    box-shadow: none !important;
 }
 
 .react-datepicker__input-container .react-datepicker__calendar-icon {

@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import styled from 'styled-components';
 import SelectTime from './projectcalendar';
-import Example from './projecttime';
+import ProjectTime from './projecttime';
 import AfterLogin from '../Layouts/AfterLogin';
 const ProjectMakePageContainer = styled.div`
     margin-left: auto;
@@ -23,9 +23,9 @@ const ProjectMakePageContainer = styled.div`
 const ProjectMakePage: FC = () => {
     return (
         <ProjectMakePageContainer>
-            {/* <AfterLogin />
-            <SelectTime /> */}
-            <Example />
+            <AfterLogin />
+            <SelectTime />
+            <ProjectTime />
         </ProjectMakePageContainer>
     );
 };

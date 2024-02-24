@@ -6,8 +6,7 @@ import './projecttime.css';
 
 const ProjectTimeContainer = styled.div`
     display: flex;
-    flex-direction: row;
-    justify-content: center;
+    flex-direction: column;
     width: 600px;
     height: 400px;
     background: #fff;
@@ -42,8 +41,8 @@ const Text = styled.div`
     font-size: 24px;
     font-weight: 400;
     line-height: normal;
-    margin-bottom: 12px;
-    margin-top: 12px;
+    margin-top: 42px;
+    margin: auto;
 `;
 
 const Separator = styled.span`
@@ -55,41 +54,68 @@ const Separator = styled.span`
     margin-top: 40px;
 `;
 
-const Example: FC = () => {
+const MakeWeekend = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    margin-top: 40px;
+`;
+
+const Weekend = styled.div`
+    width: 60px;
+    height: 60px;
+    border-radius: 5px;
+    background: #d9d9d9;
+`;
+
+const ProjectTime: FC = () => {
     const [startDate, setStartDate] = useState(new Date());
     const [endDate, setEndDate] = useState(new Date());
 
     return (
         <ProjectTimeContainer>
-            <DateContainer>
-                <Text>프로젝트 시작일</Text>
-                <SDatePicker
-                    locale={ko}
-                    dateFormat={'YYYY-MM-dd'}
-                    selected={startDate}
-                    onChange={(date: Date) => setStartDate(date)}
-                    startDate={startDate}
-                    onFocus={(e) => e.target.blur()}
-                />
-            </DateContainer>
+            <div
+                style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    justifyContent: 'center',
+                    marginTop: '42px',
+                }}
+            >
+                <DateContainer>
+                    <Text>프로젝트 시작일</Text>
+                    <SDatePicker
+                        locale={ko}
+                        dateFormat={'YYYY-MM-dd'}
+                        selected={startDate}
+                        onChange={(date: Date) => setStartDate(date)}
+                        startDate={startDate}
+                        onFocus={(e) => e.target.blur()}
+                    />
+                </DateContainer>
 
-            <Separator>~</Separator>
+                <Separator>~</Separator>
 
-            <DateContainer>
-                <Text>프로젝트 종료일</Text>
-                <SDatePicker
-                    locale={ko}
-                    dateFormat={'YYYY-MM-dd'}
-                    selected={endDate}
-                    onChange={(date: Date) => setEndDate(date)}
-                    selectsEnd
-                    endDate={endDate}
-                    minDate={startDate}
-                    onFocus={(e) => e.target.blur()}
-                />
-            </DateContainer>
+                <DateContainer>
+                    <Text>프로젝트 종료일</Text>
+                    <SDatePicker
+                        locale={ko}
+                        dateFormat={'YYYY-MM-dd'}
+                        selected={endDate}
+                        onChange={(date: Date) => setEndDate(date)}
+                        selectsEnd
+                        endDate={endDate}
+                        minDate={startDate}
+                        onFocus={(e) => e.target.blur()}
+                    />
+                </DateContainer>
+            </div>
+            <MakeWeekend>
+                <Text>생성할 요일</Text>
+            </MakeWeekend>
         </ProjectTimeContainer>
     );
 };
 
-export default Example;
+export default ProjectTime;
