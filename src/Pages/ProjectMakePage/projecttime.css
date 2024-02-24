@@ -241,6 +241,7 @@
     display: inline-block;
 }
 
+
 .react-datepicker__time-container {
     float: right;
     border-left: 1px solid #aeaeae;
@@ -378,6 +379,9 @@
     line-height: 1.7rem;
     text-align: center;
     margin: 0.166rem;
+}
+.react-datepicker-input {
+    cursor: none;
 }
 
 .react-datepicker__day,
@@ -627,8 +631,11 @@
 
 .react-datepicker__input-container {
     position: relative;
-    display: inline-block;
-    width: 100%;
+    display: flex;
+    width: 208px;
+    padding: 4px;
+    align-items: flex-start;
+    gap: 8px;
 }
 
 .react-datepicker__input-container .react-datepicker__calendar-icon {
