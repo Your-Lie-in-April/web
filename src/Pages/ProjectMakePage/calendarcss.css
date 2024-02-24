@@ -90,37 +90,15 @@
     font-size: 0.75em;
     font-weight: bold;
 }
-.react-calendar__month-view__weekdays abbr {
-    text-decoration: none;
-    font-weight: 600;
-    content: attr(data-day);
-    &[data-day='일']::after {
-        content: 'S';
-    }
-    &[data-day='월']::after {
-        content: 'M';
-    }
-    &[data-day='화']::after {
-        content: 'T';
-    }
-    &[data-day='수']::after {
-        content: 'W';
-    }
-    &[data-day='목']::after {
-        content: 'T';
-    }
-    &[data-day='금']::after {
-        content: 'F';
-    }
-    &[data-day='토']::after {
-        content: 'S';
-    }
-}
 
 .react-calendar__month-view__days__day--neighboringMonth,
 .react-calendar__decade-view__years__year--neighboringDecade,
 .react-calendar__century-view__decades__decade--neighboringCentury {
     color: transparent;
+}
+.react-calendar__month-view__weekdays abbr {
+    text-decoration: none;
+    font-weight: 600;
 }
 
 .react-calendar__year-view .react-calendar__tile,
@@ -130,7 +108,7 @@
 }
 .react-calendar__year-view .react-calendar__tile:enabled:hover,
 .react-calendar__year-view .react-calendar__tile:enabled:focus {
-    background-color: #b79fff;
+    background-color: transparent;
 }
 
 .react-calendar__tile {
@@ -158,36 +136,33 @@
 .react-calendar__tile:enabled:focus {
     background-color: #b79fff;
 }
-.react-calendar__year-view .react-calendar__tile:hover {
-    color: #f0f0f0;
-}
+
 /* .react-calendar__tile--now {
     background: #ffff76;
-} */
+  } */
 
 /* .react-calendar__tile--now:enabled:hover,
   .react-calendar__tile--now:enabled:focus {
     background: #ffffa9;
   } */
 
-/* .react-calendar__tile--hasActive:hover {
+.react-calendar__tile--hasActive {
     background: #b79fff;
-} */
+}
 
 .react-calendar__tile--hasActive:enabled:hover,
 .react-calendar__tile--hasActive:enabled:focus {
     background: #b79fff;
 }
 
-/* .react-calendar__tile--active {
+.react-calendar__tile--active {
     background: #633ae2;
     color: white;
-} */
+}
 
 .react-calendar__tile--active:enabled:hover,
 .react-calendar__tile--active:enabled:focus {
     background: #633ae2;
-    color: white;
     outline: none;
 }
 
