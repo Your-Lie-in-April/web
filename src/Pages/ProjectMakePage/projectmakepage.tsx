@@ -23,8 +23,8 @@ const ProjectMakePageContainer = styled.div`
 const ProjectMakePage: FC = () => {
     return (
         <ProjectMakePageContainer>
-            <AfterLogin />
-            <SelectTime />
+            {/* <AfterLogin />
+            <SelectTime /> */}
             <Example />
         </ProjectMakePageContainer>
     );

@@ -241,7 +241,6 @@
     display: inline-block;
 }
 
-
 .react-datepicker__time-container {
     float: right;
     border-left: 1px solid #aeaeae;
@@ -636,6 +635,9 @@
     padding: 4px;
     align-items: flex-start;
     gap: 8px;
+    outline: none !important;
+    border: none !important;
+    box-shadow: none !important;
 }
 
 .react-datepicker__input-container .react-datepicker__calendar-icon {
