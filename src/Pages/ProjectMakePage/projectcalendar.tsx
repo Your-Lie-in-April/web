@@ -1,12 +1,7 @@
 import { FC, useState } from 'react';
-import { format } from 'date-fns';
 import dayjs from 'dayjs';
-import locale from 'react-day-picker';
-import { DayPicker } from 'react-day-picker';
 import styled from 'styled-components';
-import { ko } from 'date-fns/locale';
 import { StyledCalendar, StyledCalendarWrapper } from './calendar.tsx';
-import React from 'react';
 
 const Weekday = styled.div`
     width: 52px;
