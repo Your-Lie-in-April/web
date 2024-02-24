@@ -3,6 +3,7 @@ import Info from "./Pages/ProjectPage/Info";
 import MainPage from "./Pages/MainPage/MainPage";
 import { Hidden } from "@mui/material";
 import ProjectPage from "./Pages/ProjectPage/ProjectPage";
+import './App.css'
 
 function App() {
   return (

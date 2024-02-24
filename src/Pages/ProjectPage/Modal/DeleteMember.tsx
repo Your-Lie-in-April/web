@@ -3,7 +3,7 @@ import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 
 const Box = styled.div`
   width: 400px;
-  height: 182px;
+  height: 171px;
   border-radius: 20px;
   background: #f5f5f5;
   box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.25);

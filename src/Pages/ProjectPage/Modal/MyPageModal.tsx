@@ -117,7 +117,7 @@ const MyPageModal = () => {
           <EditIcon />
         </EditButton>
       </StatusBox>
-      <StorageBtn>프로젝트보관함</StorageBtn>
+      <StorageBtn>프로젝트 보관함</StorageBtn>
     </Box>
   );
 };
