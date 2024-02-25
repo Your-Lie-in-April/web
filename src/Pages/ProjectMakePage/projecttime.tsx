@@ -4,6 +4,9 @@ import styled from 'styled-components';
 import { ko } from 'date-fns/locale/ko';
 import './projecttime.css';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 
 const ProjectTimeContainer = styled.div`
     display: flex;
@@ -171,16 +174,22 @@ const ProjectTime: FC = () => {
             >
                 <DateContainer>
                     <Text>시간표 시작시간</Text>
-                    <STimePicker>
-                        <TimePicker label="Basic time picker" />
-                    </STimePicker>
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <DemoContainer components={['TimePicker']}>
+                            <TimePicker />
+                        </DemoContainer>
+                    </LocalizationProvider>
                 </DateContainer>
 
                 <Separator>~</Separator>
 
                 <DateContainer>
                     <Text>시간표 종료시간</Text>
-                    <STimePicker />
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <DemoContainer components={['TimePicker']}>
+                            <TimePicker />
+                        </DemoContainer>
+                    </LocalizationProvider>
                 </DateContainer>
             </div>
         </ProjectTimeContainer>
