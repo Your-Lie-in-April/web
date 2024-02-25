@@ -1,3 +1,4 @@
+import Alarm from "./Alarm";
 import ChangeNickName from "./Modal/ChangeNickname";
 import ChangeStatus from "./Modal/ChangeStatus";
 import DeleteMemeber from "./Modal/DeleteMember";
@@ -12,6 +13,7 @@ const ProjectPage = () => {
       <DeleteMemeber />
       <DeleteProject />
       <MyPageModal />
+      <Alarm />
     </div>
   );
 };
