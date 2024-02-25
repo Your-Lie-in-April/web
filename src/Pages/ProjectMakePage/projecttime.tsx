@@ -3,12 +3,12 @@ import ReactDatePicker from 'react-datepicker';
 import styled from 'styled-components';
 import { ko } from 'date-fns/locale/ko';
 import './projecttime.css';
+import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 
 const ProjectTimeContainer = styled.div`
     display: flex;
     flex-direction: column;
     width: 600px;
-    height: 400px;
     background: #fff;
 `;
 
@@ -171,30 +171,16 @@ const ProjectTime: FC = () => {
             >
                 <DateContainer>
                     <Text>시간표 시작시간</Text>
-                    <SDatePicker
-                        locale={ko}
-                        dateFormat={'YYYY-MM-dd'}
-                        selected={startDate}
-                        onChange={(date: Date) => setStartDate(date)}
-                        startDate={startDate}
-                        onFocus={(e) => e.target.blur()}
-                    />
+                    <STimePicker>
+                        <TimePicker label="Basic time picker" />
+                    </STimePicker>
                 </DateContainer>
 
                 <Separator>~</Separator>
 
                 <DateContainer>
                     <Text>시간표 종료시간</Text>
-                    <SDatePicker
-                        locale={ko}
-                        dateFormat={'YYYY-MM-dd'}
-                        selected={endDate}
-                        onChange={(date: Date) => setEndDate(date)}
-                        selectsEnd
-                        endDate={endDate}
-                        minDate={startDate}
-                        onFocus={(e) => e.target.blur()}
-                    />
+                    <STimePicker />
                 </DateContainer>
             </div>
         </ProjectTimeContainer>
