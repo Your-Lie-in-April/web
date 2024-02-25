@@ -8,16 +8,12 @@ import BeforeLogin from "../Layouts/BeforeLogin";
 import Banner from "./Banner";
 import ProjectList from "./ProjectList";
 import Pinned from "./Pinned";
+import { createGlobalStyle } from "styled-components";
 
-const MainPageContainer = styled.div`
-  margin-left: auto;
-  margin-right: auto;
-  max-width: 1920px;
-  max-height: 1080px;
-  background-color: #212121;
-  overflow: auto;
-
+const GlobalStyle = createGlobalStyle`
   body {
+    margin: 0;
+    background-color: #212121;
     -ms-overflow-style: none;
   }
 
@@ -26,37 +22,31 @@ const MainPageContainer = styled.div`
   }
 `;
 
-const Main = styled.div`
+const MainContainer = styled.div`
   display: flex;
-  flex-direction: row;
-  margin-top: 126px;
-  justify-content: center;
+  flex-direction: column;
+  margin: 0 auto;
+  max-width: 1284px;
+  box-sizing: border-box;
 `;
 
 const MainPage: FC = () => {
   return (
-    <MainPageContainer>
+    <>
+      <GlobalStyle />
       <BeforeLogin />
       <Banner />
-      <Main>
+      <div
+        style={{
+          height: "126px",
+        }}
+      />
+      <MainContainer>
         <div
           style={{
             display: "flex",
-            flexDirection: "column",
-            alignItems: "flex-start",
-            gap: "14px",
-            marginRight: 20,
-          }}
-        >
-          <Login />
-          <Alarm />
-        </div>
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "flex-start",
-            gap: "24px",
+            flexDirection: "row",
+            gap: "20px",
           }}
         >
           <div
@@ -64,27 +54,51 @@ const MainPage: FC = () => {
               display: "flex",
               flexDirection: "column",
               alignItems: "flex-start",
-              gap: "21px",
+              gap: "14px",
+            }}
+          >
+            <Login />
+            <Alarm />
+          </div>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "flex-start",
+              gap: "24px",
             }}
           >
             <div
               style={{
                 display: "flex",
-                flexDirection: "row",
+                flexDirection: "column",
                 alignItems: "flex-start",
-                gap: "8px",
+                gap: "21px",
               }}
             >
-              <Search />
-              <NewProject />
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "flex-start",
+                  gap: "8px",
+                }}
+              >
+                <Search />
+                <NewProject />
+              </div>
+              <Pinned />
             </div>
-            <Pinned />
+            <ProjectList />
           </div>
-          <ProjectList />
         </div>
-      </Main>
-      <div style={{ height: "300px" }} />
-    </MainPageContainer>
+      </MainContainer>
+      <div
+        style={{
+          height: "300px",
+        }}
+      />
+    </>
   );
 };
 
