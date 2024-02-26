@@ -5,11 +5,13 @@ import DeleteMemeber from "./Modal/DeleteMember";
 import DeleteProject from "./Modal/DeleteProject";
 import MyPageModal from "./Modal/MyPageModal";
 import ProfileList from "./ProjectList/ProfileList";
+import TimeTable from "./Schedule/EditMySchedule";
 
 const ProjectPage = () => {
   return (
     <div>
       <ProfileList />
+      <TimeTable />
     </div>
   );
 };
