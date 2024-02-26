@@ -4,16 +4,12 @@ import ChangeStatus from "./Modal/ChangeStatus";
 import DeleteMemeber from "./Modal/DeleteMember";
 import DeleteProject from "./Modal/DeleteProject";
 import MyPageModal from "./Modal/MyPageModal";
+import ProfileList from "./ProjectList/ProfileList";
 
 const ProjectPage = () => {
   return (
     <div>
-      <ChangeNickName />
-      <ChangeStatus />
-      <DeleteMemeber />
-      <DeleteProject />
-      <MyPageModal />
-      <Alarm />
+      <ProfileList />
     </div>
   );
 };
