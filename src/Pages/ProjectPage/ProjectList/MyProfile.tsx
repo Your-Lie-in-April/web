@@ -26,7 +26,6 @@ const MyProfileNick = styled.div`
   justify-content: space-evenly;
   border-radius: 10px;
   background: #633ae2;
-  box-sizing: border-box;
 
   color: #ffffff;
   font-family: Pretendard;
@@ -64,7 +63,7 @@ const MyEmailText = styled.div`
 `;
 
 const MyStatus = styled.div`
-  width: 270px;
+  width: 100%;
   height: 30px;
   padding: 7px 13px;
   justify-content: center;

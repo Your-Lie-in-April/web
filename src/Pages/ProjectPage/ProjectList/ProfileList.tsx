@@ -4,15 +4,15 @@ import MemberProfile from "./MemberProfile";
 import LeaderProfile from "./LeaderProfile";
 
 const Box = styled.div`
-  width: 269px;
+  width: 286px;
   height: 610px;
   display: flex;
   flex-direction: column;
   padding: 8px;
   gap: 46px;
-  align-items: flex-start;
   border-radius: 20px;
   background: #212121;
+  justify-content: space-evenly;
 `;
 
 const MemberListBox = styled.div`
@@ -89,6 +89,7 @@ const ProfileList = () => {
         </div>
         <MemberList>
           <LeaderProfile />
+          <MemberProfile />
           <MemberProfile />
           <MemberProfile />
           <MemberProfile />
