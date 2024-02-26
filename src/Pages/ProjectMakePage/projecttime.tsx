@@ -1,12 +1,13 @@
 import React, { FC, useState } from 'react';
 import ReactDatePicker from 'react-datepicker';
-import styled from 'styled-components';
+import styled, { ThemeProvider } from 'styled-components';
 import { ko } from 'date-fns/locale/ko';
 import './projecttime.css';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { createTheme } from '@mui/material';
 
 const ProjectTimeContainer = styled.div`
     display: flex;
@@ -38,7 +39,7 @@ const SDatePicker = styled(ReactDatePicker)`
     }
 `;
 
-const STimePicker = styled.div`
+const STimePicker = styled(TimePicker)`
     margin-top: 12px;
     width: 166px;
     height: 33px;
@@ -108,6 +109,14 @@ const Weekend = styled.div`
     }
 `;
 
+const theme = createTheme({
+    palette: {
+        primary: {
+            main: 'f5f5f5',
+        },
+    },
+});
+
 const ProjectTime: FC = () => {
     const [startDate, setStartDate] = useState(new Date());
     const [endDate, setEndDate] = useState(new Date());
@@ -174,11 +183,13 @@ const ProjectTime: FC = () => {
             >
                 <DateContainer>
                     <Text>시간표 시작시간</Text>
-                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <DemoContainer components={['TimePicker']}>
-                            <TimePicker />
-                        </DemoContainer>
-                    </LocalizationProvider>
+                    <ThemeProvider theme={theme}>
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <DemoContainer components={['TimePicker']}>
+                                <TimePicker sx={{ bgcolor: '#f5f5f5' }} />
+                            </DemoContainer>
+                        </LocalizationProvider>
+                    </ThemeProvider>
                 </DateContainer>
 
                 <Separator>~</Separator>
