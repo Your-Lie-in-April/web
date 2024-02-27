@@ -53,7 +53,7 @@ const TitleText = styled.input`
 const Content = styled.div`
     margin-top: 8px;
     display: flex;
-    width: 828px;
+    width: 1043px;
     padding: 8px;
     justify-content: center;
     align-items: center;
@@ -73,7 +73,6 @@ const ContentText = styled.textarea<ContentTextProps>`
     border: transparent;
     outline: none;
     resize: none;
-    max-height: 68px;
     &:focus {
         outline: none;
         color: #000000;
@@ -81,7 +80,7 @@ const ContentText = styled.textarea<ContentTextProps>`
     overflow: hidden;
 `;
 
-const Make = styled.div`
+const Make = styled.button`
     width: 145px;
     height: 35px;
     border-radius: 40px;
@@ -91,11 +90,11 @@ const Make = styled.div`
     align-items: center;
     justify-content: center;
     font-family: Pretendard;
+    white-space: nowrap;
     font-size: 22px;
     font-style: normal;
     font-weight: 600;
     line-height: normal;
-    margin-bottom: 13px;
     margin-left: 1150px;
 `;
 
@@ -131,8 +130,8 @@ const Info: FC = () => {
                     onBlur={() => setIsContentClicked(false)}
                     placeholder={isContentClicked === true ? '' : '프로젝트 내용을 작성해주세요'}
                 />
+                <Make>커버만들기</Make>
             </Content>
-            <Make>커버만들기</Make>
         </Container>
     );
 };
