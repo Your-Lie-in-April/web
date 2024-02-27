@@ -20,14 +20,12 @@ const TimeLeft = styled(TimeContainer)`
   left: 0;
   border-top-left-radius: 20px;
   border-bottom-left-radius: 20px;
-  background-color: #000000;
 `;
 
 const TimeRight = styled(TimeContainer)`
   right: 0;
   border-top-right-radius: 20px;
   border-bottom-right-radius: 20px;
-  background-color: #ae23;
 `;
 
 const VerticalLine = styled.div`

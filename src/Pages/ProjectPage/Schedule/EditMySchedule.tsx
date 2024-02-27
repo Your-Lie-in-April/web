@@ -12,6 +12,7 @@ const Box = styled.div`
   padding: 4px 1px 3px 1px;
 
   display: flex;
+  flex: 1;
   flex-direction: column;
   gap: 21px;
   align-items: center;
