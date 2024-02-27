@@ -1,7 +1,6 @@
 import styled from "styled-components";
 
 const TimeBox = styled.div`
-  position: relative;
   width: 40px;
   height: 30px;
   border: 0.5px solid #7d7d7d;
@@ -13,9 +12,8 @@ const TimeBox = styled.div`
 `;
 
 const TimeContainer = styled.div`
-  width: 20px;
-  height: 30px;
-  background-color: #d9d9d9;
+  flex: 1;
+  box-sizing: border-box;
 `;
 
 const TimeLeft = styled(TimeContainer)`
