@@ -135,6 +135,7 @@ const ProjectTime: FC = () => {
                         locale={ko}
                         dateFormat={'YYYY-MM-dd'}
                         selected={startDate}
+                        selectsStart
                         onChange={(date: Date) => setStartDate(date)}
                         startDate={startDate}
                         onFocus={(e) => e.target.blur()}
@@ -185,7 +186,7 @@ const ProjectTime: FC = () => {
                     <Text>시간표 시작시간</Text>
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <STimePickerContainer components={['TimePicker']}>
-                            <STimePicker disabled />
+                            <STimePicker />
                         </STimePickerContainer>
                     </LocalizationProvider>
                 </DateContainer>

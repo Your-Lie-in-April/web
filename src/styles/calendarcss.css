@@ -15,19 +15,13 @@
     font-size: 0.75em;
     font-weight: bold;
     margin-bottom: 5px;
+    gap: 2px;
+    width: 378px;
 }
 
 .react-calendar--doubleView {
     width: 700px;
     height: 700px;
-}
-.react-calendar__month-view__weekdays {
-    text-align: center;
-    text-transform: uppercase;
-    font: inherit;
-    font-size: 0.75em;
-    font-weight: bold;
-    margin-bottom: 5px;
 }
 
 .react-calendar--doubleView .react-calendar__viewContainer {
