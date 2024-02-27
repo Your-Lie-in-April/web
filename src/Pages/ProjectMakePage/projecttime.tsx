@@ -2,9 +2,11 @@ import React, { FC, useState } from 'react';
 import ReactDatePicker from 'react-datepicker';
 import styled from 'styled-components';
 import { ko } from 'date-fns/locale/ko';
-import '/src/styles/calendarcss.css';
 import '/src/styles/projecttime.css';
-import TimePicker from 'react-time-picker';
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 
 const ProjectTimeContainer = styled.div`
     display: flex;
@@ -36,20 +38,19 @@ const SDatePicker = styled(ReactDatePicker)`
     }
 `;
 
-const STimePicker = styled(TimePicker)`
+const STimePickerContainer = styled(DemoContainer)`
     margin-top: 12px;
-    width: 166px;
-    padding: 4px;
     font-size: 28px;
     font-weight: 400;
-    border-radius: 20px;
     background: #f5f5f5;
     text-align: center;
     margin: auto;
+    position: relative;
+`;
 
-    &:hover {
-        cursor: pointer;
-    }
+const STimePicker = styled(TimePicker)`
+    background: #f5f5f5;
+    width: 166px;
 `;
 
 const Text = styled.div`
@@ -171,14 +172,22 @@ const ProjectTime: FC = () => {
             >
                 <DateContainer>
                     <Text>시간표 시작시간</Text>
-                    <TimePicker />
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <STimePickerContainer components={['TimePicker']}>
+                            <STimePicker />
+                        </STimePickerContainer>
+                    </LocalizationProvider>
                 </DateContainer>
 
                 <Separator>~</Separator>
 
                 <DateContainer>
                     <Text>시간표 종료시간</Text>
-                    <TimePicker />
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <STimePickerContainer components={['TimePicker']}>
+                            <STimePicker />
+                        </STimePickerContainer>
+                    </LocalizationProvider>
                 </DateContainer>
             </div>
         </ProjectTimeContainer>

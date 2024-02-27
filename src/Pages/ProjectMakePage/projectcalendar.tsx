@@ -1,8 +1,21 @@
 import { FC, useState } from 'react';
 import dayjs from 'dayjs';
 import styled from 'styled-components';
-import { StyledCalendar, StyledCalendarWrapper } from './calendar.tsx';
+import Calendar from 'react-calendar';
+import '/src/styles/calendarcss.css';
+const StyledCalendarWrapper = styled.div`
+    width: 390px;
+    display: flex;
+    justify-content: center;
+    position: relative;
+    display: flex;
+    font-size: 32px;
 
+    .react-calendar__tile {
+        padding: 8px;
+    }
+`;
+const StyledCalendar = styled(Calendar)``;
 const Weekday = styled.div`
     width: 52px;
     height: 40px;
@@ -26,7 +39,7 @@ const ProjectCalendar: FC = () => {
     const today = new Date();
     const [date, setDate] = useState<Value>(today);
     const [activeStartDate, setActiveStartDate] = useState<Date | null>(new Date());
-    const attendDay = ['2023-12-03', '2023-12-13']; // 출석한 날짜 예시
+    const attendDay = ['2023-12-03', '2023-12-13'];
     const weekdays = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
     const handleDateChange = (newDate: Value) => {
         setDate(newDate);
