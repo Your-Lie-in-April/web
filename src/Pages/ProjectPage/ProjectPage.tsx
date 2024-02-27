@@ -6,6 +6,7 @@ import DeleteProject from "./Modal/DeleteProject";
 import MyPageModal from "./Modal/MyPageModal";
 import ProfileList from "./ProjectList/ProfileList";
 import EditMySchedule from "./Schedule/EditMySchedule";
+import MemberSchedule from "./Schedule/MemberSchedule";
 import MySchedule from "./Schedule/MySchedule";
 import TeamSchedule from "./Schedule/TeamSchedule";
 
@@ -19,7 +20,11 @@ const ProjectPage = () => {
       <TeamSchedule />
       <br></br>
       <MySchedule />
-      <br></br><br></br><br></br>
+      <br></br>
+      <MemberSchedule />
+      <br></br>
+      <br></br>
+      <br></br>
     </div>
   );
 };

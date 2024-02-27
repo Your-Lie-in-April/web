@@ -1,5 +1,9 @@
 import styled from "styled-components";
 
+interface TimeBoxProps {
+  style?: React.CSSProperties;
+}
+
 const TimeBox = styled.div`
   width: 40px;
   height: 30px;
@@ -33,9 +37,9 @@ const VerticalLine = styled.div`
   border-left: 0.5px dashed #a4a4a4;
 `;
 
-const TimeCircle = () => {
+const TimeCircle: React.FC<TimeBoxProps> = ({ style }) => {
   return (
-    <TimeBox>
+    <TimeBox style={style}>
       <TimeLeft />
       <VerticalLine />
       <TimeRight />
