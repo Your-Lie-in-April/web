@@ -117,7 +117,6 @@ const ProjectTime: FC = () => {
                     display: 'flex',
                     flexDirection: 'row',
                     justifyContent: 'center',
-                    marginTop: '42px',
                 }}
             >
                 <DateContainer>

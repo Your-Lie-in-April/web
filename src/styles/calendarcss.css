@@ -1,5 +1,6 @@
 .react-calendar {
     width: 390px;
+    height: 420px;
     max-width: 100%;
     border-radius: 10px;
     background: #fbfbfb;
@@ -10,6 +11,7 @@
 
 .react-calendar--doubleView {
     width: 700px;
+    height: 700px;
 }
 
 .react-calendar--doubleView .react-calendar__viewContainer {
@@ -72,9 +74,7 @@
 }
 .react-calendar__title,
 .react-calendar__month-view__weekdays__weekday {
-    padding: 0.5em;
     background-color: #633ae2;
-    letter-spacing: 2px;
     color: white;
 }
 .react-calendar__month-view__weekdays__weekday--weekend {

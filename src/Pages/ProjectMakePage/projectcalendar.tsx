@@ -5,6 +5,7 @@ import Calendar from 'react-calendar';
 import '/src/styles/calendarcss.css';
 const StyledCalendarWrapper = styled.div`
     width: 390px;
+    height: auto;
     display: flex;
     justify-content: center;
     position: relative;
@@ -16,21 +17,6 @@ const StyledCalendarWrapper = styled.div`
     }
 `;
 const StyledCalendar = styled(Calendar)``;
-const Weekday = styled.div`
-    width: 52px;
-    height: 40px;
-    border-radius: 8px;
-    background-color: #633ae2;
-    color: #ffffff;
-    font-size: 32px;
-    font-weight: 700;
-    margin-right: 2px;
-    margin-bottom: 2px;
-    text-align: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-`;
 
 type ValuePiece = Date | null;
 type Value = ValuePiece | [ValuePiece, ValuePiece];
