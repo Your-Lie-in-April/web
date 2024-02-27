@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import TimeCircle from "./TimeCircle";
+import EditMyTimeCircle from "./EditMyTimeCircle";
 
 const CommonText = styled.div`
   color: #000000;
@@ -77,7 +77,7 @@ const EditMyTime = () => {
               <div key={idx} style={{ display: "flex", flexDirection: "row" }}>
                 {HoursOfDay.slice(0, HoursOfDay.length - 1).map(
                   (hour, hourIdx) => (
-                    <TimeCircle key={hourIdx} />
+                    <EditMyTimeCircle key={hourIdx} />
                   )
                 )}
               </div>

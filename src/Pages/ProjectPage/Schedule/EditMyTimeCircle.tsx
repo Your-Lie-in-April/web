@@ -2,19 +2,18 @@ import styled from "styled-components";
 
 const TimeBox = styled.div`
   position: relative;
-  width: 40px;
-  height: 30px;
+  width: 53px;
+  height: 40px;
   border: 0.5px solid #7d7d7d;
   border-radius: 20px;
   box-sizing: border-box;
-  background-color: #d9d9d9;
-  display: flex;
-  flex-direction: row;
 `;
 
 const TimeContainer = styled.div`
-  width: 20px;
-  height: 30px;
+  position: absolute;
+  width: 26.5px;
+  height: 40px;
+  box-sizing: border-box;
   background-color: #d9d9d9;
 `;
 
@@ -26,23 +25,28 @@ const TimeLeft = styled(TimeContainer)`
 
 const TimeRight = styled(TimeContainer)`
   right: 0;
+
   border-top-right-radius: 20px;
   border-bottom-right-radius: 20px;
 `;
 
 const VerticalLine = styled.div`
+  position: absolute;
+  left: 26.5px;
+  width: 0.5px;
   height: 100%;
+  background-color: #d9d9d9;
   border-left: 0.5px dashed #a4a4a4;
 `;
 
-const TimeCircle = () => {
+const EditMyTimeCircle = () => {
   return (
     <TimeBox>
       <TimeLeft />
-      <VerticalLine />
       <TimeRight />
+      <VerticalLine />
     </TimeBox>
   );
 };
 
-export default TimeCircle;
+export default EditMyTimeCircle;

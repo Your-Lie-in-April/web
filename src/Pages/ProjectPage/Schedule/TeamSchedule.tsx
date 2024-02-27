@@ -1,21 +1,21 @@
 import styled from "styled-components";
-import TimeCircle from "./EditMyTimeCircle";
-import EditMyTime from "./EditMyTime";
+import TeamTime from "./TeamTime";
+
 
 const Box = styled.div`
-  width: 876px;
-  height: 389px;
+  width: 661px;
+  height: 294px;
   border-radius: 20px;
   border: 1px solid #000000;
   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.25);
   box-sizing: border-box;
-  padding: 4px 1px 3px 1px;
 
   display: flex;
   flex-direction: column;
-  gap: 21px;
+  gap: 18px;
+  padding: 5px 5px 8px 3px;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: flex-start;
 `;
 
 const CommonText = styled.div`
@@ -29,26 +29,28 @@ const CommonText = styled.div`
 `;
 
 const Title = styled(CommonText)`
-  width: 240px;
-  height: 32px;
+  width: 178px;
+  height: 22px;
   border-radius: 20px;
-  padding: 4px 20px;
+  padding: 3px 34px;
+  display: flex;
   justify-content: center;
   align-items: center;
+  box-sizing: border-box;
+
   background-color: #633ae2;
   color: #ffffff;
-  font-size: 20px;
-  font-weight: 700;
-  box-sizing: border-box;
+  font-size: 13px;
+  font-weight: 500;
 `;
 
-const EditMySchedule = () => {
+const TeamSchedule = () => {
   return (
     <Box>
-      <Title>나의 시간표</Title>
-      <EditMyTime />
+      <Title>(프로젝트명) 시간표</Title>
+      <TeamTime />
     </Box>
   );
 };
 
-export default EditMySchedule;
+export default TeamSchedule;
