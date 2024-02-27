@@ -2,7 +2,9 @@ import { FC, useState } from 'react';
 import dayjs from 'dayjs';
 import styled from 'styled-components';
 import Calendar from 'react-calendar';
+import { isWithinInterval } from 'date-fns';
 import '/src/styles/calendarcss.css';
+
 const StyledCalendarWrapper = styled.div`
     width: 390px;
     height: auto;
@@ -21,13 +23,30 @@ const StyledCalendar = styled(Calendar)``;
 type ValuePiece = Date | null;
 type Value = ValuePiece | [ValuePiece, ValuePiece];
 
-const ProjectCalendar: FC = () => {
+type ProjectCalendarProps = {
+    startDate: Date | null;
+    endDate: Date | null;
+};
+
+const ProjectCalendar: FC<ProjectCalendarProps> = ({ startDate, endDate }) => {
     const today = new Date();
     const [date, setDate] = useState<Value>(today);
-    const [activeStartDate, setActiveStartDate] = useState<Date | null>(new Date());
-    const weekdays = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+
     const handleDateChange = (newDate: Value) => {
         setDate(newDate);
+    };
+    const isWithinRange = (currentDate: Date) => {
+        if (startDate && endDate) {
+            return isWithinInterval(currentDate, { start: startDate, end: endDate });
+        }
+        return false;
+    };
+
+    const tileContent = ({ date, view }: { date: Date; view: string }) => {
+        if (view === 'month' && isWithinRange(date)) {
+            return <div style={{ background: '#B79FFF', borderRadius: '50%', height: '100%', width: '100%' }}></div>;
+        }
+        return null;
     };
 
     return (
@@ -42,6 +61,8 @@ const ProjectCalendar: FC = () => {
                 next2Label={null}
                 prev2Label={null}
                 minDetail="year"
+                selectRange={true}
+                // tileContent={tileContent}
             />
         </StyledCalendarWrapper>
     );

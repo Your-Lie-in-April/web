@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import styled from 'styled-components';
 import Info from './Info';
 import SelectTime from './projectcalendar';
@@ -61,13 +61,15 @@ const SButtonText = styled.text`
     line-height: normal;
 `;
 const ProjectMakePage: FC = () => {
+    const [startDate, setStartDate] = useState(new Date());
+    const [endDate, setEndDate] = useState(new Date());
     return (
         <ProjectMakePageContainer>
             <AfterLogin />
             <Info />
             <Container>
                 <TimeContainer>
-                    <SelectTime />
+                    <SelectTime startDate={startDate} endDate={endDate} />
                     <ProjectTime />
                 </TimeContainer>
                 <SButton>

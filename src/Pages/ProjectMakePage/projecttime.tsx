@@ -7,6 +7,7 @@ import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
+import ProjectCalendar from './projectcalendar';
 
 const ProjectTimeContainer = styled.div`
     display: flex;
@@ -184,7 +185,7 @@ const ProjectTime: FC = () => {
                     <Text>시간표 시작시간</Text>
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <STimePickerContainer components={['TimePicker']}>
-                            <STimePicker />
+                            <STimePicker disabled />
                         </STimePickerContainer>
                     </LocalizationProvider>
                 </DateContainer>
