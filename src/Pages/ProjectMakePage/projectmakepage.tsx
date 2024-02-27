@@ -7,8 +7,7 @@ import AfterLogin from '../Layouts/AfterLogin';
 const ProjectMakePageContainer = styled.div`
     margin-left: auto;
     margin-right: auto;
-    max-width: 1920px;
-    max-height: 1080px;
+
     background-color: #212121;
     overflow: auto;
 
@@ -20,14 +19,27 @@ const ProjectMakePageContainer = styled.div`
         display: none;
     }
 `;
+const TimeContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 109px 389px;
+    align-items: flex-start;
+`;
 
 const ProjectMakePage: FC = () => {
     return (
         <ProjectMakePageContainer>
             <AfterLogin />
             <Info />
-            <SelectTime />
-            <ProjectTime />
+            <TimeContainer>
+                <div>
+                    <SelectTime />
+                    <ProjectTime />
+                </div>
+                <button>안녕</button>
+            </TimeContainer>
         </ProjectMakePageContainer>
     );
 };

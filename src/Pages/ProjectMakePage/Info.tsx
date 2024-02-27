@@ -1,6 +1,10 @@
 import { FC, useState, ChangeEvent } from 'react';
 import styled from 'styled-components';
 
+interface ContentTextProps {
+    focused: boolean;
+}
+
 const Container = styled.div`
     width: 1920px;
     height: 200px;
@@ -56,7 +60,8 @@ const Content = styled.div`
     gap: 8px;
 `;
 
-const ContentText = styled.textarea`
+const ContentText = styled.textarea<ContentTextProps>`
+    color: ${({ focused }) => (focused ? '#000000' : '#7d7d7d')};
     color: #7d7d7d;
     text-align: center;
     font-family: Pretendard;
@@ -71,6 +76,7 @@ const ContentText = styled.textarea`
     max-height: 68px;
     &:focus {
         outline: none;
+        color: #000000;
     }
     overflow: hidden;
 `;
@@ -89,6 +95,7 @@ const Make = styled.div`
     font-style: normal;
     font-weight: 600;
     line-height: normal;
+    margin-bottom: 13px;
     margin-left: 1150px;
 `;
 
@@ -118,6 +125,7 @@ const Info: FC = () => {
             <Content>
                 <ContentText
                     value={content}
+                    focused
                     onChange={handleTextareaChange}
                     onFocus={() => setIsContentClicked(true)}
                     onBlur={() => setIsContentClicked(false)}
