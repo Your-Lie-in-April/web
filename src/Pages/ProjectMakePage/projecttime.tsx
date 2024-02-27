@@ -88,11 +88,11 @@ const WeekendContainer = styled.div`
     justify-content: center;
     margin-top: 8px;
 `;
-const Weekend = styled.div`
+const Weekend = styled.div<{ selected: boolean }>`
     width: 60px;
     height: 60px;
     border-radius: 5px;
-    background: #d9d9d9;
+    background: ${({ selected }) => (selected ? '#633ae2' : '#d9d9d9')};
     font-size: 32px;
     font-weight: bold;
     color: white;
@@ -109,6 +109,15 @@ const Weekend = styled.div`
 const ProjectTime: FC = () => {
     const [startDate, setStartDate] = useState(new Date());
     const [endDate, setEndDate] = useState(new Date());
+    const [selectedDays, setSelectedDays] = useState<number[]>([]);
+
+    const toggleWeekend = (dayIndex: number) => {
+        if (selectedDays.includes(dayIndex)) {
+            setSelectedDays(selectedDays.filter((day) => day !== dayIndex));
+        } else {
+            setSelectedDays([...selectedDays, dayIndex]);
+        }
+    };
 
     return (
         <ProjectTimeContainer>
@@ -151,13 +160,15 @@ const ProjectTime: FC = () => {
             <MakeWeekend>
                 <Text>생성할 요일</Text>
                 <WeekendContainer>
-                    <Weekend>S</Weekend>
-                    <Weekend>M</Weekend>
-                    <Weekend>T</Weekend>
-                    <Weekend>W</Weekend>
-                    <Weekend>T</Weekend>
-                    <Weekend>F</Weekend>
-                    <Weekend>S</Weekend>
+                    {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((day, index) => (
+                        <Weekend
+                            key={index}
+                            selected={selectedDays.includes(index)}
+                            onClick={() => toggleWeekend(index)}
+                        >
+                            {day}
+                        </Weekend>
+                    ))}
                 </WeekendContainer>
             </MakeWeekend>
 
