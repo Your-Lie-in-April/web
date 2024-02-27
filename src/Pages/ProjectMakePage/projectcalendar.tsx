@@ -62,7 +62,7 @@ const ProjectCalendar: FC<ProjectCalendarProps> = ({ startDate, endDate }) => {
                 prev2Label={null}
                 minDetail="year"
                 selectRange={true}
-                // tileContent={tileContent}
+                tileContent={tileContent}
             />
         </StyledCalendarWrapper>
     );
