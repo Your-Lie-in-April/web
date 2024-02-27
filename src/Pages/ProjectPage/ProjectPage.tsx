@@ -2,7 +2,7 @@ import AfterLogin from "../Layouts/AfterLogin";
 import styled from "styled-components";
 import { createGlobalStyle } from "styled-components";
 import ProjectInfo from "./ProjectInfo";
-import ProfileList from "./ProjectList/ProfileList";
+import ProfileList from "./ProfileList/ProfileList";
 import MySchedule from "./Schedule/MySchedule";
 import TeamSchedule from "./Schedule/TeamSchedule";
 import Alarm from "./Alarm";
