@@ -1,5 +1,6 @@
 import { FC } from 'react';
 import styled from 'styled-components';
+import Info from './Info';
 import SelectTime from './projectcalendar';
 import ProjectTime from './projecttime';
 import AfterLogin from '../Layouts/AfterLogin';
@@ -24,6 +25,7 @@ const ProjectMakePage: FC = () => {
     return (
         <ProjectMakePageContainer>
             <AfterLogin />
+            <Info />
             <SelectTime />
             <ProjectTime />
         </ProjectMakePageContainer>

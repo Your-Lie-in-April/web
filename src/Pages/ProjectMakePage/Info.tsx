@@ -10,10 +10,12 @@ const Container = styled.div`
     justify-content: center;
     background-color: #ffffff;
     border: 1px solid #000000;
+    margin-top: 16px;
+    margin-bottom: 16px;
 `;
 
 const Title = styled.div`
-    margin-top: 20px;
+    margin-top: 32px;
     width: 820px;
     height: 70px;
     display: flex;
@@ -45,6 +47,7 @@ const TitleText = styled.input`
 `;
 
 const Content = styled.div`
+    margin-top: 8px;
     display: flex;
     width: 828px;
     padding: 8px;
@@ -86,26 +89,8 @@ const Make = styled.div`
     font-style: normal;
     font-weight: 600;
     line-height: normal;
-    margin-bottom: 13px;
     margin-left: 1150px;
 `;
-
-const initalState = {
-    zoom: true,
-    active: false,
-    date: {
-        DATE: new Date(),
-        YEAR: new Date().getFullYear(),
-        MONTH: new Date().getMonth() + 1,
-        TODAY: new Date().getDate(),
-    },
-    changeMonth: new Date().getMonth() + 1,
-    changeYear: new Date().getFullYear(),
-
-    totalDate: [],
-    calendar: {},
-    select: {},
-};
 
 const Info: FC = () => {
     const [content, setContent] = useState<string>('');
@@ -122,7 +107,7 @@ const Info: FC = () => {
 
     return (
         <Container>
-            <Title>
+            <Title style={{ marginTop: '16px;' }}>
                 <TitleText
                     type="text"
                     onFocus={() => setIsTitleClicked(true)}

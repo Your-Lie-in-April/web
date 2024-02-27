@@ -39,7 +39,6 @@ const ProjectCalendar: FC = () => {
     const today = new Date();
     const [date, setDate] = useState<Value>(today);
     const [activeStartDate, setActiveStartDate] = useState<Date | null>(new Date());
-    const attendDay = ['2023-12-03', '2023-12-13'];
     const weekdays = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
     const handleDateChange = (newDate: Value) => {
         setDate(newDate);
