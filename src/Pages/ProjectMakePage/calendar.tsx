@@ -1,6 +1,6 @@
 import Calendar from 'react-calendar';
 import styled from 'styled-components';
-import './calendarcss.css';
+import '/src/styles/calendarcss.css';
 
 export const StyledCalendarWrapper = styled.div`
     width: 390px;
