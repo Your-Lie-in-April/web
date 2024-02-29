@@ -177,14 +177,24 @@
     border-bottom-right-radius: 0;
     border-top-left-radius: 6px !important;
     border-bottom-left-radius: 6px !important;
-    background: #6f48eb;
-    color: white;
+    background: #6f48eb !important;
+    color: white !important;
 }
 .react-calendar__tile--rangeEnd {
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
     border-top-right-radius: 6px;
     border-bottom-right-radius: 6px;
+    background: #6f48eb !important;
+    color: white !important;
+}
+.react-calendar__tile--now {
+    background: #6f48eb33;
+    color: black;
+}
+.react-calendar__tile--now:enabled:hover,
+.react-calendar__tile--now:enabled:focus {
     background: #6f48eb;
+    border-radius: 6px;
     color: white;
 }
