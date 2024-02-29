@@ -17,6 +17,10 @@ const StyledCalendarWrapper = styled.div`
     .react-calendar__tile {
         padding: 8px;
     }
+    &--active {
+        background-color: inherit;
+        border-radius: 0;
+    }
 `;
 const StyledCalendar = styled(Calendar)``;
 
@@ -26,14 +30,21 @@ type Value = ValuePiece | [ValuePiece, ValuePiece];
 type ProjectCalendarProps = {
     startDate: Date | null;
     endDate: Date | null;
+    onDateChange?: (startDate: Date | null, endDate: Date | null) => void;
 };
 
-const ProjectCalendar: FC<ProjectCalendarProps> = ({ startDate, endDate }) => {
+const ProjectCalendar: FC<ProjectCalendarProps> = ({ startDate, endDate, onDateChange }) => {
     const today = new Date();
     const [date, setDate] = useState<Value>(today);
 
     const handleDateChange = (newDate: Value) => {
         setDate(newDate);
+        if (Array.isArray(newDate)) {
+            const [start, end] = newDate;
+            onDateChange?.(start, end);
+        } else {
+            onDateChange?.(newDate, newDate);
+        }
     };
     const isWithinRange = (currentDate: Date) => {
         if (startDate && endDate) {
@@ -43,8 +54,18 @@ const ProjectCalendar: FC<ProjectCalendarProps> = ({ startDate, endDate }) => {
     };
 
     const tileContent = ({ date, view }: { date: Date; view: string }) => {
-        if (view === 'month' && isWithinRange(date)) {
-            return <div style={{ background: '#B79FFF', borderRadius: '50%', height: '100%', width: '100%' }}></div>;
+        if (view === 'month') {
+            const isInRange = isWithinRange(date);
+
+            return (
+                <>
+                    {isInRange && <div></div>}
+                    {date.getDate() === startDate?.getDate() && date.getMonth() === startDate?.getMonth() && (
+                        <div></div>
+                    )}
+                    {date.getDate() === endDate?.getDate() && date.getMonth() === endDate?.getMonth() && <div></div>}
+                </>
+            );
         }
         return null;
     };
@@ -54,7 +75,7 @@ const ProjectCalendar: FC<ProjectCalendarProps> = ({ startDate, endDate }) => {
             <StyledCalendar
                 value={date}
                 onChange={handleDateChange}
-                formatDay={(locale, date) => dayjs(date).format('DD')}
+                formatDay={(locale, date) => dayjs(date).format('D')}
                 formatYear={(locale, date) => dayjs(date).format('YYYY')}
                 formatMonthYear={(locale, date) => dayjs(date).format('YYYY. MM')}
                 showNeighboringMonth={false}

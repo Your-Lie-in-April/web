@@ -7,7 +7,6 @@ import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
-import ProjectCalendar from './projectcalendar';
 
 const ProjectTimeContainer = styled.div`
     display: flex;
@@ -106,10 +105,13 @@ const Weekend = styled.div<{ selected: boolean }>`
         background: #b79fff;
     }
 `;
+type ProjectTimeProps = {
+    startDate: Date | null;
+    endDate: Date | null;
+    onDateChange?: (startDate: Date | null, endDate: Date | null) => void;
+};
 
-const ProjectTime: FC = () => {
-    const [startDate, setStartDate] = useState(new Date());
-    const [endDate, setEndDate] = useState(new Date());
+const ProjectTime: FC<ProjectTimeProps> = ({ startDate, endDate, onDateChange }) => {
     const [selectedDays, setSelectedDays] = useState<number[]>([]);
 
     const toggleWeekend = (dayIndex: number) => {
@@ -118,6 +120,7 @@ const ProjectTime: FC = () => {
         } else {
             setSelectedDays([...selectedDays, dayIndex]);
         }
+        onDateChange?.(startDate, endDate);
     };
 
     return (
@@ -136,7 +139,7 @@ const ProjectTime: FC = () => {
                         dateFormat={'YYYY-MM-dd'}
                         selected={startDate}
                         selectsStart
-                        onChange={(date: Date) => setStartDate(date)}
+                        onChange={(date: Date) => onDateChange?.(date, endDate)}
                         startDate={startDate}
                         onFocus={(e) => e.target.blur()}
                     />
@@ -150,7 +153,7 @@ const ProjectTime: FC = () => {
                         locale={ko}
                         dateFormat={'YYYY-MM-dd'}
                         selected={endDate}
-                        onChange={(date: Date) => setEndDate(date)}
+                        onChange={(date: Date) => onDateChange?.(startDate, date)}
                         selectsEnd
                         endDate={endDate}
                         minDate={startDate}

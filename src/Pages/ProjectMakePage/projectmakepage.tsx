@@ -4,6 +4,7 @@ import Info from './Info';
 import SelectTime from './projectcalendar';
 import ProjectTime from './projecttime';
 import AfterLogin from '../Layouts/AfterLogin';
+import ProjectCalendar from './projectcalendar';
 const ProjectMakePageContainer = styled.div`
     margin-left: auto;
     margin-right: auto;
@@ -69,8 +70,15 @@ const ProjectMakePage: FC = () => {
             <Info />
             <Container>
                 <TimeContainer>
-                    <SelectTime startDate={startDate} endDate={endDate} />
-                    <ProjectTime />
+                    <ProjectCalendar
+                        startDate={startDate}
+                        endDate={endDate}
+                        onDateChange={(start, end) => {
+                            setStartDate(start || new Date());
+                            setEndDate(end || new Date());
+                        }}
+                    />
+                    <ProjectTime startDate={startDate} endDate={endDate} />
                 </TimeContainer>
                 <SButton>
                     <SButtonText>프로젝트 만들기</SButtonText>
