@@ -62,8 +62,13 @@ const SButtonText = styled.text`
     line-height: normal;
 `;
 const ProjectMakePage: FC = () => {
-    const [startDate, setStartDate] = useState(new Date());
-    const [endDate, setEndDate] = useState(new Date());
+    const [startDate, setStartDate] = useState<Date | null>(new Date());
+    const [endDate, setEndDate] = useState<Date | null>(new Date());
+
+    const handleDateChange = (newStartDate: Date | null, newEndDate: Date | null) => {
+        setStartDate(newStartDate);
+        setEndDate(newEndDate);
+    };
     return (
         <ProjectMakePageContainer>
             <AfterLogin />
@@ -78,7 +83,14 @@ const ProjectMakePage: FC = () => {
                             setEndDate(end || new Date());
                         }}
                     />
-                    <ProjectTime startDate={startDate} endDate={endDate} />
+                    <ProjectTime
+                        startDate={startDate}
+                        endDate={endDate}
+                        onDateChange={(start, end) => {
+                            setStartDate(start || new Date());
+                            setEndDate(end || new Date());
+                        }}
+                    />
                 </TimeContainer>
                 <SButton>
                     <SButtonText>프로젝트 만들기</SButtonText>

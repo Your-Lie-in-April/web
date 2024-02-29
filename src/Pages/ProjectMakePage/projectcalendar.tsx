@@ -53,21 +53,18 @@ const ProjectCalendar: FC<ProjectCalendarProps> = ({ startDate, endDate, onDateC
         return false;
     };
 
-    const tileContent = ({ date, view }: { date: Date; view: string }) => {
-        if (view === 'month') {
-            const isInRange = isWithinRange(date);
+    const tileContent = ({ date }: { date: Date; view: string }) => {
+        const isInRange = isWithinRange(date);
+        const isStartDate = date.getDate() === startDate?.getDate() && date.getMonth() === startDate?.getMonth();
+        const isEndDate = date.getDate() === endDate?.getDate() && date.getMonth() === endDate?.getMonth();
 
-            return (
-                <>
-                    {isInRange && <div></div>}
-                    {date.getDate() === startDate?.getDate() && date.getMonth() === startDate?.getMonth() && (
-                        <div></div>
-                    )}
-                    {date.getDate() === endDate?.getDate() && date.getMonth() === endDate?.getMonth() && <div></div>}
-                </>
-            );
-        }
-        return null;
+        return (
+            <>
+                {isInRange && <div></div>}
+                {isStartDate && <div></div>}
+                {isEndDate && <div></div>}
+            </>
+        );
     };
 
     return (

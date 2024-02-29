@@ -100,11 +100,12 @@ const Weekend = styled.div<{ selected: boolean }>`
     align-items: center;
     justify-content: center;
 
-    &: hover {
+    &:hover {
         cursor: pointer;
         background: #b79fff;
     }
 `;
+
 type ProjectTimeProps = {
     startDate: Date | null;
     endDate: Date | null;
@@ -139,9 +140,10 @@ const ProjectTime: FC<ProjectTimeProps> = ({ startDate, endDate, onDateChange })
                         dateFormat={'YYYY-MM-dd'}
                         selected={startDate}
                         selectsStart
-                        onChange={(date: Date) => onDateChange?.(date, endDate)}
+                        onChange={(date: Date) => {
+                            onDateChange?.(date, endDate);
+                        }}
                         startDate={startDate}
-                        onFocus={(e) => e.target.blur()}
                     />
                 </DateContainer>
 
@@ -153,11 +155,12 @@ const ProjectTime: FC<ProjectTimeProps> = ({ startDate, endDate, onDateChange })
                         locale={ko}
                         dateFormat={'YYYY-MM-dd'}
                         selected={endDate}
-                        onChange={(date: Date) => onDateChange?.(startDate, date)}
+                        onChange={(date: Date) => {
+                            onDateChange?.(startDate, date);
+                        }}
                         selectsEnd
                         endDate={endDate}
                         minDate={startDate}
-                        onFocus={(e) => e.target.blur()}
                     />
                 </DateContainer>
             </div>
