@@ -17,9 +17,17 @@ const Container = styled.div`
     margin-top: 16px;
     margin-bottom: 16px;
 `;
-
+const MakeContainer = styled.div`
+    width: 1043;
+    height: 164px;
+    display: flex;
+`;
+const TitleContainer = styled.div`
+    width: 820px;
+    heigth: 136px;
+    gap: 32px;
+`;
 const Title = styled.div`
-    margin-top: 32px;
     width: 820px;
     height: 70px;
     display: flex;
@@ -53,7 +61,6 @@ const TitleText = styled.input`
 const Content = styled.div`
     margin-top: 8px;
     display: flex;
-    width: 1043px;
     padding: 8px;
     justify-content: center;
     align-items: center;
@@ -87,8 +94,6 @@ const Make = styled.button`
     background-color: #ffffff;
     border: 1px solid #000000;
     display: flex;
-    align-items: center;
-    justify-content: center;
     font-family: Pretendard;
     white-space: nowrap;
     font-size: 22px;
@@ -113,25 +118,28 @@ const Info: FC = () => {
 
     return (
         <Container>
-            <Title style={{ marginTop: '16px;' }}>
-                <TitleText
-                    type="text"
-                    onFocus={() => setIsTitleClicked(true)}
-                    onBlur={() => setIsTitleClicked(false)}
-                    placeholder={isTitleClicked === true ? '' : '프로젝트 제목을 작성해주세요'}
-                ></TitleText>
-            </Title>
-            <Content>
-                <ContentText
-                    value={content}
-                    focused
-                    onChange={handleTextareaChange}
-                    onFocus={() => setIsContentClicked(true)}
-                    onBlur={() => setIsContentClicked(false)}
-                    placeholder={isContentClicked === true ? '' : '프로젝트 내용을 작성해주세요'}
-                />
-                <Make>커버만들기</Make>
-            </Content>
+            <MakeContainer>
+                <TitleContainer>
+                    <Title>
+                        <TitleText
+                            type="text"
+                            onFocus={() => setIsTitleClicked(true)}
+                            onBlur={() => setIsTitleClicked(false)}
+                            placeholder={isTitleClicked === true ? '' : '프로젝트 제목을 작성해주세요'}
+                        ></TitleText>
+                    </Title>
+                    <Content>
+                        <ContentText
+                            value={content}
+                            focused
+                            onChange={handleTextareaChange}
+                            onFocus={() => setIsContentClicked(true)}
+                            onBlur={() => setIsContentClicked(false)}
+                            placeholder={isContentClicked === true ? '' : '프로젝트 내용을 작성해주세요'}
+                        />
+                    </Content>
+                </TitleContainer>
+            </MakeContainer>
         </Container>
     );
 };
