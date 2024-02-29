@@ -18,14 +18,15 @@ const Container = styled.div`
     margin-bottom: 16px;
 `;
 const MakeContainer = styled.div`
-    width: 1043;
+    width: 1043px;
     height: 164px;
     display: flex;
+    justify-content: space-between;
+    margin-left: 200px;
 `;
 const TitleContainer = styled.div`
     width: 820px;
     heigth: 136px;
-    gap: 32px;
 `;
 const Title = styled.div`
     width: 820px;
@@ -100,7 +101,10 @@ const Make = styled.button`
     font-style: normal;
     font-weight: 600;
     line-height: normal;
-    margin-left: 1150px;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    margin-top: 130px;
 `;
 
 const Info: FC = () => {
@@ -139,6 +143,7 @@ const Info: FC = () => {
                         />
                     </Content>
                 </TitleContainer>
+                <Make>커버 만들기</Make>
             </MakeContainer>
         </Container>
     );
