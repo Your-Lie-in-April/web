@@ -105,6 +105,9 @@ const Make = styled.button`
     align-items: center;
     justify-content: center;
     margin-top: 130px;
+    &: hover {
+        border-color: black;
+    }
 `;
 
 const Info: FC = () => {
