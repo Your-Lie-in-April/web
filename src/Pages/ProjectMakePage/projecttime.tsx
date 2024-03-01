@@ -192,7 +192,7 @@ const ProjectTime: FC<ProjectTimeProps> = ({ startDate, endDate, onDateChange })
                     <Text>시간표 시작시간</Text>
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <STimePickerContainer components={['TimePicker']}>
-                            <STimePicker />
+                            <STimePicker timeSteps={{ minutes: 30 }} />
                         </STimePickerContainer>
                     </LocalizationProvider>
                 </DateContainer>
@@ -203,7 +203,7 @@ const ProjectTime: FC<ProjectTimeProps> = ({ startDate, endDate, onDateChange })
                     <Text>시간표 종료시간</Text>
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <STimePickerContainer components={['TimePicker']}>
-                            <STimePicker />
+                            <STimePicker timeSteps={{ minutes: 30 }} />
                         </STimePickerContainer>
                     </LocalizationProvider>
                 </DateContainer>
