@@ -2,12 +2,15 @@ import { FC, useState, ChangeEvent } from 'react';
 import styled from 'styled-components';
 
 interface ContentTextProps {
+    isTitleKeyPress: boolean;
     focused: boolean;
 }
 interface TitleProps {
     keypress: boolean;
 }
-
+interface MakeProps {
+    isTitleKeyPress: boolean;
+}
 const Container = styled.div`
     width: 1920px;
     height: 200px;
@@ -74,8 +77,7 @@ const Content = styled.div`
 `;
 
 const ContentText = styled.textarea<ContentTextProps>`
-    color: ${({ focused }) => (focused ? '#000000' : '#7d7d7d')};
-    color: #7d7d7d;
+    color: ${({ isTitleKeyPress, focused }) => (isTitleKeyPress || focused ? '#000000' : '#7d7d7d')};
     text-align: center;
     font-family: Pretendard;
     font-size: 28px;
@@ -89,6 +91,9 @@ const ContentText = styled.textarea<ContentTextProps>`
     &:focus {
         outline: none;
         color: #000000;
+    }
+    &::placeholder {
+        color: ${({ isTitleKeyPress }) => (isTitleKeyPress ? '#000000' : '#your_default_color')};
     }
     overflow: hidden;
 `;
@@ -120,6 +125,8 @@ const Info: FC = () => {
     const [keypress, setIsKeypress] = useState<boolean>(false);
     const [isTitleClicked, setIsTitleClicked] = useState<boolean>(false);
     const [isContentClicked, setIsContentClicked] = useState<boolean>(false);
+    const [isTitleKeyPress, setIsTitleKeyPress] = useState<boolean>(false);
+
     const handleTextareaChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
         const inputText = e.target.value;
         const limitedText = inputText.slice(0, 58);
@@ -131,7 +138,7 @@ const Info: FC = () => {
     const handleTitleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Enter') {
             setIsKeypress(true);
-            setIsContentClicked(true);
+            setIsTitleKeyPress(true);
         }
     };
 
@@ -156,6 +163,7 @@ const Info: FC = () => {
                     </Title>
                     <Content>
                         <ContentText
+                            isTitleKeyPress={isTitleKeyPress}
                             value={content}
                             focused
                             onChange={handleTextareaChange}
