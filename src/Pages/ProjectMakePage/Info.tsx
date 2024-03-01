@@ -4,6 +4,9 @@ import styled from 'styled-components';
 interface ContentTextProps {
     focused: boolean;
 }
+interface TitleProps {
+    keypress: boolean;
+}
 
 const Container = styled.div`
     width: 1920px;
@@ -28,14 +31,15 @@ const TitleContainer = styled.div`
     width: 820px;
     heigth: 136px;
 `;
-const Title = styled.div`
+const Title = styled.div<TitleProps>`
     width: 820px;
     height: 70px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 1px solid #000000;
+    border: ${({ keypress }) => (keypress ? '1px solid transparent' : '1px solid #000000')};
     border-radius: 70px;
+    background-color: ${({ keypress }) => (keypress ? '#ffffff' : 'transparent')};
     ::placeholder {
         color: black;
     }
@@ -57,6 +61,7 @@ const TitleText = styled.input`
     &:focus {
         outline: none;
     }
+    background-color: transparent;
 `;
 
 const Content = styled.div`
@@ -112,6 +117,7 @@ const Make = styled.button`
 
 const Info: FC = () => {
     const [content, setContent] = useState<string>('');
+    const [keypress, setIsKeypress] = useState<boolean>(false);
     const [isTitleClicked, setIsTitleClicked] = useState<boolean>(false);
     const [isContentClicked, setIsContentClicked] = useState<boolean>(false);
     const handleTextareaChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
@@ -122,17 +128,30 @@ const Info: FC = () => {
             setContent(limitedText);
         }
     };
+    const handleTitleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === 'Enter') {
+            setIsKeypress(true);
+            setIsContentClicked(true);
+        }
+    };
 
     return (
         <Container>
             <MakeContainer>
                 <TitleContainer>
-                    <Title>
+                    <Title keypress={keypress}>
                         <TitleText
                             type="text"
-                            onFocus={() => setIsTitleClicked(true)}
-                            onBlur={() => setIsTitleClicked(false)}
+                            onFocus={() => {
+                                setIsTitleClicked(true);
+                                setIsKeypress(false);
+                            }}
+                            onBlur={() => {
+                                setIsTitleClicked(false);
+                                setIsKeypress(true);
+                            }}
                             placeholder={isTitleClicked === true ? '' : '프로젝트 제목을 작성해주세요'}
+                            onKeyDown={handleTitleKeyPress}
                         ></TitleText>
                     </Title>
                     <Content>
