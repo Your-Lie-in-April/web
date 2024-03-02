@@ -149,6 +149,7 @@ const Info: FC = () => {
         if (e.key === 'Enter') {
             setIsKeypress(true);
             setIsTitleKeyPress(true);
+            e.currentTarget.blur();
         }
     };
 
@@ -176,10 +177,6 @@ const Info: FC = () => {
                             onBlur={() => {
                                 setIsTitleClicked(false);
                                 setIsKeypress(true);
-                            }}
-                            onClick={() => {
-                                setIsKeypress(false);
-                                setIsTitleClicked(false);
                             }}
                             placeholder={isTitleClicked === true ? '' : '프로젝트 제목을 작성해주세요'}
                             onKeyDown={handleTitleKeyPress}
