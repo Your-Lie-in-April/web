@@ -5,6 +5,7 @@ import SelectTime from './projectcalendar';
 import ProjectTime from './projecttime';
 import AfterLogin from '../Layouts/AfterLogin';
 import ProjectCalendar from './projectcalendar';
+import Cover from './cover';
 const ProjectMakePageContainer = styled.div`
     margin-left: auto;
     margin-right: auto;
@@ -73,7 +74,7 @@ const ProjectMakePage: FC = () => {
         <ProjectMakePageContainer>
             <AfterLogin />
             <Info />
-            <Container>
+            {/* <Container>
                 <TimeContainer>
                     <ProjectCalendar
                         startDate={startDate}
@@ -95,7 +96,8 @@ const ProjectMakePage: FC = () => {
                 <SButton>
                     <SButtonText>프로젝트 만들기</SButtonText>
                 </SButton>
-            </Container>
+            </Container> */}
+            <Cover />
         </ProjectMakePageContainer>
     );
 };
