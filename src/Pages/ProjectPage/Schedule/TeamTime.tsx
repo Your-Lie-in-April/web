@@ -14,7 +14,6 @@ const CommonText = styled.div`
 const TimeTableDiv = styled.div`
   width: 100%;
   display: flex;
-  flex-direction: column;
 `;
 
 const DayTextList = styled.div`
@@ -25,13 +24,14 @@ const DayTextList = styled.div`
   align-items: center;
   justify-content: space-between;
   margin-top: 3px;
+  align-self: flex-end;
 `;
 
 const HourTextList = styled.div`
-  width: 610px;
+  width: 574px;
   display: flex;
   flex-direction: row;
-  gap: 10px;
+  gap: 11px;
   align-items: center;
   justify-content: space-between;
 `;
@@ -40,21 +40,22 @@ const DayOfWeek = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
 const HoursOfDay = [...Array(16).keys()].map((_, index) => index + 9);
 
 const TeamTime = () => {
+  const filteredHours = HoursOfDay.slice(0, 15);
   return (
     <TimeTableDiv>
-      <HourTextList style={{ alignSelf: "flex-end" }}>
-        {HoursOfDay.map((hour, idx) => (
-          <CommonText key={idx} style={{}}>
-            {hour}
-          </CommonText>
+      <DayTextList>
+        {DayOfWeek.map((day, idx) => (
+          <CommonText key={idx}>{day}</CommonText>
         ))}
-      </HourTextList>
-      <div style={{ display: "flex", flexDirection: "row" }}>
-        <DayTextList>
-          {DayOfWeek.map((day, idx) => (
-            <CommonText key={idx}>{day}</CommonText>
+      </DayTextList>
+      <div style={{ display: "flex", flexDirection: "column" }}>
+        <HourTextList style={{ alignSelf: "flex-start" }}>
+          {filteredHours.map((hour, idx) => (
+            <CommonText key={idx} style={{}}>
+              {hour}
+            </CommonText>
           ))}
-        </DayTextList>
+        </HourTextList>
         <div
           style={{
             display: "flex",
