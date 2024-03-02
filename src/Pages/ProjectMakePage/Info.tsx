@@ -127,7 +127,7 @@ const CoverContainer = styled.div`
     top: calc(100%);
     left: 75%;
     transform: translateX(-50%);
-    z-index: 5;
+    z-index: ;
 `;
 const Info: FC = () => {
     const [content, setContent] = useState<string>('');
@@ -136,6 +136,7 @@ const Info: FC = () => {
     const [isContentClicked, setIsContentClicked] = useState<boolean>(false);
     const [isTitleKeyPress, setIsTitleKeyPress] = useState<boolean>(false);
     const [isCoverClicked, setIsCoverClicked] = useState<boolean>(false);
+    const [isRegister, setIsRegister] = useState<boolean>(false);
 
     const handleTextareaChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
         const inputText = e.target.value;
@@ -171,11 +172,11 @@ const Info: FC = () => {
                                 setIsTitleClicked(true);
                                 setIsKeypress(false);
                                 handleTitleFocus();
+                                setIsCoverClicked(false);
                             }}
                             onBlur={() => {
                                 setIsTitleClicked(false);
                                 setIsKeypress(true);
-                                setIsTitleKeyPress(true);
                             }}
                             placeholder={isTitleClicked === true ? '' : '프로젝트 제목을 작성해주세요'}
                             onKeyDown={handleTitleKeyPress}
@@ -193,9 +194,13 @@ const Info: FC = () => {
                         />
                     </Content>
                 </TitleContainer>
-                <Make isTitleKeyPress={isTitleKeyPress} onClick={toggleCover}>
-                    {isTitleKeyPress ? '프로젝트 보관하기' : '커버 만들기'}
-                </Make>
+                {isTitleKeyPress ? (
+                    <Make isTitleKeyPress={isTitleKeyPress}>프로젝트 보관하기</Make>
+                ) : (
+                    <Make isTitleKeyPress={isTitleKeyPress} onClick={toggleCover}>
+                        커버 만들기
+                    </Make>
+                )}
             </MakeContainer>
             {isCoverClicked && (
                 <CoverContainer>
