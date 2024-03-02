@@ -30,7 +30,7 @@ const Container = styled.div`
     background-color: white;
     flex-direction: column;
     align-items: center;
-    gap: 8px;
+    gap: 16px;
    
 `;
 const TimeContainer = styled.div`
@@ -74,7 +74,7 @@ const ProjectMakePage: FC = () => {
         <ProjectMakePageContainer>
             <AfterLogin />
             <Info />
-            <Container>
+            <Container style={{ marginTop: '24px' }}>
                 <TimeContainer>
                     <ProjectCalendar
                         startDate={startDate}
