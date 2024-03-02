@@ -46,11 +46,12 @@ const STimePickerContainer = styled(DemoContainer)`
     text-align: center;
     margin: auto;
     position: relative;
+    width: 140px;
 `;
 
 const STimePicker = styled(TimePicker)`
     background: #f5f5f5;
-    width: 166px;
+    width: 140px;
 `;
 
 const Text = styled.div`

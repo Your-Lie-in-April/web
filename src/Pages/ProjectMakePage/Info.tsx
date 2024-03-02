@@ -98,16 +98,17 @@ const ContentText = styled.textarea<ContentTextProps>`
     overflow: hidden;
 `;
 
-const Make = styled.button`
+const Make = styled.button<MakeProps>`
     width: 145px;
     height: 35px;
     border-radius: 40px;
-    background-color: #ffffff;
+    color: ${({ isTitleKeyPress }) => (isTitleKeyPress ? 'white' : 'black')};
+    background-color: ${({ isTitleKeyPress }) => (isTitleKeyPress ? '#633ae2' : '#ffffff')};
     border: 1px solid #000000;
     display: flex;
     font-family: Pretendard;
     white-space: nowrap;
-    font-size: 22px;
+    font-size: ${({ isTitleKeyPress }) => (isTitleKeyPress ? '14px' : '22px')};
     font-style: normal;
     font-weight: 600;
     line-height: normal;
@@ -142,6 +143,10 @@ const Info: FC = () => {
         }
     };
 
+    const handleTitleFocus = () => {
+        setIsTitleKeyPress(false);
+    };
+
     return (
         <Container>
             <MakeContainer>
@@ -152,10 +157,12 @@ const Info: FC = () => {
                             onFocus={() => {
                                 setIsTitleClicked(true);
                                 setIsKeypress(false);
+                                handleTitleFocus();
                             }}
                             onBlur={() => {
                                 setIsTitleClicked(false);
                                 setIsKeypress(true);
+                                setIsTitleKeyPress(true);
                             }}
                             placeholder={isTitleClicked === true ? '' : '프로젝트 제목을 작성해주세요'}
                             onKeyDown={handleTitleKeyPress}
@@ -173,7 +180,7 @@ const Info: FC = () => {
                         />
                     </Content>
                 </TitleContainer>
-                <Make>커버 만들기</Make>
+                <Make isTitleKeyPress={isTitleKeyPress}>{isTitleKeyPress ? '프로젝트 보관하기' : '커버 만들기'}</Make>
             </MakeContainer>
         </Container>
     );
