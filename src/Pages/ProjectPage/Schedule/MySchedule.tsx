@@ -1,5 +1,7 @@
 import styled from "styled-components";
 import TeamTime from "./TeamTime";
+import { useState } from "react";
+import EditMySchedule from "./EditMySchedule";
 
 const Box = styled.div`
   width: 661px;
@@ -54,20 +56,27 @@ const EditBtn = styled.button`
 `;
 
 const MySchedule = () => {
+  const [isEditModal, setIsEditModal] = useState(false);
+  const onSetIsEditModal = () => {
+    setIsEditModal((prev) => !prev);
+  };
   return (
-    <Box>
-      <div
-        style={{
-          display: "flex",
-          gap: "58px",
-          margin: "3px 7px auto auto",
-        }}
-      >
-        <Title>나의 시간표</Title>
-        <EditBtn>수정하기</EditBtn>
-      </div>
-      <TeamTime />
-    </Box>
+    <>
+      <Box>
+        <div
+          style={{
+            display: "flex",
+            gap: "58px",
+            margin: "3px 7px auto auto",
+          }}
+        >
+          <Title>나의 시간표</Title>
+          <EditBtn onClick={onSetIsEditModal}>수정하기</EditBtn>
+        </div>
+        <TeamTime />
+      </Box>
+      {isEditModal && <EditMySchedule onSetIsEditModal={onSetIsEditModal} />}
+    </>
   );
 };
 
