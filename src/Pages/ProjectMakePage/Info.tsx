@@ -127,7 +127,7 @@ const CoverContainer = styled.div`
     top: calc(100%);
     left: 75%;
     transform: translateX(-50%);
-    z-index: ;
+    z-index: 5;
 `;
 const Info: FC = () => {
     const [content, setContent] = useState<string>('');
@@ -136,7 +136,6 @@ const Info: FC = () => {
     const [isContentClicked, setIsContentClicked] = useState<boolean>(false);
     const [isTitleKeyPress, setIsTitleKeyPress] = useState<boolean>(false);
     const [isCoverClicked, setIsCoverClicked] = useState<boolean>(false);
-    const [isRegister, setIsRegister] = useState<boolean>(false);
 
     const handleTextareaChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
         const inputText = e.target.value;
