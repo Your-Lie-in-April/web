@@ -1,5 +1,6 @@
 import { FC, useState, ChangeEvent } from 'react';
 import styled from 'styled-components';
+import Cover from './cover';
 
 interface ContentTextProps {
     isTitleKeyPress: boolean;
@@ -22,6 +23,7 @@ const Container = styled.div`
     border: 1px solid #000000;
     margin-top: 16px;
     margin-bottom: 16px;
+    position: relative;
 `;
 const MakeContainer = styled.div`
     width: 1043px;
@@ -120,13 +122,20 @@ const Make = styled.button<MakeProps>`
         border-color: black;
     }
 `;
-
+const CoverContainer = styled.div`
+    position: absolute;
+    top: calc(100%);
+    left: 75%;
+    transform: translateX(-50%);
+    z-index: 5;
+`;
 const Info: FC = () => {
     const [content, setContent] = useState<string>('');
     const [keypress, setIsKeypress] = useState<boolean>(false);
     const [isTitleClicked, setIsTitleClicked] = useState<boolean>(false);
     const [isContentClicked, setIsContentClicked] = useState<boolean>(false);
     const [isTitleKeyPress, setIsTitleKeyPress] = useState<boolean>(false);
+    const [isCoverClicked, setIsCoverClicked] = useState<boolean>(false);
 
     const handleTextareaChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
         const inputText = e.target.value;
@@ -145,6 +154,10 @@ const Info: FC = () => {
 
     const handleTitleFocus = () => {
         setIsTitleKeyPress(false);
+    };
+
+    const toggleCover = () => {
+        setIsCoverClicked((prevIsCoverClicked) => !prevIsCoverClicked);
     };
 
     return (
@@ -180,8 +193,15 @@ const Info: FC = () => {
                         />
                     </Content>
                 </TitleContainer>
-                <Make isTitleKeyPress={isTitleKeyPress}>{isTitleKeyPress ? '프로젝트 보관하기' : '커버 만들기'}</Make>
+                <Make isTitleKeyPress={isTitleKeyPress} onClick={toggleCover}>
+                    {isTitleKeyPress ? '프로젝트 보관하기' : '커버 만들기'}
+                </Make>
             </MakeContainer>
+            {isCoverClicked && (
+                <CoverContainer>
+                    <Cover />
+                </CoverContainer>
+            )}
         </Container>
     );
 };

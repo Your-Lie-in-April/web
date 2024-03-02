@@ -5,7 +5,7 @@ import SelectTime from './projectcalendar';
 import ProjectTime from './projecttime';
 import AfterLogin from '../Layouts/AfterLogin';
 import ProjectCalendar from './projectcalendar';
-import Cover from './cover';
+
 const ProjectMakePageContainer = styled.div`
     margin-left: auto;
     margin-right: auto;
@@ -47,10 +47,10 @@ const SButton = styled.button`
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-bottom: 78px;
     border-radius: 60px;
     background: #633ae2;
     white-space: nowrap;
+    margin-bottom: 109px;
 `;
 
 const SButtonText = styled.text`
@@ -74,7 +74,7 @@ const ProjectMakePage: FC = () => {
         <ProjectMakePageContainer>
             <AfterLogin />
             <Info />
-            {/* <Container>
+            <Container>
                 <TimeContainer>
                     <ProjectCalendar
                         startDate={startDate}
@@ -96,8 +96,7 @@ const ProjectMakePage: FC = () => {
                 <SButton>
                     <SButtonText>프로젝트 만들기</SButtonText>
                 </SButton>
-            </Container> */}
-            <Cover />
+            </Container>
         </ProjectMakePageContainer>
     );
 };

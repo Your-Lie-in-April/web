@@ -97,7 +97,7 @@ const Image = styled.button`
     background-repeat: no-repeat;
     background-position: center;
 `;
-const colors = ['#633AE2', '#FFCB3B', '#64AFF5', '#C2D57A', '#EB5757', '#212121', '#FFF'];
+const colors = ['#633AE2', '#FFCB3B', '#64AFF5', '#C2D57A', '#EB5757', '#212121'];
 const urls = [
     'https://s3-alpha-sig.figma.com/img/1428/5f05/043a78e2fa12ac2136b1383ece3b805c?Expires=1710115200&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=dtK-wfzGTlsj~sQidsbTULkBX8gQq2YK1PYYad~4zSuM6RIAPGfk1Bd5FXVwRJmZuqsmedy8sfQEPpFR4j5Z8tCHvCpNDbN-qflkEc2K4TJJGvodeSQkIZtMoc0K0fX5eU2rc-KEuMwwnFfrSFuZqHxmnEr3yiDEJFr8YlD3tdzVJO6SjHpOJqs5Emehq7lWQD79PNyqLQ24ALQbmBIGkz3FSkzicgSs77-o4WBoXSWYIcGx7uYzU3cd-eQyuSSflhFTgr78ROWYu92tUvPoM6JyjiEtDnACTLSWM-MmKGH45hEGomVH1yfDhygNo7q-erFQoaj~WWvggUxipdXqwQ__',
     'https://s3-alpha-sig.figma.com/img/efb8/74df/f4f778f0a5ad5ba05f81b2233e6fd797?Expires=1710115200&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=dGDS4Fht6aRooxbHpl6Jj2TrWylbRb1Ef4lnV--lQL9nlAq2fjoQacrct1eISZCCkWYEapTaX8ThD0mP38NR630iH7GWUf5IX5mZVbTCd~ImYJp7c8EqMWdxXa5s7P5zohmA~xelnmjg01TVqcbpfaJfPRKkd3dHE70z4Um-OW-xBHPuhv85dsdnjAdt1l7BbZcTwSaXt9zkAUaVLL2kQOBZLX34rLriYFt8el0i0KB9QiIPxYLZt-29VNVB4u6j5HdQSc55mvKPjv~Il0ON5VuhZG9ZlWR11idaCFix1c~-eFGqqV7PGj5TckrdFA0OQaTMtFR9P2Y5x1oxwrMWlg__',
@@ -122,6 +122,7 @@ const Cover: FC = () => {
                         {colors.map((color, index) => (
                             <Color key={index} style={{ background: color }}></Color>
                         ))}
+                        <Color style={{ background: '#FFF', border: '1px solid black' }} />
                         <Color style={{ background: '#D9D9D9' }}>{plus}</Color>
                     </ColorChoose>
                 </ColorContainer>
