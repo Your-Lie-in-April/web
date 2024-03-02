@@ -1,5 +1,7 @@
 import styled from "styled-components";
 import BorderColorOutlinedIcon from "@mui/icons-material/BorderColorOutlined";
+import { useState } from "react";
+import ChangeNickName from "../Modal/ChangeNickname";
 
 const MyProfileBox = styled.div`
   width: 100%;
@@ -91,44 +93,51 @@ const CommonText = styled.div`
 `;
 
 const MyProfile = () => {
+  const [isEditModal, setIsEditModal] = useState(false);
+  const onSetIsEditModal = () => {
+    setIsEditModal((prev) => !prev);
+  };
   return (
-    <MyProfileBox>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          alignItems: "flex-start",
-          gap: "22px",
-        }}
-      >
-        <MyProfileImg />
+    <>
+      <MyProfileBox>
         <div
           style={{
             display: "flex",
-            flexDirection: "column",
+            flexDirection: "row",
             alignItems: "flex-start",
-            gap: "8px",
+            gap: "22px",
           }}
         >
-          <MyProfileNick>
-            <CommonText
-              style={{
-                width: "106px",
-                fontSize: "14px",
-                color: "#ffffff",
-              }}
-            >
-              닉네임
-            </CommonText>
-            <EditButton>
-              <EditIcon />
-            </EditButton>
-          </MyProfileNick>
-          <MyEmailText>----------@gmail.com</MyEmailText>
+          <MyProfileImg />
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "flex-start",
+              gap: "8px",
+            }}
+          >
+            <MyProfileNick>
+              <CommonText
+                style={{
+                  width: "106px",
+                  fontSize: "14px",
+                  color: "#ffffff",
+                }}
+              >
+                닉네임
+              </CommonText>
+              <EditButton onClick={onSetIsEditModal}>
+                <EditIcon />
+              </EditButton>
+            </MyProfileNick>
+            <MyEmailText>----------@gmail.com</MyEmailText>
+          </div>
         </div>
-      </div>
-      <MyStatus>현재상태메세지</MyStatus>
-    </MyProfileBox>
+        <MyStatus>현재상태메세지</MyStatus>
+      </MyProfileBox>
+      {isEditModal && <ChangeNickName onSetIsEditModal={onSetIsEditModal} />}
+    </>
   );
 };
 export default MyProfile;

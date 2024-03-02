@@ -69,7 +69,7 @@ const ProjectPage = () => {
                 display: "flex",
                 flexDirection: "column",
                 gap: "12px",
-                justifyContent: "space-between", // 수정된 부분
+                justifyContent: "space-between", 
               }}
             >
               <Callendar />
