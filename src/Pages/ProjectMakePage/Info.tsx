@@ -177,6 +177,10 @@ const Info: FC = () => {
                                 setIsTitleClicked(false);
                                 setIsKeypress(true);
                             }}
+                            onClick={() => {
+                                setIsKeypress(false);
+                                setIsTitleClicked(false);
+                            }}
                             placeholder={isTitleClicked === true ? '' : '프로젝트 제목을 작성해주세요'}
                             onKeyDown={handleTitleKeyPress}
                         ></TitleText>
