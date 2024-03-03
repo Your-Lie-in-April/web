@@ -17,6 +17,7 @@ const Container = styled.div`
     border: 1px solid #000000;
     margin-top: 16px;
     margin-bottom: 16px;
+    position: relative;
 `;
 const MakeContainer = styled.div`
     width: 1043px;
@@ -117,12 +118,12 @@ const CoverContainer = styled.div`
     transform: translateX(-50%);
     z-index: 5;
 `;
-
 const Info: FC = () => {
     const [content, setContent] = useState<string>('');
     const [isTitleClicked, setIsTitleClicked] = useState<boolean>(false);
     const [isContentClicked, setIsContentClicked] = useState<boolean>(false);
     const [isCoverClicked, setIsCoverClicked] = useState<boolean>(false);
+
     const handleTextareaChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
         const inputText = e.target.value;
         const limitedText = inputText.slice(0, 58);
@@ -131,6 +132,7 @@ const Info: FC = () => {
             setContent(limitedText);
         }
     };
+
     const toggleCover = () => {
         setIsCoverClicked((prevIsCoverClicked) => !prevIsCoverClicked);
     };
@@ -142,8 +144,14 @@ const Info: FC = () => {
                     <Title>
                         <TitleText
                             type="text"
-                            onFocus={() => setIsTitleClicked(true)}
-                            onBlur={() => setIsTitleClicked(false)}
+                            onFocus={() => {
+                                setIsTitleClicked(true);
+
+                                setIsCoverClicked(false);
+                            }}
+                            onBlur={() => {
+                                setIsTitleClicked(false);
+                            }}
                             placeholder={isTitleClicked === true ? '' : '프로젝트 제목을 작성해주세요'}
                         ></TitleText>
                     </Title>
