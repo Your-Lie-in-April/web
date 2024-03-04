@@ -8,10 +8,11 @@ const AlarmDiv = styled.div`
   width: 289px;
   height: 300px;
   background-color: #f5f5f5;
-  border-radius: 10px;
+  border-radius: 20px;
   padding: 21px;
   gap: 111px;
   box-sizing: border-box;
+  box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.25);
 `;
 
 const TextStyle = styled.div`
