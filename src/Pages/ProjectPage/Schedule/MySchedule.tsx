@@ -2,6 +2,7 @@ import styled from "styled-components";
 import TeamTime from "./TeamTime";
 import { useState } from "react";
 import EditMySchedule from "./EditMySchedule";
+import MyTime from "./MyTime";
 
 const Box = styled.div`
   width: 661px;
@@ -73,7 +74,7 @@ const MySchedule = () => {
           <Title>나의 시간표</Title>
           <EditBtn onClick={onSetIsEditModal}>수정하기</EditBtn>
         </div>
-        <TeamTime />
+        <MyTime />
       </Box>
       {isEditModal && <EditMySchedule onSetIsEditModal={onSetIsEditModal} />}
     </>
