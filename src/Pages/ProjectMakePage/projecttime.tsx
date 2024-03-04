@@ -1,12 +1,8 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useRef } from 'react';
 import ReactDatePicker from 'react-datepicker';
 import styled from 'styled-components';
 import { ko } from 'date-fns/locale/ko';
 import '/src/styles/projecttime.css';
-import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-// import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 
 const ProjectTimeContainer = styled.div`
     display: flex;
@@ -53,24 +49,17 @@ const TimePicker = styled.div`
         cursor: pointer;
     }
 `;
-const TimeDropdown = styled.select`
-    width: 33%;
+
+const DropdownContainer = styled.div`
+    width: auto;
+    display: flex;
+    flex-direction: row;
+    background: #d7d7d7;
+    border: 1px solid #ccc;
 `;
 
-const STimePickerContainer = styled(DemoContainer)`
-    margin-top: 12px;
-    font-size: 28px;
-    font-weight: 400;
-    background: #f5f5f5;
-    text-align: center;
-    margin: auto;
-    position: relative;
-    width: 140px;
-`;
-
-const STimePicker = styled(TimePicker)`
-    background: #f5f5f5;
-    width: 140px;
+const DropdownItem = styled.select`
+    margin: 3px;
 `;
 
 const Text = styled.div`
@@ -134,9 +123,8 @@ type ProjectTimeProps = {
 
 const ProjectTime: FC<ProjectTimeProps> = ({ startDate, endDate, onDateChange }) => {
     const [selectedDays, setSelectedDays] = useState<number[]>([]);
-    const [hour, setHour] = useState('');
-    const [minute, setMinute] = useState('');
-    const [ampm, setAmpm] = useState('AM');
+    const [isOpen, setIsOpen] = useState<boolean>(false);
+    const [time, setTime] = useState({ hour: '12', minute: '00', ampm: 'AM' });
 
     const toggleWeekend = (dayIndex: number) => {
         if (selectedDays.includes(dayIndex)) {
@@ -147,6 +135,19 @@ const ProjectTime: FC<ProjectTimeProps> = ({ startDate, endDate, onDateChange })
         onDateChange?.(startDate, endDate);
     };
 
+    const hourRef = useRef<HTMLSelectElement>(null);
+    const minuteRef = useRef<HTMLSelectElement>(null);
+    const ampmRef = useRef<HTMLSelectElement>(null);
+
+    const toggleDropdown = () => setIsOpen((prevIsOpen) => !prevIsOpen);
+
+    const updateTime = () => {
+        setTime({
+            hour: hourRef.current?.value ?? time.hour,
+            minute: minuteRef.current?.value ?? time.minute,
+            ampm: ampmRef.current?.value ?? time.ampm,
+        });
+    };
     return (
         <ProjectTimeContainer>
             <div
@@ -213,25 +214,27 @@ const ProjectTime: FC<ProjectTimeProps> = ({ startDate, endDate, onDateChange })
             >
                 <DateContainer>
                     <Text>시간표 시작시간</Text>
-                    <TimePicker>
-                        <TimeDropdown value={hour} onChange={(e) => setHour(e.target.value)}>
-                            {Array.from({ length: 12 }, (_, i) => i + 1).map((num) => (
-                                <option key={num} value={num}>
-                                    {num}
-                                </option>
-                            ))}
-                        </TimeDropdown>
-                        <TimeDropdown value={minute} onChange={(e) => setMinute(e.target.value)}>
-                            {Array.from({ length: 60 }, (_, i) => i).map((num) => (
-                                <option key={num} value={num}>
-                                    {num}
-                                </option>
-                            ))}
-                        </TimeDropdown>
-                        <TimeDropdown value={ampm} onChange={(e) => setAmpm(e.target.value)}>
-                            <option value="AM">AM</option>
-                            <option value="PM">PM</option>
-                        </TimeDropdown>
+                    <TimePicker onClick={toggleDropdown}>
+                        {`${time.hour}:${time.minute} ${time.ampm}`}
+                        {isOpen && (
+                            <DropdownContainer>
+                                <DropdownItem ref={hourRef} defaultValue={time.hour} onChange={updateTime}>
+                                    {Array.from({ length: 12 }, (_, i) => i + 1).map((hour) => (
+                                        <option key={hour} value={hour}>
+                                            {hour}
+                                        </option>
+                                    ))}
+                                </DropdownItem>
+                                <DropdownItem ref={minuteRef} defaultValue={time.minute} onChange={updateTime}>
+                                    <option value="00">00</option>
+                                    <option value="30">30</option>
+                                </DropdownItem>
+                                <DropdownItem ref={ampmRef} defaultValue={time.ampm} onChange={updateTime}>
+                                    <option value="AM">AM</option>
+                                    <option value="PM">PM</option>
+                                </DropdownItem>
+                            </DropdownContainer>
+                        )}
                     </TimePicker>
                 </DateContainer>
 
@@ -239,26 +242,7 @@ const ProjectTime: FC<ProjectTimeProps> = ({ startDate, endDate, onDateChange })
 
                 <DateContainer>
                     <Text>시간표 종료시간</Text>
-                    <TimePicker>
-                        <TimeDropdown value={hour} onChange={(e) => setHour(e.target.value)}>
-                            {Array.from({ length: 12 }, (_, i) => i + 1).map((num) => (
-                                <option key={num} value={num}>
-                                    {num}
-                                </option>
-                            ))}
-                        </TimeDropdown>
-                        <TimeDropdown value={minute} onChange={(e) => setMinute(e.target.value)}>
-                            {Array.from({ length: 60 }, (_, i) => i).map((num) => (
-                                <option key={num} value={num}>
-                                    {num}
-                                </option>
-                            ))}
-                        </TimeDropdown>
-                        <TimeDropdown value={ampm} onChange={(e) => setAmpm(e.target.value)}>
-                            <option value="AM">AM</option>
-                            <option value="PM">PM</option>
-                        </TimeDropdown>
-                    </TimePicker>
+                    <TimePicker></TimePicker>
                 </DateContainer>
             </div>
         </ProjectTimeContainer>
