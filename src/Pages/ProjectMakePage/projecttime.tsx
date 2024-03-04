@@ -36,8 +36,7 @@ const SDatePicker = styled(ReactDatePicker)`
 
 const TimePicker = styled.div`
     margin-top: 12px;
-    width: 166px;
-    padding: 4px;
+    width: 178px;
     font-size: 28px;
     font-weight: 400;
     border-radius: 20px;
@@ -51,11 +50,14 @@ const TimePicker = styled.div`
 `;
 
 const DropdownContainer = styled.div`
+    position: absolute;
+    top: calc(80%);
     width: auto;
     display: flex;
     flex-direction: row;
     background: #d7d7d7;
     border: 1px solid #ccc;
+    z-index: 5;
 `;
 
 const DropdownItem = styled.select`
@@ -209,40 +211,58 @@ const ProjectTime: FC<ProjectTimeProps> = ({ startDate, endDate, onDateChange })
                     display: 'flex',
                     flexDirection: 'row',
                     justifyContent: 'center',
-                    marginTop: '42px',
+                    marginTop: '40px',
+                    marginLeft: '10px',
                 }}
             >
                 <DateContainer>
                     <Text>시간표 시작시간</Text>
-                    <TimePicker onClick={toggleDropdown}>
-                        {`${time.hour}:${time.minute} ${time.ampm}`}
-                        {isOpen && (
-                            <DropdownContainer>
-                                <DropdownItem ref={hourRef} defaultValue={time.hour} onChange={updateTime}>
-                                    {Array.from({ length: 12 }, (_, i) => i + 1).map((hour) => (
-                                        <option key={hour} value={hour}>
-                                            {hour}
-                                        </option>
-                                    ))}
-                                </DropdownItem>
-                                <DropdownItem ref={minuteRef} defaultValue={time.minute} onChange={updateTime}>
-                                    <option value="00">00</option>
-                                    <option value="30">30</option>
-                                </DropdownItem>
-                                <DropdownItem ref={ampmRef} defaultValue={time.ampm} onChange={updateTime}>
-                                    <option value="AM">AM</option>
-                                    <option value="PM">PM</option>
-                                </DropdownItem>
-                            </DropdownContainer>
-                        )}
-                    </TimePicker>
+                    <TimePicker onClick={toggleDropdown}>{`${time.hour}:${time.minute} ${time.ampm}`}</TimePicker>
+                    {isOpen && (
+                        <DropdownContainer>
+                            <DropdownItem ref={hourRef} defaultValue={time.hour} onChange={updateTime}>
+                                {Array.from({ length: 12 }, (_, i) => i + 1).map((hour) => (
+                                    <option key={hour} value={hour}>
+                                        {hour}
+                                    </option>
+                                ))}
+                            </DropdownItem>
+                            <DropdownItem ref={minuteRef} defaultValue={time.minute} onChange={updateTime}>
+                                <option value="00">00</option>
+                                <option value="30">30</option>
+                            </DropdownItem>
+                            <DropdownItem ref={ampmRef} defaultValue={time.ampm} onChange={updateTime}>
+                                <option value="AM">AM</option>
+                                <option value="PM">PM</option>
+                            </DropdownItem>
+                        </DropdownContainer>
+                    )}
                 </DateContainer>
 
-                <Separator>~</Separator>
+                <Separator style={{ marginLeft: '28px', marginRight: '28px' }}>~</Separator>
 
                 <DateContainer>
                     <Text>시간표 종료시간</Text>
-                    <TimePicker></TimePicker>
+                    <TimePicker onClick={toggleDropdown}>{`${time.hour}:${time.minute} ${time.ampm}`}</TimePicker>
+                    {isOpen && (
+                        <DropdownContainer>
+                            <DropdownItem ref={hourRef} defaultValue={time.hour} onChange={updateTime}>
+                                {Array.from({ length: 12 }, (_, i) => i + 1).map((hour) => (
+                                    <option key={hour} value={hour}>
+                                        {hour}
+                                    </option>
+                                ))}
+                            </DropdownItem>
+                            <DropdownItem ref={minuteRef} defaultValue={time.minute} onChange={updateTime}>
+                                <option value="00">00</option>
+                                <option value="30">30</option>
+                            </DropdownItem>
+                            <DropdownItem ref={ampmRef} defaultValue={time.ampm} onChange={updateTime}>
+                                <option value="AM">AM</option>
+                                <option value="PM">PM</option>
+                            </DropdownItem>
+                        </DropdownContainer>
+                    )}
                 </DateContainer>
             </div>
         </ProjectTimeContainer>
