@@ -69,7 +69,6 @@ const ProjectPage = () => {
                 display: "flex",
                 flexDirection: "column",
                 gap: "12px",
-                justifyContent: "space-between", 
               }}
             >
               <Callendar />
