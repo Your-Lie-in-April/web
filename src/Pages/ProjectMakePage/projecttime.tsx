@@ -51,24 +51,19 @@ const TimePicker = styled.div`
 
 const DropdownContainer = styled.div`
     position: absolute;
-    top: calc(84%);
+    top: calc(83.6%);
     width: auto;
     display: flex;
     flex-direction: row;
-    background: transparent;
     z-index: 5;
 `;
 
 const DropdownItem = styled.select`
     margin: 5px;
-    font-size: 14px;
-    border: 1px solid #ccc;
+    font-size: 15px;
+    border: transparent;
     border-radius: 4px;
     cursor: pointer;
-
-    &:hover {
-        background-color: #f1f1f1;
-    }
 `;
 
 const Text = styled.div`
