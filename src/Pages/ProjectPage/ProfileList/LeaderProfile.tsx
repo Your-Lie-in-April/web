@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-const MemberProfileBox = styled.div`
+const LeaderProfileBox = styled.div`
   width: 100%;
   height: 52px;
   display: flex;
@@ -12,12 +12,12 @@ const MemberProfileBox = styled.div`
   background: #ffffff;
 `;
 
-const MemberImg = styled.image`
+const LeaderImg = styled.image`
   width: 46px;
   height: 46px;
   border-radius: 50%;
   background: #d9d9d9;
-  border: 1px solid #633ae2;
+  border: 2px solid #633ae2;
   box-sizing: border-box;
 `;
 
@@ -51,39 +51,37 @@ const CommonText = styled.div`
 
 const LeaderProfile = () => {
   return (
-    <div>
-      <MemberProfileBox>
-        <MemberImg />
+    <LeaderProfileBox>
+      <LeaderImg />
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          gap: " 100px",
+        }}
+      >
         <div
           style={{
+            width: "66px",
             display: "flex",
-            flexDirection: "row",
-            gap: " 88px",
+            flexDirection: "column",
+            gap: " 5px",
+            justifyContent: "center",
           }}
         >
-          <div
+          <CommonText>닉네임(본인)</CommonText>
+          <CommonText
             style={{
-              width: "66px",
-              display: "flex",
-              flexDirection: "column",
-              gap: " 5px",
-              justifyContent: "center",
+              fontSize: "10px",
+              fontWeight: "400",
             }}
           >
-            <CommonText>닉네임(본인)</CommonText>
-            <CommonText
-              style={{
-                fontSize: "10px",
-                fontWeight: "400",
-              }}
-            >
-              상태메세지
-            </CommonText>
-          </div>
-          <EditMemberBtn>멤버수정</EditMemberBtn>
+            상태메세지
+          </CommonText>
         </div>
-      </MemberProfileBox>
-    </div>
+        <EditMemberBtn>멤버수정</EditMemberBtn>
+      </div>
+    </LeaderProfileBox>
   );
 };
 export default LeaderProfile;

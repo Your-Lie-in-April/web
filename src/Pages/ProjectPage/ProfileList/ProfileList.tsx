@@ -19,7 +19,7 @@ const MemberListBox = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
 `;
 
 const InviteBtn = styled.button`
@@ -79,7 +79,7 @@ const ProfileList = () => {
           style={{
             display: "flex",
             flexDirection: "row",
-            gap: "174px",
+            gap: "171px",
             alignItems: "center",
             alignSelf: "center",
           }}

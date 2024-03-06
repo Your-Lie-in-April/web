@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 
 const MemberProfileBox = styled.div`
   width: 100%;
@@ -28,40 +29,51 @@ const CommonText = styled.div`
   line-height: normal;
 `;
 
+const DeleteBtn = styled(RemoveCircleOutlineIcon)`
+  width: 24px;
+  height: 24px;
+  color: #d9d9d9;
+  align-self: center;
+
+  &:hover {
+    color: #eb5757;
+    cursor: pointer;
+  }
+`;
+
 const MemberProfile = () => {
   return (
-    <div>
-      <MemberProfileBox>
-        <MemberImg />
+    <MemberProfileBox>
+      <MemberImg />
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          gap: " 132px",
+        }}
+      >
         <div
           style={{
+            width: "66px",
             display: "flex",
-            flexDirection: "row",
-            gap: " 88px",
+            flexDirection: "column",
+            gap: " 5px",
+            justifyContent: "center",
           }}
         >
-          <div
+          <CommonText>닉네임(본인)</CommonText>
+          <CommonText
             style={{
-              width: "66px",
-              display: "flex",
-              flexDirection: "column",
-              gap: " 5px",
-              justifyContent: "center",
+              fontSize: "10px",
+              fontWeight: "400",
             }}
           >
-            <CommonText>닉네임(본인)</CommonText>
-            <CommonText
-              style={{
-                fontSize: "10px",
-                fontWeight: "400",
-              }}
-            >
-              상태메세지
-            </CommonText>
-          </div>
+            상태메세지
+          </CommonText>
         </div>
-      </MemberProfileBox>
-    </div>
+        <DeleteBtn />
+      </div>
+    </MemberProfileBox>
   );
 };
 export default MemberProfile;
