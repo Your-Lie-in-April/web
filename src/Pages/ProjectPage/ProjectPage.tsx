@@ -45,6 +45,24 @@ const Callendar = styled.div`
   border-radius: 20px;
 `;
 
+const MemTimeBtn = styled.button`
+  width: 176px;
+  height: 40px;
+  display: flex;
+  padding: 8px 10px;
+  align-items: flex-start;
+  gap: 8px;
+
+  border-radius: 30px;
+  background: #212121;
+  color: #ffffff;
+  font-family: Pretendard;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+`;
+
 const ProjectPage = () => {
   return (
     <>
