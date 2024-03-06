@@ -9,6 +9,7 @@ const AfterLoginDiv = styled.div`
   align-items: center;
   position: relative;
 `;
+
 const Logo = styled.div`
   font-family: "Pretendard";
   font-style: normal;
@@ -17,7 +18,9 @@ const Logo = styled.div`
   margin: auto;
   margin-bottom: 14px;
 `;
-const LogIn = styled.div`
+
+const LogIn = styled.button`
+  box-sizing: border-box;
   font-family: "Pretendard";
   font-style: normal;
   font-weight: 800;
@@ -25,6 +28,15 @@ const LogIn = styled.div`
   position: absolute;
   right: 319.5px;
   bottom: 20px;
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+
+  &: focus {
+    border: none;
+    outline: none;
+  }
 `;
 
 const AfterLogin: FC = () => {
