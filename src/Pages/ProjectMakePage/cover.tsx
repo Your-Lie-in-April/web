@@ -168,7 +168,7 @@ const Cover: FC<CoverProps> = ({ onColorSelect, onImageSelect }) => {
                                     backgroundRepeat: 'no-repeat',
                                     backgroundPosition: 'center',
                                 }}
-                                onClick={() => handleImageClick(url)}
+                                onClick={() => handleImageClick(backurls[index])}
                             ></Image>
                         ))}
                     </ImageChoose>
