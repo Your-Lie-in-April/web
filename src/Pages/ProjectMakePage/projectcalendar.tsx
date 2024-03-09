@@ -72,9 +72,9 @@ const ProjectCalendar: FC<ProjectCalendarProps> = ({ startDate, endDate, onDateC
             <StyledCalendar
                 value={date}
                 onChange={handleDateChange}
-                formatDay={(locale, date) => dayjs(date).format('D')}
-                formatYear={(locale, date) => dayjs(date).format('YYYY')}
-                formatMonthYear={(locale, date) => dayjs(date).format('YYYY. MM')}
+                formatDay={(date) => dayjs(date).format('D')}
+                formatYear={(date) => dayjs(date).format('YYYY')}
+                formatMonthYear={(date) => dayjs(date).format('YYYY. MM')}
                 showNeighboringMonth={false}
                 next2Label={null}
                 prev2Label={null}
