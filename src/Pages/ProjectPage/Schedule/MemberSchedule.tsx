@@ -12,10 +12,9 @@ const Box = styled.div`
   display: flex;
   flex: 1;
   flex-direction: column;
-  gap: 17px;
-  padding: 5px 5px 8px 3px;
+  gap: 7.46px;
+  padding: 7.46px 5px 8px 9.32px;
   align-items: center;
-  justify-content: flex-end;
 `;
 
 const CommonText = styled.div`

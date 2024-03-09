@@ -6,6 +6,11 @@ import ProfileList from "./ProfileList/ProfileList";
 import MySchedule from "./Schedule/MySchedule";
 import TeamSchedule from "./Schedule/TeamSchedule";
 import Alarm from "./Alarm";
+import MemberSchedule from "./Schedule/MemberSchedule";
+import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import { useState } from "react";
+import MemberScheduleGrid from "./Schedule/MemberScheduleGrid";
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -49,9 +54,10 @@ const MemTimeBtn = styled.button`
   width: 176px;
   height: 40px;
   display: flex;
-  padding: 8px 10px;
-  align-items: flex-start;
-  gap: 8px;
+  padding: 0;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
 
   border-radius: 30px;
   background: #212121;
@@ -61,9 +67,20 @@ const MemTimeBtn = styled.button`
   font-style: normal;
   font-weight: 500;
   line-height: normal;
+
+  .icon {
+    width: 22px;
+    height: 22px;
+  }
 `;
 
 const ProjectPage = () => {
+  const [seeMemTime, setSeeMemTime] = useState(true);
+
+  const toggleMemTime = () => {
+    setSeeMemTime(!seeMemTime);
+  };
+
   return (
     <>
       <GlobalStyle />
@@ -74,25 +91,47 @@ const ProjectPage = () => {
           <ProjectInfo />
         </div>
         <Box>
-          <MainBox>
-            <ProfileList />
-            <div
-              style={{ display: "flex", flexDirection: "column", gap: "12px" }}
-            >
-              <TeamSchedule />
-              <MySchedule />
-            </div>
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                gap: "12px",
-              }}
-            >
-              <Callendar />
-              <Alarm />
-            </div>
-          </MainBox>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "24px",
+              alignItems: "center",
+            }}
+          >
+            <MainBox>
+              <ProfileList />
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "12px",
+                }}
+              >
+                <TeamSchedule />
+                <MySchedule />
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "12px",
+                }}
+              >
+                <Callendar />
+                <Alarm />
+              </div>
+            </MainBox>
+            <MemTimeBtn onClick={toggleMemTime}>
+              {seeMemTime ? "멤버 시간표 닫기" : "멤버 시간표 열기"}
+              {seeMemTime ? (
+                <ArrowDropUpIcon className="icon" />
+              ) : (
+                <ArrowDropDownIcon className="icon" />
+              )}
+            </MemTimeBtn>
+            {seeMemTime && <MemberScheduleGrid />}
+          </div>
         </Box>
       </div>
       <div style={{ height: "400px" }}></div>
