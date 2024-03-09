@@ -10,7 +10,6 @@ const LoginDiv = styled.div`
   height: 218px;
   border-radius: 10px;
   background-color: #ffffff;
-  margin-bottom: 14px;
 `;
 
 const ImageDiv = styled.div`
