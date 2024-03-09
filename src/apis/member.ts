@@ -1,12 +1,12 @@
 import { API } from '#/constants/api';
 import getAPIResponseData from '#/utils/getAPIResponseData';
 import {
-    MemberResDto,
     MemberInfoResDto,
+    MemberResDto,
     MemberStateResDto,
     MemberNicknameReqDto,
-    ProjectDeleteResDto,
     ProjectStoreResDto,
+    ProjectDeleteResDto,
 } from '#/Types/member';
 
 export const getMemberList = async () => {

@@ -1,20 +1,10 @@
-import { useMutation, useQueryClient } from 'react-query';
+import { useQuery } from 'react-query';
 import { QUERY_KEY } from '#/constants/queryKey';
-import { putMemberStatus } from '#/apis/member';
+import { getMemberStatus } from '#/apis/member';
 
-/**
- * PUT /members/${status}
- */
-const useMemberStatusMutation = (status: string) => {
-    const queryClient = useQueryClient();
-    return useMutation({
-        mutationFn: () => putMemberStatus(status),
-        onSuccess: () => {
-            void queryClient.invalidateQueries({
-                queryKey: QUERY_KEY.MEMBER_STATE,
-            });
-        },
+const useMemberStatusQuery = () => {
+    return useQuery({
+        queryKey: QUERY_KEY.MEMBER_STATUS,
+        queryFn: () => getMemberStatus(),
     });
 };
-
-export default useMemberStatusMutation;

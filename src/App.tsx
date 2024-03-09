@@ -1,16 +1,18 @@
-import styled from 'styled-components';
-import Info from './Pages/ProjectMakePage/Info';
-import MainPage from './Pages/MainPage/MainPage';
-import ProjectMakePage from './Pages/ProjectMakePage/projectmakepage';
-import { Hidden } from '@mui/material';
+import styled from "styled-components";
+import Info from "./Pages/ProjectPage/Info";
+import MainPage from "./Pages/MainPage/MainPage";
+import { Hidden } from "@mui/material";
+import ProjectPage from "./Pages/ProjectPage/ProjectPage";
+import './App.css'
 
 function App() {
-    return (
-        <div>
-            {/* <MainPage /> */}
-            <ProjectMakePage />
-        </div>
-    );
+  return (
+    <div>
+      <ProjectPage />
+      {/* <MainPage /> */}
+      {/* <Info /> */}
+    </div>
+  );
 }
 
 export default App;
