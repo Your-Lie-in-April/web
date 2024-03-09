@@ -1,6 +1,11 @@
 import { FC, useState } from 'react';
 import styled from 'styled-components';
 
+interface CoverProps {
+    onColorSelect: (color: string) => void;
+    onImageSelect: (url: string) => void;
+}
+
 const plus = (
     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
         <path
@@ -111,7 +116,13 @@ const urls = [
     'https://s3-alpha-sig.figma.com/img/9d99/2209/8e9be0fcc8ed0d00ede564ec9eb28549?Expires=1710115200&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=YuJwHNYWqCbmPfQjamXGFye6oNa9HKhRULZ4WS8bbi-reuSOobQJeeXGf~Gpwzc6j8MM7NW~HzgzT9SzG~s02ATdspMuDPi4LDJq23km7kCb6eo14YYkdEnRTrWVCprG8jrsCogv-CJqKFfc3F2UAeOto6vLEyC0GRPNKKlE~KxLfYw-EjZv51RHiIy-YXyCthsGz5QQ3s4mTL8EZCSWcR9Hg0jYkll4hRmxfNQV8IP5ZO-tplE0oOwKh3oJRpzwER8PZ7Gu8rg0FXBUE6h9ZFXbOyunJuNmvZupzZuQAkTolCETn5FqPvocMXqYG6VDK1c8aUZDJlXH8fBNikIoRQ__',
 ];
 
-const Cover: FC = () => {
+const Cover: FC<CoverProps> = ({ onColorSelect, onImageSelect }) => {
+    const handleColorClick = (color: string) => {
+        onColorSelect(color);
+    };
+    const handleImageClick = (url: string) => {
+        onImageSelect(url);
+    };
     return (
         <CoverContainer>
             <ConverInnerContainer>
@@ -120,10 +131,19 @@ const Cover: FC = () => {
                     단색
                     <ColorChoose>
                         {colors.map((color, index) => (
-                            <Color key={index} style={{ background: color }}></Color>
+                            <Color
+                                key={index}
+                                style={{ background: color }}
+                                onClick={() => handleColorClick(color)}
+                            ></Color>
                         ))}
-                        <Color style={{ background: '#FFF', border: '1px solid black' }} />
-                        <Color style={{ background: '#D9D9D9' }}>{plus}</Color>
+                        <Color
+                            style={{ background: '#FFF', border: '1px solid black' }}
+                            onClick={() => handleColorClick('black')}
+                        />
+                        <Color style={{ background: '#D9D9D9' }} onClick={() => handleColorClick('#D9D9D9')}>
+                            {plus}
+                        </Color>
                     </ColorChoose>
                 </ColorContainer>
                 <ImageContainer>
@@ -138,6 +158,7 @@ const Cover: FC = () => {
                                     backgroundRepeat: 'no-repeat',
                                     backgroundPosition: 'center',
                                 }}
+                                onClick={() => handleImageClick(url)}
                             ></Image>
                         ))}
                     </ImageChoose>

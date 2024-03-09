@@ -123,6 +123,8 @@ const Info: FC = () => {
     const [isTitleClicked, setIsTitleClicked] = useState<boolean>(false);
     const [isContentClicked, setIsContentClicked] = useState<boolean>(false);
     const [isCoverClicked, setIsCoverClicked] = useState<boolean>(false);
+    const [selectedColor, setSelectedColor] = useState<string | null>(null);
+    const [selectedImageUrl, setSelectedImageUrl] = useState<string | null>(null);
 
     const handleTextareaChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
         const inputText = e.target.value;
@@ -137,8 +139,21 @@ const Info: FC = () => {
         setIsCoverClicked((prevIsCoverClicked) => !prevIsCoverClicked);
     };
 
+    const handleColorSelect = (color: string) => {
+        setSelectedColor(color);
+    };
+
+    const handleImageSelect = (url: string) => {
+        setSelectedImageUrl(url);
+    };
+
     return (
-        <Container>
+        <Container
+            style={{
+                backgroundColor: selectedColor || 'white',
+                backgroundImage: `url('${selectedImageUrl}')`,
+            }}
+        >
             <MakeContainer>
                 <TitleContainer>
                     <Title>
@@ -170,7 +185,7 @@ const Info: FC = () => {
             </MakeContainer>
             {isCoverClicked && (
                 <CoverContainer>
-                    <Cover />
+                    <Cover onColorSelect={handleColorSelect} onImageSelect={handleImageSelect} />
                 </CoverContainer>
             )}
         </Container>
