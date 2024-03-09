@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 const Box = styled.div`
   width: 500px;
-  height: 182px;
+  height: 200px;
   border-radius: 20px;
   background: #f5f5f5;
   box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.25);
@@ -46,7 +46,7 @@ const ButtonsContainer = styled.div`
   gap: 4px;
 `;
 
-const CommonButton = styled.button`
+const ConfirmBtn = styled.button`
   display: flex;
   width: 60px;
   padding: 8px 12px;
@@ -54,19 +54,34 @@ const CommonButton = styled.button`
   align-items: center;
   gap: 8px;
   border-radius: 20px;
+  background: #633ae2;
+
+  color: #ffffff;
+  text-align: center;
   font-family: Pretendard;
   font-size: 13px;
+  font-style: normal;
   font-weight: 500;
   line-height: normal;
-  color: #ffffff;
 `;
 
-const ConfirmBtn = styled(CommonButton)`
-  background: #633ae2;
-`;
-
-const CancelBtn = styled(CommonButton)`
+const CancelBtn = styled.button`
+  display: flex;
+  width: 60px;
+  padding: 8px 12px;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  border-radius: 20px;
   background: #d9d9d9;
+
+  color: #ffffff;
+  text-align: center;
+  font-family: Pretendard;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
 `;
 
 const ChangeStatus = () => {
@@ -76,10 +91,8 @@ const ChangeStatus = () => {
         style={{
           display: "flex",
           flexDirection: "column",
-          alignItems: "center",
-          gap: "19px",
-          width: "100%",
-          height: "100%",
+          alignItems: "flex-end",
+          gap: "18px",
         }}
       >
         <div
@@ -87,15 +100,14 @@ const ChangeStatus = () => {
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
-            gap: "31px",
-            width: "100%",
-            height: "100%",
+            justifyItems: "center",
+            gap: "18px",
           }}
         >
           <Title>상태메시지를 작성해주세요</Title>
           <StatusField type="text" />
         </div>
-        <ButtonsContainer style={{ alignSelf: "flex-end" }}>
+        <ButtonsContainer>
           <ConfirmBtn>확인</ConfirmBtn>
           <CancelBtn>취소</CancelBtn>
         </ButtonsContainer>
