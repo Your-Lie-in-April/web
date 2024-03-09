@@ -139,11 +139,9 @@ const Cover: FC<CoverProps> = ({ onColorSelect, onImageSelect }) => {
                         ))}
                         <Color
                             style={{ background: '#FFF', border: '1px solid black' }}
-                            onClick={() => handleColorClick('black')}
+                            onClick={() => handleColorClick('#fff')}
                         />
-                        <Color style={{ background: '#D9D9D9' }} onClick={() => handleColorClick('#D9D9D9')}>
-                            {plus}
-                        </Color>
+                        <Color style={{ background: '#D9D9D9' }}>{plus}</Color>
                     </ColorChoose>
                 </ColorContainer>
                 <ImageContainer>

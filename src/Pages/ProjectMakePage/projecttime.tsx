@@ -38,10 +38,13 @@ const TimePicker = styled.div`
     margin-top: 12px;
     width: 178px;
     font-size: 28px;
-    font-weight: 400;
+    height: 40px;
     border-radius: 20px;
     background: #f5f5f5;
     text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     margin: auto;
 
     &:hover {
