@@ -41,6 +41,7 @@ const Title = styled.div`
     ::placeholder {
         color: black;
     }
+    background-color: white;
 `;
 const TitleText = styled.input`
     display: flex;
@@ -88,6 +89,7 @@ const ContentText = styled.textarea<ContentTextProps>`
         color: #000000;
     }
     overflow: hidden;
+    background-color: transparent;
 `;
 
 const Make = styled.button`
