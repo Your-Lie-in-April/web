@@ -7,34 +7,44 @@ const BeforeLoginDiv = styled.div`
   background-color: #f1f1f1;
   display: flex;
   align-items: center;
+  position: relative;
 `;
+
 const Logo = styled.div`
   font-family: "Pretendard";
   font-style: normal;
   font-weight: 700;
-  width: 173px;
   font-size: 32px;
-  line-height: 38px;
-  margin-top: 49px;
-  margin-left: 873.5px;
-  margin-bottom: 13px;
+  margin: auto;
+  margin-bottom: 14px;
 `;
-const LogIn = styled.div`
+
+const LogIn = styled.button`
+  box-sizing: border-box;
   font-family: "Pretendard";
   font-style: normal;
-  font-weight: 550;
+  font-weight: 800;
   font-size: 22px;
-  margin-top: 55px;
-  margin-bottom: 21px;
+  position: absolute;
+  right: 319.5px;
+  bottom: 20px;
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+
+  &: focus {
+    border: none;
+    outline: none;
+  }
 `;
 
 const BeforeLogin: FC = () => {
   return (
     <BeforeLoginDiv>
       <Logo>TIME PIECE</Logo>
-      <div style={{ marginLeft: "493.17px" }}>
-        <LogIn>Log in</LogIn>
-      </div>
+
+      <LogIn>Log in</LogIn>
     </BeforeLoginDiv>
   );
 };
