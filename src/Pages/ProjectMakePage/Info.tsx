@@ -143,10 +143,12 @@ const Info: FC = () => {
 
     const handleColorSelect = (color: string) => {
         setSelectedColor(color);
+        setSelectedImageUrl(null);
     };
 
     const handleImageSelect = (url: string) => {
         setSelectedImageUrl(url);
+        setSelectedColor(null);
     };
 
     return (

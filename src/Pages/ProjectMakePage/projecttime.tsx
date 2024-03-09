@@ -64,6 +64,7 @@ const DropdownContainer = styled.div`
 const DropdownItem = styled.select`
     margin: 5px;
     font-size: 15px;
+    font-weight: bold;
     border: transparent;
     border-radius: 4px;
     cursor: pointer;
