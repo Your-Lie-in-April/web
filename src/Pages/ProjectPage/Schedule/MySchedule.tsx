@@ -13,7 +13,7 @@ const Box = styled.div`
   box-sizing: border-box;
 
   display: flex;
-  flex: 1;
+
   flex-direction: column;
   gap: 17px;
   padding: 5px 5px 8px 3px;
@@ -46,7 +46,7 @@ const EditBtn = styled.button`
   justify-content: center;
   align-items: center;
   border-radius: 15px;
-  background: #212121;
+  background: #633ae2;
 
   color: #ffffff;
   font-family: Pretendard;

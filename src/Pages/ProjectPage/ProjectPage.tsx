@@ -44,10 +44,11 @@ const MainBox = styled.div`
 
 // 임시 캘린더
 const Callendar = styled.div`
-  width: 288px;
-  height: 300px;
+  width: 291px;
+  height: 294px;
   background-color: #000000;
   border-radius: 20px;
+  box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.25);
 `;
 
 const MemTimeBtn = styled.button`

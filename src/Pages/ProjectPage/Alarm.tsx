@@ -5,8 +5,8 @@ const AlarmDiv = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 289px;
-  height: 300px;
+  width: 291px;
+  height: 294px;
   background-color: #f5f5f5;
   border-radius: 20px;
   padding: 21px;

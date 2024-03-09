@@ -16,6 +16,7 @@ const MemberScheduleGrid = () => {
       <MemberSchedule />
       <MemberSchedule />
       <MemberSchedule />
+      <MemberSchedule />
     </GridContainer>
   );
 };

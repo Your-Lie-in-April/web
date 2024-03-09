@@ -11,7 +11,6 @@ const Box = styled.div`
   box-sizing: border-box;
 
   display: flex;
-  flex: 1;
   flex-direction: column;
   gap: 18px;
   padding: 5px 5px 8px 3px;
@@ -48,7 +47,7 @@ const Title = styled(CommonText)`
 const TeamSchedule = () => {
   return (
     <Box>
-      <Title>(프로젝트명) 시간표</Title>
+      <Title>프로젝트명 시간표</Title>
       <TeamTime />
     </Box>
   );

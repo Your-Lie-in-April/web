@@ -5,11 +5,10 @@ import LeaderProfile from "./LeaderProfile";
 
 const Box = styled.div`
   width: 286px;
-  height: 610px;
   display: flex;
   flex-direction: column;
   padding: 8px;
-  gap: 46px;
+  gap: 36px;
   border-radius: 20px;
   background: #212121;
   justify-content: space-evenly;
@@ -79,7 +78,7 @@ const ProfileList = () => {
           style={{
             display: "flex",
             flexDirection: "row",
-            gap: "171px",
+            gap: "174px",
             alignItems: "center",
             alignSelf: "center",
           }}
