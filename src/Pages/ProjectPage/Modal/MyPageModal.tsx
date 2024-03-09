@@ -5,7 +5,7 @@ import BorderColorOutlinedIcon from "@mui/icons-material/BorderColorOutlined";
 const Box = styled.div`
   position: relative;
   width: 300px;
-  height: 241px;
+  height: 244px;
   border-radius: 20px;
   background: #212121;
 
@@ -18,7 +18,14 @@ const Box = styled.div`
   box-sizing: border-box;
 `;
 
-const CloseIconBtn = styled(CancelOutlinedIcon)`
+const CloseButton = styled.button`
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+`;
+
+const StyleCloseIconBtn = styled(CancelOutlinedIcon)`
   position: absolute;
   top: 12px;
   right: 8px;
@@ -69,6 +76,11 @@ const EditButton = styled.button`
   border: none;
   padding: 0;
   cursor: pointer;
+
+  &: focus {
+    border: none;
+    outline: none;
+  }
 `;
 
 const EditIcon = styled(BorderColorOutlinedIcon)`
@@ -99,7 +111,9 @@ const StorageBtn = styled.button`
 const MyPageModal = () => {
   return (
     <Box>
-      <CloseIconBtn />
+      <CloseButton>
+        <StyleCloseIconBtn sx={{ fontSize: "24px" }} />
+      </CloseButton>
       <div
         style={{
           display: "flex",
