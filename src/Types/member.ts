@@ -32,10 +32,10 @@ export type MemberNicknameReqDto = {
 /**
  * POST /members/storage/${projectId}
  */
-export type ProjectStoreResDto = Pick<ProjectEntity, 'projcetId'>;
+export type ProjectStoreResDto = Pick<ProjectEntity, 'projectId'>;
 
 /**
  * DELETE /members/storage/${projectId}
  */
-export type ProjectDeleteResDto = Pick<ProjectEntity, 'projcetId'>;
+export type ProjectDeleteResDto = Pick<ProjectEntity, 'projectId'>;
 //
