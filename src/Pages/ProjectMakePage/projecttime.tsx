@@ -197,6 +197,7 @@ const ProjectTime: FC<ProjectTimeProps> = ({ startDate, endDate, onDateChange })
                 <DateContainer>
                     <Text>프로젝트 시작일</Text>
                     <SDatePicker
+                        disabled
                         locale={ko}
                         dateFormat={'YYYY-MM-dd'}
                         selected={startDate}
@@ -213,6 +214,7 @@ const ProjectTime: FC<ProjectTimeProps> = ({ startDate, endDate, onDateChange })
                 <DateContainer>
                     <Text>프로젝트 종료일</Text>
                     <SDatePicker
+                        disabled
                         locale={ko}
                         dateFormat={'YYYY-MM-dd'}
                         selected={endDate}
