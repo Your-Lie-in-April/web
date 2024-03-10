@@ -1,17 +1,19 @@
-import styled from "styled-components";
-import MyProfile from "./MyProfile";
-import MemberProfile from "./MemberProfile";
-import LeaderProfile from "./LeaderProfile";
+import styled from 'styled-components';
+import MyProfile from './MyProfile';
+import MemberProfile from './MemberProfile';
+import LeaderProfile from './LeaderProfile';
 
 const Box = styled.div`
   width: 286px;
+  height: 616px;
   display: flex;
   flex-direction: column;
-  padding: 8px;
-  gap: 36px;
+  padding: 12px 8px 8px 8px;
+  gap: 41px;
   border-radius: 20px;
   background: #212121;
   justify-content: space-evenly;
+  box-sizing: border-box;
 `;
 
 const MemberListBox = styled.div`
@@ -76,14 +78,14 @@ const ProfileList = () => {
       <MemberListBox>
         <div
           style={{
-            display: "flex",
-            flexDirection: "row",
-            gap: "174px",
-            alignItems: "center",
-            alignSelf: "center",
+            display: 'flex',
+            flexDirection: 'row',
+            gap: '174px',
+            alignItems: 'center',
+            alignSelf: 'center',
           }}
         >
-          <CommonText style={{ color: "#ffffff" }}>멤버</CommonText>
+          <CommonText style={{ color: '#ffffff' }}>멤버</CommonText>
           <InviteBtn>+초대하기</InviteBtn>
         </div>
         <MemberList>

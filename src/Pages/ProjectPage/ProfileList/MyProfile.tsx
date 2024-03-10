@@ -1,13 +1,13 @@
-import styled from "styled-components";
-import BorderColorOutlinedIcon from "@mui/icons-material/BorderColorOutlined";
-import { useState } from "react";
-import ChangeNickName from "../Modal/ChangeNickname";
+import styled from 'styled-components';
+import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined';
+import { useState } from 'react';
+import ChangeNickName from '../Modal/ChangeNickname';
 
 const MyProfileBox = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 15px;
   align-items: flex-start;
 `;
 
@@ -21,7 +21,7 @@ const MyProfileImg = styled.img`
 const MyProfileNick = styled.div`
   display: flex;
   width: 168px;
-  padding: 8px;
+  padding: 8px 12px;
   flex-direction: row;
   gap: 8px;
   align-items: center;
@@ -30,7 +30,6 @@ const MyProfileNick = styled.div`
   background: #633ae2;
 
   color: #ffffff;
-  font-family: Pretendard;
   font-size: 14px;
   font-style: normal;
   font-weight: 500;
@@ -102,27 +101,27 @@ const MyProfile = () => {
       <MyProfileBox>
         <div
           style={{
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "flex-start",
-            gap: "22px",
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'flex-start',
+            gap: '12px',
           }}
         >
           <MyProfileImg />
           <div
             style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "flex-start",
-              gap: "8px",
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'flex-start',
+              gap: '9px',
             }}
           >
             <MyProfileNick>
               <CommonText
                 style={{
-                  width: "106px",
-                  fontSize: "14px",
-                  color: "#ffffff",
+                  width: '106px',
+                  fontSize: '14px',
+                  color: '#ffffff',
                 }}
               >
                 닉네임

@@ -1,16 +1,20 @@
-import styled from "styled-components";
-import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
+import styled from 'styled-components';
+import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 
 const MemberProfileBox = styled.div`
   width: 100%;
   height: 52px;
-  display: flex;
-  flex-direction: row;
   padding: 3px 4px;
-  gap: 12px;
   box-sizing: border-box;
   border-radius: 40px;
   background: #ffffff;
+`;
+
+const MemberProfileDiv = styled.div`
+  width: 254px;
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
 `;
 
 const MemberImg = styled.image`
@@ -44,35 +48,37 @@ const DeleteBtn = styled(RemoveCircleOutlineIcon)`
 const MemberProfile = () => {
   return (
     <MemberProfileBox>
-      <MemberImg />
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          gap: " 132px",
-        }}
-      >
+      <MemberProfileDiv>
+        <MemberImg />
         <div
           style={{
-            width: "66px",
-            display: "flex",
-            flexDirection: "column",
-            gap: " 5px",
-            justifyContent: "center",
+            display: 'flex',
+            flex: '1',
+            alignContent: 'center',
+            justifyContent: 'space-between',
           }}
         >
-          <CommonText>닉네임(본인)</CommonText>
-          <CommonText
+          <div
             style={{
-              fontSize: "10px",
-              fontWeight: "400",
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '7px',
+              justifyContent: 'center',
             }}
           >
-            상태메세지
-          </CommonText>
+            <CommonText>닉네임(본인)</CommonText>
+            <CommonText
+              style={{
+                fontSize: '10px',
+                fontWeight: '400',
+              }}
+            >
+              상태메세지
+            </CommonText>
+          </div>
+          <DeleteBtn />
         </div>
-        <DeleteBtn />
-      </div>
+      </MemberProfileDiv>
     </MemberProfileBox>
   );
 };

@@ -3,13 +3,17 @@ import styled from "styled-components";
 const LeaderProfileBox = styled.div`
   width: 100%;
   height: 52px;
-  display: flex;
-  flex-direction: row;
   padding: 3px 4px;
-  gap: 12px;
   box-sizing: border-box;
   border-radius: 40px;
   background: #ffffff;
+`;
+
+const LeaderProfileDiv = styled.div`
+  width: 250px;
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
 `;
 
 const LeaderImg = styled.image`
@@ -52,20 +56,21 @@ const CommonText = styled.div`
 const LeaderProfile = () => {
   return (
     <LeaderProfileBox>
+      <LeaderProfileDiv>
       <LeaderImg />
       <div
         style={{
-          display: "flex",
-          flexDirection: "row",
-          gap: " 100px",
+          display: 'flex',
+            flex: '1',
+            alignContent: 'center',
+            justifyContent: 'space-between',
         }}
       >
         <div
           style={{
-            width: "66px",
             display: "flex",
             flexDirection: "column",
-            gap: " 5px",
+            gap: " 7px",
             justifyContent: "center",
           }}
         >
@@ -81,7 +86,9 @@ const LeaderProfile = () => {
         </div>
         <EditMemberBtn>멤버수정</EditMemberBtn>
       </div>
+      </LeaderProfileDiv>
     </LeaderProfileBox>
+    
   );
 };
 export default LeaderProfile;
