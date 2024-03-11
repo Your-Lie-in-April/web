@@ -7,7 +7,7 @@ const MyProfileBox = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 10px;
   align-items: flex-start;
 `;
 
@@ -21,14 +21,13 @@ const MyProfileImg = styled.img`
 const MyProfileNick = styled.div`
   display: flex;
   width: 168px;
-  padding: 8px 12px;
+  padding: 8px;
   flex-direction: row;
-  gap: 8px;
   align-items: center;
-  justify-content: space-evenly;
+  justify-content: start;
+  box-sizing: border-box;
   border-radius: 10px;
   background: #633ae2;
-
   color: #ffffff;
   font-size: 14px;
   font-style: normal;
@@ -104,7 +103,7 @@ const MyProfile = () => {
             display: 'flex',
             flexDirection: 'row',
             alignItems: 'flex-start',
-            gap: '12px',
+            gap: '22px',
           }}
         >
           <MyProfileImg />
@@ -117,18 +116,29 @@ const MyProfile = () => {
             }}
           >
             <MyProfileNick>
-              <CommonText
+              <div
                 style={{
-                  width: '106px',
-                  fontSize: '14px',
-                  color: '#ffffff',
+                  width: '144px',
+                  height : "22px",
+                  display : "flex",
+                  gap : "8px",
+                  alignItems :"center",
+                  justifyContent : "flex-end"
                 }}
               >
-                닉네임
-              </CommonText>
-              <EditButton onClick={onSetIsEditModal}>
-                <EditIcon />
-              </EditButton>
+                <CommonText
+                  style={{
+                    width: '106px',
+                    fontSize: '14px',
+                    color: '#ffffff',
+                  }}
+                >
+                  닉네임
+                </CommonText>
+                <EditButton onClick={onSetIsEditModal}>
+                  <EditIcon />
+                </EditButton>
+              </div>
             </MyProfileNick>
             <MyEmailText>----------@gmail.com</MyEmailText>
           </div>
