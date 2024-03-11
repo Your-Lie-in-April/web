@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
+import { useState } from 'react';
+import DeleteMember from '../Modal/DeleteMember';
 
 const MemberProfileBox = styled.div`
   width: 100%;
@@ -46,40 +48,49 @@ const DeleteBtn = styled(RemoveCircleOutlineIcon)`
 `;
 
 const MemberProfile = () => {
+  const [deleteMemModal, SetDeleteMemModal] = useState(false);
+  const onSetDeleteMemModal = () => {
+    SetDeleteMemModal((prev) => !prev);
+  };
   return (
-    <MemberProfileBox>
-      <MemberProfileDiv>
-        <MemberImg />
-        <div
-          style={{
-            display: 'flex',
-            flex: '1',
-            alignContent: 'center',
-            justifyContent: 'space-between',
-          }}
-        >
+    <>
+      <MemberProfileBox>
+        <MemberProfileDiv>
+          <MemberImg />
           <div
             style={{
               display: 'flex',
-              flexDirection: 'column',
-              gap: '7px',
-              justifyContent: 'center',
+              flex: '1',
+              alignContent: 'center',
+              justifyContent: 'space-between',
             }}
           >
-            <CommonText>닉네임(본인)</CommonText>
-            <CommonText
+            <div
               style={{
-                fontSize: '10px',
-                fontWeight: '400',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '7px',
+                justifyContent: 'center',
               }}
             >
-              상태메세지
-            </CommonText>
+              <CommonText>닉네임(본인)</CommonText>
+              <CommonText
+                style={{
+                  fontSize: '10px',
+                  fontWeight: '400',
+                }}
+              >
+                상태메세지
+              </CommonText>
+            </div>
+            <DeleteBtn onClick={onSetDeleteMemModal} />
           </div>
-          <DeleteBtn />
-        </div>
-      </MemberProfileDiv>
-    </MemberProfileBox>
+        </MemberProfileDiv>
+      </MemberProfileBox>
+      {deleteMemModal && (
+        <DeleteMember onSetDeleteMemModal={onSetDeleteMemModal} />
+      )}
+    </>
   );
 };
 export default MemberProfile;
