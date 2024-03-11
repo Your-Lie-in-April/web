@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 const LeaderProfileBox = styled.div`
   width: 100%;
@@ -53,42 +53,46 @@ const CommonText = styled.div`
   line-height: normal;
 `;
 
-const LeaderProfile = () => {
+const LeaderProfile = ({
+  toggleDeleteBtn,
+}: {
+  toggleDeleteBtn: React.MouseEventHandler<HTMLButtonElement>;
+}) => {
   return (
     <LeaderProfileBox>
       <LeaderProfileDiv>
-      <LeaderImg />
-      <div
-        style={{
-          display: 'flex',
+        <LeaderImg />
+        <div
+          style={{
+            display: 'flex',
             flex: '1',
             alignContent: 'center',
             justifyContent: 'space-between',
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: " 7px",
-            justifyContent: "center",
           }}
         >
-          <CommonText>닉네임(본인)</CommonText>
-          <CommonText
+          <div
             style={{
-              fontSize: "10px",
-              fontWeight: "400",
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '7px',
+              justifyContent: 'center',
             }}
           >
-            상태메세지
-          </CommonText>
+            <CommonText>닉네임(본인)</CommonText>
+            <CommonText
+              style={{
+                fontSize: '10px',
+                fontWeight: '400',
+              }}
+            >
+              상태메세지
+            </CommonText>
+          </div>
+          <EditMemberBtn onClick={toggleDeleteBtn}>멤버수정</EditMemberBtn>
         </div>
-        <EditMemberBtn>멤버수정</EditMemberBtn>
-      </div>
       </LeaderProfileDiv>
     </LeaderProfileBox>
-    
   );
 };
+
 export default LeaderProfile;

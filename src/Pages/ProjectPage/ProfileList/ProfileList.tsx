@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import MyProfile from './MyProfile';
 import MemberProfile from './MemberProfile';
 import LeaderProfile from './LeaderProfile';
+import { useState } from 'react';
 
 const Box = styled.div`
   width: 286px;
@@ -72,6 +73,12 @@ const MemberList = styled.div`
 `;
 
 const ProfileList = () => {
+  const [showDeleteBtn, setShowDeleteBtn] = useState(false);
+
+  const toggleDeleteBtn = () => {
+    setShowDeleteBtn((prev) => !prev);
+  };
+
   return (
     <Box>
       <MyProfile />
@@ -89,16 +96,18 @@ const ProfileList = () => {
           <InviteBtn>+초대하기</InviteBtn>
         </div>
         <MemberList>
-          <LeaderProfile />
-          <MemberProfile />
-          <MemberProfile />
-          <MemberProfile />
-          <MemberProfile />
-          <MemberProfile />
-          <MemberProfile />
+          <LeaderProfile toggleDeleteBtn={toggleDeleteBtn} />
+          <MemberProfile showDeleteBtn={showDeleteBtn} />
+          <MemberProfile showDeleteBtn={showDeleteBtn} />
+          <MemberProfile showDeleteBtn={showDeleteBtn} />
+          <MemberProfile showDeleteBtn={showDeleteBtn} />
+          <MemberProfile showDeleteBtn={showDeleteBtn} />
+          <MemberProfile showDeleteBtn={showDeleteBtn} />
+          <MemberProfile showDeleteBtn={showDeleteBtn} />
         </MemberList>
       </MemberListBox>
     </Box>
   );
 };
+
 export default ProfileList;

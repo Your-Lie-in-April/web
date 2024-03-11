@@ -47,11 +47,13 @@ const DeleteBtn = styled(RemoveCircleOutlineIcon)`
   }
 `;
 
-const MemberProfile = () => {
+const MemberProfile = ({ showDeleteBtn }: { showDeleteBtn: boolean }) => {
   const [deleteMemModal, SetDeleteMemModal] = useState(false);
+
   const onSetDeleteMemModal = () => {
     SetDeleteMemModal((prev) => !prev);
   };
+
   return (
     <>
       <MemberProfileBox>
@@ -83,7 +85,10 @@ const MemberProfile = () => {
                 상태메세지
               </CommonText>
             </div>
-            <DeleteBtn onClick={onSetDeleteMemModal} />
+            <DeleteBtn
+              style={{ display: showDeleteBtn ? 'block' : 'none' }}
+              onClick={onSetDeleteMemModal}
+            />
           </div>
         </MemberProfileDiv>
       </MemberProfileBox>
@@ -93,4 +98,5 @@ const MemberProfile = () => {
     </>
   );
 };
+
 export default MemberProfile;
