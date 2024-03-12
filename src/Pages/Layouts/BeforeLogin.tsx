@@ -11,6 +11,7 @@ const BeforeLoginDiv = styled.div`
 `;
 
 const Logo = styled.div`
+  width: 173px;
   color: #000000;
   font-style: normal;
   font-weight: 700;
@@ -19,9 +20,10 @@ const Logo = styled.div`
 `;
 
 const LogIn = styled.button`
+  width: 87px;
   box-sizing: border-box;
   font-style: normal;
-  font-weight: 800;
+  font-weight: 500;
   font-size: 22px;
 
   background-color: transparent;
@@ -40,8 +42,16 @@ const BeforeLogin: FC = () => {
     <>
       <BeforeLoginDiv>
         <div style={{ marginBottom: '14px' }} />
-        <div style={{ width: '554px' }} />
-        <div style={{ display: 'flex', marginBottom: '14px' }}>
+        <div
+          style={{
+            display: 'flex',
+            marginRight: 'auto',
+            marginLeft: 'auto',
+            marginBottom: '14px',
+            alignContent: 'center',
+          }}
+        >
+          <div style={{ width: '554px' }} />
           <Logo>TIME PIECE</Logo>
           <LogIn>Log in</LogIn>
         </div>
