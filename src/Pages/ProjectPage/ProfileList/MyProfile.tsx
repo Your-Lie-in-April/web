@@ -112,7 +112,7 @@ const MyProfile = () => {
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'flex-start',
-              gap: '9px',
+              gap: '10px',
             }}
           >
             <MyProfileNick>

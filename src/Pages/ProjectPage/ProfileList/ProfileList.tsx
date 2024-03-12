@@ -6,11 +6,11 @@ import { useState } from 'react';
 
 const Box = styled.div`
   width: 286px;
-  height: 616px;
+  height: 600px;
   display: flex;
   flex-direction: column;
-  padding: 12px 8px 8px 8px;
-  gap: 41px;
+  padding:8px;
+  gap: 36px;
   border-radius: 20px;
   background: #212121;
   justify-content: space-evenly;
@@ -21,7 +21,7 @@ const MemberListBox = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
 `;
 
 const InviteBtn = styled.button`
