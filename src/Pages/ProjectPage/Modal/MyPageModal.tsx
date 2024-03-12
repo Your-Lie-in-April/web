@@ -1,6 +1,6 @@
-import styled from "styled-components";
-import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
-import BorderColorOutlinedIcon from "@mui/icons-material/BorderColorOutlined";
+import styled from 'styled-components';
+import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
+import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined';
 
 const Box = styled.div`
   position: relative;
@@ -108,18 +108,22 @@ const StorageBtn = styled.button`
   line-height: normal;
 `;
 
-const MyPageModal = () => {
+interface MyPageModalProps {
+  onSetIsMyPageModal: () => void;
+}
+
+const MyPageModal: React.FC<MyPageModalProps> = ({ onSetIsMyPageModal }) => {
   return (
     <Box>
-      <CloseButton>
-        <StyleCloseIconBtn sx={{ fontSize: "24px" }} />
+      <CloseButton onClick={onSetIsMyPageModal}>
+        <StyleCloseIconBtn sx={{ fontSize: '24px' }} />
       </CloseButton>
       <div
         style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          gap: "8px",
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: '8px',
         }}
       >
         <MyImg />

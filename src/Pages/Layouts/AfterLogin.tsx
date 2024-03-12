@@ -1,5 +1,6 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import styled from 'styled-components';
+import MyPageModal from '../ProjectPage/Modal/MyPageModal';
 
 const AfterLoginDiv = styled.div`
   width: 100%;
@@ -36,15 +37,22 @@ const LogIn = styled.button`
 `;
 
 const AfterLogin: FC = () => {
+  const [isMyPageModal, setIsMyPageModal] = useState<Boolean>(false);
+  const onSetIsMyPageModal = () => {
+    setIsMyPageModal((prev) => !prev);
+  };
   return (
-    <AfterLoginDiv>
-      <div style={{ marginBottom: '14px' }} />
-      <div style={{ width: '554px' }} />
-      <div style={{ display: 'flex', marginBottom: '14px' }}>
-        <Logo>TIME PIECE</Logo>
-        <LogIn>My page</LogIn>
-      </div>
-    </AfterLoginDiv>
+    <>
+      <AfterLoginDiv>
+        <div style={{ marginBottom: '14px' }} />
+        <div style={{ width: '554px' }} />
+        <div style={{ display: 'flex', marginBottom: '14px' }}>
+          <Logo>TIME PIECE</Logo>
+          <LogIn onClick={onSetIsMyPageModal}>My page</LogIn>
+        </div>
+      </AfterLoginDiv>
+      {/* {isMyPageModal && <MyPageModal onSetIsMyPageModal={onSetIsMyPageModal} />} */}
+    </>
   );
 };
 export default AfterLogin;
