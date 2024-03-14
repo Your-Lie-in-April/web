@@ -142,6 +142,8 @@ const backurls = [
 
 const Cover: FC<CoverProps> = ({ onColorSelect, onImageSelect, onHexSelect }) => {
     const [color, setColor] = useState<string>('#ffffff');
+    const [openHex, setOpenHex] = useState<boolean>(false);
+
     const handleColorClick = (color: string) => {
         onColorSelect(color);
     };
@@ -156,6 +158,10 @@ const Cover: FC<CoverProps> = ({ onColorSelect, onImageSelect, onHexSelect }) =>
         },
         [color]
     );
+
+    const toggleHex = () => {
+        setOpenHex((prev) => !prev);
+    };
     https: return (
         <div>
             <CoverContainer>
@@ -175,7 +181,9 @@ const Cover: FC<CoverProps> = ({ onColorSelect, onImageSelect, onHexSelect }) =>
                                 style={{ background: '#FFF', border: '1px solid black' }}
                                 onClick={() => handleColorClick('#fff')}
                             />
-                            <Color style={{ background: '#D9D9D9' }}>{plus}</Color>
+                            <Color style={{ background: '#D9D9D9' }} onClick={toggleHex}>
+                                {plus}
+                            </Color>
                         </ColorChoose>
                     </ColorContainer>
                     <ImageContainer>
@@ -197,11 +205,13 @@ const Cover: FC<CoverProps> = ({ onColorSelect, onImageSelect, onHexSelect }) =>
                     </ImageContainer>
                 </ConverInnerContainer>
             </CoverContainer>
-            <HEXContainer>
-                <div style={{ display: 'flex', justifyContent: 'center' }}>
-                    <ChromePicker color={color} onChange={(color) => handleColorChange(color.hex)} />
-                </div>
-            </HEXContainer>
+            {openHex ? (
+                <HEXContainer>
+                    <div style={{ display: 'flex', justifyContent: 'center' }}>
+                        <ChromePicker color={color} onChange={(color) => handleColorChange(color.hex)} />
+                    </div>
+                </HEXContainer>
+            ) : null}
         </div>
     );
 };
