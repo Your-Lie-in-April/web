@@ -1,5 +1,7 @@
-import { FC, useState } from 'react';
+import { FC, useState, useEffect, useCallback } from 'react';
+import React from 'react';
 import styled from 'styled-components';
+import { ChromePicker } from 'react-color';
 
 interface CoverProps {
     onColorSelect: (color: string) => void;
@@ -129,52 +131,66 @@ const backurls = [
 ];
 
 const Cover: FC<CoverProps> = ({ onColorSelect, onImageSelect }) => {
+    const [back, setBack] = useState<string>('');
+    const [color, setColor] = useState<string>('#ffffff');
     const handleColorClick = (color: string) => {
         onColorSelect(color);
+        setBack(color);
     };
     const handleImageClick = (url: string) => {
         onImageSelect(url);
+        setBack(url);
     };
-    return (
-        <CoverContainer>
-            <ConverInnerContainer>
-                <Register>커버등록</Register>
-                <ColorContainer>
-                    단색
-                    <ColorChoose>
-                        {colors.map((color, index) => (
+
+    const handleColorChange = useCallback(
+        (color: string) => {
+            setColor(color);
+        },
+        [color]
+    );
+    https: return (
+        <div>
+            <CoverContainer>
+                <ConverInnerContainer>
+                    <Register>커버등록</Register>
+                    <ColorContainer>
+                        단색
+                        <ColorChoose>
+                            {colors.map((color, index) => (
+                                <Color
+                                    key={index}
+                                    style={{ background: color }}
+                                    onClick={() => handleColorClick(color)}
+                                ></Color>
+                            ))}
                             <Color
-                                key={index}
-                                style={{ background: color }}
-                                onClick={() => handleColorClick(color)}
-                            ></Color>
-                        ))}
-                        <Color
-                            style={{ background: '#FFF', border: '1px solid black' }}
-                            onClick={() => handleColorClick('#fff')}
-                        />
-                        <Color style={{ background: '#D9D9D9' }}>{plus}</Color>
-                    </ColorChoose>
-                </ColorContainer>
-                <ImageContainer>
-                    이미지
-                    <ImageChoose>
-                        {urls.map((url, index) => (
-                            <Image
-                                key={index}
-                                style={{
-                                    backgroundImage: `url('${url}')`,
-                                    backgroundSize: 'cover',
-                                    backgroundRepeat: 'no-repeat',
-                                    backgroundPosition: 'center',
-                                }}
-                                onClick={() => handleImageClick(backurls[index])}
-                            ></Image>
-                        ))}
-                    </ImageChoose>
-                </ImageContainer>
-            </ConverInnerContainer>
-        </CoverContainer>
+                                style={{ background: '#FFF', border: '1px solid black' }}
+                                onClick={() => handleColorClick('#fff')}
+                            />
+                            <Color style={{ background: '#D9D9D9' }}>{plus}</Color>
+                        </ColorChoose>
+                    </ColorContainer>
+                    <ImageContainer>
+                        이미지
+                        <ImageChoose>
+                            {urls.map((url, index) => (
+                                <Image
+                                    key={index}
+                                    style={{
+                                        backgroundImage: `url('${url}')`,
+                                        backgroundSize: 'cover',
+                                        backgroundRepeat: 'no-repeat',
+                                        backgroundPosition: 'center',
+                                    }}
+                                    onClick={() => handleImageClick(backurls[index])}
+                                ></Image>
+                            ))}
+                        </ImageChoose>
+                    </ImageContainer>
+                </ConverInnerContainer>
+            </CoverContainer>
+            <ChromePicker color={color} onChange={(color) => handleColorChange(color.hex)} />
+        </div>
     );
 };
 export default Cover;
