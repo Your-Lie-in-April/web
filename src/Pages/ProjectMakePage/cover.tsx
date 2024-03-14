@@ -1,11 +1,12 @@
 import { FC, useState, useEffect, useCallback } from 'react';
 import React from 'react';
 import styled from 'styled-components';
-import { ChromePicker } from 'react-color';
+import { AlphaPicker, ChromePicker } from 'react-color';
 
 interface CoverProps {
     onColorSelect: (color: string) => void;
     onImageSelect: (url: string) => void;
+    onHexSelect: (color: string) => void;
 }
 
 const plus = (
@@ -104,6 +105,15 @@ const Image = styled.button`
     background-repeat: no-repeat;
     background-position: center;
 `;
+const HEXContainer = styled.div`
+    width: 300px;
+    height: 478px;
+    gap: 8px;
+    border-radius: 6px;
+    background: white;
+    box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.25);
+    margin-top: 8px;
+`;
 const colors = ['#633AE2', '#FFCB3B', '#64AFF5', '#C2D57A', '#EB5757', '#212121'];
 const urls = [
     'https://s3-alpha-sig.figma.com/img/1428/5f05/043a78e2fa12ac2136b1383ece3b805c?Expires=1710115200&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=dtK-wfzGTlsj~sQidsbTULkBX8gQq2YK1PYYad~4zSuM6RIAPGfk1Bd5FXVwRJmZuqsmedy8sfQEPpFR4j5Z8tCHvCpNDbN-qflkEc2K4TJJGvodeSQkIZtMoc0K0fX5eU2rc-KEuMwwnFfrSFuZqHxmnEr3yiDEJFr8YlD3tdzVJO6SjHpOJqs5Emehq7lWQD79PNyqLQ24ALQbmBIGkz3FSkzicgSs77-o4WBoXSWYIcGx7uYzU3cd-eQyuSSflhFTgr78ROWYu92tUvPoM6JyjiEtDnACTLSWM-MmKGH45hEGomVH1yfDhygNo7q-erFQoaj~WWvggUxipdXqwQ__',
@@ -130,21 +140,19 @@ const backurls = [
     'https://s3-alpha-sig.figma.com/img/9ec7/03fd/37e40de737e425f7b7c36080e0220504?Expires=1710720000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=Sm6ELb~YJvtu2GS2F0B5WWx6fDfHT9~M5m7fw99PaHZ3E65cyi9xPYIHpzMlY1S84n0dS8uuXNPeaVOZAjnoi9qNSYWCIuFeQalz3UJRtj-T1iPMVwZ9GRGIdTzWarhcznUnnzOjYMBSO0iuyaYK1jz8znQBG0gG-B7WnFu-TmZvXtXiCmPyW-CHKxipm2Zvw19wTkWXqG8AzctgDcqb6-2z8EIv3OLtaCBnQmiXI-ELgHyODMDPakE9vCj6RR7GT8kKdpBsMoQGKPMjOaqRxJFFrVd2CKqzEAIKKkfmHzSMih4w3f3ZntrvwN3OnwVChAEno~3zSHmJIxkP42pDoQ__',
 ];
 
-const Cover: FC<CoverProps> = ({ onColorSelect, onImageSelect }) => {
-    const [back, setBack] = useState<string>('');
+const Cover: FC<CoverProps> = ({ onColorSelect, onImageSelect, onHexSelect }) => {
     const [color, setColor] = useState<string>('#ffffff');
     const handleColorClick = (color: string) => {
         onColorSelect(color);
-        setBack(color);
     };
     const handleImageClick = (url: string) => {
         onImageSelect(url);
-        setBack(url);
     };
 
     const handleColorChange = useCallback(
         (color: string) => {
             setColor(color);
+            onHexSelect(color);
         },
         [color]
     );
@@ -189,7 +197,11 @@ const Cover: FC<CoverProps> = ({ onColorSelect, onImageSelect }) => {
                     </ImageContainer>
                 </ConverInnerContainer>
             </CoverContainer>
-            <ChromePicker color={color} onChange={(color) => handleColorChange(color.hex)} />
+            <HEXContainer>
+                <div style={{ display: 'flex', justifyContent: 'center' }}>
+                    <ChromePicker color={color} onChange={(color) => handleColorChange(color.hex)} />
+                </div>
+            </HEXContainer>
         </div>
     );
 };

@@ -127,6 +127,7 @@ const Info: FC = () => {
     const [isCoverClicked, setIsCoverClicked] = useState<boolean>(false);
     const [selectedColor, setSelectedColor] = useState<string | null>(null);
     const [selectedImageUrl, setSelectedImageUrl] = useState<string | null>(null);
+    const [selectedHex, setSelectedHex] = useState<string | null>(null);
 
     const handleTextareaChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
         const inputText = e.target.value;
@@ -144,17 +145,25 @@ const Info: FC = () => {
     const handleColorSelect = (color: string) => {
         setSelectedColor(color);
         setSelectedImageUrl(null);
+        setSelectedHex(null);
     };
 
     const handleImageSelect = (url: string) => {
         setSelectedImageUrl(url);
         setSelectedColor(null);
+        setSelectedHex(null);
+    };
+
+    const handleHexSelect = (color: string) => {
+        setSelectedColor(null);
+        setSelectedImageUrl(null);
+        setSelectedHex(color);
     };
 
     return (
         <Container
             style={{
-                backgroundColor: selectedColor || 'white',
+                backgroundColor: selectedColor || selectedHex || 'white',
                 backgroundImage: `url('${selectedImageUrl}')`,
             }}
         >
@@ -189,7 +198,11 @@ const Info: FC = () => {
             </MakeContainer>
             {isCoverClicked && (
                 <CoverContainer>
-                    <Cover onColorSelect={handleColorSelect} onImageSelect={handleImageSelect} />
+                    <Cover
+                        onColorSelect={handleColorSelect}
+                        onImageSelect={handleImageSelect}
+                        onHexSelect={handleHexSelect}
+                    />
                 </CoverContainer>
             )}
         </Container>
