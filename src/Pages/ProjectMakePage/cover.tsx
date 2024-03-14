@@ -1,7 +1,7 @@
 import { FC, useState, useEffect, useCallback } from 'react';
 import React from 'react';
 import styled from 'styled-components';
-import { AlphaPicker, ChromePicker } from 'react-color';
+import { AlphaPicker, ChromePicker, ColorResult } from 'react-color';
 
 interface CoverProps {
     onColorSelect: (color: string) => void;
@@ -152,11 +152,15 @@ const Cover: FC<CoverProps> = ({ onColorSelect, onImageSelect, onHexSelect }) =>
     };
 
     const handleColorChange = useCallback(
-        (color: string) => {
-            setColor(color);
-            onHexSelect(color);
+        (color: ColorResult) => {
+            let hexCode = color.hex;
+            if (color.rgb.a !== 1) {
+                hexCode = `rgba(${color.rgb.r}, ${color.rgb.g}, ${color.rgb.b}, ${color.rgb.a})`;
+            }
+            setColor(hexCode);
+            onHexSelect(hexCode);
         },
-        [color]
+        [onHexSelect]
     );
 
     const toggleHex = () => {
@@ -208,7 +212,11 @@ const Cover: FC<CoverProps> = ({ onColorSelect, onImageSelect, onHexSelect }) =>
             {openHex ? (
                 <HEXContainer>
                     <div style={{ display: 'flex', justifyContent: 'center' }}>
-                        <ChromePicker color={color} onChange={(color) => handleColorChange(color.hex)} />
+                        <ChromePicker
+                            disableAlpha={false}
+                            color={color}
+                            onChange={(selectedColor) => handleColorChange(selectedColor)}
+                        />
                     </div>
                 </HEXContainer>
             ) : null}
