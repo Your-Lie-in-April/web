@@ -1,5 +1,5 @@
-import styled from "styled-components";
-import TimeCircle from "./TimeCircle";
+import styled from 'styled-components';
+import TimeCircle from './TimeCircle';
 
 const CommonText = styled.div`
   color: #000000;
@@ -18,16 +18,18 @@ const TimeTableDiv = styled.div`
 `;
 
 const DayTextList = styled.div`
+  height: 212.5px;
   display: flex;
   flex-direction: column;
   gap: 9.32px;
   align-items: center;
   justify-content: space-between;
-  margin-top: 3px;
+  margin-bottom: 2.8px;
   align-self: flex-end;
 `;
 
 const HourTextList = styled.div`
+  width: 536px;
   display: flex;
   flex-direction: row;
   gap: 7.46px;
@@ -35,7 +37,7 @@ const HourTextList = styled.div`
   justify-content: space-between;
 `;
 
-const DayOfWeek = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
+const DayOfWeek = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
 const HoursOfDay = [...Array(16).keys()].map((_, index) => index + 9);
 
 const MemeberTime = () => {
@@ -44,34 +46,34 @@ const MemeberTime = () => {
     <TimeTableDiv>
       <DayTextList>
         {DayOfWeek.map((day, idx) => (
-          <CommonText key={idx}>{day}</CommonText>
+          <CommonText style={{ height: '22.369px' }} key={idx}>
+            {day}
+          </CommonText>
         ))}
       </DayTextList>
-      <div style={{ display: "flex", flexDirection: "column", gap: "7.46px" }}>
-        <HourTextList style={{ alignSelf: "flex-start" }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap : "7.3px"}}>
+        <HourTextList style={{ alignSelf: 'flex-start' }}>
           {filteredHours.map((hour, idx) => (
-            <CommonText key={idx} style={{}}>
-              {hour}
-            </CommonText>
+            <CommonText key={idx}>{hour}</CommonText>
           ))}
         </HourTextList>
         <div
           style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "2px",
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '3.73px',
           }}
         >
           {DayOfWeek.map((day, idx) => (
-            <div key={idx} style={{ display: "flex", flexDirection: "row" }}>
+            <div key={idx} style={{ display: 'flex', flexDirection: 'row' }}>
               {HoursOfDay.slice(0, HoursOfDay.length - 1).map(
                 (hour, hourIdx) => (
                   <TimeCircle
                     key={hourIdx}
                     style={{
-                      border: "none",
-                      width: "37.282px",
-                      height: "27.962px",
+                      border: 'none',
+                      width: '37.282px',
+                      height: '27.962px',
                     }}
                   />
                 )
