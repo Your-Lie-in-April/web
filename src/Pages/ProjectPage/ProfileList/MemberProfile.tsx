@@ -1,16 +1,22 @@
-import styled from "styled-components";
-import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
+import styled from 'styled-components';
+import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
+import { useState } from 'react';
+import DeleteMember from '../Modal/DeleteMember';
 
 const MemberProfileBox = styled.div`
   width: 100%;
   height: 52px;
-  display: flex;
-  flex-direction: row;
   padding: 3px 4px;
-  gap: 12px;
   box-sizing: border-box;
   border-radius: 40px;
   background: #ffffff;
+`;
+
+const MemberProfileDiv = styled.div`
+  width: 254px;
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
 `;
 
 const MemberImg = styled.image`
@@ -41,39 +47,56 @@ const DeleteBtn = styled(RemoveCircleOutlineIcon)`
   }
 `;
 
-const MemberProfile = () => {
+const MemberProfile = ({ showDeleteBtn }: { showDeleteBtn: boolean }) => {
+  const [deleteMemModal, SetDeleteMemModal] = useState(false);
+
+  const onSetDeleteMemModal = () => {
+    SetDeleteMemModal((prev) => !prev);
+  };
+
   return (
-    <MemberProfileBox>
-      <MemberImg />
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          gap: " 132px",
-        }}
-      >
-        <div
-          style={{
-            width: "66px",
-            display: "flex",
-            flexDirection: "column",
-            gap: " 5px",
-            justifyContent: "center",
-          }}
-        >
-          <CommonText>닉네임(본인)</CommonText>
-          <CommonText
+    <>
+      <MemberProfileBox>
+        <MemberProfileDiv>
+          <MemberImg />
+          <div
             style={{
-              fontSize: "10px",
-              fontWeight: "400",
+              display: 'flex',
+              flex: '1',
+              alignContent: 'center',
+              justifyContent: 'space-between',
             }}
           >
-            상태메세지
-          </CommonText>
-        </div>
-        <DeleteBtn />
-      </div>
-    </MemberProfileBox>
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '7px',
+                justifyContent: 'center',
+              }}
+            >
+              <CommonText>닉네임(본인)</CommonText>
+              <CommonText
+                style={{
+                  fontSize: '10px',
+                  fontWeight: '400',
+                }}
+              >
+                상태메세지
+              </CommonText>
+            </div>
+            <DeleteBtn
+              style={{ display: showDeleteBtn ? 'block' : 'none' }}
+              onClick={onSetDeleteMemModal}
+            />
+          </div>
+        </MemberProfileDiv>
+      </MemberProfileBox>
+      {deleteMemModal && (
+        <DeleteMember onSetDeleteMemModal={onSetDeleteMemModal} />
+      )}
+    </>
   );
 };
+
 export default MemberProfile;

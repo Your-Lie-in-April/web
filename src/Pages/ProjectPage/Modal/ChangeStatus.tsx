@@ -1,4 +1,23 @@
-import styled from "styled-components";
+import styled from 'styled-components';
+
+const ModalBlackOut = styled.div`
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  background: rgba(0, 0, 0, 0.5);
+`;
+
+const ModalContainer = styled.div`
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 999;
+`;
 
 const Box = styled.div`
   width: 500px;
@@ -69,38 +88,49 @@ const CancelBtn = styled(CommonButton)`
   background: #d9d9d9;
 `;
 
-const ChangeStatus = () => {
+interface ChangeStatusProps {
+  onSetEditStatusModal: () => void;
+}
+
+const ChangeStatus: React.FC<ChangeStatusProps> = ({
+  onSetEditStatusModal,
+}) => {
   return (
+    <>
+    <ModalBlackOut />
+      <ModalContainer>
     <Box>
       <div
         style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          gap: "19px",
-          width: "100%",
-          height: "100%",
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: '19px',
+          width: '100%',
+          height: '100%',
         }}
       >
         <div
           style={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            gap: "31px",
-            width: "100%",
-            height: "100%",
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: '31px',
+            width: '100%',
+            height: '100%',
           }}
         >
           <Title>상태메시지를 작성해주세요</Title>
           <StatusField type="text" />
         </div>
-        <ButtonsContainer style={{ alignSelf: "flex-end" }}>
-          <ConfirmBtn>확인</ConfirmBtn>
-          <CancelBtn>취소</CancelBtn>
+        <ButtonsContainer style={{ alignSelf: 'flex-end' }}>
+          <ConfirmBtn onClick={onSetEditStatusModal}>확인</ConfirmBtn>
+          <CancelBtn >취소</CancelBtn>
         </ButtonsContainer>
       </div>
     </Box>
+    </ModalContainer>
+    </>
   );
 };
 export default ChangeStatus;
