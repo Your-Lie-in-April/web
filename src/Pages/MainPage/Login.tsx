@@ -134,6 +134,21 @@ const GoogleLogin = styled.div`
 `;
 const googleLogo = 'src/pics/google-logo-9808 1.png';
 const Login: FC = () => {
+    const URL = 'https://timepiece.inuappcenter.kr/';
+    const oAuth = async () => {
+        try {
+            const res = await fetch(URL + `/v1/oauth2/login-page/google`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+                },
+            });
+            if (res.status === 200) {
+                console.log('보냄');
+            }
+        } catch {}
+    };
     return (
         <>
             <GlobalStyle />
@@ -157,7 +172,7 @@ const Login: FC = () => {
                     </div>
                     <div>
                         <Google>
-                            <GoogleLogin>
+                            <GoogleLogin onClick={oAuth}>
                                 <img src={googleLogo} />
                                 구글로그인
                             </GoogleLogin>
