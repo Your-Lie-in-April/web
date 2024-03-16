@@ -9,6 +9,7 @@ import Banner from './Banner';
 import ProjectList from './ProjectList';
 import Pinned from './Pinned';
 import { createGlobalStyle } from 'styled-components';
+import Profile from './Profile';
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -66,7 +67,7 @@ const MainPage: FC = () => {
                 gap: '14px',
               }}
             >
-              <Login />
+              <Profile />
               <Alarm />
             </div>
             <div
