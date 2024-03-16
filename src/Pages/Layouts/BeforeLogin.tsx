@@ -2,7 +2,7 @@ import { FC } from 'react';
 import styled from 'styled-components';
 
 const BeforeLoginDiv = styled.div`
-  width: 100%;
+  width: 100vw;
   height: 100px;
   background-color: #f1f1f1;
   display: flex;
