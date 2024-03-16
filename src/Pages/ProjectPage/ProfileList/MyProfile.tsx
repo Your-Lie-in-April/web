@@ -1,7 +1,7 @@
-import styled from "styled-components";
-import BorderColorOutlinedIcon from "@mui/icons-material/BorderColorOutlined";
-import { useState } from "react";
-import ChangeNickName from "../Modal/ChangeNickname";
+import styled from 'styled-components';
+import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined';
+import { useState } from 'react';
+import ChangeNickName from '../Modal/ChangeNickname';
 
 const MyProfileBox = styled.div`
   width: 100%;
@@ -23,14 +23,12 @@ const MyProfileNick = styled.div`
   width: 168px;
   padding: 8px;
   flex-direction: row;
-  gap: 8px;
   align-items: center;
-  justify-content: space-evenly;
+  justify-content: start;
+  box-sizing: border-box;
   border-radius: 10px;
   background: #633ae2;
-
   color: #ffffff;
-  font-family: Pretendard;
   font-size: 14px;
   font-style: normal;
   font-weight: 500;
@@ -102,34 +100,45 @@ const MyProfile = () => {
       <MyProfileBox>
         <div
           style={{
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "flex-start",
-            gap: "22px",
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'flex-start',
+            gap: '22px',
           }}
         >
           <MyProfileImg />
           <div
             style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "flex-start",
-              gap: "8px",
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'flex-start',
+              gap: '10px',
             }}
           >
             <MyProfileNick>
-              <CommonText
+              <div
                 style={{
-                  width: "106px",
-                  fontSize: "14px",
-                  color: "#ffffff",
+                  width: '144px',
+                  height : "22px",
+                  display : "flex",
+                  gap : "8px",
+                  alignItems :"center",
+                  justifyContent : "flex-end"
                 }}
               >
-                닉네임
-              </CommonText>
-              <EditButton onClick={onSetIsEditModal}>
-                <EditIcon />
-              </EditButton>
+                <CommonText
+                  style={{
+                    width: '106px',
+                    fontSize: '14px',
+                    color: '#ffffff',
+                  }}
+                >
+                  닉네임
+                </CommonText>
+                <EditButton onClick={onSetIsEditModal}>
+                  <EditIcon />
+                </EditButton>
+              </div>
             </MyProfileNick>
             <MyEmailText>----------@gmail.com</MyEmailText>
           </div>

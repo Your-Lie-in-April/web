@@ -1,10 +1,10 @@
-import styled from "styled-components";
-import BorderColorOutlinedIcon from "@mui/icons-material/BorderColorOutlined";
-import InboxOutlinedIcon from "@mui/icons-material/InboxOutlined";
+import styled from 'styled-components';
+import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined';
+import InboxOutlinedIcon from '@mui/icons-material/InboxOutlined';
 
 const Container = styled.div`
   position: relative;
-  width: 100%;
+  width: 100vw;
   height: 200px;
   background: #d9d9d9;
   box-sizing: border-box;
@@ -43,7 +43,7 @@ const MainContainer = styled.div`
 const SettingDiv = styled.div`
   position: absolute;
   bottom: 16px;
-  right: 319px;
+  right: 319.5px;
   width: 221px;
   height: 34px;
   display: flex;
@@ -79,18 +79,18 @@ const ProjectInfo = () => {
     <>
       <Container>
         <ProjectInfoDiv>
-          <CommonText style={{ fontSize: "42px", fontWeight: "700" }}>
+          <CommonText style={{ fontSize: '42px', fontWeight: '700' }}>
             프로젝트 제목
           </CommonText>
           <CommonText>프로젝트 내용</CommonText>
         </ProjectInfoDiv>
         <SettingDiv>
           <SettingBtn>
-            <BorderColorOutlinedIcon style={{ fontSize: "18px" }} />
+            <BorderColorOutlinedIcon style={{ fontSize: '18px' }} />
             커버 수정
           </SettingBtn>
           <SettingBtn>
-            <InboxOutlinedIcon style={{ fontSize: "18px" }} />
+            <InboxOutlinedIcon style={{ fontSize: '18px' }} />
             프로젝트 보관
           </SettingBtn>
         </SettingDiv>

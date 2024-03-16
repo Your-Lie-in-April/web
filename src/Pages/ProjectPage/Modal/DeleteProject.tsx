@@ -67,7 +67,7 @@ const ButtonsContainer = styled.div`
   gap: 4px;
 `;
 
-const DeleteMember = () => {
+const DeleteProject = () => {
   return (
     <Box>
       <div
@@ -103,4 +103,4 @@ const DeleteMember = () => {
   );
 };
 
-export default DeleteMember;
+export default DeleteProject;

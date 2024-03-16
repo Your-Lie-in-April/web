@@ -1,15 +1,19 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 const LeaderProfileBox = styled.div`
   width: 100%;
   height: 52px;
-  display: flex;
-  flex-direction: row;
   padding: 3px 4px;
-  gap: 12px;
   box-sizing: border-box;
   border-radius: 40px;
   background: #ffffff;
+`;
+
+const LeaderProfileDiv = styled.div`
+  width: 250px;
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
 `;
 
 const LeaderImg = styled.image`
@@ -49,39 +53,46 @@ const CommonText = styled.div`
   line-height: normal;
 `;
 
-const LeaderProfile = () => {
+const LeaderProfile = ({
+  toggleDeleteBtn,
+}: {
+  toggleDeleteBtn: React.MouseEventHandler<HTMLButtonElement>;
+}) => {
   return (
     <LeaderProfileBox>
-      <LeaderImg />
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          gap: " 100px",
-        }}
-      >
+      <LeaderProfileDiv>
+        <LeaderImg />
         <div
           style={{
-            width: "66px",
-            display: "flex",
-            flexDirection: "column",
-            gap: " 5px",
-            justifyContent: "center",
+            display: 'flex',
+            flex: '1',
+            alignContent: 'center',
+            justifyContent: 'space-between',
           }}
         >
-          <CommonText>닉네임(본인)</CommonText>
-          <CommonText
+          <div
             style={{
-              fontSize: "10px",
-              fontWeight: "400",
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '7px',
+              justifyContent: 'center',
             }}
           >
-            상태메세지
-          </CommonText>
+            <CommonText>닉네임(본인)</CommonText>
+            <CommonText
+              style={{
+                fontSize: '10px',
+                fontWeight: '400',
+              }}
+            >
+              상태메세지
+            </CommonText>
+          </div>
+          <EditMemberBtn onClick={toggleDeleteBtn}>멤버수정</EditMemberBtn>
         </div>
-        <EditMemberBtn>멤버수정</EditMemberBtn>
-      </div>
+      </LeaderProfileDiv>
     </LeaderProfileBox>
   );
 };
+
 export default LeaderProfile;

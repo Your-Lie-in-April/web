@@ -1,16 +1,16 @@
-import AfterLogin from "../Layouts/AfterLogin";
-import styled from "styled-components";
-import { createGlobalStyle } from "styled-components";
-import ProjectInfo from "./ProjectInfo";
-import ProfileList from "./ProfileList/ProfileList";
-import MySchedule from "./Schedule/MySchedule";
-import TeamSchedule from "./Schedule/TeamSchedule";
-import Alarm from "./Alarm";
-import MemberSchedule from "./Schedule/MemberSchedule";
-import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
-import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
-import { useState } from "react";
-import MemberScheduleGrid from "./Schedule/MemberScheduleGrid";
+import AfterLogin from '../Layouts/AfterLogin';
+import styled from 'styled-components';
+import { createGlobalStyle } from 'styled-components';
+import ProjectInfo from './ProjectInfo';
+import ProfileList from './ProfileList/ProfileList';
+import MySchedule from './Schedule/MySchedule';
+import TeamSchedule from './Schedule/TeamSchedule';
+import Alarm from './Alarm';
+import MemberSchedule from './Schedule/MemberSchedule';
+import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import { useState } from 'react';
+import MemberScheduleGrid from './Schedule/MemberScheduleGrid';
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -25,9 +25,9 @@ const GlobalStyle = createGlobalStyle`
 `;
 
 const Divider = styled.div`
-  width: 100%;
+  width: 100vw;
   height: 20px;
-  background-color: #000000;
+  background-color: #212121;
 `;
 
 const Box = styled.div`
@@ -85,7 +85,15 @@ const ProjectPage = () => {
   return (
     <>
       <GlobalStyle />
-      <div style={{ display: "flex", flexDirection: "column", gap: "32px" }}>
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '32px',
+          width: '100vw',
+          margin: '0 auto',
+        }}
+      >
         <div>
           <AfterLogin />
           <Divider />
@@ -94,19 +102,19 @@ const ProjectPage = () => {
         <Box>
           <div
             style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: "24px",
-              alignItems: "center",
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '24px',
+              alignItems: 'center',
             }}
           >
             <MainBox>
               <ProfileList />
               <div
                 style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "12px",
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '12px',
                 }}
               >
                 <TeamSchedule />
@@ -114,9 +122,9 @@ const ProjectPage = () => {
               </div>
               <div
                 style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "12px",
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '12px',
                 }}
               >
                 <Callendar />
@@ -124,7 +132,7 @@ const ProjectPage = () => {
               </div>
             </MainBox>
             <MemTimeBtn onClick={toggleMemTime}>
-              {seeMemTime ? "멤버 시간표 닫기" : "멤버 시간표 열기"}
+              {seeMemTime ? '멤버 시간표 닫기' : '멤버 시간표 열기'}
               {seeMemTime ? (
                 <ArrowDropUpIcon className="icon" />
               ) : (
@@ -135,7 +143,7 @@ const ProjectPage = () => {
           </div>
         </Box>
       </div>
-      <div style={{ height: "400px" }}></div>
+      <div style={{ height: '400px' }}></div>
     </>
   );
 };

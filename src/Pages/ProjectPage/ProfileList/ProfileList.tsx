@@ -1,10 +1,13 @@
-import styled from "styled-components";
-import MyProfile from "./MyProfile";
-import MemberProfile from "./MemberProfile";
-import LeaderProfile from "./LeaderProfile";
+import { useState } from 'react';
+import styled from 'styled-components';
+import MyProfile from './MyProfile';
+import MemberProfile from './MemberProfile';
+import LeaderProfile from './LeaderProfile';
+import InvitationModal from '../Modal/InvitationModal';
 
 const Box = styled.div`
   width: 286px;
+  height: 600px;
   display: flex;
   flex-direction: column;
   padding: 8px;
@@ -12,13 +15,14 @@ const Box = styled.div`
   border-radius: 20px;
   background: #212121;
   justify-content: space-evenly;
+  box-sizing: border-box;
 `;
 
 const MemberListBox = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
 `;
 
 const InviteBtn = styled.button`
@@ -32,7 +36,6 @@ const InviteBtn = styled.button`
   border-radius: 20px;
   background: #633ae2;
   box-sizing: border-box;
-
   color: #fff;
   text-align: center;
   font-family: Pretendard;
@@ -57,7 +60,6 @@ const MemberList = styled.div`
   display: flex;
   flex-direction: column;
   gap: 8px;
-
   overflow-y: auto;
 
   &::-webkit-scrollbar {
@@ -70,33 +72,50 @@ const MemberList = styled.div`
 `;
 
 const ProfileList = () => {
+  const [showDeleteBtn, setShowDeleteBtn] = useState(false);
+  const [showInviteModal, setShowInviteModal] = useState(false);
+
+  const toggleDeleteBtn = () => {
+    setShowDeleteBtn((prev) => !prev);
+  };
+
+  const toggleInviteModal = () => {
+    setShowInviteModal((prev) => !prev);
+  };
+
   return (
     <Box>
       <MyProfile />
       <MemberListBox>
         <div
           style={{
-            display: "flex",
-            flexDirection: "row",
-            gap: "174px",
-            alignItems: "center",
-            alignSelf: "center",
+            display: 'flex',
+            flexDirection: 'row',
+            gap: '174px',
+            alignItems: 'center',
+            alignSelf: 'center',
           }}
         >
-          <CommonText style={{ color: "#ffffff" }}>멤버</CommonText>
-          <InviteBtn>+초대하기</InviteBtn>
+          <CommonText style={{ color: '#ffffff' }}>멤버</CommonText>
+          <InviteBtn onClick={toggleInviteModal}>+초대하기</InviteBtn>{' '}
+          {/* 초대하기 버튼 */}
         </div>
         <MemberList>
-          <LeaderProfile />
-          <MemberProfile />
-          <MemberProfile />
-          <MemberProfile />
-          <MemberProfile />
-          <MemberProfile />
-          <MemberProfile />
+          <LeaderProfile toggleDeleteBtn={toggleDeleteBtn} />
+          <MemberProfile showDeleteBtn={showDeleteBtn} />
+          <MemberProfile showDeleteBtn={showDeleteBtn} />
+          <MemberProfile showDeleteBtn={showDeleteBtn} />
+          <MemberProfile showDeleteBtn={showDeleteBtn} />
+          <MemberProfile showDeleteBtn={showDeleteBtn} />
+          <MemberProfile showDeleteBtn={showDeleteBtn} />
+          <MemberProfile showDeleteBtn={showDeleteBtn} />
         </MemberList>
       </MemberListBox>
+      {showInviteModal && (
+        <InvitationModal onShowInviteModal={toggleInviteModal} />
+      )}
     </Box>
   );
 };
+
 export default ProfileList;
