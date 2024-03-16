@@ -3,11 +3,13 @@ import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
 import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined';
 
 const Box = styled.div`
-  position: relative;
   width: 300px;
   height: 244px;
   border-radius: 20px;
   background: #212121;
+  position: fixed;
+  top: 100px;
+  right: 319.5px;
 
   display: inline-flex;
   padding: 12px 8px;
@@ -16,6 +18,7 @@ const Box = styled.div`
   justify-content: flex-end;
   gap: 22px;
   box-sizing: border-box;
+  z-index: 999;
 `;
 
 const CloseButton = styled.button`

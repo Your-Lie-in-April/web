@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import MyPageModal from '../ProjectPage/Modal/MyPageModal';
 
 const AfterLoginDiv = styled.div`
-  width: 100%;
+  width: 100vw;
   height: 100px;
   background-color: #f1f1f1;
   display: flex;
@@ -13,15 +13,19 @@ const AfterLoginDiv = styled.div`
 
 const Logo = styled.div`
   width: 173px;
+  height: 38px;
   color: #000000;
   font-style: normal;
   font-weight: 700;
   font-size: 32px;
-  margin-right: 467px;
+  margin-bottom: 14px;
 `;
 
 const LogIn = styled.button`
+  position: absolute;
+  right: 319.5px;
   width: 87px;
+  height: 26px;
   box-sizing: border-box;
   font-style: normal;
   font-weight: 500;
@@ -31,37 +35,29 @@ const LogIn = styled.button`
   border: none;
   padding: 0;
   cursor: pointer;
+  margin: auto;
+  margin-bottom: 20px;
 
-  &: focus {
+  &:focus {
     border: none;
     outline: none;
   }
 `;
 
 const AfterLogin: FC = () => {
-  const [isMyPageModal, setIsMyPageModal] = useState<Boolean>(false);
+  const [isMyPageModal, setIsMyPageModal] = useState(false);
   const onSetIsMyPageModal = () => {
     setIsMyPageModal((prev) => !prev);
   };
   return (
     <>
       <AfterLoginDiv>
-        <div style={{ marginBottom: '14px' }} />
-        <div
-          style={{
-            display: 'flex',
-            marginRight: 'auto',
-            marginLeft: 'auto',
-            marginBottom: '14px',
-            alignContent: 'center',
-          }}
-        >
-          <div style={{ width: '554px' }} />
-          <Logo>TIME PIECE</Logo>
-          <LogIn onClick={onSetIsMyPageModal}>My page</LogIn>
-        </div>
+        <Logo>TIME PIECE</Logo>
+        <LogIn onClick={onSetIsMyPageModal}>My page</LogIn>
+        {isMyPageModal && (
+          <MyPageModal onSetIsMyPageModal={onSetIsMyPageModal} />
+        )}
       </AfterLoginDiv>
-      {/* {isMyPageModal && <MyPageModal onSetIsMyPageModal={onSetIsMyPageModal} />} */}
     </>
   );
 };
