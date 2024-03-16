@@ -9,7 +9,7 @@ const Box = styled.div`
   height: 244px;
   border-radius: 20px;
   background: #212121;
-  position: fixed;
+  position: absolute;
   top: 100px;
   right: 319.5px;
 

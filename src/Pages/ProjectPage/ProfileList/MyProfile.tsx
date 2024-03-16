@@ -92,9 +92,16 @@ const CommonText = styled.div`
 
 const MyProfile = () => {
   const [isEditModal, setIsEditModal] = useState(false);
+  const [nick, setNick] = useState('닉네임');
+
+  const handleNickChange = (newNick: string) => {
+    setNick(newNick);
+  };
+
   const onSetIsEditModal = () => {
     setIsEditModal((prev) => !prev);
   };
+
   return (
     <>
       <MyProfileBox>
@@ -119,11 +126,11 @@ const MyProfile = () => {
               <div
                 style={{
                   width: '144px',
-                  height : "22px",
-                  display : "flex",
-                  gap : "8px",
-                  alignItems :"center",
-                  justifyContent : "flex-end"
+                  height: '22px',
+                  display: 'flex',
+                  gap: '8px',
+                  alignItems: 'center',
+                  justifyContent: 'flex-end',
                 }}
               >
                 <CommonText
@@ -133,7 +140,7 @@ const MyProfile = () => {
                     color: '#ffffff',
                   }}
                 >
-                  닉네임
+                  {nick}
                 </CommonText>
                 <EditButton onClick={onSetIsEditModal}>
                   <EditIcon />
@@ -145,7 +152,12 @@ const MyProfile = () => {
         </div>
         <MyStatus>현재상태메세지</MyStatus>
       </MyProfileBox>
-      {isEditModal && <ChangeNickName onSetIsEditModal={onSetIsEditModal} />}
+      {isEditModal && (
+        <ChangeNickName
+          onSetIsEditModal={onSetIsEditModal}
+          onNickChange={handleNickChange}
+        />
+      )}
     </>
   );
 };

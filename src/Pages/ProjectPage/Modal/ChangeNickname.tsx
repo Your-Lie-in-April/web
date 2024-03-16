@@ -1,4 +1,5 @@
-import styled from "styled-components";
+import { useState } from 'react';
+import styled from 'styled-components';
 
 const ModalBlackOut = styled.div`
   width: 100%;
@@ -87,11 +88,21 @@ const CancelBtn = styled(CommonButton)`
 
 interface ChangeNickNameProps {
   onSetIsEditModal: () => void;
+  onNickChange: (newNick: string) => void;
 }
 
 const ChangeNickName: React.FC<ChangeNickNameProps> = ({
   onSetIsEditModal,
+  onNickChange,
 }) => {
+  const [newNick, setNewNick] = useState('');
+
+  const handleConfirm = () => {
+    console.log('new nickname:', newNick);
+    onNickChange(newNick);
+    onSetIsEditModal();
+  };
+
   return (
     <>
       <ModalBlackOut />
@@ -99,29 +110,22 @@ const ChangeNickName: React.FC<ChangeNickNameProps> = ({
         <Box>
           <div
             style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              gap: "18px",
-              width: "100%",
-              height: "100%",
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: '18px',
+              width: '100%',
+              height: '100%',
             }}
           >
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                gap: "18px",
-                width: "100%",
-                height: "100%",
-              }}
-            >
-              <Title>프로젝트에서 사용할 닉네임을 작성해주세요</Title>
-              <NickNameField type="text" />
-            </div>
-            <ButtonsContainer style={{ alignSelf: "flex-end" }}>
-              <ConfirmBtn>확인</ConfirmBtn>
+            <Title>프로젝트에서 사용할 닉네임을 작성해주세요</Title>
+            <NickNameField
+              type="text"
+              value={newNick}
+              onChange={(e) => setNewNick(e.target.value)}
+            />
+            <ButtonsContainer style={{ alignSelf: 'flex-end' }}>
+              <ConfirmBtn onClick={handleConfirm}>확인</ConfirmBtn>
               <CancelBtn onClick={onSetIsEditModal}>취소</CancelBtn>
             </ButtonsContainer>
           </div>
