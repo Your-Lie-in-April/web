@@ -210,15 +210,13 @@ const Cover: FC<CoverProps> = ({ onColorSelect, onImageSelect, onHexSelect }) =>
                 </ConverInnerContainer>
             </CoverContainer>
             {openHex ? (
-                <HEXContainer>
-                    <div style={{ display: 'flex', justifyContent: 'center' }}>
-                        <ChromePicker
-                            disableAlpha={false}
-                            color={color}
-                            onChange={(selectedColor) => handleColorChange(selectedColor)}
-                        />
-                    </div>
-                </HEXContainer>
+                <div style={{ display: 'flex', justifyContent: 'center' }}>
+                    <ChromePicker
+                        disableAlpha={false}
+                        color={color}
+                        onChange={(selectedColor) => handleColorChange(selectedColor)}
+                    />
+                </div>
             ) : null}
         </div>
     );
