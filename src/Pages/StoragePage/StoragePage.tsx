@@ -8,6 +8,7 @@ import SpringIcon from './Icon/SpringIcon';
 
 const GlobalStyle = createGlobalStyle`
   body {
+    min-height : 1573px;
     margin: 0;
     background-color: #212121;
     -ms-overflow-style: none;
@@ -48,10 +49,10 @@ const StoragePage = () => {
   return (
     <>
       <GlobalStyle />
-      {/* <ArrowIcon />
-      <LightningIcon />
+      <ArrowIcon />
+      {/* <LightningIcon /> */}
+      {/* <SpringIcon /> */}
       <SummertimeSadnessIcon />
-      <SpringIcon /> */}
       <div
         style={{
           display: 'flex',
