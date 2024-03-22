@@ -8,8 +8,8 @@ function App() {
     return (
         <div>
             {/* <MainPage /> */}
-            {/* <ProjectMakePage /> */}
-            <Login />
+            <ProjectMakePage />
+            {/* <Login /> */}
         </div>
     );
 }
