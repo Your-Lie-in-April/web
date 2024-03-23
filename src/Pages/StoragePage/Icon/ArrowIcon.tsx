@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import useDocumentSize from '../useDocumentSize';
+import useDocumentSize from '../../../hooks/useDocumentSize';
 
 const IconWrapper = styled.div<{ offset: number }>`
   position: absolute;

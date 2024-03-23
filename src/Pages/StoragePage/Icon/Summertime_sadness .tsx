@@ -1,13 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
-import useDocumentSize from '../useDocumentSize';
+import useDocumentSize from '../../../hooks/useDocumentSize';
 
 const IconWrapper = styled.div<{ offset: number }>`
   position: absolute;
   bottom: calc(100vh - ${(props) => props.offset}px);
   right: 0px;
   flex-shrink: 0;
-  
 `;
 
 const SummertimeSadnessIcon: React.FC = () => {
