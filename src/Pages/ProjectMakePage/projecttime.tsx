@@ -34,7 +34,7 @@ const SDatePicker = styled(ReactDatePicker)`
     }
 `;
 
-const TimePicker = styled.div`
+const TimePicker = styled.select`
     margin-top: 12px;
     width: 178px;
     font-size: 28px;
@@ -46,28 +46,8 @@ const TimePicker = styled.div`
     justify-content: center;
     align-items: center;
     margin: auto;
-
-    &:hover {
-        cursor: pointer;
-    }
-`;
-
-const DropdownContainer = styled.div`
-    position: absolute;
-    top: calc(83.6%);
-    width: auto;
-    display: flex;
-    flex-direction: row;
-    z-index: 5;
-`;
-
-const DropdownItem = styled.select`
-    margin: 5px;
-    font-size: 15px;
-    font-weight: bold;
-    border: transparent;
-    border-radius: 4px;
     cursor: pointer;
+    border: none;
 `;
 
 const Text = styled.div`
@@ -141,6 +121,16 @@ const ProjectTime: FC<ProjectTimeProps> = ({ startDate, endDate, onDateChange })
     const startDropdownRef = useRef<HTMLDivElement>(null);
     const endDropdownRef = useRef<HTMLDivElement>(null);
 
+    const Times = [];
+    for (let hour = 0; hour < 24; hour++) {
+        for (let minute = 0; minute < 60; minute += 30) {
+            const formattedHour = hour.toString().padStart(2, '0');
+            const formattedMinute = minute.toString().padStart(2, '0');
+            const time = `${formattedHour}:${formattedMinute}`;
+            Times.push({ value: time, label: time });
+        }
+    }
+
     const toggleWeekend = (dayIndex: number) => {
         if (selectedDays.includes(dayIndex)) {
             setSelectedDays(selectedDays.filter((day) => day !== dayIndex));
@@ -150,23 +140,20 @@ const ProjectTime: FC<ProjectTimeProps> = ({ startDate, endDate, onDateChange })
         onDateChange?.(startDate, endDate);
     };
 
-    const startDropdown = () => setIsStartOpen((prevIsOpen) => !prevIsOpen);
-    const endDropdown = () => setIsEndOpen((prevIsOpen) => !prevIsOpen);
-
     const updateStartTime = () => {
-        setStartTime({
-            hour: hourRef.current?.value ?? starttime.hour,
-            minute: minuteRef.current?.value ?? starttime.minute,
-            ampm: ampmRef.current?.value ?? starttime.ampm,
-        });
+        const hour = hourRef.current?.value || '12';
+        const minute = minuteRef.current?.value || '00';
+        const ampm = ampmRef.current?.value || 'AM';
+        setStartTime({ hour, minute, ampm });
     };
+
     const updateEndTime = () => {
-        setEndTime({
-            hour: hourRef.current?.value ?? endtime.hour,
-            minute: minuteRef.current?.value ?? endtime.minute,
-            ampm: ampmRef.current?.value ?? endtime.ampm,
-        });
+        const hour = hourRef.current?.value || '12';
+        const minute = minuteRef.current?.value || '00';
+        const ampm = ampmRef.current?.value || 'AM';
+        setEndTime({ hour, minute, ampm });
     };
+
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             if (startDropdownRef.current && !startDropdownRef.current.contains(event.target as Node) && isStartOpen) {
@@ -184,6 +171,14 @@ const ProjectTime: FC<ProjectTimeProps> = ({ startDate, endDate, onDateChange })
             document.removeEventListener('mousedown', handleClickOutside);
         };
     }, [isStartOpen, isEndOpen]);
+
+    const startDropdown = () => {
+        setIsStartOpen(!isStartOpen);
+    };
+
+    const endDropdown = () => {
+        setIsEndOpen(!isEndOpen);
+    };
 
     return (
         <ProjectTimeContainer>
@@ -255,53 +250,27 @@ const ProjectTime: FC<ProjectTimeProps> = ({ startDate, endDate, onDateChange })
                 <DateContainer>
                     <Text>시간표 시작시간</Text>
                     <TimePicker
-                        onClick={startDropdown}
-                    >{`${starttime.hour}:${starttime.minute} ${starttime.ampm}`}</TimePicker>
-                    {isStartOpen && (
-                        <DropdownContainer ref={startDropdownRef}>
-                            <DropdownItem ref={hourRef} defaultValue={starttime.hour} onChange={updateStartTime}>
-                                {Array.from({ length: 12 }, (_, i) => i + 1).map((hour) => (
-                                    <option key={hour} value={hour}>
-                                        {hour}
-                                    </option>
-                                ))}
-                            </DropdownItem>
-                            <DropdownItem ref={minuteRef} defaultValue={starttime.minute} onChange={updateStartTime}>
-                                <option value="00">00</option>
-                                <option value="30">30</option>
-                            </DropdownItem>
-                            <DropdownItem ref={ampmRef} defaultValue={starttime.ampm} onChange={updateStartTime}>
-                                <option value="AM">AM</option>
-                                <option value="PM">PM</option>
-                            </DropdownItem>
-                        </DropdownContainer>
-                    )}
+                        value={`${starttime.hour}:${starttime.minute} ${starttime.ampm}`}
+                        onChange={updateStartTime}
+                    >
+                        {Times.map((time, index) => (
+                            <option key={index} value={time.value}>
+                                {time.label}
+                            </option>
+                        ))}
+                    </TimePicker>
                 </DateContainer>
-
                 <Separator style={{ marginLeft: '28px', marginRight: '28px' }}>~</Separator>
 
                 <DateContainer>
                     <Text>시간표 종료시간</Text>
-                    <TimePicker onClick={endDropdown}>{`${endtime.hour}:${endtime.minute} ${endtime.ampm}`}</TimePicker>
-                    {isEndOpen && (
-                        <DropdownContainer ref={endDropdownRef}>
-                            <DropdownItem ref={hourRef} defaultValue={endtime.hour} onChange={updateEndTime}>
-                                {Array.from({ length: 12 }, (_, i) => i + 1).map((hour) => (
-                                    <option key={hour} value={hour}>
-                                        {hour}
-                                    </option>
-                                ))}
-                            </DropdownItem>
-                            <DropdownItem ref={minuteRef} defaultValue={endtime.minute} onChange={updateEndTime}>
-                                <option value="00">00</option>
-                                <option value="30">30</option>
-                            </DropdownItem>
-                            <DropdownItem ref={ampmRef} defaultValue={endtime.ampm} onChange={updateEndTime}>
-                                <option value="AM">AM</option>
-                                <option value="PM">PM</option>
-                            </DropdownItem>
-                        </DropdownContainer>
-                    )}
+                    <TimePicker value={`${endtime.hour}:${endtime.minute} ${endtime.ampm}`} onChange={updateEndTime}>
+                        {Times.map((time, index) => (
+                            <option key={index} value={time.value}>
+                                {time.label}
+                            </option>
+                        ))}
+                    </TimePicker>
                 </DateContainer>
             </div>
         </ProjectTimeContainer>
