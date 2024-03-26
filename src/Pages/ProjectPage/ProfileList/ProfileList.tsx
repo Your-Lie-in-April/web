@@ -98,7 +98,6 @@ const ProfileList = () => {
         >
           <CommonText style={{ color: '#ffffff' }}>멤버</CommonText>
           <InviteBtn onClick={toggleInviteModal}>+초대하기</InviteBtn>{' '}
-          {/* 초대하기 버튼 */}
         </div>
         <MemberList>
           <LeaderProfile toggleDeleteBtn={toggleDeleteBtn} />
@@ -111,9 +110,7 @@ const ProfileList = () => {
           <MemberProfile showDeleteBtn={showDeleteBtn} />
         </MemberList>
       </MemberListBox>
-      {showInviteModal && (
-        <InvitationModal onShowInviteModal={toggleInviteModal} />
-      )}
+      {showInviteModal && <InvitationModal />}
     </Box>
   );
 };

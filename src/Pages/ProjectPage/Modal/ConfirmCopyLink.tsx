@@ -1,12 +1,12 @@
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { createGlobalStyle } from 'styled-components';
 
-const Container = styled.div`
+const Container = styled.div<{ opacity: number }>`
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  z-index: 999;
+  z-index: 1000;
 
   padding: 8px 12px;
   justify-content: center;
@@ -21,9 +21,35 @@ const Container = styled.div`
   font-style: normal;
   font-weight: 500;
   line-height: normal;
+
+  opacity: ${({ opacity }) => opacity};
+  transition: opacity 1s ease;
+  pointer-events: none;
 `;
 
 const ConfirmCopyLink = () => {
-  return <Container>프로젝트 링크가 복사되었습니다</Container>;
+  const [opacity, setOpacity] = useState(1);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setOpacity(0);
+    }, 1200);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    if (opacity === 0) {
+      const hideTimer = setTimeout(() => {
+        setOpacity(0);
+      }, 2000);
+      return () => clearTimeout(hideTimer);
+    }
+  }, [opacity]);
+
+  return (
+    <Container opacity={opacity}>프로젝트 링크가 복사되었습니다</Container>
+  );
 };
+
 export default ConfirmCopyLink;

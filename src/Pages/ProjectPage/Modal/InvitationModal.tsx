@@ -1,27 +1,34 @@
 import { useState } from 'react';
 import styled from 'styled-components';
+import ConfirmCopyLink from './ConfirmCopyLink';
 
 interface CommonButtonProps {
   primary?: boolean;
   onClick?: () => void;
 }
 
-const ModalBlackOut = styled.div`
+const ModalBlackOut = styled.div<{ isVisible: boolean }>`
   width: 100%;
   height: 100%;
   position: fixed;
   left: 0;
   top: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, ${({ isVisible }) => (isVisible ? '0.5' : '0')});
   z-index: 1;
+  transition: background 4s ease, opacity 4s ease;
+  display: ${({ isVisible }) => (isVisible ? 'block' : 'none')};
 `;
 
-const ModalContainer = styled.div`
+const ModalContainer = styled.div<{ isVisible: boolean }>`
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  opacity: ${({ isVisible }) => (isVisible ? '1' : '0')};
+  transition: opacity 4s ease;
   z-index: 999;
+  transition: opacity 0s 3s;
+  display: ${({ isVisible }) => (isVisible ? 'block' : 'none')};
 `;
 
 const Box = styled.div`
@@ -46,7 +53,7 @@ const Title = styled.div`
   line-height: normal;
 `;
 
-const InviteField = styled.div`
+const InviteField = styled.input`
   width: 400px;
   height: 32px;
   border-radius: 20px;
@@ -62,6 +69,7 @@ const InviteField = styled.div`
   padding: 9px 0px;
   justify-content: center;
   align-items: center;
+  border: none;
 `;
 
 const ButtonsContainer = styled.div`
@@ -87,35 +95,47 @@ const CommonButton = styled.button<CommonButtonProps>`
   background-color: ${(props) => (props.primary ? '#633AE2' : '#d9d9d9')};
 `;
 
-interface ShowInviteModalProps {
-  onShowInviteModal: () => void;
-}
 
-const InvitationModal: React.FC<ShowInviteModalProps> = ({
-  onShowInviteModal,
+
+const InvitationModal = ({
+  
 }) => {
   const [link, setLink] = useState('');
   const [isBtnClick, setIsBtnClick] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
+  const [showConfirmCopyLink, setShowConfirmCopyLink] = useState(false);
 
+  // 링크 생성 로직
+  // 수정필요**
   const generateLink = () => {
-    const generatedLink = '프로젝트 페이지 url https://www--------------';
-    setLink(generatedLink);
     setIsBtnClick(false);
+    const generatedLink = '프로젝트 페이지 url https://www.example.com';
+    setLink(generatedLink);
   };
 
-  const copyLink = () => {
-    // 링크 복사
-    setIsBtnClick(true);
-  };
-
+  // 모달 닫기
   const closeInviteModal = () => {
-    onShowInviteModal();
+    setIsVisible(false);
+    setTimeout(() => {
+      setShowConfirmCopyLink(true);
+    }, 2500);
+  };
+
+  // Clipboard API를 이용해 초대링크 복사
+  const onClickCopyLink = async (url: string) => {
+    try {
+      await navigator.clipboard.writeText(url);
+      setIsBtnClick(true);
+      closeInviteModal();
+    } catch (e) {
+      alert('초대코드 복사에 실패했습니다😭');
+    }
   };
 
   return (
     <>
-      <ModalBlackOut onClick={closeInviteModal} />
-      <ModalContainer>
+      <ModalBlackOut isVisible={isVisible} onClick={closeInviteModal} />
+      <ModalContainer isVisible={isVisible}>
         <Box>
           <div
             style={{
@@ -138,20 +158,25 @@ const InvitationModal: React.FC<ShowInviteModalProps> = ({
               }}
             >
               <Title>프로젝트명</Title>
-              <InviteField>{link || ''}</InviteField>
+              <InviteField value={link} readOnly />
             </div>
             <ButtonsContainer style={{ alignSelf: 'flex-end' }}>
               <CommonButton primary={!isBtnClick} onClick={generateLink}>
                 링크생성
               </CommonButton>
-              <CommonButton primary={isBtnClick} onClick={copyLink}>
+              <CommonButton
+                primary={isBtnClick}
+                onClick={() => onClickCopyLink(link)}
+              >
                 링크복사
               </CommonButton>
             </ButtonsContainer>
           </div>
         </Box>
       </ModalContainer>
+      {showConfirmCopyLink && <ConfirmCopyLink />}
     </>
   );
 };
+
 export default InvitationModal;
