@@ -19,7 +19,6 @@ const DateContainer = styled.div`
 `;
 
 const SDatePicker = styled(ReactDatePicker)`
-    margin-top: 12px;
     width: 166px;
     padding: 4px;
     font-size: 28px;
@@ -34,8 +33,7 @@ const SDatePicker = styled(ReactDatePicker)`
     }
 `;
 
-const TimePicker = styled.select`
-    margin-top: 12px;
+const TimePicker = styled.div`
     width: 178px;
     font-size: 28px;
     height: 40px;
@@ -48,6 +46,35 @@ const TimePicker = styled.select`
     margin: auto;
     cursor: pointer;
     border: none;
+`;
+
+const TimePickerContainer = styled.ul`
+    width: 178px;
+    height: 124px;
+    font-size: 28px;
+    border-radius: 5px;
+    background: #f5f5f5;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0;
+    list-style-type: none;
+    margin: auto;
+    overflow-y: auto;
+`;
+
+const TimeOption = styled.li`
+    width: 100%;
+    height: 40px;
+    cursor: pointer;
+    font-size: 24px;
+    line-height: 28px;
+    color: #7d7d7d;
+    &:hover {
+        background-color: #633ae2;
+        color: #fff;
+    }
 `;
 
 const Text = styled.div`
@@ -123,11 +150,19 @@ const ProjectTime: FC<ProjectTimeProps> = ({ startDate, endDate, onDateChange })
 
     const Times = [];
     for (let hour = 0; hour < 24; hour++) {
+        const ampm = hour < 12 ? 'AM' : 'PM';
+        const displayHour = hour === 0 ? 0 : hour > 12 ? hour - 12 : hour;
         for (let minute = 0; minute < 60; minute += 30) {
-            const formattedHour = hour.toString().padStart(2, '0');
+            const formattedHour = displayHour.toString().padStart(2, '0');
             const formattedMinute = minute.toString().padStart(2, '0');
-            const time = `${formattedHour}:${formattedMinute}`;
-            Times.push({ value: time, label: time });
+            const time = `${ampm} ${formattedHour}:${formattedMinute}`;
+            Times.push({
+                value: `${formattedHour}:${formattedMinute}`,
+                label: time,
+                hour: formattedHour,
+                minute: formattedMinute,
+                ampm,
+            });
         }
     }
 
@@ -140,17 +175,11 @@ const ProjectTime: FC<ProjectTimeProps> = ({ startDate, endDate, onDateChange })
         onDateChange?.(startDate, endDate);
     };
 
-    const updateStartTime = () => {
-        const hour = hourRef.current?.value || '12';
-        const minute = minuteRef.current?.value || '00';
-        const ampm = ampmRef.current?.value || 'AM';
+    const updateStartTime = (hour: string, minute: string, ampm: string) => {
         setStartTime({ hour, minute, ampm });
     };
 
-    const updateEndTime = () => {
-        const hour = hourRef.current?.value || '12';
-        const minute = minuteRef.current?.value || '00';
-        const ampm = ampmRef.current?.value || 'AM';
+    const updateEndTime = (hour: string, minute: string, ampm: string) => {
         setEndTime({ hour, minute, ampm });
     };
 
@@ -247,30 +276,29 @@ const ProjectTime: FC<ProjectTimeProps> = ({ startDate, endDate, onDateChange })
                     marginLeft: '10px',
                 }}
             >
-                <DateContainer>
+                <DateContainer style={{ gap: '4px' }}>
                     <Text>시간표 시작시간</Text>
-                    <TimePicker
-                        value={`${starttime.hour}:${starttime.minute} ${starttime.ampm}`}
-                        onChange={updateStartTime}
-                    >
+                    <TimePicker></TimePicker>
+                    <TimePickerContainer>
                         {Times.map((time, index) => (
-                            <option key={index} value={time.value}>
+                            <TimeOption key={index} onClick={() => updateStartTime(time.hour, time.minute, time.ampm)}>
                                 {time.label}
-                            </option>
+                            </TimeOption>
                         ))}
-                    </TimePicker>
+                    </TimePickerContainer>
                 </DateContainer>
                 <Separator style={{ marginLeft: '28px', marginRight: '28px' }}>~</Separator>
 
-                <DateContainer>
+                <DateContainer style={{ gap: '4px' }}>
                     <Text>시간표 종료시간</Text>
-                    <TimePicker value={`${endtime.hour}:${endtime.minute} ${endtime.ampm}`} onChange={updateEndTime}>
+                    <TimePicker></TimePicker>
+                    <TimePickerContainer>
                         {Times.map((time, index) => (
-                            <option key={index} value={time.value}>
+                            <TimeOption key={index} onClick={() => updateEndTime(time.hour, time.minute, time.ampm)}>
                                 {time.label}
-                            </option>
+                            </TimeOption>
                         ))}
-                    </TimePicker>
+                    </TimePickerContainer>
                 </DateContainer>
             </div>
         </ProjectTimeContainer>
