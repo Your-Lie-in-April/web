@@ -42,7 +42,7 @@ const ConfirmCopyLink = () => {
     if (opacity === 0) {
       const hideTimer = setTimeout(() => {
         setOpacity(0);
-      }, 2000);
+      }, 1500);
       return () => clearTimeout(hideTimer);
     }
   }, [opacity]);

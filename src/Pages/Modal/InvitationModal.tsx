@@ -15,8 +15,7 @@ const ModalBlackOut = styled.div<{ isVisible: boolean }>`
   top: 0;
   background: rgba(0, 0, 0, ${({ isVisible }) => (isVisible ? '0.5' : '0')});
   z-index: 1;
-  transition: background 4s ease, opacity 4s ease;
-  display: ${({ isVisible }) => (isVisible ? 'block' : 'none')};
+  transition: background 1s ease;
 `;
 
 const ModalContainer = styled.div<{ isVisible: boolean }>`
@@ -25,10 +24,8 @@ const ModalContainer = styled.div<{ isVisible: boolean }>`
   left: 50%;
   transform: translate(-50%, -50%);
   opacity: ${({ isVisible }) => (isVisible ? '1' : '0')};
-  transition: opacity 4s ease;
+  transition: opacity 1s ease;
   z-index: 999;
-  transition: opacity 0s 3s;
-  display: ${({ isVisible }) => (isVisible ? 'block' : 'none')};
 `;
 
 const Box = styled.div`
@@ -93,17 +90,21 @@ const CommonButton = styled.button<CommonButtonProps>`
   line-height: normal;
   color: #ffffff;
   background-color: ${(props) => (props.primary ? '#633AE2' : '#d9d9d9')};
+
+  &: focus {
+    border: none;
+    outline: none;
+  }
 `;
 
-
-
-const InvitationModal = ({
-  
-}) => {
-  const [link, setLink] = useState('');
-  const [isBtnClick, setIsBtnClick] = useState(false);
-  const [isVisible, setIsVisible] = useState(true);
-  const [showConfirmCopyLink, setShowConfirmCopyLink] = useState(false);
+const InvitationModal = ({}) => {
+  const [link, setLink] = useState<string>('');
+  const [isBtnClick, setIsBtnClick] = useState<boolean>(false);
+  const [isVisible, setIsVisible] = useState<boolean>(true);
+  const [showConfirmCopyLink, setShowConfirmCopyLink] =
+    useState<boolean>(false);
+  const [isModalCompleteHidden, setIsModalCompleteHidden] =
+    useState<boolean>(false);
 
   // 링크 생성 로직
   // 수정필요**
@@ -113,12 +114,19 @@ const InvitationModal = ({
     setLink(generatedLink);
   };
 
-  // 모달 닫기
-  const closeInviteModal = () => {
+  const clickBack = () => {
     setIsVisible(false);
+  };
+
+  // 복사 버튼 클릭시 모달 닫기
+  const closeModal = () => {
+    setIsVisible(false);
+
     setTimeout(() => {
+      setIsModalCompleteHidden(true);
       setShowConfirmCopyLink(true);
-    }, 2500);
+      setTimeout(() => {}, 100);
+    }, 1000);
   };
 
   // Clipboard API를 이용해 초대링크 복사
@@ -126,7 +134,7 @@ const InvitationModal = ({
     try {
       await navigator.clipboard.writeText(url);
       setIsBtnClick(true);
-      closeInviteModal();
+      closeModal();
     } catch (e) {
       alert('초대코드 복사에 실패했습니다😭');
     }
@@ -134,46 +142,50 @@ const InvitationModal = ({
 
   return (
     <>
-      <ModalBlackOut isVisible={isVisible} onClick={closeInviteModal} />
-      <ModalContainer isVisible={isVisible}>
-        <Box>
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              gap: '18px',
-              width: '100%',
-              height: '100%',
-            }}
-          >
-            <div
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                gap: '18px',
-                width: '100%',
-                height: '100%',
-              }}
-            >
-              <Title>프로젝트명</Title>
-              <InviteField value={link} readOnly />
-            </div>
-            <ButtonsContainer style={{ alignSelf: 'flex-end' }}>
-              <CommonButton primary={!isBtnClick} onClick={generateLink}>
-                링크생성
-              </CommonButton>
-              <CommonButton
-                primary={isBtnClick}
-                onClick={() => onClickCopyLink(link)}
+      {!isModalCompleteHidden && (
+        <>
+          <ModalBlackOut isVisible={isVisible} onClick={clickBack} />
+          <ModalContainer isVisible={isVisible}>
+            <Box>
+              <div
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  gap: '18px',
+                  width: '100%',
+                  height: '100%',
+                }}
               >
-                링크복사
-              </CommonButton>
-            </ButtonsContainer>
-          </div>
-        </Box>
-      </ModalContainer>
+                <div
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    gap: '18px',
+                    width: '100%',
+                    height: '100%',
+                  }}
+                >
+                  <Title>프로젝트명</Title>
+                  <InviteField value={link} readOnly />
+                </div>
+                <ButtonsContainer style={{ alignSelf: 'flex-end' }}>
+                  <CommonButton primary={!isBtnClick} onClick={generateLink}>
+                    링크생성
+                  </CommonButton>
+                  <CommonButton
+                    primary={isBtnClick}
+                    onClick={() => onClickCopyLink(link)}
+                  >
+                    링크복사
+                  </CommonButton>
+                </ButtonsContainer>
+              </div>
+            </Box>
+          </ModalContainer>
+        </>
+      )}
       {showConfirmCopyLink && <ConfirmCopyLink />}
     </>
   );
