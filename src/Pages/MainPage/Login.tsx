@@ -3,7 +3,9 @@ import styled, { keyframes } from 'styled-components';
 import Banner from './Banner';
 import BeforeLogin from '../Layouts/BeforeLogin';
 import { createGlobalStyle } from 'styled-components';
+import { redirect } from 'react-router-dom';
 import zIndex from '@mui/material/styles/zIndex';
+
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -134,6 +136,7 @@ const GoogleLogin = styled.div`
 `;
 const googleLogo = 'src/pics/google-logo-9808 1.png';
 const Login: FC = () => {
+
     const URL = 'https://timepiece.inuappcenter.kr';
     const oAuth = async () => {
         try {
@@ -166,6 +169,7 @@ const Login: FC = () => {
                 </Container>
                 <LoginBanner>
                     <div>
+
                         <text style={{ color: '#fff', textAlign: 'center', fontSize: '32px', fontWeight: '700' }}>
                             Sign up
                         </text>
