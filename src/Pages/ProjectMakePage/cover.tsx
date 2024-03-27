@@ -1,5 +1,13 @@
-import { FC, useState } from 'react';
+import { FC, useState, useEffect, useCallback } from 'react';
+import React from 'react';
 import styled from 'styled-components';
+import { AlphaPicker, ChromePicker, ColorResult } from 'react-color';
+
+interface CoverProps {
+    onColorSelect: (color: string) => void;
+    onImageSelect: (url: string) => void;
+    onHexSelect: (color: string) => void;
+}
 
 const plus = (
     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
@@ -97,53 +105,128 @@ const Image = styled.button`
     background-repeat: no-repeat;
     background-position: center;
 `;
+const HEXContainer = styled.div`
+    width: 300px;
+    height: 478px;
+    gap: 8px;
+    border-radius: 6px;
+    background: white;
+    box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.25);
+    margin-top: 8px;
+`;
 const colors = ['#633AE2', '#FFCB3B', '#64AFF5', '#C2D57A', '#EB5757', '#212121'];
 const urls = [
-    'https://s3-alpha-sig.figma.com/img/1428/5f05/043a78e2fa12ac2136b1383ece3b805c?Expires=1710115200&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=dtK-wfzGTlsj~sQidsbTULkBX8gQq2YK1PYYad~4zSuM6RIAPGfk1Bd5FXVwRJmZuqsmedy8sfQEPpFR4j5Z8tCHvCpNDbN-qflkEc2K4TJJGvodeSQkIZtMoc0K0fX5eU2rc-KEuMwwnFfrSFuZqHxmnEr3yiDEJFr8YlD3tdzVJO6SjHpOJqs5Emehq7lWQD79PNyqLQ24ALQbmBIGkz3FSkzicgSs77-o4WBoXSWYIcGx7uYzU3cd-eQyuSSflhFTgr78ROWYu92tUvPoM6JyjiEtDnACTLSWM-MmKGH45hEGomVH1yfDhygNo7q-erFQoaj~WWvggUxipdXqwQ__',
-    'https://s3-alpha-sig.figma.com/img/efb8/74df/f4f778f0a5ad5ba05f81b2233e6fd797?Expires=1710115200&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=dGDS4Fht6aRooxbHpl6Jj2TrWylbRb1Ef4lnV--lQL9nlAq2fjoQacrct1eISZCCkWYEapTaX8ThD0mP38NR630iH7GWUf5IX5mZVbTCd~ImYJp7c8EqMWdxXa5s7P5zohmA~xelnmjg01TVqcbpfaJfPRKkd3dHE70z4Um-OW-xBHPuhv85dsdnjAdt1l7BbZcTwSaXt9zkAUaVLL2kQOBZLX34rLriYFt8el0i0KB9QiIPxYLZt-29VNVB4u6j5HdQSc55mvKPjv~Il0ON5VuhZG9ZlWR11idaCFix1c~-eFGqqV7PGj5TckrdFA0OQaTMtFR9P2Y5x1oxwrMWlg__',
-    'https://s3-alpha-sig.figma.com/img/2fbf/dd1e/fcd0bb21cb1fc00fc7279925a32d87cc?Expires=1710115200&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=N~kP3gfrSUy8FGawfzDvuxeolo0FnyUFATDbWw7rVHRjgUOmhtYiPTP6uYasWjDMlfbmZLYBvsnwgz-2Q7aYhDCX6ZCO3plh3qvk7XYOgLw1cTgrvI9ti7kHaFjhdAMrOMNNmP0QJgicCrNqsDIUXaD01lDKfWULIikODBKPuipZmox2GhRtNgE5Gk-Gz~Pzg~U~VA1s6wzi1wKFv1y5ZluG5U0kqd0ez5mKAOkdRpDMqfIm8EwiyUaFed1Paz3K5GbgwItxETSucNC9rDBsUxqYDNkJc4Ski-0SKxWXtbkbN8~JQp9FAO~lI0LXGcj-9PyB3srJaZLeTddVGX5-4w__',
-    'https://s3-alpha-sig.figma.com/img/58b0/57ea/8e0718d71dbaabb5992ff6d5bb08446d?Expires=1710115200&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=BcXY8xQ8wvqj7PtcEvA0oIxtMqmDiqKjuWB6BQzYaWBc7li8YUf2O~QejVzqSi7QstfSefLQGVkJVrHiquBM0JpkXMZVI2fV1VaUIBGVtZukYH87YT1a0PIyW49-SChthJHM2TO9zyDr5NuuuPq5Sl~poa51-tOgPd-~cnxk1NlsVM16vjtHt2RpI98OP6CgCzpjl3heF7MR5tIfgDhNEkWRj~Xrpyo9MU1zKEvEyl1gy~x8qZLa9in4XJ9Zvjf9kRONDcjR7gX2~Wpwdgr22MUPHlOi8gkjMomcvwTz3rQRwjDpewR2mH9uq5Q3tXPo2i72Y4NTtKgDSTUmPWTYiA__',
-    'https://s3-alpha-sig.figma.com/img/1a2d/e314/db589dfb0a2d5f1ee6b02b85690f03b1?Expires=1710115200&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=jYhrzMm0pOf3uDpxfZy50sd2-yCFu1TsZ2vWTAzVGCVO8fAe5oN05urs1y1jCWXup5suGyOXG8i1bhBZiqtg0psq813A0ny367e06ekkRwQE0wdL8GLpa6UfY6OEeK2CAOwsrqvmDkFwW5nDF~AFBfmlhQUxs2fOwnoPDNq-tvPew0ZV6i4BxB-TB7Yor7dsc8EFjvB7QefZ-k8dhI9AtenOqE81931aC-lBhszq9lzBPuPFZc8R7KOWzJM92-y6yXT4cAymZ~Hp2H11-Yq1qgHYLAdJYFq~e6NbR59wrhQf-7brrUn-acfF246MGyRogdgGk2SLnQCu-eHiR-ZMjA__',
-    'https://s3-alpha-sig.figma.com/img/7107/8111/d29686da31b512dd3411f02c330a0cc5?Expires=1710115200&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=aLpW~Qi~8tKfviROdsZPX6-wmpFG-KZbnsO3QGEiWL~BPmujCdIkOy5pbdWa8HfVeowx~3gcBwzkd9rPS4ZqS5A6zqIi7yVIeq6Yn9V28EZngBSE2e1rw-fh-C78ffBLm9yV2xnGnN5YWgqACAWnmAXGtNmN~QzSY1V7OchuabnLpTFTejfw6ZsGQv02G3xMXDI72w7z5V1nKXgcTP7QZUEdY3BSEsdFefesq8iQ-65xTptflxYa7OMQUXGh5NWh2m0pJlYzW~NjPPNikLcqVtbsurIPVT4HzXqI34HF1y2kJHeNgdArqApk21-Qbgt1CgBucmn-YpaS~jA5wlaW5w__',
-    'https://s3-alpha-sig.figma.com/img/ba52/05ec/3b22fab4a744b5cb3f32d4eb5ad0478a?Expires=1710115200&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=H26a-nId7d5kUppvKnkqm1V8f6A7RWcJxakuPHP10evly8X62xyPAjbtrQTGsRgVmoeu63maEosnpnEemT8hchV94NamSodrfPjykDgd-RxZeo8mZmrMFJAvbjzPtXFnHesO7dCYqoH9TCoBPxlZjfXUEFfqhZaUAqquFNekAEpgeY-wQRqC8joS0KH0MTpvaEJ~KzyNw62GZaO3I3TSKMAxCILxneAEG2CxJY4kTE9P5jB0xzV5RziCMna5YXIcFjsJZzmtZBCPNJ8oq~ownzOJeZLj0yjEtNhYiGroht6LaTZpOgNOQPDg2bakQ2aPjv5-BTrOzRZrqa-bVJG09g__',
-    'https://s3-alpha-sig.figma.com/img/bf79/fd16/4496947b340c6bb18843cfe05dfbacb4?Expires=1710115200&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=MVljuOxZgela4n8GNnlTGw9sneN86CCeDytoAd~Wj23FVXWbL0mcCP5r0QR2SXmlQhzWRyp7lq4RwtIG9yj7a9LOrsI3DZOAgwZs0A4GjlYD5pljbS2VjUZ3MGjkEyFt2WTImnaco-FwcywG9-D4GSo6eFZPsFRMj~Od0blmqSiQtUX2eVB8Dll7yCRfU5aZu-g8FCY8cqjBbjTKZiURngHmM2q8RdWLVQsSj38tOZ~ugqwdXI7uc8OgRo03~pIB749LCMoEwpI-fySuhFY20PqBnPCT-sbO3x112GRBctoNZpIcZeDNLbRJiDZv7uIa3HhdsO4WJDl74YLsZHeZdA__',
-    'https://s3-alpha-sig.figma.com/img/07a1/769e/b0ad8c6ed312fa282298d47756028b4a?Expires=1710115200&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=kFsT1NCgUdmzdJwxlr~0L6qW1K~3I7da3XbP2f9uQsyD4VloW9cGXSK2I2myEfNJUp544VsRx86QFTifexpxQggzrkUh5w7s9PW2DURhrxGAE6HQvWaNaM-CODknu6h2hBQ65rldxf1vqy8gXvXuwVLkIaKT3-PoE-9bI~4gpe0ogzYEbWMDd-BPonb7lrEM1ycrBb3bZndpwZ6tNo-4T14R4IcJSRXk~b73zjVRZZ9WmlVMVG9INnQm0jjAsJ~kXt4lfppwxMWA8UdHJg3-oMI1GUgKDxyuzT4g2p2DwciSFsLDhERdVcSIvZG3rDZqA03A6eQPo983ASRG50as5w__',
-    'https://s3-alpha-sig.figma.com/img/9d99/2209/8e9be0fcc8ed0d00ede564ec9eb28549?Expires=1710115200&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=YuJwHNYWqCbmPfQjamXGFye6oNa9HKhRULZ4WS8bbi-reuSOobQJeeXGf~Gpwzc6j8MM7NW~HzgzT9SzG~s02ATdspMuDPi4LDJq23km7kCb6eo14YYkdEnRTrWVCprG8jrsCogv-CJqKFfc3F2UAeOto6vLEyC0GRPNKKlE~KxLfYw-EjZv51RHiIy-YXyCthsGz5QQ3s4mTL8EZCSWcR9Hg0jYkll4hRmxfNQV8IP5ZO-tplE0oOwKh3oJRpzwER8PZ7Gu8rg0FXBUE6h9ZFXbOyunJuNmvZupzZuQAkTolCETn5FqPvocMXqYG6VDK1c8aUZDJlXH8fBNikIoRQ__',
+    'https://s3-alpha-sig.figma.com/img/1428/5f05/043a78e2fa12ac2136b1383ece3b805c?Expires=1711324800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=M3ntrL8DfrFbmumQgCKrlg3oUpu2ek2~CRQ0p~YoWuMLNolGDMLFt5K3mYnDR51ePGVP6BiF3ErD5lQ3Dy73z7dZJXkae3kfhHqxEB9wEPwaGYR-SFK6JF9tTmLbAPucfPfXx~mY9XQqJjET-9FnHlosOEJUxsOG6oaV7BLkoW6yQIGnCdN3Z7632r-egffAjaFYPjnjWckV4M3QA2fxWPDIxMTWk7KeZRPRw6PX9ex7~-nzkaKEVbCeljSut98EXDSkmwZ8CHsN9MQrsXv6xkRXiC3-CLuNhCdOZWl~MeWvkRQqKpexGKrK6xpsEK-jcUuotxYd4N-hIQa84XDMJQ__',
+    'https://s3-alpha-sig.figma.com/img/efb8/74df/f4f778f0a5ad5ba05f81b2233e6fd797?Expires=1711324800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=Gjo2BbRHGO9ZrhwvAhQ41gm1pHLYU0gqqhZFYkH3JyvgfRmvLffd-~fxsqwJb4LyPoOqwZVq4Bm9gSsdMkud4wsJGV0ZI5PG42oFrK2D9OuCR8RQygT~QIyYkzByuIEkHyOmeVLFl-MuEnWKiCACpSHL94zShGZ4WMFHho0LiKLzusPTQx8Lfm~PBTFFoxlYqqSZ6N~LtKH5Q54qsyAe-wUcxoAQ8wx30hG8QSfIZo3uFjc-oTE1HKvuhn0lgnTX-liWecluvRMmiyHK7-jYWY7EtmNheeyGT3l3g0bV~9qunhGjoShKrASPyX2ynvCSWiKcc4k-Wwz5CjqlfHih-g__',
+    'https://s3-alpha-sig.figma.com/img/2fbf/dd1e/fcd0bb21cb1fc00fc7279925a32d87cc?Expires=1711324800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=Ihc3oVnKpfRQ49V~mHs-B3fSnB4WZhI3UD27bBnpozG9n-bzSD~s2WqATwRvLClkGXib54E67jf9DBhWNqcTF~VQiJvG5NshRRtkhI0q8U0D9-w5ObMxQuKAo1gT3z2HFTS7z2EnDbp4zS6AnV73ctV2Z2GjEz20~h2UeC5Bhr0Qn9Tdtrl9c2ZmLWTL8TVolwkVMBwqCJdlxmG2v59pElpLqQjH003mMGTfdvYIG1ecfwmpNCZAZkLrZyvZLFqCswzJ3sHEwBenWEG-omV8yLhqnWxvCpRpNnKsoPh7QqXJMZHA4-sRZE6T1E~uea7xRMa8mdUhMwFz2kl91jOXyQ__',
+    'https://s3-alpha-sig.figma.com/img/58b0/57ea/8e0718d71dbaabb5992ff6d5bb08446d?Expires=1711324800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=ppBkk2F62wDnc0avRaIbn0jF5RVgOH6MherFidiJriec70EIlIbiyHKhD5EGgwYzvvbYIn4YCjFuxsYAjUzCaM17Z~lNaNf3a5mZ3MI-WJzOuTUdEXrI5oHAIYNN6GdpBPzEdm2GIJfYCyA--SadMy6hhsvj8PKN6JasTEb3rpuKNuzHnAadvIvSpu0yTj~YcB694nIMW6HyLDtpYuqV0wZE-fZfzUAAkUJ9czh~olQuOaWKL41LokZ6OSbczKEYZfldxi9617e80zJb2GL3vbx4ivDfCi0Gjbt9InIm1wRnltt8r0W97ONUfv8hpNg4K7tAi6r0E-p~2plh6zm4Kw__',
+    'https://s3-alpha-sig.figma.com/img/1a2d/e314/db589dfb0a2d5f1ee6b02b85690f03b1?Expires=1711324800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=Z0Jl53h55MnoSfnu31Rydrw3ofxCyVP~HLNI2coPDYE9kWBRkYDxCgOvqlhCqMSM3NULRhefTVS2d2GwswILbTT1uWugEagrNmxb4tYw5UfrYoG5gKslksQJgZ1lQpBY0TcXau0M7Svl~~EEh7PkLALvFHSRKPOD0UnHwemhVaPOZvHepkHtg592L80WYmnMm45K3AcY7Pw84OT0LfpLbOwIO1vCE9ULq4oI4GLv-HzJZNhRbt1cdkGR0wAXs1vhnubNX3x2zui2U1zw228eekNXk88lcVFNKcYnI1uO9tD0Nx42aRxuFJ3taUi-qaEf6Xz9sRkF25JiYRr718plwg__',
+    'https://s3-alpha-sig.figma.com/img/7107/8111/d29686da31b512dd3411f02c330a0cc5?Expires=1711324800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=JHRtmp34KkIHTvw4dJz6b08xfeNU4h0CAJ~Z6PnUEs7T~4AHH4b6BvsA1DUAnX~D~U9~SVEEz9MmDDvVTgUTTA0-gM1Sz1osjoiX83UkokmigJOieJTqKbWEYgTgeHgtMH2EJJX7HqT7zK0Wgd5kntR~2hRF-qusfOvPf67e1uVx2vh6gA344c7P4j-oLBfq7ZgcLCdSETpuKY8d9WDRmChZZv88Zjhtb8URjcgInZgTWkFkRtTiG~hu8hDlFnbxVJq5~kxarrInYaG2bgfbmiKYyaD6Izdar-v6dTMYsPLxdZNCkWmmwKZ3gywtNL1I~FfGUFHNhO~q9rTD-TSmVg__',
+    'https://s3-alpha-sig.figma.com/img/ba52/05ec/3b22fab4a744b5cb3f32d4eb5ad0478a?Expires=1711324800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=NWC10XhixP63DIG2wS3LyTJKoNc-XDd6rLH6B9pPWGnNJb5URaFPrH0qo3jMJjffXWdk68nBmVURKbREHp0EfSukMgwo5BvPr0JdTg9JR4I9X69OOkNwVqfn6~ONsFDVg~XFozW1tGhoanWKu3D3p8vBcK0krlttTUr65U~pC47LaTV5K1tmccFChcfdSwQEZsOhiMrubKq51BMhzWisYTm2edKgbVHIrq93Gp176l31Bz-2G9ksRescrVMJIohoVucRYQs7surLi4knTfXP8WvFavoRC3dDra4FrPPucMgHM1~sLFAjV70yCchTzY4Q~L~DKIBHBQuGW1-FjrcTPw__',
+    'https://s3-alpha-sig.figma.com/img/bf79/fd16/4496947b340c6bb18843cfe05dfbacb4?Expires=1711324800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=NaFv6tti3lu6X8mO9XJseDFX8yfR2ZNiqGYoietnrQk9cu3ZuXW-yF8E1Z53~pO6yfPThLCJ7u2PPWkYhnzxl7KrTAJEtILW6W4PYX-5ekvnn1X5aKKCKzL2mw1T9yiW6fx1Uu47SgCq-RiZmY1qQRHH0sxPDW-UC3I0e7ONTVsXg9Iqh25XHUgVUtbD0cNsV2nMv1w8UjDTI4Sw3pyy5MCZx98SPGHMVWgYPO7eceTE-NmInI6IxGWTkIY8-xS8kyohfgpwQfY612bmAk6HsgSHiDmlYpT~E~v6yanfVSnmkzYT4z5kscm7kEPckQxa5NOdmQ3DF9g3G9X8OVMIBQ__',
+    'https://s3-alpha-sig.figma.com/img/07a1/769e/b0ad8c6ed312fa282298d47756028b4a?Expires=1711324800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=a7~5fvkE5wmaKhW6HXXfBD~2uLMmY40hRICkNOPcXCv6rOZb-9b7yRNhlpe~8G-C03C1~zUnU~wWKASFOt2p-qAwCM2gZPuX64zQl2onqF2tNUZIaBAlAx-UgGQ8aUYbYIX8uLCRM60Ewd1UqA8ACdAM6c6JP5J-iqIef35XREwy4ibH8Av1ox5LmkkuM1wGWdnxrrcVGKlaWaA6Fr9rVBP9AYKOdehC9XAbdXNzmE1v2xmFtOHqQZYJXF2cejosJ7eNW3ef9l9OQCQTRoVitaWx6zF7K4us3W-AFdu3ftz9kTVynr3wxe2LIPbCnSh8BF5I54tAPp~nEHctJXRmtg__',
+    'https://s3-alpha-sig.figma.com/img/9d99/2209/8e9be0fcc8ed0d00ede564ec9eb28549?Expires=1711324800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=L7aiUKgQQXNGUAPfl7xJfTaOx-oN8SyBa0bEVKViRPhVld-ucpQqa9uyVX23ygJNrQGHLw1ujYe-PFkSsBWw9Rc0nUvVuBgUYvPkQpLpFz7ClMUjRjWd-poWC~rkV1FLbKslUu4teaXekmW9QoEarnNkSYUVWLSQ12dbbvgGo5BODoePrtY5puOwpU0qg29on6kzI6lRFf59aNOA8sOImS5aaSp5v~v9ORjzpCN5wB2FDPU~HpkdkewwKsPkYS26k1fx5-4EMCtVg8B-iOiyEq4uRMHEZQlPRVcbPg0Bugdr6BU0f0AK6rtbun2kWEfRuZoR6kuMPXHK8i83gh2lJA__',
+];
+const backurls = [
+    'https://s3-alpha-sig.figma.com/img/8198/48fb/a4ff19fdc12d82ff384e91143ed97900?Expires=1710720000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=djyiepAHHs5GZ~JiHAsJ80ZuqGetHaAnMahhtM-rHLdOoxn1XXRd2ZTJxXnwsFyXKg0g2PwvjSiBmntv~qP3Wdtf~NCznKjK4z6s7jy7qsowCOT4SbtScKk74JfwHjyUnP9b5JVrTaCEwxi2UzZCrrXl4CzwETEnS9oBqcqJJOD2TDAGMgf-CT2RLldirURmd1-KddzX-E4SXdnFfSuJveccghYO8d8zk22yeNRCl8GhXhLrJ2QT-P97kCVraKnTe44xAq4imRpKvITmo7m9MNcIUEXLyXnV3s7I95Dy5DtD6dBWhRxahj5DQIHFTeqsRZ39fIH-r1kKYfL0JyOiAA__',
+    'https://s3-alpha-sig.figma.com/img/c0e3/c4cf/b566e4bfd743a97d9a7fdef8a7d68cab?Expires=1710720000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=lvYFbnIrHoslDMp69jF6goXtCyoikgGsyQjNLpCz01XIJ~bIe7Fwb8-TL3wRY5-DIca9ZTR97WXCvAiWS7RUn581JmMPgeL8psU2XF1yG-8LA0Cqe8sAM2nODQAr7wO05SjzxXQ~r3kTCjlj7N8sA8wOvJ~QuXKj52j4uaFRnb~nj6rfU5PXH2DfpzlvMlYjodImc2ODMS0UDevUFs9nO6HUsAGZpkH0C9b5v8xb1FUXQagWp~AegujqRDh3DhIP3ZqirQiYNuSa4BZl97jByjeLxNuyWQC33QD1iOrf98SMHpVAD2YSd6sclgVBby8r24QLUxevoTJ0ezRnzKcYdg__',
+    'https://s3-alpha-sig.figma.com/img/105c/0d9b/d13953691cbae0f1c4c6f2379079bd83?Expires=1710720000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=CRpcv9D7C-3V~taFlXRjYUYPw72Az6RFm0hzUPB6ENlnqDAk7n9cyd6fEL9uKyuu061uBb975B9uI16e1S4oq-dZq5qYMtiRs3lgTnAbLVSF1vcXOleVulhB6JefcXgVyY-TnsbkmolBoRw-fmSSpZOp0Zp6RkppejvW2U0Omq9~GD~joKJbSBZTg7URppNXnZrwRKacdUdLGE5cte~3MlZeMvlt-yvUSd2DUgyTU2jP2WVPSkudesPfMPbU1zZ2eIFng1myTE1J5dR65B17JvvIevpfXxFd-C4ZeGCdE-OPNwsMjQdx1KMF2JMWfHMGpopbqDIsSb4Z2WCd9a47jQ__',
+    'https://s3-alpha-sig.figma.com/img/210c/4712/a5cfb086784400fc9eb56d64ca225961?Expires=1710720000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=QQWls5wbrkZsRFjfbWAzt1ge-pA51oAhfx-mS7q7nwRR3LdJrSg4VAbMcQ2cvZ~0mPu9k5QZttZP8SWOIVsILmrr9-9KzZ4Ywo~YavSKYdSZs4vvhm2fo4A01PUDKOtA5GfCqsL9l~2t4WrtNG8bnSRoRGF8uefDZ-eaVBWkH~Q59r5CPSeonhImquLEH0zTsKW6SGH1bKotL~VFxul9-tCRP0hX-gyfKwd1x8z7Xb~1xl7AhClkKsuftggvb01A~8ueR6BTpSoImmi~xFXZl~zLF8V0OkuHZJ919tQNugNrE3l-gvBZF9u8yP5G50LpO3f3GyZ5HL~EG-Tty4j24w__',
+    'https://s3-alpha-sig.figma.com/img/0810/c136/63c2a535540b9e0f2e82e3bca348209c?Expires=1710720000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=k~NBMC5FdU6~eJvK3Mz0RE6uBjCZ6RUIjAEvKGwd6rPHt3AKg8EwdZyyls9Kdu9isrcSVXB3KGLFoR576i42Doxd3I1kczCENlQyIgvwQXxZzDK4rAW4oV~~ed3XTAexAf~lwYQDE25Xey60vn2bMd9-Hvz3h4iAn1bLkSa0vgJF~TB0u74~8Dhwm6WCmM5BUbSAje0TxLqahkmOo903aIhIAigJNm1sQjiCdQkQMg9Brkobn-oVexb6N~IkBgFzCi1WH8WztHPmfuUWGA0EEC7Td~Dc2kGAYVr7l98M6QEewhmksA7ILHuxXqcS5s-6FCzES1xGgcAOQ6C358X45g__',
+    'https://s3-alpha-sig.figma.com/img/eacc/4340/d1b342dcf6d83a071d7f657655fc453e?Expires=1710720000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=UpuNgYXKVrS2pKyPY9d-l-MUoRg6aavyzZOfTrNUNPl982V~ZSbuRqayUn70GL2-8eMGQTRCxgB7UnZa8Ar~~-w3gzdNk3QvuLhG7XfQM03qaQRMrzCWtEEKaGWDdumKwdLiCHWIvpgZsP0Tgn4i7B0vPC6eqY9usn-E792O0yzdKT~muffdgrREnIU63KndhT1VjLhlNmMWO1Q9dnhamXAQyN~tk8~4GOdTeOivdEKKuOuPMDyZFZU3-ZDFWlFjg29eoTfyBoUrMQwl5NcQRZ4If3MMCP-9AEc3UW4jsj1cVDz-Sbky11EirB9XFycleyfd1xPIoBJWaUhLkx2Evg__',
+    'https://s3-alpha-sig.figma.com/img/50c8/60d7/133f89a6971170a19026a2df443b533c?Expires=1710720000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=f5OADkdhKbLPc7q3RtqYCunaqmpUqXW6FSInF5ihgaOvEOvhPyX~ZPr2WTSOPOFVrt0yfyiy-lZqOBfZsdq0wSJyQ0R4wwcAq6YNnHoMc8Ov04tXBSpNS1xU9dhW4MZp531XH77ci8WiaCux99PrGpzML03WDAydwCnn0zOpTWDAGOZxZMCcx~dALh2GCUsGRBdwjdprp516XYoCog336hMDcecbbwkXST5W0U4zAdr4P6Z~Zn3m~hmzZWZpl5zSzoHNFqVc1RKqIMNMDhm4~GlYnEsjH1nt2r7OuBfiTPQlBMJ1RLL20vExO6FMw28L1oqjyjvA4k692DyWBB3OBg__',
+    'https://s3-alpha-sig.figma.com/img/0e17/953b/92848b9243bf1d1ecd3728f26ce6dc78?Expires=1710720000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=V-UcPWaMrAH20Jdltc0SrxKPaMSCXGwZTq8ZCAj5wLAN1FlwJfGbiXLWlCMgjCuS4jpql1hFgWauxls5Irq-P1j3nIW-22vyakl6x7ZwjHcYjgZSHJqIEeNRFB~mDvNnem7MYc1e9d1t4AFOMBL0T-6JltFH9Csgp2si34yByWkG1Qeli1Scz0njhYdYUl-FAo0ye24vuEikwysznircufJ80l3BEOFiVOYahbcqlKuQzUQlAnxhHCBm5-Mb7~MJUM8tPnVlyRjoLuVjsBSZslXCN1xt5FDX8cKaRVJ-7UWqsWh4hYCERggyGem69UGs12Cqp8t1Ffdrp8DjsHd2eg__',
+    'https://s3-alpha-sig.figma.com/img/f242/5429/7d8bf83785b22f83c7ba791f4b46f02f?Expires=1710720000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=EukvuJFh7976SizeJV~6R4dot8Hc6rcsMneGrnOncravvSk581B2rO8BG2cyJwZiVZ556oP4hNp0s92c1pe1m-JCrVxJ5q00yzzAPq-J8Hkj~XWPL1SrlKyt4QisegRg1MplmY1cMSueqWm3sU0qVmUaOPzlaAHWbZiu3TELsjZdTVBS8irrATTvBY44skGIFgXo3LPKk4Tg2pjZ2BV0qM1OVDHcJ7VK~In4RE6OhnT1MJ93~ExY6xM11uPYQD7ytm-LX9DIKPHwMA-RWP~Bo2VvxdsVMB6O8IWSWnwEAZexd~xzSXVLBykmDtnWui7X~al9Sbf4~n4TgtoGVtl6lg__',
+    'https://s3-alpha-sig.figma.com/img/9ec7/03fd/37e40de737e425f7b7c36080e0220504?Expires=1710720000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=Sm6ELb~YJvtu2GS2F0B5WWx6fDfHT9~M5m7fw99PaHZ3E65cyi9xPYIHpzMlY1S84n0dS8uuXNPeaVOZAjnoi9qNSYWCIuFeQalz3UJRtj-T1iPMVwZ9GRGIdTzWarhcznUnnzOjYMBSO0iuyaYK1jz8znQBG0gG-B7WnFu-TmZvXtXiCmPyW-CHKxipm2Zvw19wTkWXqG8AzctgDcqb6-2z8EIv3OLtaCBnQmiXI-ELgHyODMDPakE9vCj6RR7GT8kKdpBsMoQGKPMjOaqRxJFFrVd2CKqzEAIKKkfmHzSMih4w3f3ZntrvwN3OnwVChAEno~3zSHmJIxkP42pDoQ__',
 ];
 
-const Cover: FC = () => {
-    return (
-        <CoverContainer>
-            <ConverInnerContainer>
-                <Register>커버등록</Register>
-                <ColorContainer>
-                    단색
-                    <ColorChoose>
-                        {colors.map((color, index) => (
-                            <Color key={index} style={{ background: color }}></Color>
-                        ))}
-                        <Color style={{ background: '#FFF', border: '1px solid black' }} />
-                        <Color style={{ background: '#D9D9D9' }}>{plus}</Color>
-                    </ColorChoose>
-                </ColorContainer>
-                <ImageContainer>
-                    이미지
-                    <ImageChoose>
-                        {urls.map((url, index) => (
-                            <Image
-                                key={index}
-                                style={{
-                                    backgroundImage: `url('${url}')`,
-                                    backgroundSize: 'cover',
-                                    backgroundRepeat: 'no-repeat',
-                                    backgroundPosition: 'center',
-                                }}
-                            ></Image>
-                        ))}
-                    </ImageChoose>
-                </ImageContainer>
-            </ConverInnerContainer>
-        </CoverContainer>
+const Cover: FC<CoverProps> = ({ onColorSelect, onImageSelect, onHexSelect }) => {
+    const [color, setColor] = useState<string>('#ffffff');
+    const [openHex, setOpenHex] = useState<boolean>(false);
+
+    const handleColorClick = (color: string) => {
+        onColorSelect(color);
+    };
+    const handleImageClick = (url: string) => {
+        onImageSelect(url);
+    };
+
+    const handleColorChange = useCallback(
+        (color: ColorResult) => {
+            let hexCode = color.hex;
+            if (color.rgb.a !== 1) {
+                hexCode = `rgba(${color.rgb.r}, ${color.rgb.g}, ${color.rgb.b}, ${color.rgb.a})`;
+            }
+            setColor(hexCode);
+            onHexSelect(hexCode);
+        },
+        [onHexSelect]
+    );
+
+    const toggleHex = () => {
+        setOpenHex((prev) => !prev);
+    };
+    https: return (
+        <div>
+            <CoverContainer>
+                <ConverInnerContainer>
+                    <Register>커버등록</Register>
+                    <ColorContainer>
+                        단색
+                        <ColorChoose>
+                            {colors.map((color, index) => (
+                                <Color
+                                    key={index}
+                                    style={{ background: color }}
+                                    onClick={() => handleColorClick(color)}
+                                ></Color>
+                            ))}
+                            <Color
+                                style={{ background: '#FFF', border: '1px solid black' }}
+                                onClick={() => handleColorClick('#fff')}
+                            />
+                            <Color style={{ background: '#D9D9D9' }} onClick={toggleHex}>
+                                {plus}
+                            </Color>
+                        </ColorChoose>
+                    </ColorContainer>
+                    <ImageContainer>
+                        이미지
+                        <ImageChoose>
+                            {urls.map((url, index) => (
+                                <Image
+                                    key={index}
+                                    style={{
+                                        backgroundImage: `url('${url}')`,
+                                        backgroundSize: 'cover',
+                                        backgroundRepeat: 'no-repeat',
+                                        backgroundPosition: 'center',
+                                    }}
+                                    onClick={() => handleImageClick(backurls[index])}
+                                ></Image>
+                            ))}
+                        </ImageChoose>
+                    </ImageContainer>
+                </ConverInnerContainer>
+                {openHex ? (
+                    <div
+                        style={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                            height: '252px',
+                            marginLeft: '8px',
+                            marginTop: '37px',
+                        }}
+                    >
+                        <ChromePicker
+                            disableAlpha={false}
+                            color={color}
+                            onChange={(selectedColor) => handleColorChange(selectedColor)}
+                        />
+                    </div>
+                ) : null}
+            </CoverContainer>
+        </div>
     );
 };
 export default Cover;

@@ -41,6 +41,7 @@ const Title = styled.div`
     ::placeholder {
         color: black;
     }
+    background-color: white;
 `;
 const TitleText = styled.input`
     display: flex;
@@ -88,6 +89,7 @@ const ContentText = styled.textarea<ContentTextProps>`
         color: #000000;
     }
     overflow: hidden;
+    background-color: transparent;
 `;
 
 const Make = styled.button`
@@ -123,6 +125,9 @@ const Info: FC = () => {
     const [isTitleClicked, setIsTitleClicked] = useState<boolean>(false);
     const [isContentClicked, setIsContentClicked] = useState<boolean>(false);
     const [isCoverClicked, setIsCoverClicked] = useState<boolean>(false);
+    const [selectedColor, setSelectedColor] = useState<string | null>(null);
+    const [selectedImageUrl, setSelectedImageUrl] = useState<string | null>(null);
+    const [selectedHex, setSelectedHex] = useState<string | null>(null);
 
     const handleTextareaChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
         const inputText = e.target.value;
@@ -137,8 +142,31 @@ const Info: FC = () => {
         setIsCoverClicked((prevIsCoverClicked) => !prevIsCoverClicked);
     };
 
+    const handleColorSelect = (color: string) => {
+        setSelectedColor(color);
+        setSelectedImageUrl(null);
+        setSelectedHex(null);
+    };
+
+    const handleImageSelect = (url: string) => {
+        setSelectedImageUrl(url);
+        setSelectedColor(null);
+        setSelectedHex(null);
+    };
+
+    const handleHexSelect = (color: string) => {
+        setSelectedColor(null);
+        setSelectedImageUrl(null);
+        setSelectedHex(color);
+    };
+
     return (
-        <Container>
+        <Container
+            style={{
+                backgroundColor: selectedColor || selectedHex || 'white',
+                backgroundImage: `url('${selectedImageUrl}')`,
+            }}
+        >
             <MakeContainer>
                 <TitleContainer>
                     <Title>
@@ -170,7 +198,11 @@ const Info: FC = () => {
             </MakeContainer>
             {isCoverClicked && (
                 <CoverContainer>
-                    <Cover />
+                    <Cover
+                        onColorSelect={handleColorSelect}
+                        onImageSelect={handleImageSelect}
+                        onHexSelect={handleHexSelect}
+                    />
                 </CoverContainer>
             )}
         </Container>

@@ -39,8 +39,13 @@ const TimeContainer = styled.div`
     height: 530px;
     padding: 109px 389px;
     gap: 240px;
+    position: relative;
 `;
 const SButton = styled.button`
+    position: absolute;
+    bottom: 109px;
+    left: 50%;
+    transform: translateX(-50%);
     width: 289px;
     height: 62px;
     padding: 12px 44px;
@@ -50,7 +55,6 @@ const SButton = styled.button`
     border-radius: 60px;
     background: #633ae2;
     white-space: nowrap;
-    margin-bottom: 109px;
 `;
 
 const SButtonText = styled.text`
@@ -92,10 +96,10 @@ const ProjectMakePage: FC = () => {
                             setEndDate(end || new Date());
                         }}
                     />
+                    <SButton>
+                        <SButtonText>프로젝트 만들기</SButtonText>
+                    </SButton>
                 </TimeContainer>
-                <SButton>
-                    <SButtonText>프로젝트 만들기</SButtonText>
-                </SButton>
             </Container>
         </ProjectMakePageContainer>
     );

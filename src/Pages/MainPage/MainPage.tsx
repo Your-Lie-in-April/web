@@ -11,6 +11,7 @@ import Pinned from './Pinned';
 import { createGlobalStyle } from 'styled-components';
 import Profile from './Profile';
 
+
 const GlobalStyle = createGlobalStyle`
   body {
     margin: 0;
@@ -24,93 +25,83 @@ const GlobalStyle = createGlobalStyle`
 `;
 
 const MainContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin: 0 auto;
-  max-width: 1284px;
-  box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+    max-width: 1284px;
+    box-sizing: border-box;
 `;
 
 const MainPage: FC = () => {
-  return (
-    <>
-      <GlobalStyle />
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-
-          width: '100vw',
-          margin: '0 auto',
-        }}
-      >
-        <BeforeLogin />
-        <Banner />
-        <div
-          style={{
-            height: '126px',
-          }}
-        />
-        <MainContainer>
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              gap: '20px',
-            }}
-          >
+    return (
+        <>
+            <GlobalStyle />
+            <BeforeLogin />
+            <Banner />
             <div
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'flex-start',
-                gap: '14px',
-              }}
-            >
-              <Profile />
-              <Alarm />
-            </div>
-            <div
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'flex-start',
-                gap: '24px',
-              }}
-            >
-              <div
                 style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'flex-start',
-                  gap: '21px',
+                    height: '126px',
                 }}
-              >
+            />
+            <MainContainer>
                 <div
-                  style={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    alignItems: 'flex-start',
-                    gap: '8px',
-                  }}
+                    style={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        gap: '20px',
+                    }}
                 >
-                  <Search />
-                  <NewProject />
+                    <div
+                        style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'flex-start',
+                            gap: '14px',
+                        }}
+                    >
+                        <Profile />
+                        <Alarm />
+                    </div>
+                    <div
+                        style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'flex-start',
+                            gap: '24px',
+                        }}
+                    >
+                        <div
+                            style={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'flex-start',
+                                gap: '21px',
+                            }}
+                        >
+                            <div
+                                style={{
+                                    display: 'flex',
+                                    flexDirection: 'row',
+                                    alignItems: 'flex-start',
+                                    gap: '8px',
+                                }}
+                            >
+                                <Search />
+                                <NewProject />
+                            </div>
+                            <Pinned />
+                        </div>
+                        <ProjectList />
+                    </div>
                 </div>
-                <Pinned />
-              </div>
-              <ProjectList />
-            </div>
-          </div>
-        </MainContainer>
-      </div>
-      <div
-        style={{
-          height: '300px',
-        }}
-      />
-    </>
-  );
+            </MainContainer>
+            <div
+                style={{
+                    height: '300px',
+                }}
+            />
+        </>
+    );
 };
 
 export default MainPage;
