@@ -12,7 +12,6 @@ const ProjectTimeContainer = styled.div`
 `;
 
 const DateContainer = styled.div`
-    display: flex;
     flex-direction: column;
     align-items: center;
     margin: 0 20px;
@@ -26,7 +25,8 @@ const SDatePicker = styled(ReactDatePicker)`
     border-radius: 20px;
     background: #f5f5f5;
     text-align: center;
-    margin: auto;
+    display: flex;
+    margin-left: 14px;
 
     &:hover {
         cursor: pointer;
@@ -93,7 +93,7 @@ const Separator = styled.span`
     font-size: 32px;
     font-weight: 600;
     text-align: center;
-    margin-top: 40px;
+    margin-top: 30px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -142,9 +142,6 @@ const ProjectTime: FC<ProjectTimeProps> = ({ startDate, endDate, onDateChange })
     const [isEndOpen, setIsEndOpen] = useState<boolean>(false);
     const [starttime, setStartTime] = useState({ hour: '12', minute: '00', ampm: 'AM' });
     const [endtime, setEndTime] = useState({ hour: '12', minute: '00', ampm: 'AM' });
-    const hourRef = useRef<HTMLSelectElement>(null);
-    const minuteRef = useRef<HTMLSelectElement>(null);
-    const ampmRef = useRef<HTMLSelectElement>(null);
     const startDropdownRef = useRef<HTMLDivElement>(null);
     const endDropdownRef = useRef<HTMLDivElement>(null);
 
@@ -201,11 +198,11 @@ const ProjectTime: FC<ProjectTimeProps> = ({ startDate, endDate, onDateChange })
         };
     }, [isStartOpen, isEndOpen]);
 
-    const startDropdown = () => {
+    const startSelect = () => {
         setIsStartOpen(!isStartOpen);
     };
 
-    const endDropdown = () => {
+    const endSelect = () => {
         setIsEndOpen(!isEndOpen);
     };
 
@@ -218,7 +215,7 @@ const ProjectTime: FC<ProjectTimeProps> = ({ startDate, endDate, onDateChange })
                     justifyContent: 'center',
                 }}
             >
-                <DateContainer>
+                <DateContainer style={{ display: 'flex' }}>
                     <Text>프로젝트 시작일</Text>
                     <SDatePicker
                         disabled
@@ -235,7 +232,7 @@ const ProjectTime: FC<ProjectTimeProps> = ({ startDate, endDate, onDateChange })
 
                 <Separator>~</Separator>
 
-                <DateContainer>
+                <DateContainer style={{ display: 'flex' }}>
                     <Text>프로젝트 종료일</Text>
                     <SDatePicker
                         disabled
@@ -278,27 +275,37 @@ const ProjectTime: FC<ProjectTimeProps> = ({ startDate, endDate, onDateChange })
             >
                 <DateContainer style={{ gap: '4px' }}>
                     <Text>시간표 시작시간</Text>
-                    <TimePicker></TimePicker>
-                    <TimePickerContainer>
-                        {Times.map((time, index) => (
-                            <TimeOption key={index} onClick={() => updateStartTime(time.hour, time.minute, time.ampm)}>
-                                {time.label}
-                            </TimeOption>
-                        ))}
-                    </TimePickerContainer>
+                    <TimePicker style={{ marginTop: '4px' }} onClick={startSelect}></TimePicker>
+                    {isStartOpen && (
+                        <TimePickerContainer>
+                            {Times.map((time, index) => (
+                                <TimeOption
+                                    key={index}
+                                    onClick={() => updateStartTime(time.hour, time.minute, time.ampm)}
+                                >
+                                    {time.label}
+                                </TimeOption>
+                            ))}
+                        </TimePickerContainer>
+                    )}
                 </DateContainer>
                 <Separator style={{ marginLeft: '28px', marginRight: '28px' }}>~</Separator>
 
                 <DateContainer style={{ gap: '4px' }}>
                     <Text>시간표 종료시간</Text>
-                    <TimePicker></TimePicker>
-                    <TimePickerContainer>
-                        {Times.map((time, index) => (
-                            <TimeOption key={index} onClick={() => updateEndTime(time.hour, time.minute, time.ampm)}>
-                                {time.label}
-                            </TimeOption>
-                        ))}
-                    </TimePickerContainer>
+                    <TimePicker style={{ marginTop: '4px' }} onClick={endSelect}></TimePicker>
+                    {isEndOpen && (
+                        <TimePickerContainer>
+                            {Times.map((time, index) => (
+                                <TimeOption
+                                    key={index}
+                                    onClick={() => updateEndTime(time.hour, time.minute, time.ampm)}
+                                >
+                                    {time.label}
+                                </TimeOption>
+                            ))}
+                        </TimePickerContainer>
+                    )}
                 </DateContainer>
             </div>
         </ProjectTimeContainer>
