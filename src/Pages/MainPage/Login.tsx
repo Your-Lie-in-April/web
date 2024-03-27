@@ -4,6 +4,8 @@ import Banner from './Banner';
 import BeforeLogin from '../Layouts/BeforeLogin';
 import { createGlobalStyle } from 'styled-components';
 import { redirect } from 'react-router-dom';
+import zIndex from '@mui/material/styles/zIndex';
+
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -134,11 +136,22 @@ const GoogleLogin = styled.div`
 `;
 const googleLogo = 'src/pics/google-logo-9808 1.png';
 const Login: FC = () => {
-    const oAuth = async () => {
-        const URL = 'https://timepiece.inuappcenter.kr/v1/oauth2/login-page/google';
-        window.location.href = URL;
-    };
 
+    const URL = 'https://timepiece.inuappcenter.kr';
+    const oAuth = async () => {
+        try {
+            const res = await fetch(URL + `/v1/oauth2/login-page/google`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+                },
+            });
+            if (res.status === 200) {
+                console.log('보냄');
+            }
+        } catch {}
+    };
     return (
         <>
             <GlobalStyle />
@@ -156,9 +169,10 @@ const Login: FC = () => {
                 </Container>
                 <LoginBanner>
                     <div>
-                        <span style={{ color: '#fff', textAlign: 'center', fontSize: '32px', fontWeight: '700' }}>
+
+                        <text style={{ color: '#fff', textAlign: 'center', fontSize: '32px', fontWeight: '700' }}>
                             Sign up
-                        </span>
+                        </text>
                     </div>
                     <div>
                         <Google>

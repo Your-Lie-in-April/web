@@ -1,13 +1,17 @@
-import styled from "styled-components";
-import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
-import BorderColorOutlinedIcon from "@mui/icons-material/BorderColorOutlined";
+import styled from 'styled-components';
+import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
+import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined';
+import { useState } from 'react';
+import ChangeStatus from './ChangeStatus';
 
 const Box = styled.div`
-  position: relative;
   width: 300px;
-  height: 241px;
+  height: 244px;
   border-radius: 20px;
   background: #212121;
+  position: absolute;
+  top: 100px;
+  right: 319.5px;
 
   display: inline-flex;
   padding: 12px 8px;
@@ -16,9 +20,17 @@ const Box = styled.div`
   justify-content: flex-end;
   gap: 22px;
   box-sizing: border-box;
+  z-index: 1;
 `;
 
-const CloseIconBtn = styled(CancelOutlinedIcon)`
+const CloseButton = styled.button`
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+`;
+
+const StyleCloseIconBtn = styled(CancelOutlinedIcon)`
   position: absolute;
   top: 12px;
   right: 8px;
@@ -69,6 +81,11 @@ const EditButton = styled.button`
   border: none;
   padding: 0;
   cursor: pointer;
+
+  &: focus {
+    border: none;
+    outline: none;
+  }
 `;
 
 const EditIcon = styled(BorderColorOutlinedIcon)`
@@ -96,29 +113,44 @@ const StorageBtn = styled.button`
   line-height: normal;
 `;
 
-const MyPageModal = () => {
+interface MyPageModalProps {
+  onSetIsMyPageModal: () => void;
+}
+
+const MyPageModal: React.FC<MyPageModalProps> = ({ onSetIsMyPageModal }) => {
+  const [editStatusModal, setEditStatusModal] = useState(false);
+  const onSetEditStatusModal = () => {
+    setEditStatusModal((prev) => !prev);
+  };
   return (
-    <Box>
-      <CloseIconBtn />
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          gap: "8px",
-        }}
-      >
-        <MyImg />
-        <MyEmailText>----------@gmail.com</MyEmailText>
-      </div>
-      <StatusBox>
-        <StatusText>현재 상태메시지</StatusText>
-        <EditButton>
-          <EditIcon />
-        </EditButton>
-      </StatusBox>
-      <StorageBtn>프로젝트 보관함</StorageBtn>
-    </Box>
+    <>
+      <Box>
+        <CloseButton onClick={onSetIsMyPageModal}>
+          <StyleCloseIconBtn sx={{ fontSize: '24px' }} />
+        </CloseButton>
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: '8px',
+          }}
+        >
+          <MyImg />
+          <MyEmailText>----------@gmail.com</MyEmailText>
+        </div>
+        <StatusBox>
+          <StatusText>현재 상태메시지</StatusText>
+          <EditButton onClick={onSetEditStatusModal}>
+            <EditIcon />
+          </EditButton>
+        </StatusBox>
+        <StorageBtn>프로젝트 보관함</StorageBtn>
+      </Box>
+      {editStatusModal && (
+        <ChangeStatus onSetEditStatusModal={onSetEditStatusModal} />
+      )}
+    </>
   );
 };
 export default MyPageModal;

@@ -1,8 +1,27 @@
-import styled from "styled-components";
+import styled from 'styled-components';
+
+const ModalBlackOut = styled.div`
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  background: rgba(0, 0, 0, 0.5);
+`;
+
+const ModalContainer = styled.div`
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 999;
+`;
 
 const Box = styled.div`
   width: 500px;
-  height: 200px;
+  height: 182px;
   border-radius: 20px;
   background: #f5f5f5;
   box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.25);
@@ -46,7 +65,7 @@ const ButtonsContainer = styled.div`
   gap: 4px;
 `;
 
-const ConfirmBtn = styled.button`
+const CommonButton = styled.button`
   display: flex;
   width: 60px;
   padding: 8px 12px;
@@ -54,65 +73,64 @@ const ConfirmBtn = styled.button`
   align-items: center;
   gap: 8px;
   border-radius: 20px;
+  font-family: Pretendard;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: normal;
+  color: #ffffff;
+`;
+
+const ConfirmBtn = styled(CommonButton)`
   background: #633ae2;
-
-  color: #ffffff;
-  text-align: center;
-  font-family: Pretendard;
-  font-size: 13px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: normal;
 `;
 
-const CancelBtn = styled.button`
-  display: flex;
-  width: 60px;
-  padding: 8px 12px;
-  justify-content: center;
-  align-items: center;
-  gap: 8px;
-  border-radius: 20px;
+const CancelBtn = styled(CommonButton)`
   background: #d9d9d9;
-
-  color: #ffffff;
-  text-align: center;
-  font-family: Pretendard;
-  font-size: 13px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: normal;
 `;
 
-const ChangeStatus = () => {
+interface ChangeStatusProps {
+  onSetEditStatusModal: () => void;
+}
+
+const ChangeStatus: React.FC<ChangeStatusProps> = ({
+  onSetEditStatusModal,
+}) => {
   return (
+    <>
+    <ModalBlackOut />
+      <ModalContainer>
     <Box>
       <div
         style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "flex-end",
-          gap: "18px",
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: '19px',
+          width: '100%',
+          height: '100%',
         }}
       >
         <div
           style={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyItems: "center",
-            gap: "18px",
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: '31px',
+            width: '100%',
+            height: '100%',
           }}
         >
           <Title>상태메시지를 작성해주세요</Title>
           <StatusField type="text" />
         </div>
-        <ButtonsContainer>
-          <ConfirmBtn>확인</ConfirmBtn>
-          <CancelBtn>취소</CancelBtn>
+        <ButtonsContainer style={{ alignSelf: 'flex-end' }}>
+          <ConfirmBtn onClick={onSetEditStatusModal}>확인</ConfirmBtn>
+          <CancelBtn >취소</CancelBtn>
         </ButtonsContainer>
       </div>
     </Box>
+    </ModalContainer>
+    </>
   );
 };
 export default ChangeStatus;

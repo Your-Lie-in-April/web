@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import styled from 'styled-components';
-import Profile from './Profile';
+import Login from './Login';
 import Alarm from './Alarm';
 import NewProject from './NewProject';
 import Search from './Search';
@@ -9,6 +9,8 @@ import Banner from './Banner';
 import ProjectList from './ProjectList';
 import Pinned from './Pinned';
 import { createGlobalStyle } from 'styled-components';
+import Profile from './Profile';
+
 
 const GlobalStyle = createGlobalStyle`
   body {
