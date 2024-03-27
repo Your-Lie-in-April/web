@@ -13,7 +13,7 @@ const IconWrapper = styled.div<{ offset: number }>`
 
 const SpringIcon: React.FC = () => {
   const { height } = useDocumentSize();
-  const offset = height ? height + 150 : 0;
+  const offset = height ? height + 0 : 0;
 
   return (
     <IconWrapper offset={offset}>
