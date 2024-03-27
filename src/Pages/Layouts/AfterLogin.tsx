@@ -3,11 +3,12 @@ import styled from 'styled-components';
 import MyPageModal from '../ProjectPage/Modal/MyPageModal';
 
 const AfterLoginDiv = styled.div`
-    width: 1920px;
-    height: 100px;
-    background-color: #f1f1f1;
-    display: flex;
-    align-items: center;
+  width: 100vw;
+  height: 100px;
+  background-color: #f1f1f1;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
 `;
 
 const Logo = styled.div`
