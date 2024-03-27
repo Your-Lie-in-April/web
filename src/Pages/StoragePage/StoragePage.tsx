@@ -9,7 +9,7 @@ import GraphicIcons from './Icon/GraphicIcons';
 
 const GlobalStyle = createGlobalStyle`
   body {
-    min-height : 1573px;
+    min-height : 1200px;
     margin: 0;
     background-color: #212121;
     -ms-overflow-style: none;
