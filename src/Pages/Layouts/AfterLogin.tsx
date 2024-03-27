@@ -1,6 +1,6 @@
 import { FC, useState } from 'react';
 import styled from 'styled-components';
-import MyPageModal from '../ProjectPage/Modal/MyPageModal';
+import MyPageModal from '../Modal/MyPageModal';
 
 const AfterLoginDiv = styled.div`
   width: 100vw;

@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import MyProfile from './MyProfile';
 import MemberProfile from './MemberProfile';
 import LeaderProfile from './LeaderProfile';
-import InvitationModal from '../Modal/InvitationModal';
+import InvitationModal from '../../Modal/InvitationModal';
 
 const Box = styled.div`
   width: 286px;
