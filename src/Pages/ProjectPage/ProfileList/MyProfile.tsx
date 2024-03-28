@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined';
 import { useState } from 'react';
-import ChangeNickName from '../Modal/ChangeNickname';
+import ChangeNickName from '../../Modal/ChangeNickname';
 
 const MyProfileBox = styled.div`
   width: 100%;
