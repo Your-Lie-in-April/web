@@ -5,10 +5,11 @@ import StorageProjectList from './StorageProjectList';
 import SummertimeSadnessIcon from './Icon/Summertime_sadness ';
 import LightningIcon from './Icon/LightningIcon';
 import SpringIcon from './Icon/SpringIcon';
+import GraphicIcons from './Icon/GraphicIcons';
 
 const GlobalStyle = createGlobalStyle`
   body {
-    min-height : 1573px;
+    min-height : 1200px;
     margin: 0;
     background-color: #212121;
     -ms-overflow-style: none;
@@ -49,10 +50,7 @@ const StoragePage = () => {
   return (
     <>
       <GlobalStyle />
-      <ArrowIcon />
-      {/* <LightningIcon /> */}
-      {/* <SpringIcon /> */}
-      <SummertimeSadnessIcon />
+      <GraphicIcons />
       <div
         style={{
           display: 'flex',

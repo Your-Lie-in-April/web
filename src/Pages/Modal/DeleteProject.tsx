@@ -1,5 +1,25 @@
-import styled from "styled-components";
-import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
+import styled from 'styled-components';
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+import { useState } from 'react';
+
+const ModalBlackOut = styled.div`
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  background: rgba(0, 0, 0, 0.5);
+`;
+
+const ModalContainer = styled.div`
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 999;
+`;
 
 const Box = styled.div`
   width: 406px;
@@ -49,6 +69,10 @@ const Button = styled.button`
   font-size: 13px;
   font-weight: 500;
   line-height: normal;
+
+  &: focus {
+    outline: none;
+  }
 `;
 
 const ConfirmBtn = styled(Button)`
@@ -67,39 +91,55 @@ const ButtonsContainer = styled.div`
   gap: 4px;
 `;
 
-const DeleteProject = () => {
+interface DeleteProjectProps {
+  onClose: () => void;
+}
+
+const DeleteProject: React.FC<DeleteProjectProps> = ({ onClose }) => {
+  const [isBtnClick, setIsBtnClick] = useState<boolean>(false);
+
+  const onSetIsBtnClick = () => {
+    setIsBtnClick(!isBtnClick);
+    onClose();
+  };
+
   return (
-    <Box>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          gap: "12px",
-          width: "100%",
-          height: "100%",
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            gap: "10px",
-            width: "100%",
-            height: "100%",
-          }}
-        >
-          <InfoCircleIcon sx={{ fontSize: "32px" }} />
-          <PeojectName>프로젝트명</PeojectName>
-          <Title>프로젝트에서 내보내겠습니까?</Title>
-        </div>
-        <ButtonsContainer style={{ alignSelf: "flex-end" }}>
-          <ConfirmBtn>확인</ConfirmBtn>
-          <CancelBtn>취소</CancelBtn>
-        </ButtonsContainer>
-      </div>
-    </Box>
+    <>
+      <ModalBlackOut />
+      <ModalContainer>
+        <Box>
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: '12px',
+              width: '100%',
+              height: '100%',
+            }}
+          >
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                gap: '10px',
+                width: '100%',
+                height: '100%',
+              }}
+            >
+              <InfoCircleIcon sx={{ fontSize: '32px' }} />
+              <PeojectName>프로젝트명</PeojectName>
+              <Title>프로젝트명을 삭제하겠습니까?</Title>
+            </div>
+            <ButtonsContainer style={{ alignSelf: 'flex-end' }}>
+              <ConfirmBtn onClick={onSetIsBtnClick}>확인</ConfirmBtn>
+              <CancelBtn onClick={onSetIsBtnClick}>취소</CancelBtn>
+            </ButtonsContainer>
+          </div>
+        </Box>
+      </ModalContainer>
+    </>
   );
 };
 

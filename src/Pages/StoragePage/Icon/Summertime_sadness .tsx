@@ -7,6 +7,9 @@ const IconWrapper = styled.div<{ offset: number }>`
   bottom: calc(100vh - ${(props) => props.offset}px);
   right: 0px;
   flex-shrink: 0;
+  overflow: hidden;
+  width: 319px;
+  height: 281px;
 `;
 
 const SummertimeSadnessIcon: React.FC = () => {
