@@ -30,7 +30,7 @@ const Logo = styled.div`
 
 const MyPageDiv = styled.div`
   position: relative;
-  bottom: 20px;
+  bottom: 21px;
   justify-content: flex-end;
   flex-basis: 20%;
   white-space: nowrap;

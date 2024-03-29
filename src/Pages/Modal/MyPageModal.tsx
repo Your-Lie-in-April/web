@@ -76,6 +76,9 @@ const StatusText = styled.text`
   font-weight: 500;
   line-height: normal;
   flex-grow: 1;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 const EditButton = styled.button`
@@ -83,6 +86,7 @@ const EditButton = styled.button`
   border: none;
   padding: 0;
   cursor: pointer;
+  flex-basis: 10%;
 
   &: focus {
     border: none;
@@ -148,6 +152,7 @@ const MyPageModal: React.FC<MyPageModalProps> = ({ onSetIsMyPageModal }) => {
           <MyEmailText>----------@gmail.com</MyEmailText>
         </div>
         <StatusBox>
+          <div style={{ justifyContent: 'flex-start', flexBasis: '10%' }} />
           <StatusText>현재 상태메시지</StatusText>
           <EditButton onClick={onSetEditStatusModal}>
             <EditIcon />

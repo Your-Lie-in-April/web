@@ -96,7 +96,6 @@ const MoreBox = styled.div`
   padding-top: 69px;
   border-radius: 16px;
   background: rgba(0, 0, 0, 0.3);
-  z-index: 1;
 `;
 
 const MoreItem = styled.button`
