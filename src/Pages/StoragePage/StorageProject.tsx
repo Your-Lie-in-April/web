@@ -6,10 +6,6 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { useState } from 'react';
 
-interface MoreTextProps extends React.HTMLAttributes<HTMLDivElement> {
-  isMove?: boolean;
-}
-
 const ProjectBox = styled.div`
   position: relative;
   display: flex;
@@ -35,26 +31,31 @@ const TextBox = styled.div`
   box-sizing: border-box;
   align-items: flex-start;
   gap: 8px;
-`;
 
-const ProjectName = styled.text`
   color: #000000;
-  font-family: 'Pretendard';
-  font-size: 24px;
   font-style: normal;
-  font-weight: 700;
   line-height: normal;
   text-transform: uppercase;
+`;
+
+const ProjectName = styled.div`
+  width: 100%;
+  font-size: 24px;
+  font-weight: 700;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 `;
 
 const DetailText = styled.div`
-  color: #000000;
-  font-family: 'Pretendard';
+  max-height: 43px;
   font-size: 16px;
-  font-style: normal;
   font-weight: 400;
-  line-height: normal;
-  text-transform: uppercase;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
 `;
 
 const MoreButton = styled.button`
@@ -114,14 +115,13 @@ const MoreItem = styled.button`
   }
 `;
 
-const MoreText = styled.div<MoreTextProps>`
+const MoreText = styled.div`
   color: #f1f1f1;
   font-weight: 400;
   font-size: 12px;
   font-style: normal;
   line-height: normal;
   text-transform: uppercase;
-  letter-spacing: ${({ isMove }) => (isMove ? '-1.2px' : 'normal')};
 `;
 
 const StorageProject = () => {
@@ -141,7 +141,7 @@ const StorageProject = () => {
             </MoreItem>
             <MoreItem>
               <DeleteIcon sx={{ fontSize: 48, color: '#F1F1F1' }} />
-              <MoreText isMove>삭제하기</MoreText>
+              <MoreText>삭제하기</MoreText>
             </MoreItem>
           </div>
         </MoreBox>
@@ -159,11 +159,12 @@ const StorageProject = () => {
           </MoreButton>
         </MoreDiv>
         <TextBox>
-          <ProjectName>2023 여름방학 프로젝트</ProjectName>
+          <ProjectName>
+            2023 여름방학 프로젝트2023 여름방학 프로젝트2023 여름방학 프로젝트
+          </ProjectName>
           <DetailText>
-            2023 앱센터 프로젝트 입니다.
-            <br />
-            2023 앱센터 프로젝트 입니다.
+            2023 앱센터 프로젝트 입니다.2023 앱센터 프로젝트 입니다.2023 앱센터
+            프로젝트 입니다.2023 앱센터 프로젝트 입니다.
           </DetailText>
         </TextBox>
       </div>
