@@ -1,5 +1,5 @@
-import styled from "styled-components";
-import PushPinOutlinedIcon from "@mui/icons-material/PushPinOutlined";
+import styled from 'styled-components';
+import PushPinOutlinedIcon from '@mui/icons-material/PushPinOutlined';
 
 const PinnedBox = styled.div`
   width: 950px;
@@ -27,6 +27,22 @@ const ScheduleBox = styled.div`
   background: #fff;
 `;
 
+const StyledButton = styled.button`
+  width: 36px;
+  height: 36px;
+
+  background: none;
+  color: #ffffff;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+
+  &: focus {
+    border: none;
+    outline: none;
+  }
+`;
+
 const StyledPushPin = styled(PushPinOutlinedIcon)`
   color: #ffffff;
   flex-grow: 1;
@@ -42,7 +58,7 @@ const TextDiv = styled.div`
 
 const ProjectText = styled.text`
   color: #ffffff;
-  font-family: "Pretendard";
+  font-family: 'Pretendard';
   font-size: 32px;
   font-style: normal;
   font-weight: 800;
@@ -51,7 +67,7 @@ const ProjectText = styled.text`
 
 const DetailText = styled.text`
   color: #ffffff;
-  font-family: "Pretendard";
+  font-family: 'Pretendard';
   font-size: 16px;
   font-style: normal;
   font-weight: 500;
@@ -64,8 +80,10 @@ const DetailText = styled.text`
 const Pinned = () => {
   return (
     <PinnedBox>
-      <div style={{ display: "flex", flexDirection: "column" }}>
-        <StyledPushPin sx={{ fontSize: 36 }} />
+      <div style={{ display: 'flex', flexDirection: 'column' }}>
+        <StyledButton>
+          <PushPinOutlinedIcon sx={{ fontSize: 36 }} />
+        </StyledButton>
         <ProjectBox>
           <TextDiv>
             <ProjectText>
