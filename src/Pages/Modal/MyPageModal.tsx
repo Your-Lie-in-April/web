@@ -10,8 +10,8 @@ const Box = styled.div`
   border-radius: 20px;
   background: #212121;
   position: absolute;
-  top: 100px;
-  right: 319.5px;
+  top: 100%;
+  left: -205px;
 
   display: inline-flex;
   padding: 12px 8px;
@@ -21,6 +21,8 @@ const Box = styled.div`
   gap: 22px;
   box-sizing: border-box;
   z-index: 1;
+
+  margin-top: 1.5rem;
 `;
 
 const CloseButton = styled.button`
@@ -111,6 +113,10 @@ const StorageBtn = styled.button`
   font-style: normal;
   font-weight: 500;
   line-height: normal;
+
+  &:focus {
+    outline: none;
+  }
 `;
 
 interface MyPageModalProps {
@@ -119,9 +125,11 @@ interface MyPageModalProps {
 
 const MyPageModal: React.FC<MyPageModalProps> = ({ onSetIsMyPageModal }) => {
   const [editStatusModal, setEditStatusModal] = useState(false);
+
   const onSetEditStatusModal = () => {
     setEditStatusModal((prev) => !prev);
   };
+
   return (
     <>
       <Box>
