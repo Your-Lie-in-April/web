@@ -27,13 +27,24 @@ const Logo = styled.div`
   font-size: 32px;
 `;
 
-const LogIn = styled.div`
+const LogIn = styled.button`
   position: relative;
   bottom: 21px;
   justify-content: flex-end;
   flex-basis: 20%;
   white-space: nowrap;
   font-size: 22px;
+  font-weight: 500;
+  box-sizing: border-box;
+
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+
+  &:focus {
+    outline: none;
+  }
 `;
 
 const BeforeLogin: FC = () => {
