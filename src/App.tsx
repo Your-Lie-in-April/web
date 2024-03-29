@@ -8,9 +8,9 @@ import Login from './Pages/MainPage/Login';
 function App() {
     return (
         <>
-            {/* <Login></Login> */}
-            <MainPage />
-            {/* <ProjectMakePage /> */}
+            <Login></Login>
+            {/* <MainPage />
+            <ProjectMakePage /> */}
         </>
     );
 }

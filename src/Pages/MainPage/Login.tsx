@@ -6,7 +6,6 @@ import { createGlobalStyle } from 'styled-components';
 import { redirect } from 'react-router-dom';
 import zIndex from '@mui/material/styles/zIndex';
 
-
 const GlobalStyle = createGlobalStyle`
   body {
     margin: 0;
@@ -131,12 +130,9 @@ const GoogleLogin = styled.div`
     align-items: center;
     gap: 86px;
     position: relative;
-    top: -5px;
-    left: -30px;
 `;
 const googleLogo = 'src/pics/google-logo-9808 1.png';
 const Login: FC = () => {
-
     const URL = 'https://timepiece.inuappcenter.kr';
     const oAuth = async () => {
         try {
@@ -169,7 +165,6 @@ const Login: FC = () => {
                 </Container>
                 <LoginBanner>
                     <div>
-
                         <text style={{ color: '#fff', textAlign: 'center', fontSize: '32px', fontWeight: '700' }}>
                             Sign up
                         </text>
