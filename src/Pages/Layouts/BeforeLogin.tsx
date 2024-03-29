@@ -31,7 +31,7 @@ const LogIn = styled.button`
   position: relative;
   bottom: 21px;
   justify-content: flex-end;
-  flex-basis: 20%;
+  flex-basis: 30%;
   white-space: nowrap;
   font-size: 22px;
   font-weight: 500;
@@ -50,7 +50,7 @@ const LogIn = styled.button`
 const BeforeLogin: FC = () => {
   return (
     <BeforeLoginDiv>
-      <div style={{ justifyContent: 'flex-start', flexBasis: '20%' }} />
+      <div style={{ justifyContent: 'flex-start', flexBasis: '30%' }} />
       <Logo>TIME PIECE</Logo>
       <LogIn>Log in</LogIn>
     </BeforeLoginDiv>
