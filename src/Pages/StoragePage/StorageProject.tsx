@@ -92,7 +92,7 @@ const MoreBox = styled.div`
   height: 100%;
   color: #7d7d7d;
   box-sizing: border-box;
-  padding: 69px 84px 164px 84px;
+  padding-top: 69px;
   border-radius: 16px;
   background: rgba(0, 0, 0, 0.3);
   z-index: 10;
@@ -134,7 +134,9 @@ const StorageProject = () => {
     <ProjectBox>
       {showMore && (
         <MoreBox>
-          <div style={{ display: 'flex', gap: '30px', width: '130px' }}>
+          <div
+            style={{ display: 'flex', gap: '30px', justifyContent: 'center' }}
+          >
             <MoreItem>
               <AddCircleIcon sx={{ fontSize: 48, color: '#F1F1F1' }} />
               <MoreText>자세히보기</MoreText>
