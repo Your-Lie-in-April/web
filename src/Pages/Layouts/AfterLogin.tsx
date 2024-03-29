@@ -37,10 +37,8 @@ const MyPageDiv = styled.div`
 `;
 
 const MyPageBtn = styled.button`
-  white-space: nowrap;
-  box-sizing: border-box;
+ box-sizing: border-box;
 
-  box-sizing: border-box;
   font-weight: 500;
   font-size: 22px;
 

@@ -27,15 +27,19 @@ const Logo = styled.div`
   font-size: 32px;
 `;
 
-const LogIn = styled.button`
+const  LogInDiv = styled.div`
   position: relative;
   bottom: 21px;
   justify-content: flex-end;
-  flex-basis: 30%;
+  flex-basis: 20%;
   white-space: nowrap;
-  font-size: 22px;
+`;
+
+const LogInBtn = styled.button`
+ box-sizing: border-box;
+
   font-weight: 500;
-  box-sizing: border-box;
+  font-size: 22px;
 
   background-color: transparent;
   border: none;
@@ -43,16 +47,20 @@ const LogIn = styled.button`
   cursor: pointer;
 
   &:focus {
+    border: none;
     outline: none;
   }
 `;
 
+
+
 const BeforeLogin: FC = () => {
   return (
     <BeforeLoginDiv>
-      <div style={{ justifyContent: 'flex-start', flexBasis: '30%' }} />
+      <div style={{ justifyContent: 'flex-start', flexBasis: '20%' }} />
       <Logo>TIME PIECE</Logo>
-      <LogIn>Log in</LogIn>
+      <LogInDiv><LogInBtn>Log in</LogInBtn></LogInDiv>
+     
     </BeforeLoginDiv>
   );
 };
