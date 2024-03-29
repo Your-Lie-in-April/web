@@ -78,6 +78,10 @@ const CommonButton = styled.button`
   font-weight: 500;
   line-height: normal;
   color: #ffffff;
+
+  &: focus {
+    outline: none;
+  }
 `;
 
 const ConfirmBtn = styled(CommonButton)`
@@ -97,39 +101,39 @@ const ChangeStatus: React.FC<ChangeStatusProps> = ({
 }) => {
   return (
     <>
-    <ModalBlackOut />
+      <ModalBlackOut />
       <ModalContainer>
-    <Box>
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          gap: '19px',
-          width: '100%',
-          height: '100%',
-        }}
-      >
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            gap: '31px',
-            width: '100%',
-            height: '100%',
-          }}
-        >
-          <Title>상태메시지를 작성해주세요</Title>
-          <StatusField type="text" />
-        </div>
-        <ButtonsContainer style={{ alignSelf: 'flex-end' }}>
-          <ConfirmBtn onClick={onSetEditStatusModal}>확인</ConfirmBtn>
-          <CancelBtn >취소</CancelBtn>
-        </ButtonsContainer>
-      </div>
-    </Box>
-    </ModalContainer>
+        <Box>
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: '19px',
+              width: '100%',
+              height: '100%',
+            }}
+          >
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                gap: '31px',
+                width: '100%',
+                height: '100%',
+              }}
+            >
+              <Title>상태메시지를 작성해주세요</Title>
+              <StatusField type="text" />
+            </div>
+            <ButtonsContainer style={{ alignSelf: 'flex-end' }}>
+              <ConfirmBtn onClick={onSetEditStatusModal}>확인</ConfirmBtn>
+              <CancelBtn onClick={onSetEditStatusModal}>취소</CancelBtn>
+            </ButtonsContainer>
+          </div>
+        </Box>
+      </ModalContainer>
     </>
   );
 };
