@@ -5,6 +5,7 @@ import InboxOutlinedIcon from '@mui/icons-material/InboxOutlined';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { useState } from 'react';
+import DeleteProject from '../Modal/DeleteProject';
 
 const ProjectBox = styled.div`
   position: relative;
@@ -95,7 +96,7 @@ const MoreBox = styled.div`
   padding-top: 69px;
   border-radius: 16px;
   background: rgba(0, 0, 0, 0.3);
-  z-index: 10;
+  z-index: 1;
 `;
 
 const MoreItem = styled.button`
@@ -125,52 +126,61 @@ const MoreText = styled.div`
 `;
 
 const StorageProject = () => {
-  const [showMore, setShowMore] = useState(false);
+  const [showMore, setShowMore] = useState<boolean>(false);
+  const [isClick, setIsClick] = useState<boolean>(false);
+
   const toggleMoreBtn = () => {
     setShowMore(!showMore);
   };
 
+  const onClickItem = () => {
+    setIsClick(!isClick);
+  };
+
   return (
-    <ProjectBox>
-      {showMore && (
-        <MoreBox>
-          <div
-            style={{ display: 'flex', gap: '30px', justifyContent: 'center' }}
-          >
-            <MoreItem>
-              <AddCircleIcon sx={{ fontSize: 48, color: '#F1F1F1' }} />
-              <MoreText>자세히보기</MoreText>
-            </MoreItem>
-            <MoreItem>
-              <DeleteIcon sx={{ fontSize: 48, color: '#F1F1F1' }} />
-              <MoreText>삭제하기</MoreText>
-            </MoreItem>
-          </div>
-        </MoreBox>
-      )}
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '4px',
-        }}
-      >
-        <MoreDiv>
-          <MoreButton>
-            <StyledMoreBtn sx={{ fontSize: 32 }} onClick={toggleMoreBtn} />
-          </MoreButton>
-        </MoreDiv>
-        <TextBox>
-          <ProjectName>
-            2023 여름방학 프로젝트2023 여름방학 프로젝트2023 여름방학 프로젝트
-          </ProjectName>
-          <DetailText>
-            2023 앱센터 프로젝트 입니다.2023 앱센터 프로젝트 입니다.2023 앱센터
-            프로젝트 입니다.2023 앱센터 프로젝트 입니다.
-          </DetailText>
-        </TextBox>
-      </div>
-    </ProjectBox>
+    <>
+      <ProjectBox>
+        {showMore && (
+          <MoreBox>
+            <div
+              style={{ display: 'flex', gap: '30px', justifyContent: 'center' }}
+            >
+              <MoreItem>
+                <AddCircleIcon sx={{ fontSize: 48, color: '#F1F1F1' }} />
+                <MoreText>자세히보기</MoreText>
+              </MoreItem>
+              <MoreItem onClick={onClickItem}>
+                <DeleteIcon sx={{ fontSize: 48, color: '#F1F1F1' }} />
+                <MoreText>삭제하기</MoreText>
+              </MoreItem>
+            </div>
+          </MoreBox>
+        )}
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '4px',
+          }}
+        >
+          <MoreDiv>
+            <MoreButton>
+              <StyledMoreBtn sx={{ fontSize: 32 }} onClick={toggleMoreBtn} />
+            </MoreButton>
+          </MoreDiv>
+          <TextBox>
+            <ProjectName>
+              2023 여름방학 프로젝트2023 여름방학 프로젝트2023 여름방학 프로젝트
+            </ProjectName>
+            <DetailText>
+              2023 앱센터 프로젝트 입니다.2023 앱센터 프로젝트 입니다.2023
+              앱센터 프로젝트 입니다.2023 앱센터 프로젝트 입니다.
+            </DetailText>
+          </TextBox>
+        </div>
+      </ProjectBox>
+      {isClick && <DeleteProject onClose={onClickItem} />}
+    </>
   );
 };
 
