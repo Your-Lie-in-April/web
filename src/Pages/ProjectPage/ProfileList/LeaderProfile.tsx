@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+import MoreBtn from '../Buttons/MoreBtn';
 
 const LeaderProfileBox = styled.div`
   width: 100%;
@@ -85,9 +86,7 @@ const LeaderProfile = ({
               상태메세지
             </CommonText>
           </div>
-          <EditMemberBtn onClick={toggleDeleteBtn}>
-            <MoreHorizIcon sx={{ fontSize: 32 }} />
-          </EditMemberBtn>
+          <MoreBtn />
         </div>
       </LeaderProfileDiv>
     </LeaderProfileBox>
