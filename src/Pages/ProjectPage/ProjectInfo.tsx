@@ -3,8 +3,7 @@ import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined';
 import InboxOutlinedIcon from '@mui/icons-material/InboxOutlined';
 
 const Container = styled.div`
-  position: relative;
-  width: 100vw;
+  width: 100%;
   height: 200px;
   background: #d9d9d9;
   box-sizing: border-box;
@@ -12,6 +11,7 @@ const Container = styled.div`
 `;
 
 const ProjectInfoDiv = styled.div`
+  position: relative;
   width: 900px;
   height: 172px;
   display: flex;
@@ -32,18 +32,10 @@ const CommonText = styled.div`
   line-height: normal;
 `;
 
-const MainContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin: 0 auto;
-  max-width: 1284px;
-  box-sizing: border-box;
-`;
-
 const SettingDiv = styled.div`
   position: absolute;
-  bottom: 16px;
-  right: 319.5px;
+  top: 70%;
+  right: -185px;
   width: 221px;
   height: 34px;
   display: flex;
@@ -68,10 +60,15 @@ const SettingBtn = styled.button`
   gap: 4px;
 
   border-radius: 20px;
+  border: none;
   padding: 0;
   margin: 0;
   background: transparent;
   box-sizing: border-box;
+
+  &: focus {
+    outline: none;
+  }
 `;
 
 const ProjectInfo = () => {
@@ -82,18 +79,20 @@ const ProjectInfo = () => {
           <CommonText style={{ fontSize: '42px', fontWeight: '700' }}>
             프로젝트 제목
           </CommonText>
-          <CommonText>프로젝트 내용</CommonText>
+          <CommonText style={{ position: 'relative' }}>
+            프로젝트 내용
+          </CommonText>{' '}
+          <SettingDiv>
+            <SettingBtn>
+              <BorderColorOutlinedIcon style={{ fontSize: '18px' }} />
+              커버 수정
+            </SettingBtn>
+            <SettingBtn>
+              <InboxOutlinedIcon style={{ fontSize: '18px' }} />
+              프로젝트 보관
+            </SettingBtn>
+          </SettingDiv>
         </ProjectInfoDiv>
-        <SettingDiv>
-          <SettingBtn>
-            <BorderColorOutlinedIcon style={{ fontSize: '18px' }} />
-            커버 수정
-          </SettingBtn>
-          <SettingBtn>
-            <InboxOutlinedIcon style={{ fontSize: '18px' }} />
-            프로젝트 보관
-          </SettingBtn>
-        </SettingDiv>
       </Container>
     </>
   );
