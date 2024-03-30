@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import styled from 'styled-components';
 
 const ModalBlackOut = styled.div`
@@ -20,8 +21,8 @@ const ModalContainer = styled.div`
 `;
 
 const Box = styled.div`
-  width: 500px;
-  height: 182px;
+  width: 504px;
+  height: 167px;
   border-radius: 20px;
   background: #f5f5f5;
   box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.25);
@@ -32,26 +33,22 @@ const Box = styled.div`
   box-sizing: border-box;
 `;
 
-const Title = styled.text`
+const Title = styled.div`
   color: #000000;
   font-family: Pretendard;
-  font-size: 20px;
-  font-style: normal;
-  font-weight: 700;
   line-height: normal;
+  font-size: 20px;
+  font-weight: 700;
 `;
 
-const StatusField = styled.input`
+const NickNameField = styled.input`
   width: 400px;
   height: 40px;
   border-radius: 20px;
   background: #ffffff;
   color: #000000;
-  font-family: Pretendard;
   font-size: 18px;
-  font-style: normal;
   font-weight: 400;
-  line-height: normal;
   padding: 9px 16px;
   box-sizing: border-box;
   border: none;
@@ -77,60 +74,64 @@ const CommonButton = styled.button`
   font-size: 13px;
   font-weight: 500;
   line-height: normal;
-  color: #ffffff;
 `;
 
 const ConfirmBtn = styled(CommonButton)`
   background: #633ae2;
+  color: #ffffff;
 `;
 
 const CancelBtn = styled(CommonButton)`
   background: #d9d9d9;
+  color: #ffffff;
 `;
 
-interface ChangeStatusProps {
-  onSetEditStatusModal: () => void;
+interface ChangeNickNameProps {
+  onSetIsEditModal: () => void;
+  onNickChange: (newNick: string) => void;
 }
 
-const ChangeStatus: React.FC<ChangeStatusProps> = ({
-  onSetEditStatusModal,
+const ChangeNickName: React.FC<ChangeNickNameProps> = ({
+  onSetIsEditModal,
+  onNickChange,
 }) => {
+  const [newNick, setNewNick] = useState('');
+
+  const handleConfirm = () => {
+    console.log('new nickname:', newNick);
+    onNickChange(newNick);
+    onSetIsEditModal();
+  };
+
   return (
     <>
-    <ModalBlackOut />
+      <ModalBlackOut />
       <ModalContainer>
-    <Box>
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          gap: '19px',
-          width: '100%',
-          height: '100%',
-        }}
-      >
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            gap: '31px',
-            width: '100%',
-            height: '100%',
-          }}
-        >
-          <Title>상태메시지를 작성해주세요</Title>
-          <StatusField type="text" />
-        </div>
-        <ButtonsContainer style={{ alignSelf: 'flex-end' }}>
-          <ConfirmBtn onClick={onSetEditStatusModal}>확인</ConfirmBtn>
-          <CancelBtn >취소</CancelBtn>
-        </ButtonsContainer>
-      </div>
-    </Box>
-    </ModalContainer>
+        <Box>
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: '18px',
+              width: '100%',
+              height: '100%',
+            }}
+          >
+            <Title>프로젝트에서 사용할 닉네임을 작성해주세요</Title>
+            <NickNameField
+              type="text"
+              value={newNick}
+              onChange={(e) => setNewNick(e.target.value)}
+            />
+            <ButtonsContainer style={{ alignSelf: 'flex-end' }}>
+              <ConfirmBtn onClick={handleConfirm}>확인</ConfirmBtn>
+              <CancelBtn onClick={onSetIsEditModal}>취소</CancelBtn>
+            </ButtonsContainer>
+          </div>
+        </Box>
+      </ModalContainer>
     </>
   );
 };
-export default ChangeStatus;
+export default ChangeNickName;

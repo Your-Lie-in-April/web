@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import { useState } from 'react';
-import DeleteMember from '../Modal/DeleteMember';
+import DeleteMember from '../../Modal/DeleteMember';
 
 const MemberProfileBox = styled.div`
   width: 100%;

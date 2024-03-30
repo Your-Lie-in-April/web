@@ -1,5 +1,5 @@
-import styled from "styled-components";
-import MemberSchedule from "./MemberSchedule";
+import styled from 'styled-components';
+import MemberSchedule from './MemberSchedule';
 
 const GridContainer = styled.div`
   display: grid;

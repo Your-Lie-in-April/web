@@ -1,19 +1,14 @@
-import { useState } from 'react';
 import styled from 'styled-components';
-
-interface CommonButtonProps {
-  primary?: boolean;
-  onClick?: () => void;
-}
 
 const ModalBlackOut = styled.div`
   width: 100%;
   height: 100%;
   position: fixed;
-  left: 0;
-  top: 0;
-  background: rgba(0, 0, 0, 0.5);
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
   z-index: 1;
+  background: rgba(0, 0, 0, 0.5);
 `;
 
 const ModalContainer = styled.div`
@@ -25,8 +20,8 @@ const ModalContainer = styled.div`
 `;
 
 const Box = styled.div`
-  width: 504px;
-  height: 167px;
+  width: 500px;
+  height: 182px;
   border-radius: 20px;
   background: #f5f5f5;
   box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.25);
@@ -37,7 +32,7 @@ const Box = styled.div`
   box-sizing: border-box;
 `;
 
-const Title = styled.div`
+const Title = styled.text`
   color: #000000;
   font-family: Pretendard;
   font-size: 20px;
@@ -46,22 +41,21 @@ const Title = styled.div`
   line-height: normal;
 `;
 
-const InviteField = styled.div`
+const StatusField = styled.input`
   width: 400px;
-  height: 32px;
+  height: 40px;
   border-radius: 20px;
   background: #ffffff;
-  color: #7d7d7d;
-  font-size: 12px;
+  color: #000000;
+  font-family: Pretendard;
+  font-size: 18px;
   font-style: normal;
-  font-weight: 500;
+  font-weight: 400;
   line-height: normal;
   padding: 9px 16px;
   box-sizing: border-box;
-  text-align: center;
-  padding: 9px 0px;
-  justify-content: center;
-  align-items: center;
+  border: none;
+  outline: none;
 `;
 
 const ButtonsContainer = styled.div`
@@ -71,9 +65,9 @@ const ButtonsContainer = styled.div`
   gap: 4px;
 `;
 
-const CommonButton = styled.button<CommonButtonProps>`
+const CommonButton = styled.button`
   display: flex;
-  width: 72px;
+  width: 60px;
   padding: 8px 12px;
   justify-content: center;
   align-items: center;
@@ -84,37 +78,30 @@ const CommonButton = styled.button<CommonButtonProps>`
   font-weight: 500;
   line-height: normal;
   color: #ffffff;
-  background-color: ${(props) => (props.primary ? '#633AE2' : '#d9d9d9')};
+
+  &: focus {
+    outline: none;
+  }
 `;
 
-interface ShowInviteModalProps {
-  onShowInviteModal: () => void;
+const ConfirmBtn = styled(CommonButton)`
+  background: #633ae2;
+`;
+
+const CancelBtn = styled(CommonButton)`
+  background: #d9d9d9;
+`;
+
+interface ChangeStatusProps {
+  onSetEditStatusModal: () => void;
 }
 
-const InvitationModal: React.FC<ShowInviteModalProps> = ({
-  onShowInviteModal,
+const ChangeStatus: React.FC<ChangeStatusProps> = ({
+  onSetEditStatusModal,
 }) => {
-  const [link, setLink] = useState('');
-  const [isBtnClick, setIsBtnClick] = useState(false);
-
-  const generateLink = () => {
-    const generatedLink = '프로젝트 페이지 url https://www--------------';
-    setLink(generatedLink);
-    setIsBtnClick(false);
-  };
-
-  const copyLink = () => {
-    // 링크 복사
-    setIsBtnClick(true);
-  };
-
-  const closeInviteModal = () => {
-    onShowInviteModal();
-  };
-
   return (
     <>
-      <ModalBlackOut onClick={closeInviteModal} />
+      <ModalBlackOut />
       <ModalContainer>
         <Box>
           <div
@@ -122,7 +109,7 @@ const InvitationModal: React.FC<ShowInviteModalProps> = ({
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
-              gap: '18px',
+              gap: '19px',
               width: '100%',
               height: '100%',
             }}
@@ -132,21 +119,17 @@ const InvitationModal: React.FC<ShowInviteModalProps> = ({
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
-                gap: '18px',
+                gap: '31px',
                 width: '100%',
                 height: '100%',
               }}
             >
-              <Title>프로젝트명</Title>
-              <InviteField>{link || ''}</InviteField>
+              <Title>상태메시지를 작성해주세요</Title>
+              <StatusField type="text" />
             </div>
             <ButtonsContainer style={{ alignSelf: 'flex-end' }}>
-              <CommonButton primary={!isBtnClick} onClick={generateLink}>
-                링크생성
-              </CommonButton>
-              <CommonButton primary={isBtnClick} onClick={copyLink}>
-                링크복사
-              </CommonButton>
+              <ConfirmBtn onClick={onSetEditStatusModal}>확인</ConfirmBtn>
+              <CancelBtn onClick={onSetEditStatusModal}>취소</CancelBtn>
             </ButtonsContainer>
           </div>
         </Box>
@@ -154,4 +137,4 @@ const InvitationModal: React.FC<ShowInviteModalProps> = ({
     </>
   );
 };
-export default InvitationModal;
+export default ChangeStatus;

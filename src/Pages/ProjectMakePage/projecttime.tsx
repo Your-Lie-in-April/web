@@ -3,6 +3,7 @@ import ReactDatePicker from 'react-datepicker';
 import styled from 'styled-components';
 import { ko } from 'date-fns/locale/ko';
 import '/src/styles/projecttime.css';
+import { time } from 'console';
 
 const ProjectTimeContainer = styled.div`
     display: flex;
@@ -12,14 +13,12 @@ const ProjectTimeContainer = styled.div`
 `;
 
 const DateContainer = styled.div`
-    display: flex;
     flex-direction: column;
     align-items: center;
     margin: 0 20px;
 `;
 
 const SDatePicker = styled(ReactDatePicker)`
-    margin-top: 12px;
     width: 166px;
     padding: 4px;
     font-size: 28px;
@@ -27,7 +26,8 @@ const SDatePicker = styled(ReactDatePicker)`
     border-radius: 20px;
     background: #f5f5f5;
     text-align: center;
-    margin: auto;
+    display: flex;
+    margin-left: 14px;
 
     &:hover {
         cursor: pointer;
@@ -35,35 +35,47 @@ const SDatePicker = styled(ReactDatePicker)`
 `;
 
 const TimePicker = styled.div`
-    margin-top: 12px;
     width: 178px;
     font-size: 28px;
-    font-weight: 400;
+    height: 40px;
     border-radius: 20px;
     background: #f5f5f5;
     text-align: center;
-    margin: auto;
-
-    &:hover {
-        cursor: pointer;
-    }
-`;
-
-const DropdownContainer = styled.div`
-    position: absolute;
-    top: calc(83.6%);
-    width: auto;
     display: flex;
-    flex-direction: row;
-    z-index: 5;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+    cursor: pointer;
+    border: none;
 `;
 
-const DropdownItem = styled.select`
-    margin: 5px;
-    font-size: 15px;
-    border: transparent;
-    border-radius: 4px;
+const TimePickerContainer = styled.ul`
+    width: 178px;
+    height: 124px;
+    font-size: 28px;
+    border-radius: 5px;
+    background: #f5f5f5;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0;
+    list-style-type: none;
+    margin: auto;
+    overflow-y: auto;
+`;
+
+const TimeOption = styled.li`
+    width: 100%;
+    height: 40px;
     cursor: pointer;
+    font-size: 24px;
+    line-height: 28px;
+    color: #7d7d7d;
+    &:hover {
+        background-color: #633ae2;
+        color: #fff;
+    }
 `;
 
 const Text = styled.div`
@@ -82,7 +94,7 @@ const Separator = styled.span`
     font-size: 32px;
     font-weight: 600;
     text-align: center;
-    margin-top: 40px;
+    margin-top: 30px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -129,13 +141,28 @@ const ProjectTime: FC<ProjectTimeProps> = ({ startDate, endDate, onDateChange })
     const [selectedDays, setSelectedDays] = useState<number[]>([]);
     const [isStartOpen, setIsStartOpen] = useState<boolean>(false);
     const [isEndOpen, setIsEndOpen] = useState<boolean>(false);
-    const [starttime, setStartTime] = useState({ hour: '12', minute: '00', ampm: 'AM' });
-    const [endtime, setEndTime] = useState({ hour: '12', minute: '00', ampm: 'AM' });
-    const hourRef = useRef<HTMLSelectElement>(null);
-    const minuteRef = useRef<HTMLSelectElement>(null);
-    const ampmRef = useRef<HTMLSelectElement>(null);
+    const [starttime, setStartTime] = useState('AM 00:00');
+    const [endtime, setEndTime] = useState('AM 00:00');
     const startDropdownRef = useRef<HTMLDivElement>(null);
     const endDropdownRef = useRef<HTMLDivElement>(null);
+
+    const Times = [];
+    for (let hour = 0; hour < 24; hour++) {
+        const ampm = hour < 12 ? 'AM' : 'PM';
+        const displayHour = hour === 0 ? 0 : hour > 12 ? hour - 12 : hour;
+        for (let minute = 0; minute < 60; minute += 30) {
+            const formattedHour = displayHour.toString().padStart(2, '0');
+            const formattedMinute = minute.toString().padStart(2, '0');
+            const time = `${ampm} ${formattedHour}:${formattedMinute}`;
+            Times.push({
+                value: `${formattedHour}:${formattedMinute}`,
+                label: time,
+                hour: formattedHour,
+                minute: formattedMinute,
+                ampm,
+            });
+        }
+    }
 
     const toggleWeekend = (dayIndex: number) => {
         if (selectedDays.includes(dayIndex)) {
@@ -146,23 +173,6 @@ const ProjectTime: FC<ProjectTimeProps> = ({ startDate, endDate, onDateChange })
         onDateChange?.(startDate, endDate);
     };
 
-    const startDropdown = () => setIsStartOpen((prevIsOpen) => !prevIsOpen);
-    const endDropdown = () => setIsEndOpen((prevIsOpen) => !prevIsOpen);
-
-    const updateStartTime = () => {
-        setStartTime({
-            hour: hourRef.current?.value ?? starttime.hour,
-            minute: minuteRef.current?.value ?? starttime.minute,
-            ampm: ampmRef.current?.value ?? starttime.ampm,
-        });
-    };
-    const updateEndTime = () => {
-        setEndTime({
-            hour: hourRef.current?.value ?? endtime.hour,
-            minute: minuteRef.current?.value ?? endtime.minute,
-            ampm: ampmRef.current?.value ?? endtime.ampm,
-        });
-    };
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             if (startDropdownRef.current && !startDropdownRef.current.contains(event.target as Node) && isStartOpen) {
@@ -181,6 +191,14 @@ const ProjectTime: FC<ProjectTimeProps> = ({ startDate, endDate, onDateChange })
         };
     }, [isStartOpen, isEndOpen]);
 
+    const startSelect = () => {
+        setIsStartOpen(!isStartOpen);
+    };
+
+    const endSelect = () => {
+        setIsEndOpen(!isEndOpen);
+    };
+
     return (
         <ProjectTimeContainer>
             <div
@@ -190,9 +208,10 @@ const ProjectTime: FC<ProjectTimeProps> = ({ startDate, endDate, onDateChange })
                     justifyContent: 'center',
                 }}
             >
-                <DateContainer>
+                <DateContainer style={{ display: 'flex' }}>
                     <Text>프로젝트 시작일</Text>
                     <SDatePicker
+                        disabled
                         locale={ko}
                         dateFormat={'YYYY-MM-dd'}
                         selected={startDate}
@@ -206,9 +225,10 @@ const ProjectTime: FC<ProjectTimeProps> = ({ startDate, endDate, onDateChange })
 
                 <Separator>~</Separator>
 
-                <DateContainer>
+                <DateContainer style={{ display: 'flex' }}>
                     <Text>프로젝트 종료일</Text>
                     <SDatePicker
+                        disabled
                         locale={ko}
                         dateFormat={'YYYY-MM-dd'}
                         selected={endDate}
@@ -246,55 +266,48 @@ const ProjectTime: FC<ProjectTimeProps> = ({ startDate, endDate, onDateChange })
                     marginLeft: '10px',
                 }}
             >
-                <DateContainer>
+                <DateContainer style={{ gap: '4px' }}>
                     <Text>시간표 시작시간</Text>
-                    <TimePicker
-                        onClick={startDropdown}
-                    >{`${starttime.hour}:${starttime.minute} ${starttime.ampm}`}</TimePicker>
+                    <TimePicker style={{ marginTop: '4px' }} onClick={startSelect}>
+                        {starttime}
+                    </TimePicker>
                     {isStartOpen && (
-                        <DropdownContainer ref={startDropdownRef}>
-                            <DropdownItem ref={hourRef} defaultValue={starttime.hour} onChange={updateStartTime}>
-                                {Array.from({ length: 12 }, (_, i) => i + 1).map((hour) => (
-                                    <option key={hour} value={hour}>
-                                        {hour}
-                                    </option>
-                                ))}
-                            </DropdownItem>
-                            <DropdownItem ref={minuteRef} defaultValue={starttime.minute} onChange={updateStartTime}>
-                                <option value="00">00</option>
-                                <option value="30">30</option>
-                            </DropdownItem>
-                            <DropdownItem ref={ampmRef} defaultValue={starttime.ampm} onChange={updateStartTime}>
-                                <option value="AM">AM</option>
-                                <option value="PM">PM</option>
-                            </DropdownItem>
-                        </DropdownContainer>
+                        <TimePickerContainer>
+                            {Times.map((time, index) => (
+                                <TimeOption
+                                    key={index}
+                                    onClick={() => {
+                                        setStartTime(time.label);
+                                        setIsStartOpen(false);
+                                    }}
+                                >
+                                    {time.label}
+                                </TimeOption>
+                            ))}
+                        </TimePickerContainer>
                     )}
                 </DateContainer>
-
                 <Separator style={{ marginLeft: '28px', marginRight: '28px' }}>~</Separator>
 
-                <DateContainer>
+                <DateContainer style={{ gap: '4px' }}>
                     <Text>시간표 종료시간</Text>
-                    <TimePicker onClick={endDropdown}>{`${endtime.hour}:${endtime.minute} ${endtime.ampm}`}</TimePicker>
+                    <TimePicker style={{ marginTop: '4px' }} onClick={endSelect}>
+                        {endtime}
+                    </TimePicker>
                     {isEndOpen && (
-                        <DropdownContainer ref={endDropdownRef}>
-                            <DropdownItem ref={hourRef} defaultValue={endtime.hour} onChange={updateEndTime}>
-                                {Array.from({ length: 12 }, (_, i) => i + 1).map((hour) => (
-                                    <option key={hour} value={hour}>
-                                        {hour}
-                                    </option>
-                                ))}
-                            </DropdownItem>
-                            <DropdownItem ref={minuteRef} defaultValue={endtime.minute} onChange={updateEndTime}>
-                                <option value="00">00</option>
-                                <option value="30">30</option>
-                            </DropdownItem>
-                            <DropdownItem ref={ampmRef} defaultValue={endtime.ampm} onChange={updateEndTime}>
-                                <option value="AM">AM</option>
-                                <option value="PM">PM</option>
-                            </DropdownItem>
-                        </DropdownContainer>
+                        <TimePickerContainer>
+                            {Times.map((time, index) => (
+                                <TimeOption
+                                    key={index}
+                                    onClick={() => {
+                                        setEndTime(time.label);
+                                        setIsEndOpen(false);
+                                    }}
+                                >
+                                    {time.label}
+                                </TimeOption>
+                            ))}
+                        </TimePickerContainer>
                     )}
                 </DateContainer>
             </div>
