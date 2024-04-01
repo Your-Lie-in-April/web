@@ -5,7 +5,7 @@ import SelectTime from './projectcalendar';
 import ProjectTime from './projecttime';
 import AfterLogin from '../Layouts/AfterLogin';
 import ProjectCalendar from './projectcalendar';
-
+import { useNavigate } from 'react-router';
 const ProjectMakePageContainer = styled.div`
     margin-left: auto;
     margin-right: auto;
@@ -70,9 +70,9 @@ const ProjectMakePage: FC = () => {
     const [startDate, setStartDate] = useState<Date | null>(new Date());
     const [endDate, setEndDate] = useState<Date | null>(new Date());
 
-    const handleDateChange = (newStartDate: Date | null, newEndDate: Date | null) => {
-        setStartDate(newStartDate);
-        setEndDate(newEndDate);
+    const navigate = useNavigate();
+    const handleProject = () => {
+        navigate('/project');
     };
     return (
         <ProjectMakePageContainer>
@@ -81,6 +81,7 @@ const ProjectMakePage: FC = () => {
             <Container style={{ marginTop: '24px' }}>
                 <TimeContainer>
                     <ProjectCalendar
+                        selectRange={true}
                         startDate={startDate}
                         endDate={endDate}
                         onDateChange={(start, end) => {
@@ -96,7 +97,7 @@ const ProjectMakePage: FC = () => {
                             setEndDate(end || new Date());
                         }}
                     />
-                    <SButton>
+                    <SButton onClick={handleProject}>
                         <SButtonText>프로젝트 만들기</SButtonText>
                     </SButton>
                 </TimeContainer>
