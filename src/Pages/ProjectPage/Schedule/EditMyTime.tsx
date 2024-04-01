@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { TimeSlotLeft, TimeSlotRight } from './EditMyTimeCircle';
 
@@ -52,11 +52,22 @@ const EditMyTime: React.FC = () => {
   let [isMouseDown, setIsMouseDown] = useState<boolean>(false);
   let [selection, setSelection] = useState<number[]>([]);
 
+  // selection 확인
+  // useEffect(() => {
+  //   console.log(selection);
+  // }, [selection]);
+
   const handleSelectFromHere = (id: number) => {
     setIsMouseDown(true);
     setStartSlot(id);
     setEndSlot(id);
-    setSelection([id]);
+    setSelection((prevSelection) => {
+      if (!prevSelection.includes(id)) {
+        return [...prevSelection, id];
+      } else {
+        return prevSelection;
+      }
+    });
   };
 
   const handleSelectToHere = (id: number) => {
@@ -71,11 +82,19 @@ const EditMyTime: React.FC = () => {
         setStartSlot(id);
       }
 
-      const selectedSlots = [];
+      const newSelectedSlots: number[] = [];
+
       for (let i = Math.min(startIndex, id); i <= Math.max(endIndex, id); i++) {
-        selectedSlots.push(i);
+        newSelectedSlots.push(i);
       }
-      setSelection(selectedSlots);
+
+      setSelection((prevSelection) => {
+        const updatedSelection = new Set([
+          ...prevSelection,
+          ...newSelectedSlots,
+        ]);
+        return Array.from(updatedSelection);
+      });
     }
   };
 
@@ -85,6 +104,10 @@ const EditMyTime: React.FC = () => {
 
   const isSlotSelected = (id: number) => {
     return selection.includes(id);
+  };
+
+  const removeSlotFromSelection = (id: number) => {
+    setSelection(selection.filter((slotId) => slotId !== id));
   };
 
   return (
