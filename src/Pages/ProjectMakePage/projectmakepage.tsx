@@ -5,7 +5,7 @@ import SelectTime from './projectcalendar';
 import ProjectTime from './projecttime';
 import AfterLogin from '../Layouts/AfterLogin';
 import ProjectCalendar from './projectcalendar';
-
+import { useNavigate } from 'react-router';
 const ProjectMakePageContainer = styled.div`
     margin-left: auto;
     margin-right: auto;
@@ -74,6 +74,11 @@ const ProjectMakePage: FC = () => {
         setStartDate(newStartDate);
         setEndDate(newEndDate);
     };
+
+    const navigate = useNavigate();
+    const handleProject = () => {
+        navigate('/project');
+    };
     return (
         <ProjectMakePageContainer>
             <AfterLogin />
@@ -96,7 +101,7 @@ const ProjectMakePage: FC = () => {
                             setEndDate(end || new Date());
                         }}
                     />
-                    <SButton>
+                    <SButton onClick={handleProject}>
                         <SButtonText>프로젝트 만들기</SButtonText>
                     </SButton>
                 </TimeContainer>

@@ -108,6 +108,75 @@ const MainPage: FC = () => {
       />
     </>
   );
+    return (
+        <>
+            <GlobalStyle />
+            <BeforeLogin />
+            <Banner />
+            <div
+                style={{
+                    height: '126px',
+                }}
+            />
+            <MainContainer>
+                <div
+                    style={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        gap: '20px',
+                    }}
+                >
+                    <div
+                        style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'flex-start',
+                            gap: '14px',
+                        }}
+                    >
+                        <Profile />
+                        <Alarm />
+                    </div>
+                    <div
+                        style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'flex-start',
+                            gap: '24px',
+                        }}
+                    >
+                        <div
+                            style={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'flex-start',
+                                gap: '21px',
+                            }}
+                        >
+                            <div
+                                style={{
+                                    display: 'flex',
+                                    flexDirection: 'row',
+                                    alignItems: 'flex-start',
+                                    gap: '8px',
+                                }}
+                            >
+                                <Search />
+                                <NewProject/>
+                            </div>
+                            <Pinned />
+                        </div>
+                        <ProjectList />
+                    </div>
+                </div>
+            </MainContainer>
+            <div
+                style={{
+                    height: '300px',
+                }}
+            />
+        </>
+    );
 };
 
 export default MainPage;
