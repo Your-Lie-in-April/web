@@ -9,9 +9,7 @@ const BeforeLoginDiv = styled.div`
     display: flex;
     align-items: flex-end;
     justify-content: space-between;
-
     z-index: 1;
-
     color: #000000;
     font-style: normal;
 `;
@@ -21,11 +19,10 @@ const Logo = styled.div`
     bottom: 14px;
     justify-content: center;
     align-item: center;
-
     white-space: nowrap;
-
     font-weight: 700;
     font-size: 32px;
+    cursor: pointer;
 `;
 
 const LogInDiv = styled.div`
@@ -61,7 +58,7 @@ const BeforeLogin: FC = () => {
     return (
         <BeforeLoginDiv>
             <div style={{ justifyContent: 'flex-start', flexBasis: '20%' }} />
-            <Logo>TIME PIECE</Logo>
+            <Logo onClick={() => navigate('/')}>TIME PIECE</Logo>
             <LogInDiv>
                 <LogInBtn onClick={handleLoginClick}>Log in</LogInBtn>
             </LogInDiv>
