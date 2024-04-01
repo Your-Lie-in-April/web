@@ -61,7 +61,7 @@ const BeforeLogin: FC = () => {
     return (
         <BeforeLoginDiv>
             <div style={{ justifyContent: 'flex-start', flexBasis: '20%' }} />
-            <Logo>TIME PIECE</Logo>
+            <Logo onClick={() => navigate('/')}>TIME PIECE</Logo>
             <LogInDiv>
                 <LogInBtn onClick={handleLoginClick}>Log in</LogInBtn>
             </LogInDiv>
