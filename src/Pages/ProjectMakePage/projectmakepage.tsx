@@ -1,11 +1,23 @@
 import { FC, useState } from 'react';
-import styled from 'styled-components';
+import styled, { createGlobalStyle } from 'styled-components';
 import Info from './Info';
 import SelectTime from './projectcalendar';
 import ProjectTime from './projecttime';
 import AfterLogin from '../Layouts/AfterLogin';
 import ProjectCalendar from './projectcalendar';
 import { useNavigate } from 'react-router';
+
+const GlobalStyle = createGlobalStyle`
+  body {
+    margin: 0;
+    background-color: #FFFFFF;
+    -ms-overflow-style: none;
+  }
+
+  ::-webkit-scrollbar {
+    display: none;
+  }
+`;
 const ProjectMakePageContainer = styled.div`
     margin-left: auto;
     margin-right: auto;
@@ -14,14 +26,6 @@ const ProjectMakePageContainer = styled.div`
 
     background-color: #212121;
     overflow: auto;
-
-    body {
-        -ms-overflow-style: none;
-    }
-
-    ::-webkit-scrollbar {
-        display: none;
-    }
 `;
 const Container = styled.div`
     display: flex;
@@ -76,6 +80,7 @@ const ProjectMakePage: FC = () => {
     };
     return (
         <ProjectMakePageContainer>
+            <GlobalStyle />
             <AfterLogin />
             <Info />
             <Container style={{ marginTop: '24px' }}>
