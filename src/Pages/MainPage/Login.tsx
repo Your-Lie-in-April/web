@@ -130,23 +130,28 @@ const GoogleLogin = styled.div`
     align-items: center;
     gap: 86px;
     position: relative;
+    top: -5px;
+    left: -30px;
 `;
 const googleLogo = 'src/pics/google-logo-9808 1.png';
 const Login: FC = () => {
-    const URL = 'https://timepiece.inuappcenter.kr';
-    const oAuth = async () => {
-        try {
-            const res = await fetch(URL + `/v1/oauth2/login-page/google`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${sessionStorage.getItem('token')}`,
-                },
-            });
-            if (res.status === 200) {
-                console.log('보냄');
-            }
-        } catch {}
+    const URL = 'https://timepiece-server.inuappcenter.kr';
+    // const oAuth = async () => {
+    //     try {
+    //         const res = await fetch(URL + `/v1/oauth2/login-page/google`, {
+    //             method: 'GET',
+    //             headers: {
+    //                 'Content-Type': 'application/json',
+    //                 Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+    //             },
+    //         });
+    //         if (res.status === 200) {
+    //             console.log('보냄');
+    //         }
+    //     } catch {}
+    // };
+    const oAuth = () => {
+        window.location.href = URL + '/v1/oauth2/login-page/google';
     };
     return (
         <>
