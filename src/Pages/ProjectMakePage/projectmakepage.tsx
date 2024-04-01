@@ -70,11 +70,6 @@ const ProjectMakePage: FC = () => {
     const [startDate, setStartDate] = useState<Date | null>(new Date());
     const [endDate, setEndDate] = useState<Date | null>(new Date());
 
-    const handleDateChange = (newStartDate: Date | null, newEndDate: Date | null) => {
-        setStartDate(newStartDate);
-        setEndDate(newEndDate);
-    };
-
     const navigate = useNavigate();
     const handleProject = () => {
         navigate('/project');
@@ -86,6 +81,7 @@ const ProjectMakePage: FC = () => {
             <Container style={{ marginTop: '24px' }}>
                 <TimeContainer>
                     <ProjectCalendar
+                        selectRange={true}
                         startDate={startDate}
                         endDate={endDate}
                         onDateChange={(start, end) => {
