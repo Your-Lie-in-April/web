@@ -1,5 +1,6 @@
 import { FC } from 'react';
 import styled from 'styled-components';
+import { useNavigate } from 'react-router';
 
 const BeforeLoginDiv = styled.div`
     width: 1920px;
@@ -19,6 +20,7 @@ const Logo = styled.div`
     margin-top: 49px;
     margin-left: 873.5px;
     margin-bottom: 13px;
+    cursor: pointer;
 `;
 const LogIn = styled.div`
     font-family: 'Pretendard';
@@ -27,14 +29,19 @@ const LogIn = styled.div`
     font-size: 22px;
     margin-top: 55px;
     margin-bottom: 21px;
+    cursor: pointer;
 `;
 
 const BeforeLogin: FC = () => {
+    const navigate = useNavigate();
+    const handleLoginClick = () => {
+        navigate('/login');
+    };
     return (
         <BeforeLoginDiv>
-            <Logo>TIME PIECE</Logo>
+            <Logo onClick={() => navigate('/')}>TIME PIECE</Logo>
             <div style={{ marginLeft: '493.17px' }}>
-                <LogIn>Log in</LogIn>
+                <LogIn onClick={handleLoginClick}>Log in</LogIn>
             </div>
         </BeforeLoginDiv>
     );

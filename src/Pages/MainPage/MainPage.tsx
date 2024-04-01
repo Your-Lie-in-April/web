@@ -11,7 +11,6 @@ import Pinned from './Pinned';
 import { createGlobalStyle } from 'styled-components';
 import Profile from './Profile';
 
-
 const GlobalStyle = createGlobalStyle`
   body {
     margin: 0;
@@ -87,7 +86,7 @@ const MainPage: FC = () => {
                                 }}
                             >
                                 <Search />
-                                <NewProject />
+                                <NewProject/>
                             </div>
                             <Pinned />
                         </div>

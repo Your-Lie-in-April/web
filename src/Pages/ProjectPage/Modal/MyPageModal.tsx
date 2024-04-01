@@ -3,154 +3,157 @@ import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
 import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined';
 import { useState } from 'react';
 import ChangeStatus from './ChangeStatus';
+import { useNavigate } from 'react-router';
 
 const Box = styled.div`
-  width: 300px;
-  height: 244px;
-  border-radius: 20px;
-  background: #212121;
-  position: absolute;
-  top: 100px;
-  right: 319.5px;
+    width: 300px;
+    height: 244px;
+    border-radius: 20px;
+    background: #212121;
+    position: absolute;
+    top: 100px;
+    right: 319.5px;
 
-  display: inline-flex;
-  padding: 12px 8px;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 22px;
-  box-sizing: border-box;
-  z-index: 1;
+    display: inline-flex;
+    padding: 12px 8px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 22px;
+    box-sizing: border-box;
+    z-index: 1;
 `;
 
 const CloseButton = styled.button`
-  background: none;
-  border: none;
-  padding: 0;
-  cursor: pointer;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
 `;
 
 const StyleCloseIconBtn = styled(CancelOutlinedIcon)`
-  position: absolute;
-  top: 12px;
-  right: 8px;
-  color: #a4a4a4;
+    position: absolute;
+    top: 12px;
+    right: 8px;
+    color: #a4a4a4;
 `;
 
 const MyImg = styled.img`
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  background: #aeaeae;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: #aeaeae;
 `;
 
 const MyEmailText = styled.text`
-  color: #ffffff;
-  font-family: Pretendard;
-  font-size: 14px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: normal;
+    color: #ffffff;
+    font-family: Pretendard;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
 `;
 
 const StatusBox = styled.div`
-  width: 268px;
-  height: 30px;
-  border-radius: 20px;
-  background: #ffffff;
-  padding: 4px 12px;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
+    width: 268px;
+    height: 30px;
+    border-radius: 20px;
+    background: #ffffff;
+    padding: 4px 12px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 `;
 
 const StatusText = styled.text`
-  color: #000000;
-  text-align: center;
-  font-family: Pretendard;
-  font-size: 14px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: normal;
-  flex-grow: 1;
+    color: #000000;
+    text-align: center;
+    font-family: Pretendard;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    flex-grow: 1;
 `;
 
 const EditButton = styled.button`
-  background: none;
-  border: none;
-  padding: 0;
-  cursor: pointer;
-
-  &: focus {
+    background: none;
     border: none;
-    outline: none;
-  }
+    padding: 0;
+    cursor: pointer;
+
+    &: focus {
+        border: none;
+        outline: none;
+    }
 `;
 
 const EditIcon = styled(BorderColorOutlinedIcon)`
-  width: 22px;
-  height: 22px;
-  color: #7d7d7d;
+    width: 22px;
+    height: 22px;
+    color: #7d7d7d;
 `;
 
 const StorageBtn = styled.button`
-  display: flex;
-  width: 120px;
-  height: 30px;
-  padding: 8px 12px;
-  justify-content: center;
-  align-items: center;
-  border-radius: 20px;
-  background: #633ae2;
+    display: flex;
+    width: 120px;
+    height: 30px;
+    padding: 8px 12px;
+    justify-content: center;
+    align-items: center;
+    border-radius: 20px;
+    background: #633ae2;
 
-  color: #ffffff;
-  text-align: center;
-  font-family: Pretendard;
-  font-size: 13px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: normal;
+    color: #ffffff;
+    text-align: center;
+    font-family: Pretendard;
+    font-size: 13px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
 `;
 
 interface MyPageModalProps {
-  onSetIsMyPageModal: () => void;
+    onSetIsMyPageModal: () => void;
 }
 
 const MyPageModal: React.FC<MyPageModalProps> = ({ onSetIsMyPageModal }) => {
-  const [editStatusModal, setEditStatusModal] = useState(false);
-  const onSetEditStatusModal = () => {
-    setEditStatusModal((prev) => !prev);
-  };
-  return (
-    <>
-      <Box>
-        <CloseButton onClick={onSetIsMyPageModal}>
-          <StyleCloseIconBtn sx={{ fontSize: '24px' }} />
-        </CloseButton>
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            gap: '8px',
-          }}
-        >
-          <MyImg />
-          <MyEmailText>----------@gmail.com</MyEmailText>
-        </div>
-        <StatusBox>
-          <StatusText>현재 상태메시지</StatusText>
-          <EditButton onClick={onSetEditStatusModal}>
-            <EditIcon />
-          </EditButton>
-        </StatusBox>
-        <StorageBtn>프로젝트 보관함</StorageBtn>
-      </Box>
-      {editStatusModal && (
-        <ChangeStatus onSetEditStatusModal={onSetEditStatusModal} />
-      )}
-    </>
-  );
+    const [editStatusModal, setEditStatusModal] = useState(false);
+    const onSetEditStatusModal = () => {
+        setEditStatusModal((prev) => !prev);
+    };
+    const navigate = useNavigate();
+    const handleMyproject = () => {
+        navigate('/myproject');
+    };
+    return (
+        <>
+            <Box>
+                <CloseButton onClick={onSetIsMyPageModal}>
+                    <StyleCloseIconBtn sx={{ fontSize: '24px' }} />
+                </CloseButton>
+                <div
+                    style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        gap: '8px',
+                    }}
+                >
+                    <MyImg />
+                    <MyEmailText>----------@gmail.com</MyEmailText>
+                </div>
+                <StatusBox>
+                    <StatusText>현재 상태메시지</StatusText>
+                    <EditButton onClick={onSetEditStatusModal}>
+                        <EditIcon />
+                    </EditButton>
+                </StatusBox>
+                <StorageBtn onClick={handleMyproject}>프로젝트 보관함</StorageBtn>
+            </Box>
+            {editStatusModal && <ChangeStatus onSetEditStatusModal={onSetEditStatusModal} />}
+        </>
+    );
 };
 export default MyPageModal;
