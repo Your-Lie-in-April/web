@@ -3,7 +3,8 @@ import styled from 'styled-components';
 import MyProfile from './MyProfile';
 import MemberProfile from './MemberProfile';
 import LeaderProfile from './LeaderProfile';
-import InvitationModal from '../Modal/InvitationModal';
+import InvitationModal from '../../Modal/InvitationModal';
+import InviteBtn from '../Buttons/InviteBtn';
 
 const Box = styled.div`
   width: 286px;
@@ -23,26 +24,6 @@ const MemberListBox = styled.div`
   display: flex;
   flex-direction: column;
   gap: 6px;
-`;
-
-const InviteBtn = styled.button`
-  width: 52px;
-  height: 22px;
-  display: flex;
-  padding: 5px 4px;
-  justify-content: center;
-  align-items: center;
-  gap: 8px;
-  border-radius: 20px;
-  background: #633ae2;
-  box-sizing: border-box;
-  color: #fff;
-  text-align: center;
-  font-family: Pretendard;
-  font-size: 10px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: normal;
 `;
 
 const CommonText = styled.div`
@@ -79,10 +60,6 @@ const ProfileList = () => {
     setShowDeleteBtn((prev) => !prev);
   };
 
-  const toggleInviteModal = () => {
-    setShowInviteModal((prev) => !prev);
-  };
-
   return (
     <Box>
       <MyProfile />
@@ -97,8 +74,7 @@ const ProfileList = () => {
           }}
         >
           <CommonText style={{ color: '#ffffff' }}>멤버</CommonText>
-          <InviteBtn onClick={toggleInviteModal}>+초대하기</InviteBtn>{' '}
-          {/* 초대하기 버튼 */}
+          <InviteBtn />
         </div>
         <MemberList>
           <LeaderProfile toggleDeleteBtn={toggleDeleteBtn} />
@@ -111,9 +87,6 @@ const ProfileList = () => {
           <MemberProfile showDeleteBtn={showDeleteBtn} />
         </MemberList>
       </MemberListBox>
-      {showInviteModal && (
-        <InvitationModal onShowInviteModal={toggleInviteModal} />
-      )}
     </Box>
   );
 };

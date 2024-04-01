@@ -1,5 +1,5 @@
-import styled from "styled-components";
-import EditMyTimeCircle from "./EditMyTimeCircle";
+import styled from 'styled-components';
+import EditMyTimeCircle from './EditMyTimeCircle';
 
 const CommonText = styled.div`
   color: #000000;
@@ -42,7 +42,7 @@ const HourTextList = styled.div`
   justify-content: flex-end;
 `;
 
-const DayOfWeek = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
+const DayOfWeek = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
 const HoursOfDay = [...Array(16).keys()].map((_, index) => index + 9);
 
 const EditMyTime = () => {
@@ -50,31 +50,31 @@ const EditMyTime = () => {
     <TimeTableDiv>
       <HourTextList>
         {HoursOfDay.map((h, idx) => (
-          <CommonText key={idx} style={{ width: "38.45px" }}>
+          <CommonText key={idx} style={{ width: '38.45px' }}>
             {h}
           </CommonText>
         ))}
       </HourTextList>
       <TimeList>
-        <div style={{ display: "flex", flexDirection: "row" }}>
+        <div style={{ display: 'flex', flexDirection: 'row' }}>
           <DayTextList>
             {DayOfWeek.map((day, idx) => (
-              <CommonText key={idx} style={{ lineHeight: "32.11px" }}>
+              <CommonText key={idx} style={{ lineHeight: '32.11px' }}>
                 {day}
               </CommonText>
             ))}
           </DayTextList>
           <div
             style={{
-              height: "306.17px",
-              display: "flex",
-              flexDirection: "column",
-              gap: "2px",
-              padding: "8px",
+              height: '306.17px',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '2px',
+              padding: '8px',
             }}
           >
             {DayOfWeek.map((day, idx) => (
-              <div key={idx} style={{ display: "flex", flexDirection: "row" }}>
+              <div key={idx} style={{ display: 'flex', flexDirection: 'row' }}>
                 {HoursOfDay.slice(0, HoursOfDay.length - 1).map(
                   (hour, hourIdx) => (
                     <EditMyTimeCircle key={hourIdx} />
