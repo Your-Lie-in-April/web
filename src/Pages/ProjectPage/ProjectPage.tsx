@@ -13,6 +13,7 @@ import { useState } from 'react';
 import MemberScheduleGrid from './Schedule/MemberScheduleGrid';
 import Info from '../ProjectMakePage/Info';
 import Project from '../MainPage/Project';
+import ProjectCalendar from '../ProjectMakePage/projectcalendar';
 const GlobalStyle = createGlobalStyle`
   body {
     margin: 0;
@@ -43,14 +44,6 @@ const MainBox = styled.div`
     gap: 22px;
 `;
 
-const Callendar = styled.div`
-    width: 291px;
-    height: 294px;
-    background-color: #000000;
-    border-radius: 20px;
-    box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.25);
-`;
-
 const MemTimeBtn = styled.button`
     width: 176px;
     height: 40px;
@@ -74,9 +67,43 @@ const MemTimeBtn = styled.button`
         height: 22px;
     }
 `;
-
+const StyledCalendarWrapper = styled.div`
+    .react-calendar__tile {
+        padding: 3px;
+        font-size: 24px;
+    }
+    &--active {
+        background-color: inherit;
+        border-radius: 0;
+    }
+    .react-calendar {
+        width: 290px;
+        height: 294px;
+        border-radius: 10px;
+        background: #fbfbfb;
+        box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.25);
+        font-family: Arial, Helvetica, sans-serif;
+        line-height: normal;
+    }
+    .react-calendar__month-view__weekdays {
+        text-align: center;
+        text-transform: uppercase;
+        font: inherit;
+        font-size: 0.75em;
+        font-weight: bold;
+        gap: 2px;
+        width: 279px;
+    }
+    .react-calendar__navigation {
+        display: flex;
+        height: 22px;
+        margin-bottom: 1em;
+    }
+`;
 const ProjectPage = () => {
     const [seeMemTime, setSeeMemTime] = useState(true);
+    const [startDate, setStartDate] = useState<Date | null>(null);
+    const [endDate, setEndDate] = useState<Date | null>(null);
 
     const toggleMemTime = () => {
         setSeeMemTime(!seeMemTime);
@@ -127,7 +154,11 @@ const ProjectPage = () => {
                                     gap: '12px',
                                 }}
                             >
-                                <Callendar />
+                                <div style={{ position: 'relative', left: '-50px' }}>
+                                    <StyledCalendarWrapper style={{ width: '20px' }}>
+                                        <ProjectCalendar startDate={startDate} endDate={endDate} />
+                                    </StyledCalendarWrapper>
+                                </div>
                                 <Alarm />
                             </div>
                         </MainBox>
