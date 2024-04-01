@@ -99,6 +99,9 @@ const StyledCalendarWrapper = styled.div`
         height: 22px;
         margin-bottom: 1em;
     }
+    .react-calendar__viewContainer {
+        pointer-events: none;
+    }
 `;
 const ProjectPage = () => {
     const [seeMemTime, setSeeMemTime] = useState(true);
@@ -156,7 +159,7 @@ const ProjectPage = () => {
                             >
                                 <div style={{ position: 'relative', left: '-50px' }}>
                                     <StyledCalendarWrapper style={{ width: '20px' }}>
-                                        <ProjectCalendar startDate={startDate} endDate={endDate} />
+                                        <ProjectCalendar startDate={startDate} endDate={endDate} selectRange={false} />
                                     </StyledCalendarWrapper>
                                 </div>
                                 <Alarm />
