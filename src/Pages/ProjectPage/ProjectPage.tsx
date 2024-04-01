@@ -11,7 +11,8 @@ import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import { useState } from 'react';
 import MemberScheduleGrid from './Schedule/MemberScheduleGrid';
-
+import Info from '../ProjectMakePage/Info';
+import Project from '../MainPage/Project';
 const GlobalStyle = createGlobalStyle`
   body {
     margin: 0;
@@ -25,126 +26,121 @@ const GlobalStyle = createGlobalStyle`
 `;
 
 const Divider = styled.div`
-  width: 100vw;
-  height: 20px;
-  background-color: #212121;
+    width: 100vw;
+    height: 20px;
+    background-color: #212121;
 `;
 
 const Box = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin: 0 auto;
-  box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+    box-sizing: border-box;
 `;
 
 const MainBox = styled.div`
-  display: flex;
-  gap: 22px;
+    display: flex;
+    gap: 22px;
 `;
 
-// 임시 캘린더
 const Callendar = styled.div`
-  width: 291px;
-  height: 294px;
-  background-color: #000000;
-  border-radius: 20px;
-  box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.25);
+    width: 291px;
+    height: 294px;
+    background-color: #000000;
+    border-radius: 20px;
+    box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.25);
 `;
 
 const MemTimeBtn = styled.button`
-  width: 176px;
-  height: 40px;
-  display: flex;
-  padding: 0;
-  align-items: center;
-  justify-content: center;
-  gap: 2px;
+    width: 176px;
+    height: 40px;
+    display: flex;
+    padding: 0;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
 
-  border-radius: 30px;
-  background: #212121;
-  color: #ffffff;
-  font-family: Pretendard;
-  font-size: 20px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: normal;
+    border-radius: 30px;
+    background: #212121;
+    color: #ffffff;
+    font-family: Pretendard;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
 
-  .icon {
-    width: 22px;
-    height: 22px;
-  }
+    .icon {
+        width: 22px;
+        height: 22px;
+    }
 `;
 
 const ProjectPage = () => {
-  const [seeMemTime, setSeeMemTime] = useState(true);
+    const [seeMemTime, setSeeMemTime] = useState(true);
 
-  const toggleMemTime = () => {
-    setSeeMemTime(!seeMemTime);
-  };
+    const toggleMemTime = () => {
+        setSeeMemTime(!seeMemTime);
+    };
 
-  return (
-    <>
-      <GlobalStyle />
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '32px',
-          width: '100vw',
-          margin: '0 auto',
-        }}
-      >
-        <div>
-          <AfterLogin />
-          <Divider />
-          <ProjectInfo />
-        </div>
-        <Box>
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '24px',
-              alignItems: 'center',
-            }}
-          >
-            <MainBox>
-              <ProfileList />
-              <div
+    return (
+        <>
+            <GlobalStyle />
+            <div
                 style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: '12px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '32px',
+                    width: '100vw',
+                    margin: '0 auto',
                 }}
-              >
-                <TeamSchedule />
-                <MySchedule />
-              </div>
-              <div
-                style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: '12px',
-                }}
-              >
-                <Callendar />
-                <Alarm />
-              </div>
-            </MainBox>
-            <MemTimeBtn onClick={toggleMemTime}>
-              {seeMemTime ? '멤버 시간표 닫기' : '멤버 시간표 열기'}
-              {seeMemTime ? (
-                <ArrowDropUpIcon className="icon" />
-              ) : (
-                <ArrowDropDownIcon className="icon" />
-              )}
-            </MemTimeBtn>
-            {seeMemTime && <MemberScheduleGrid />}
-          </div>
-        </Box>
-      </div>
-      <div style={{ height: '400px' }}></div>
-    </>
-  );
+            >
+                <div>
+                    <AfterLogin />
+                    <Divider />
+                    <ProjectInfo />
+                </div>
+                <Box>
+                    <div
+                        style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            gap: '24px',
+                            alignItems: 'center',
+                        }}
+                    >
+                        <MainBox>
+                            <ProfileList />
+                            <div
+                                style={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    gap: '12px',
+                                }}
+                            >
+                                <TeamSchedule />
+                                <MySchedule />
+                            </div>
+                            <div
+                                style={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    gap: '12px',
+                                }}
+                            >
+                                <Callendar />
+                                <Alarm />
+                            </div>
+                        </MainBox>
+                        <MemTimeBtn onClick={toggleMemTime}>
+                            {seeMemTime ? '멤버 시간표 닫기' : '멤버 시간표 열기'}
+                            {seeMemTime ? <ArrowDropUpIcon className="icon" /> : <ArrowDropDownIcon className="icon" />}
+                        </MemTimeBtn>
+                        {seeMemTime && <MemberScheduleGrid />}
+                    </div>
+                </Box>
+            </div>
+            <div style={{ height: '400px' }}></div>
+        </>
+    );
 };
 export default ProjectPage;
