@@ -151,7 +151,7 @@ const Login: FC = () => {
     //     } catch {}
     // };
     const oAuth = () => {
-        window.location.href = 'https://timepiece-server.inuappcenter.kr/v1/oauth2/login-page/google';
+        window.location.href = URL + '/v1/oauth2/login-page/google';
     };
     return (
         <>

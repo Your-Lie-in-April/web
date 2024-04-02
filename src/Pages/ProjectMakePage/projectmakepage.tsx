@@ -1,11 +1,23 @@
 import { FC, useState } from 'react';
-import styled from 'styled-components';
+import styled, { createGlobalStyle } from 'styled-components';
 import Info from './Info';
 import SelectTime from './projectcalendar';
 import ProjectTime from './projecttime';
 import AfterLogin from '../Layouts/AfterLogin';
 import ProjectCalendar from './projectcalendar';
+import { useNavigate } from 'react-router';
 
+const GlobalStyle = createGlobalStyle`
+  body {
+    margin: 0;
+    background-color: #FFFFFF;
+    -ms-overflow-style: none;
+  }
+
+  ::-webkit-scrollbar {
+    display: none;
+  }
+`;
 const ProjectMakePageContainer = styled.div`
     margin-left: auto;
     margin-right: auto;
@@ -14,14 +26,6 @@ const ProjectMakePageContainer = styled.div`
 
     background-color: #212121;
     overflow: auto;
-
-    body {
-        -ms-overflow-style: none;
-    }
-
-    ::-webkit-scrollbar {
-        display: none;
-    }
 `;
 const Container = styled.div`
     display: flex;
@@ -70,17 +74,19 @@ const ProjectMakePage: FC = () => {
     const [startDate, setStartDate] = useState<Date | null>(new Date());
     const [endDate, setEndDate] = useState<Date | null>(new Date());
 
-    const handleDateChange = (newStartDate: Date | null, newEndDate: Date | null) => {
-        setStartDate(newStartDate);
-        setEndDate(newEndDate);
+    const navigate = useNavigate();
+    const handleProject = () => {
+        navigate('/project');
     };
     return (
         <ProjectMakePageContainer>
+            <GlobalStyle />
             <AfterLogin />
             <Info />
             <Container style={{ marginTop: '24px' }}>
                 <TimeContainer>
                     <ProjectCalendar
+                        selectRange={true}
                         startDate={startDate}
                         endDate={endDate}
                         onDateChange={(start, end) => {
@@ -96,7 +102,7 @@ const ProjectMakePage: FC = () => {
                             setEndDate(end || new Date());
                         }}
                     />
-                    <SButton>
+                    <SButton onClick={handleProject}>
                         <SButtonText>프로젝트 만들기</SButtonText>
                     </SButton>
                 </TimeContainer>
