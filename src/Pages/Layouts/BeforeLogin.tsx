@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router';
 
 const BeforeLoginDiv = styled.div`
     width: 100%;
-  
     height: 100px;
     background-color: #f1f1f1;
     display: flex;
