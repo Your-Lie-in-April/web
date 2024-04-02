@@ -8,7 +8,7 @@ interface ContentTextProps {
 }
 
 const Container = styled.div`
-    width: 1920px;
+    width: 100%;
     height: 200px;
     display: flex;
     flex-direction: column;
@@ -67,7 +67,10 @@ const Content = styled.div`
 `;
 
 const ContentText = styled.textarea<ContentTextProps>`
-    color: ${(props) => (props.focused ? 'black' : 'inherit')}; /* focused 여부에 따라 글자색 변경 */
+    color: ${(props) =>
+        props.focused
+            ? 'black'
+            : 'inherit'}; /* focused 여부에 따라 글자색 변경 */
     text-align: center;
     font-family: Pretendard;
     font-size: 28px;
@@ -130,7 +133,10 @@ const SettingDiv = styled.div`
     border-radius: 20px;
     background: #633ae2;
     box-sizing: border-box;
-    border: 1px solid black;
+
+    &:focus {
+        outline: none;
+    }
 `;
 
 const SettingBtn = styled.button`
@@ -150,6 +156,10 @@ const SettingBtn = styled.button`
     margin: 0;
     background: transparent;
     box-sizing: border-box;
+
+    &:focus {
+        outline: none;
+    }
 `;
 const ProjectInfo: FC = () => {
     const [content, setContent] = useState<string>('');
@@ -157,7 +167,9 @@ const ProjectInfo: FC = () => {
     const [isContentClicked, setIsContentClicked] = useState<boolean>(false);
     const [isCoverClicked, setIsCoverClicked] = useState<boolean>(false);
     const [selectedColor, setSelectedColor] = useState<string | null>(null);
-    const [selectedImageUrl, setSelectedImageUrl] = useState<string | null>(null);
+    const [selectedImageUrl, setSelectedImageUrl] = useState<string | null>(
+        null
+    );
     const [selectedHex, setSelectedHex] = useState<string | null>(null);
 
     const handleTextareaChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
@@ -202,7 +214,10 @@ const ProjectInfo: FC = () => {
                 <TitleContainer>
                     <Title>
                         <TitleText
-                            style={{ backgroundColor: selectedColor || selectedHex || '#d9d9d9' }}
+                            style={{
+                                backgroundColor:
+                                    selectedColor || selectedHex || '#d9d9d9',
+                            }}
                             type="text"
                             onFocus={() => {
                                 setIsTitleClicked(true);
@@ -212,7 +227,11 @@ const ProjectInfo: FC = () => {
                             onBlur={() => {
                                 setIsTitleClicked(false);
                             }}
-                            placeholder={isTitleClicked === true ? '' : '프로젝트 제목을 작성해주세요'}
+                            placeholder={
+                                isTitleClicked === true
+                                    ? ''
+                                    : '프로젝트 제목을 작성해주세요'
+                            }
                         ></TitleText>
                     </Title>
                     <Content>
@@ -222,7 +241,11 @@ const ProjectInfo: FC = () => {
                             onChange={handleTextareaChange}
                             onFocus={() => setIsContentClicked(true)}
                             onBlur={() => setIsContentClicked(false)}
-                            placeholder={isContentClicked === true ? '' : '프로젝트 내용을 작성해주세요'}
+                            placeholder={
+                                isContentClicked === true
+                                    ? ''
+                                    : '프로젝트 내용을 작성해주세요'
+                            }
                         />
                     </Content>
                 </TitleContainer>
