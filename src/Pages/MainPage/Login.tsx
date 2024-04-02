@@ -130,12 +130,10 @@ const GoogleLogin = styled.div`
     align-items: center;
     gap: 86px;
     position: relative;
-    top: -5px;
-    left: -30px;
 `;
 const googleLogo = 'src/pics/google-logo-9808 1.png';
 const Login: FC = () => {
-    const URL = 'https://timepiece-server.inuappcenter.kr';
+    const URL = 'https://timepiece.inuappcenter.kr';
     const oAuth = async () => {
         try {
             const res = await fetch(URL + `/v1/oauth2/login-page/google`, {

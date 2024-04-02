@@ -30,6 +30,7 @@ type Value = ValuePiece | [ValuePiece, ValuePiece];
 type ProjectCalendarProps = {
     startDate: Date | null;
     endDate: Date | null;
+    selectRange: boolean;
     onDateChange?: (startDate: Date | null, endDate: Date | null) => void;
 };
 
@@ -66,7 +67,6 @@ const ProjectCalendar: FC<ProjectCalendarProps> = ({ startDate, endDate, onDateC
             </>
         );
     };
-
     return (
         <StyledCalendarWrapper style={{ display: 'flex', textAlign: 'center' }}>
             <StyledCalendar
