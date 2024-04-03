@@ -13,7 +13,9 @@ import Profile from './Profile';
 
 const GlobalStyle = createGlobalStyle`
   body {
-    margin: 0;
+    width : 100%;
+    min-width : 1366px;
+    margin: 0 auto;
     background-color: #212121;
     -ms-overflow-style: none;
   }
@@ -37,24 +39,38 @@ const MainPage: FC = () => {
         <>
             <GlobalStyle />
             <BeforeLogin />
+
+            <Banner />
             <div
                 style={{
-                    width: '100vw',
-                    margin: '0 auto',
+                    height: '126px',
                 }}
-            >
-                <Banner />
+            />
+            <MainContainer>
                 <div
                     style={{
-                        height: '126px',
+                        display: 'flex',
+                        flexDirection: 'row',
+                        gap: '20px',
                     }}
-                />
-                <MainContainer>
+                >
                     <div
                         style={{
                             display: 'flex',
-                            flexDirection: 'row',
-                            gap: '20px',
+                            flexDirection: 'column',
+                            alignItems: 'flex-start',
+                            gap: '14px',
+                        }}
+                    >
+                        <Profile />
+                        <Alarm />
+                    </div>
+                    <div
+                        style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'flex-start',
+                            gap: '24px',
                         }}
                     >
                         <div
@@ -62,46 +78,27 @@ const MainPage: FC = () => {
                                 display: 'flex',
                                 flexDirection: 'column',
                                 alignItems: 'flex-start',
-                                gap: '14px',
-                            }}
-                        >
-                            <Profile />
-                            <Alarm />
-                        </div>
-                        <div
-                            style={{
-                                display: 'flex',
-                                flexDirection: 'column',
-                                alignItems: 'flex-start',
-                                gap: '24px',
+                                gap: '21px',
                             }}
                         >
                             <div
                                 style={{
                                     display: 'flex',
-                                    flexDirection: 'column',
+                                    flexDirection: 'row',
                                     alignItems: 'flex-start',
-                                    gap: '21px',
+                                    gap: '8px',
                                 }}
                             >
-                                <div
-                                    style={{
-                                        display: 'flex',
-                                        flexDirection: 'row',
-                                        alignItems: 'flex-start',
-                                        gap: '8px',
-                                    }}
-                                >
-                                    <Search />
-                                    <NewProject />
-                                </div>
-                                <Pinned />
+                                <Search />
+                                <NewProject />
                             </div>
-                            <ProjectList />
+                            <Pinned />
                         </div>
+                        <ProjectList />
                     </div>
-                </MainContainer>
-            </div>
+                </div>
+            </MainContainer>
+
             <div
                 style={{
                     height: '300px',
