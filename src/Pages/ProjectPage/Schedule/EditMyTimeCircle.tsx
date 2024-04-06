@@ -1,62 +1,78 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 
-interface TimeContainerProps {
-  selected: boolean;
+interface TimeSlotProps {
+    id: number;
+    isSelected: boolean;
+    onSelectSlot: (id: number) => void;
+    onMouseEnter: () => void;
 }
 
-const TimeBox = styled.div`
-  width: 53px;
-  height: 40px;
-  border: 0.5px solid #7d7d7d;
-  border-radius: 20px;
-  box-sizing: border-box;
-  background-color: #d9d9d9;
-  display: flex;
-  flex-direction: row;
-`;
+export const TimeSlotLeft: React.FC<TimeSlotProps> = ({
+    id,
+    isSelected,
+    onSelectSlot,
+    onMouseEnter,
+}) => {
+    const handleMouseDown = () => {
+        onSelectSlot(id);
+    };
 
-const TimeContainer = styled.div<TimeContainerProps>`
-  flex: 1;
-  box-sizing: border-box;
-`;
-
-const TimeLeft = styled(TimeContainer)<TimeContainerProps>`
-  border-top-left-radius: 20px;
-  border-bottom-left-radius: 20px;
-  background-color: ${(props) => (props.selected ? '#633AE2' : 'transparent')};
-`;
-
-const TimeRight = styled(TimeContainer)<TimeContainerProps>`
-  border-top-right-radius: 20px;
-  border-bottom-right-radius: 20px;
-  background-color: ${(props) => (props.selected ? '#633AE2' : 'transparent')};
-`;
-
-const VerticalLine = styled.div`
-  height: 100%;
-  border-left: 0.5px dashed #a4a4a4;
-`;
-
-const EditMyTimeCircle: React.FC = () => {
-  const [leftSelected, setLeftSelected] = useState(false);
-  const [rightSelected, setRightSelected] = useState(false);
-
-  const handleLeftClick = () => {
-    setLeftSelected(!leftSelected);
-  };
-
-  const handleRightClick = () => {
-    setRightSelected(!rightSelected);
-  };
-
-  return (
-    <TimeBox>
-      <TimeLeft selected={leftSelected} onClick={handleLeftClick} />
-      <VerticalLine />
-      <TimeRight selected={rightSelected} onClick={handleRightClick} />
-    </TimeBox>
-  );
+    const handleMouseEnter = () => {
+        onMouseEnter();
+    };
+    return (
+        <div
+            id={`Time${id}`}
+            style={{
+                verticalAlign: 'top',
+                display: 'flex',
+                flex: '1',
+                width: '26.665px',
+                height: '39.74px',
+                borderRadius: '20px 0 0 20px',
+                borderTop: '0.5px solid #a4a4a4',
+                borderLeft: '0.5px solid #a4a4a4',
+                borderBottom: '0.5px solid #a4a4a4',
+                background: isSelected ? '#633AE2' : '#D9D9D9',
+                boxSizing: 'border-box',
+            }}
+            onMouseDown={handleMouseDown}
+            onMouseEnter={handleMouseEnter}
+        ></div>
+    );
 };
 
-export default EditMyTimeCircle;
+export const TimeSlotRight: React.FC<TimeSlotProps> = ({
+    id,
+    isSelected,
+    onSelectSlot,
+    onMouseEnter,
+}) => {
+    const handleMouseDown = () => {
+        onSelectSlot(id);
+    };
+
+    const handleMouseEnter = () => {
+        onMouseEnter();
+    };
+    return (
+        <div
+            id={`Time${id}`}
+            style={{
+                display: 'flex',
+                width: '26.665px',
+                height: '39.74px',
+                borderRadius: '0 20px 20px 0',
+                borderLeft: '0.5px dashed #a4a4a4',
+                borderTop: '0.5px solid #a4a4a4',
+                borderRight: '0.5px solid #a4a4a4',
+                borderBottom: '0.5px solid #a4a4a4',
+                background: isSelected ? '#633AE2' : '#D9D9D9',
+                boxSizing: 'border-box',
+            }}
+            onMouseDown={handleMouseDown}
+            onMouseEnter={handleMouseEnter}
+        ></div>
+    );
+};

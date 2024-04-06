@@ -1,7 +1,6 @@
-import styled from "styled-components";
-import TimeCircle from "./EditMyTimeCircle";
-import EditMyTime from "./EditMyTime";
-import React from "react";
+import styled from 'styled-components';
+import EditMyTime from './EditMyTime';
+import React from 'react';
 
 const ModalBlackOut = styled.div`
   width: 100%;
@@ -85,6 +84,10 @@ const ConfirmBtn = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
+
+  &: focus {
+    outline: none;
+  }
 `;
 
 interface ChangeScheduleProps {
