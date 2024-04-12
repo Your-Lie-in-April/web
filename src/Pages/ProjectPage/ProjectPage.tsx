@@ -16,7 +16,9 @@ import Project from '../MainPage/Project';
 import ProjectCalendar from '../ProjectMakePage/projectcalendar';
 const GlobalStyle = createGlobalStyle`
   body {
-    margin: 0;
+    width : 100%;
+    min-width : 1366px;
+    margin: 0 auto;
     background-color: #FFFFFF;
     -ms-overflow-style: none;
   }
@@ -27,7 +29,7 @@ const GlobalStyle = createGlobalStyle`
 `;
 
 const Divider = styled.div`
-    width: 100vw;
+    width: 100%;
     height: 20px;
     background-color: #212121;
 `;
@@ -120,8 +122,7 @@ const ProjectPage = () => {
                     display: 'flex',
                     flexDirection: 'column',
                     gap: '32px',
-                    width: '100vw',
-                    margin: '0 auto',
+                    
                 }}
             >
                 <div>
@@ -157,17 +158,34 @@ const ProjectPage = () => {
                                     gap: '12px',
                                 }}
                             >
-                                <div style={{ position: 'relative', left: '-50px' }}>
-                                    <StyledCalendarWrapper style={{ width: '20px' }}>
-                                        <ProjectCalendar startDate={startDate} endDate={endDate} selectRange={false} />
+                                <div
+                                    style={{
+                                        position: 'relative',
+                                        left: '-50px',
+                                    }}
+                                >
+                                    <StyledCalendarWrapper
+                                        style={{ width: '20px' }}
+                                    >
+                                        <ProjectCalendar
+                                            startDate={startDate}
+                                            endDate={endDate}
+                                            selectRange={false}
+                                        />
                                     </StyledCalendarWrapper>
                                 </div>
                                 <Alarm />
                             </div>
                         </MainBox>
                         <MemTimeBtn onClick={toggleMemTime}>
-                            {seeMemTime ? '멤버 시간표 닫기' : '멤버 시간표 열기'}
-                            {seeMemTime ? <ArrowDropUpIcon className="icon" /> : <ArrowDropDownIcon className="icon" />}
+                            {seeMemTime
+                                ? '멤버 시간표 닫기'
+                                : '멤버 시간표 열기'}
+                            {seeMemTime ? (
+                                <ArrowDropUpIcon className="icon" />
+                            ) : (
+                                <ArrowDropDownIcon className="icon" />
+                            )}
                         </MemTimeBtn>
                         {seeMemTime && <MemberScheduleGrid />}
                     </div>

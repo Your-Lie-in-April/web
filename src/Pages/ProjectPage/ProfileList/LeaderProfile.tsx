@@ -1,4 +1,6 @@
 import styled from 'styled-components';
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+import MoreBtn from '../Buttons/MoreBtn';
 
 const LeaderProfileBox = styled.div`
   width: 100%;
@@ -31,17 +33,13 @@ const EditMemberBtn = styled.button`
   padding: 0;
   cursor: pointer;
 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
   &: focus {
-    border: none;
     outline: none;
   }
-
-  color: #633ae2;
-  font-family: Pretendard;
-  font-size: 10px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
 `;
 
 const CommonText = styled.div`
@@ -88,7 +86,7 @@ const LeaderProfile = ({
               상태메세지
             </CommonText>
           </div>
-          <EditMemberBtn onClick={toggleDeleteBtn}>멤버수정</EditMemberBtn>
+          <MoreBtn />
         </div>
       </LeaderProfileDiv>
     </LeaderProfileBox>

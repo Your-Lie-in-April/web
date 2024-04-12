@@ -9,9 +9,7 @@ const AfterLoginDiv = styled.div`
     display: flex;
     align-items: flex-end;
     justify-content: space-between;
-
     z-index: 1;
-
     color: #000000;
     font-style: normal;
 `;
@@ -21,9 +19,7 @@ const Logo = styled.div`
     bottom: 14px;
     justify-content: center;
     align-item: center;
-
     white-space: nowrap;
-
     font-weight: 700;
     font-size: 32px;
 `;
