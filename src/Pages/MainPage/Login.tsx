@@ -1,10 +1,9 @@
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import styled, { keyframes } from 'styled-components';
 import Banner from './Banner';
 import BeforeLogin from '../Layouts/BeforeLogin';
 import { createGlobalStyle } from 'styled-components';
-import { redirect } from 'react-router-dom';
-import zIndex from '@mui/material/styles/zIndex';
+import { useLocation } from 'react-router-dom';
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -194,22 +193,28 @@ const GoogleLogin = styled.div`
 
 const googleLogo = 'src/pics/google-logo-9808 1.png';
 
+function useQuery() {
+    return new URLSearchParams(useLocation().search);
+}
+
+
 const Login: FC = () => {
-    const URL = 'https://timepiece.inuappcenter.kr';
-    const oAuth = async () => {
-        try {
-            const res = await fetch(URL + `/v1/oauth2/login-page/google`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${sessionStorage.getItem('token')}`,
-                },
-            });
-            if (res.status === 200) {
-                console.log('보냄');
-            }
-        } catch {}
+    const query = useQuery();
+    console.log('Current URL:', location.href);
+    const URL = 'https://timepiece-server.inuappcenter.kr';
+
+    const oAuth = () => {
+        window.location.href = URL + '/oauth2/authorization/google';
     };
+    useEffect(() => {
+        const accessToken = query.get('access_token') || '';
+        const refreshToken = query.get('refresh_token') || '';
+        sessionStorage.setItem('accesstoken', accessToken);
+        sessionStorage.setItem('refreshToken', refreshToken);
+        console.log('Access Token:', accessToken);
+        console.log('Refresh Token:', refreshToken);
+    }, [location.search]);
+
     return (
         <>
             <GlobalStyle />
