@@ -1,17 +1,16 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { QUERY_KEY } from "#/constants/queryKey";
-import { deleteProjectMember } from "#/apis/project";
+import { patchPojectPrevilege } from "#/apis/project";
 
 /**
- * DELETE projects/{projectId}/members/{memberId}
+ * PATCH /projects/{projectId}/transfer-privilege
+ * 
+ * 관리자 권한을 양도하는 api 입니다.
  */
-const useDeleteProjectMemberMutation = (
-  projectId: number,
-  memberId: number
-) => {
+const usePatchPojectPrevilegeMutation = (projectId: number) => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: () => deleteProjectMember(projectId, memberId),
+    mutationFn: () => patchPojectPrevilege(projectId),
     onSuccess: () => {
       void queryClient.invalidateQueries({
         queryKey: QUERY_KEY.PROJECT_ID(projectId),
@@ -20,4 +19,4 @@ const useDeleteProjectMemberMutation = (
   });
 };
 
-export default useDeleteProjectMemberMutation;
+export default usePatchPojectPrevilegeMutation;

@@ -1,14 +1,16 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { QUERY_KEY } from "#/constants/queryKey";
-import { postProjectInvitation } from "#/apis/project";
+import { postProjectInviteLink } from "#/apis/project";
 
 /**
  * POST /project/{projectId}/invitation
+ * 
+ * 프로젝트의 회원 초대 링크 생성하는 api 입니다.
  */
-const usePostProjectInviteMutation = (projectId: number) => {
+const usePostProjectInviteLinkMutation = (projectId: number) => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: () => postProjectInvitation(projectId),
+    mutationFn: () => postProjectInviteLink(projectId),
     onSuccess: () => {
       void queryClient.invalidateQueries({
         queryKey: QUERY_KEY.PROJECT_ID(projectId),
@@ -17,4 +19,4 @@ const usePostProjectInviteMutation = (projectId: number) => {
   });
 };
 
-export default usePostProjectInviteMutation;
+export default usePostProjectInviteLinkMutation;
