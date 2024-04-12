@@ -1,10 +1,9 @@
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import styled, { keyframes } from 'styled-components';
 import Banner from './Banner';
 import BeforeLogin from '../Layouts/BeforeLogin';
 import { createGlobalStyle } from 'styled-components';
-import { redirect } from 'react-router-dom';
-import zIndex from '@mui/material/styles/zIndex';
+import { redirect, useLocation } from 'react-router-dom';
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -130,8 +129,6 @@ const GoogleLogin = styled.div`
     align-items: center;
     gap: 86px;
     position: relative;
-    top: -5px;
-    left: -30px;
 `;
 const googleLogo = 'src/pics/google-logo-9808 1.png';
 const Login: FC = () => {
@@ -150,9 +147,21 @@ const Login: FC = () => {
     //         }
     //     } catch {}
     // };
+
     const oAuth = () => {
-        window.location.href = URL + '/v1/oauth2/login-page/google';
+        window.location.href = URL + '/oauth2/authorization/google';
     };
+    function getURLParameter(name: string) {
+        return (
+            decodeURIComponent(
+                (new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.href) || [null, ''])[1].replace(
+                    /\+/g,
+                    '%20'
+                )
+            ) || null
+        );
+    }
+
     return (
         <>
             <GlobalStyle />
