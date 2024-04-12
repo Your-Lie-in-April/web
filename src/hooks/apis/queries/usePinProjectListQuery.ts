@@ -1,4 +1,4 @@
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import { QUERY_KEY } from "#/constants/queryKey";
 import { getPinProjectList } from "#/apis/project";
 

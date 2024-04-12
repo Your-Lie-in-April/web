@@ -1,4 +1,4 @@
-import { useMutation, useQueryClient } from "react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { QUERY_KEY } from "#/constants/queryKey";
 import { deleteProject } from "#/apis/project";
 
