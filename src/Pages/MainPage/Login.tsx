@@ -145,12 +145,13 @@ const Login: FC = () => {
         window.location.href = URL + '/oauth2/authorization/google';
     };
     useEffect(() => {
-        const accessToken = query.get('access_token');
-        const refreshToken = query.get('refresh_token');
-
+        const accessToken = query.get('access_token') || '';
+        const refreshToken = query.get('refresh_token') || '';
+        sessionStorage.setItem('accesstoken', accessToken);
+        sessionStorage.setItem('refreshToken', refreshToken);
         console.log('Access Token:', accessToken);
         console.log('Refresh Token:', refreshToken);
-    }, [query]);
+    }, [location.search]);
 
     return (
         <>
