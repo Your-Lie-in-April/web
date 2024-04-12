@@ -1,4 +1,5 @@
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import Login from './Login';
 import Alarm from './Alarm';
@@ -32,7 +33,27 @@ const MainContainer = styled.div`
     box-sizing: border-box;
 `;
 
+function useQuery() {
+    const location = useLocation();
+    return new URLSearchParams(location.search);
+}
+
 const MainPage: FC = () => {
+    const query = useQuery();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const accessToken = query.get('access_token');
+        const refreshToken = query.get('refresh_token');
+
+        if (accessToken && refreshToken) {
+            console.log('Access Token:', accessToken);
+            console.log('Refresh Token:', refreshToken);
+        } else {
+            console.log('인증정보없음');
+            navigate('/login');
+        }
+    }, [query, navigate]);
     return (
         <>
             <GlobalStyle />
