@@ -1,6 +1,6 @@
 import { FC, useEffect } from 'react';
 import styled, { keyframes } from 'styled-components';
-import Banner from './Banner';
+import Banner from './components/Banner';
 import BeforeLogin from '../Layouts/BeforeLogin';
 import { createGlobalStyle } from 'styled-components';
 import { useLocation } from 'react-router-dom';
@@ -196,7 +196,6 @@ const googleLogo = 'src/pics/google-logo-9808 1.png';
 function useQuery() {
     return new URLSearchParams(useLocation().search);
 }
-
 
 const Login: FC = () => {
     const query = useQuery();
