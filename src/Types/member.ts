@@ -8,11 +8,10 @@ export type MemberEntity = {
     profileImageUrl: string;
 };
 
-
 /**
  * GET members/all
  */
-export type MemberResDto = MemberEntity;
+export type MemberResDto = MemberEntity[];
 
 /**
  * GET members/${memberId}
@@ -33,16 +32,11 @@ export type MemberNicknameReqDto = {
 };
 
 /**
- * POST /members/storage/${projectId}
+ * PATCH /members/storage/${projectId}
  */
 export type ProjectStoreResDto = Pick<ProjectEntity, 'projectId'>;
 
 /**
- * DELETE /members/storage/${projectId}
- */
-export type ProjectDeleteResDto = Pick<ProjectEntity, 'projectId'>;
-
-/**
- * DELETE /members/pin/${projectId}
+ * PATCH /members/pin/${projectId}
  */
 export type ProjectPinResDto = Pick<ProjectEntity, 'projectId'>;

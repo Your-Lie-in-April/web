@@ -1,21 +1,26 @@
 import { API } from '#/constants/api';
 import getAPIResponseData from '#/utils/getAPIResponseData';
 import {
-    PinProjectResDto,
-    ProjectDeleteMemberReqDto,
-    ProjectDeleteReqDto,
     ProjectEntity,
-    ProjectInvitationReqDto,
-    ProjectMembersResDto,
-    ProjectPostReqDto,
-    ProjectPutReqDto,
-    ProjectSearchResDto,
+    ProjectResDto,
     ProjectThumbnailResDto,
+    PinProjectResDto,
+    ProjectSearchResDto,
+    ProjectAllMemberDto,
+    ProjectPostReqDto,
+    ProjectDeleteReqDto,
+    ProjectPutReqDto,
+    ProjectInviteLinkReqDto,
+    ProjectDeleteMemberReqDto,
+    ProjectInviteMemReqDto,
+    ProjectTransferPrivilegeReqDto,
+    ProjectSelfOutReqDto,
+    ProjectsStoredResDto,
 } from '#/types/project';
 
 // 프로젝트 전체 조회
 export const getProjectAll = async () => {
-    return await getAPIResponseData<ProjectEntity>({
+    return await getAPIResponseData<ProjectResDto>({
         method: 'GET',
         url: API.PROJECT_ALL,
     });
@@ -47,7 +52,7 @@ export const getProjectSearch = async (memberId: number, keyword: string) => {
 
 // 프로젝트에 속해있는 멤버 전체 조회
 export const getProjectMembers = async (projectId: number) => {
-    return await getAPIResponseData<ProjectMembersResDto>({
+    return await getAPIResponseData<ProjectAllMemberDto>({
         method: 'GET',
         url: API.PROJECT_MEMBERS(projectId),
     });
@@ -55,7 +60,7 @@ export const getProjectMembers = async (projectId: number) => {
 
 // 새 프로젝트 생성
 export const postNewProject = async (body: ProjectPostReqDto) => {
-    return await getAPIResponseData<ProjectEntity, ProjectPutReqDto>({
+    return await getAPIResponseData<ProjectEntity, ProjectPostReqDto>({
         method: 'POST',
         url: API.PROJECT,
         data: body,
@@ -81,7 +86,7 @@ export const putProject = async (projectId: number, body: ProjectPutReqDto) => {
 
 // 회원초대 링크 생성
 export const postProjectInviteLink = async (projectId: number) => {
-    return await getAPIResponseData<ProjectInvitationReqDto>({
+    return await getAPIResponseData<ProjectInviteLinkReqDto>({
         method: 'POST',
         url: API.PROJECT_INVITATION_LINK(projectId),
     });
@@ -100,7 +105,7 @@ export const deleteProjectMember = async (
 
 // 회원 초대 (추가)
 export const postProjectInviteMember = async (url: string) => {
-    return await getAPIResponseData<>({
+    return await getAPIResponseData<ProjectInviteMemReqDto>({
         method: 'POST',
         url: API.PROJECT_INVITE_MEMBER(url),
     });
@@ -108,7 +113,7 @@ export const postProjectInviteMember = async (url: string) => {
 
 // 관리자 권한 양도
 export const patchPojectPrevilege = async (projectId: number) => {
-    return await getAPIResponseData<>({
+    return await getAPIResponseData<ProjectTransferPrivilegeReqDto>({
         method: 'PATCH',
         url: API.PROJECT_TRANSFER_PREVILEGE(projectId),
     });
@@ -116,7 +121,7 @@ export const patchPojectPrevilege = async (projectId: number) => {
 
 // 프로젝트 스스로 나가기
 export const deleteProjectMemberSelf = async (projectId: number) => {
-    return await getAPIResponseData<>({
+    return await getAPIResponseData<ProjectSelfOutReqDto>({
         method: 'DELETE',
         url: API.PROJECT_SELF_OUT(projectId),
     });
@@ -124,7 +129,7 @@ export const deleteProjectMemberSelf = async (projectId: number) => {
 
 // 보관한 프로젝트 목록 조회
 export const getProjectIsStored = async () => {
-    return await getAPIResponseData<>({
+    return await getAPIResponseData<ProjectsStoredResDto>({
         method: 'GET',
         url: API.PROJECT_STORED,
     });
