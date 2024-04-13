@@ -7,7 +7,7 @@ import { putMemberNickname } from '#/apis/member';
  *
  * 유저가 프로젝트별 닉네임을 설정하는 api 입니다.
  */
-const usePutMemberNickQuery = () => {
+const usePutMemberNickMutation = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: () => putMemberNickname(),
@@ -19,4 +19,4 @@ const usePutMemberNickQuery = () => {
     });
 };
 
-export default usePutMemberNickQuery;
+export default usePutMemberNickMutation;

@@ -1,11 +1,11 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { QUERY_KEY } from '#/constants/queryKey';
 import { putMemberStatus } from '#/apis/member';
 
 /**
  * PUT /members/${status}
  */
-const usePutMemberStatusQuery = (status: string) => {
+const usePutMemberStatusMutation = (status: string) => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: () => putMemberStatus(status),
@@ -17,4 +17,4 @@ const usePutMemberStatusQuery = (status: string) => {
     });
 };
 
-export default usePutMemberStatusQuery;
+export default usePutMemberStatusMutation;

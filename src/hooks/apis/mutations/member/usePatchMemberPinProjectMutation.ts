@@ -1,16 +1,16 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { QUERY_KEY } from '#/constants/queryKey';
-import { patchProjectIsStored } from '#/apis/member';
+import { patchProjectIsPinned } from '#/apis/member';
 
 /**
- * PATCH /members/storage/{projectId}
+ * PATCH /members/pin/{projectId}
  *
  * 프로젝트 핀 설정/해제 api 입니다.
  */
-const usePatchMemberProjectIsStoredQuery = (projectId: number) => {
+const usePatchMemberPinProjectMutation = (projectId: number) => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: () => patchProjectIsStored(projectId),
+        mutationFn: () => patchProjectIsPinned(projectId),
         onSuccess: () => {
             void queryClient.invalidateQueries({
                 queryKey: QUERY_KEY.MEMBER_PROJECT(projectId),
@@ -19,4 +19,4 @@ const usePatchMemberProjectIsStoredQuery = (projectId: number) => {
     });
 };
 
-export default usePatchMemberProjectIsStoredQuery;
+export default usePatchMemberPinProjectMutation;
