@@ -3,25 +3,8 @@ import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import React, { useState } from 'react';
+import { ModalBlackOut, ModalContainer } from './ModalCommon';
 
-const ModalBlackOut = styled.div`
-    width: 100%;
-    height: 100%;
-    position: fixed;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 1;
-    background: rgba(0, 0, 0, 0.5);
-`;
-
-const ModalContainer = styled.div`
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 999;
-`;
 
 const Box = styled.div`
     width: 406px;

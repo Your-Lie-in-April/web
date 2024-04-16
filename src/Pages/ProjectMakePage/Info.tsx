@@ -18,6 +18,7 @@ const Container = styled.div`
     margin-top: 16px;
     margin-bottom: 16px;
     position: relative;
+    z-index: 5;
 `;
 const MakeContainer = styled.div`
     width: 1043px;
@@ -120,13 +121,7 @@ const Make = styled.button`
         outline: none;
     }
 `;
-const CoverContainer = styled.div`
-    position: absolute;
-    top: calc(100%);
-    left: 75%;
-    transform: translateX(-50%);
-    z-index: 5;
-`;
+
 const Info: FC = () => {
     const [content, setContent] = useState<string>('');
     const [isTitleClicked, setIsTitleClicked] = useState<boolean>(false);

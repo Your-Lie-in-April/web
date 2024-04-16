@@ -31,8 +31,6 @@ const CoverContainer = styled.div`
     border-radius: 8px;
     background: var(--gray00, #fbfbfb);
     box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.25);
-
-    z-index: 1;
 `;
 
 const ConverInnerContainer = styled.div`
@@ -204,10 +202,10 @@ const Cover: FC<CoverProps> = ({
                         ))}
                         <Color
                             style={{
-                                background: '#FFF',
+                                background: '#ffffff',
                                 border: '1px solid black',
                             }}
-                            onClick={() => handleColorClick('#fff')}
+                            onClick={() => handleColorClick('#ffffff')}
                         />
                         <Color
                             style={{ background: '#D9D9D9' }}

@@ -15,6 +15,7 @@ const DateContainer = styled.div`
     flex-direction: column;
     align-items: center;
     margin: 0 20px;
+   
 `;
 
 const SDatePicker = styled(ReactDatePicker)`
@@ -136,7 +137,11 @@ type ProjectTimeProps = {
     onDateChange?: (startDate: Date | null, endDate: Date | null) => void;
 };
 
-const ProjectTime: FC<ProjectTimeProps> = ({ startDate, endDate, onDateChange }) => {
+const ProjectTime: FC<ProjectTimeProps> = ({
+    startDate,
+    endDate,
+    onDateChange,
+}) => {
     const [selectedDays, setSelectedDays] = useState<number[]>([]);
     const [isStartOpen, setIsStartOpen] = useState<boolean>(false);
     const [isEndOpen, setIsEndOpen] = useState<boolean>(false);
@@ -174,11 +179,19 @@ const ProjectTime: FC<ProjectTimeProps> = ({ startDate, endDate, onDateChange })
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
-            if (startDropdownRef.current && !startDropdownRef.current.contains(event.target as Node) && isStartOpen) {
+            if (
+                startDropdownRef.current &&
+                !startDropdownRef.current.contains(event.target as Node) &&
+                isStartOpen
+            ) {
                 setIsStartOpen(false);
             }
 
-            if (endDropdownRef.current && !endDropdownRef.current.contains(event.target as Node) && isEndOpen) {
+            if (
+                endDropdownRef.current &&
+                !endDropdownRef.current.contains(event.target as Node) &&
+                isEndOpen
+            ) {
                 setIsEndOpen(false);
             }
         };
@@ -267,7 +280,10 @@ const ProjectTime: FC<ProjectTimeProps> = ({ startDate, endDate, onDateChange })
             >
                 <DateContainer style={{ gap: '4px' }}>
                     <Text>시간표 시작시간</Text>
-                    <TimePicker style={{ marginTop: '4px' }} onClick={startSelect}>
+                    <TimePicker
+                        style={{ marginTop: '4px' }}
+                        onClick={startSelect}
+                    >
                         {starttime}
                     </TimePicker>
                     {isStartOpen && (
@@ -286,11 +302,16 @@ const ProjectTime: FC<ProjectTimeProps> = ({ startDate, endDate, onDateChange })
                         </TimePickerContainer>
                     )}
                 </DateContainer>
-                <Separator style={{ marginLeft: '28px', marginRight: '28px' }}>~</Separator>
+                <Separator style={{ marginLeft: '28px', marginRight: '28px' }}>
+                    ~
+                </Separator>
 
                 <DateContainer style={{ gap: '4px' }}>
                     <Text>시간표 종료시간</Text>
-                    <TimePicker style={{ marginTop: '4px' }} onClick={endSelect}>
+                    <TimePicker
+                        style={{ marginTop: '4px' }}
+                        onClick={endSelect}
+                    >
                         {endtime}
                     </TimePicker>
                     {isEndOpen && (
