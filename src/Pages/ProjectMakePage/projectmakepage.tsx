@@ -71,6 +71,13 @@ const ProjectMakePage: FC = () => {
         <>
             <GlobalStyle />
             <AfterLogin />
+            <div
+                style={{
+                    height: '20px',
+                    width: '100%',
+                    backgroundColor: '#212121',
+                }}
+            />
             <Info />
             <div
                 style={{

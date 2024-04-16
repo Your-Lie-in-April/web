@@ -15,8 +15,7 @@ const Container = styled.div`
     justify-content: center;
     background-color: #ffffff;
     border: 1px solid #000000;
-    margin-top: 16px;
-    margin-bottom: 16px;
+
     position: relative;
     z-index: 5;
 `;
