@@ -7,7 +7,7 @@ interface ContentTextProps {
 }
 
 const Container = styled.div`
-    width: 1920px;
+    width: 100%;
     height: 200px;
     display: flex;
     flex-direction: column;
@@ -90,6 +90,8 @@ const ContentText = styled.textarea<ContentTextProps>`
     }
     overflow: hidden;
     background-color: transparent;
+
+    position: relative;
 `;
 
 const Make = styled.button`
@@ -103,14 +105,19 @@ const Make = styled.button`
     white-space: nowrap;
     font-size: 22px;
     font-style: normal;
-    font-weight: 600;
+    font-weight: 500;
     line-height: normal;
     text-align: center;
     align-items: center;
     justify-content: center;
     margin-top: 130px;
+
     &: hover {
         border-color: black;
+    }
+
+    &:focus {
+        outline: none;
     }
 `;
 const CoverContainer = styled.div`
@@ -126,7 +133,9 @@ const Info: FC = () => {
     const [isContentClicked, setIsContentClicked] = useState<boolean>(false);
     const [isCoverClicked, setIsCoverClicked] = useState<boolean>(false);
     const [selectedColor, setSelectedColor] = useState<string | null>(null);
-    const [selectedImageUrl, setSelectedImageUrl] = useState<string | null>(null);
+    const [selectedImageUrl, setSelectedImageUrl] = useState<string | null>(
+        null
+    );
     const [selectedHex, setSelectedHex] = useState<string | null>(null);
 
     const handleTextareaChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
@@ -180,7 +189,11 @@ const Info: FC = () => {
                             onBlur={() => {
                                 setIsTitleClicked(false);
                             }}
-                            placeholder={isTitleClicked === true ? '' : '프로젝트 제목을 작성해주세요'}
+                            placeholder={
+                                isTitleClicked === true
+                                    ? ''
+                                    : '프로젝트 제목을 작성해주세요'
+                            }
                         ></TitleText>
                     </Title>
                     <Content>
@@ -190,21 +203,33 @@ const Info: FC = () => {
                             onChange={handleTextareaChange}
                             onFocus={() => setIsContentClicked(true)}
                             onBlur={() => setIsContentClicked(false)}
-                            placeholder={isContentClicked === true ? '' : '프로젝트 내용을 작성해주세요'}
+                            placeholder={
+                                isContentClicked === true
+                                    ? ''
+                                    : '프로젝트 내용을 작성해주세요'
+                            }
                         />
                     </Content>
                 </TitleContainer>
-                <Make onClick={toggleCover}>커버 만들기</Make>
+                <div style={{ position: 'relative' }}>
+                    <Make onClick={toggleCover}>커버 만들기</Make>
+                    {isCoverClicked && (
+                        <div
+                            style={{
+                                position: 'absolute',
+                                right: '0px',
+                                top: '182px',
+                            }}
+                        >
+                            <Cover
+                                onColorSelect={handleColorSelect}
+                                onImageSelect={handleImageSelect}
+                                onHexSelect={handleHexSelect}
+                            />
+                        </div>
+                    )}
+                </div>
             </MakeContainer>
-            {isCoverClicked && (
-                <CoverContainer>
-                    <Cover
-                        onColorSelect={handleColorSelect}
-                        onImageSelect={handleImageSelect}
-                        onHexSelect={handleHexSelect}
-                    />
-                </CoverContainer>
-            )}
         </Container>
     );
 };

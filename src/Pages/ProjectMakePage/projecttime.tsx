@@ -8,7 +8,6 @@ import { time } from 'console';
 const ProjectTimeContainer = styled.div`
     display: flex;
     flex-direction: column;
-    width: 600px;
     background: #fff;
 `;
 

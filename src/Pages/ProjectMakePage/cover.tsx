@@ -1,7 +1,6 @@
-import { FC, useState, useEffect, useCallback } from 'react';
-import React from 'react';
+import { FC, useState, useCallback } from 'react';
 import styled from 'styled-components';
-import { AlphaPicker, ChromePicker, ColorResult } from 'react-color';
+import { ChromePicker, ColorResult } from 'react-color';
 
 interface CoverProps {
     onColorSelect: (color: string) => void;
@@ -10,7 +9,13 @@ interface CoverProps {
 }
 
 const plus = (
-    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
+    <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="18"
+        height="18"
+        viewBox="0 0 18 18"
+        fill="none"
+    >
         <path
             fill-rule="evenodd"
             clip-rule="evenodd"
@@ -26,6 +31,8 @@ const CoverContainer = styled.div`
     border-radius: 8px;
     background: var(--gray00, #fbfbfb);
     box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.25);
+
+    z-index: 1;
 `;
 
 const ConverInnerContainer = styled.div`
@@ -49,6 +56,10 @@ const Register = styled.button`
     background: #633ae2;
     white-space: nowrap;
     color: white;
+
+    &:focus {
+        outline: none;
+    }
 `;
 
 const ColorContainer = styled.div`
@@ -114,7 +125,14 @@ const HEXContainer = styled.div`
     box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.25);
     margin-top: 8px;
 `;
-const colors = ['#633AE2', '#FFCB3B', '#64AFF5', '#C2D57A', '#EB5757', '#212121'];
+const colors = [
+    '#633AE2',
+    '#FFCB3B',
+    '#64AFF5',
+    '#C2D57A',
+    '#EB5757',
+    '#212121',
+];
 const urls = [
     'https://s3-alpha-sig.figma.com/img/1428/5f05/043a78e2fa12ac2136b1383ece3b805c?Expires=1711324800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=M3ntrL8DfrFbmumQgCKrlg3oUpu2ek2~CRQ0p~YoWuMLNolGDMLFt5K3mYnDR51ePGVP6BiF3ErD5lQ3Dy73z7dZJXkae3kfhHqxEB9wEPwaGYR-SFK6JF9tTmLbAPucfPfXx~mY9XQqJjET-9FnHlosOEJUxsOG6oaV7BLkoW6yQIGnCdN3Z7632r-egffAjaFYPjnjWckV4M3QA2fxWPDIxMTWk7KeZRPRw6PX9ex7~-nzkaKEVbCeljSut98EXDSkmwZ8CHsN9MQrsXv6xkRXiC3-CLuNhCdOZWl~MeWvkRQqKpexGKrK6xpsEK-jcUuotxYd4N-hIQa84XDMJQ__',
     'https://s3-alpha-sig.figma.com/img/efb8/74df/f4f778f0a5ad5ba05f81b2233e6fd797?Expires=1711324800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=Gjo2BbRHGO9ZrhwvAhQ41gm1pHLYU0gqqhZFYkH3JyvgfRmvLffd-~fxsqwJb4LyPoOqwZVq4Bm9gSsdMkud4wsJGV0ZI5PG42oFrK2D9OuCR8RQygT~QIyYkzByuIEkHyOmeVLFl-MuEnWKiCACpSHL94zShGZ4WMFHho0LiKLzusPTQx8Lfm~PBTFFoxlYqqSZ6N~LtKH5Q54qsyAe-wUcxoAQ8wx30hG8QSfIZo3uFjc-oTE1HKvuhn0lgnTX-liWecluvRMmiyHK7-jYWY7EtmNheeyGT3l3g0bV~9qunhGjoShKrASPyX2ynvCSWiKcc4k-Wwz5CjqlfHih-g__',
@@ -140,7 +158,11 @@ const backurls = [
     'https://s3-alpha-sig.figma.com/img/9ec7/03fd/37e40de737e425f7b7c36080e0220504?Expires=1710720000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=Sm6ELb~YJvtu2GS2F0B5WWx6fDfHT9~M5m7fw99PaHZ3E65cyi9xPYIHpzMlY1S84n0dS8uuXNPeaVOZAjnoi9qNSYWCIuFeQalz3UJRtj-T1iPMVwZ9GRGIdTzWarhcznUnnzOjYMBSO0iuyaYK1jz8znQBG0gG-B7WnFu-TmZvXtXiCmPyW-CHKxipm2Zvw19wTkWXqG8AzctgDcqb6-2z8EIv3OLtaCBnQmiXI-ELgHyODMDPakE9vCj6RR7GT8kKdpBsMoQGKPMjOaqRxJFFrVd2CKqzEAIKKkfmHzSMih4w3f3ZntrvwN3OnwVChAEno~3zSHmJIxkP42pDoQ__',
 ];
 
-const Cover: FC<CoverProps> = ({ onColorSelect, onImageSelect, onHexSelect }) => {
+const Cover: FC<CoverProps> = ({
+    onColorSelect,
+    onImageSelect,
+    onHexSelect,
+}) => {
     const [color, setColor] = useState<string>('#ffffff');
     const [openHex, setOpenHex] = useState<boolean>(false);
 
@@ -167,66 +189,74 @@ const Cover: FC<CoverProps> = ({ onColorSelect, onImageSelect, onHexSelect }) =>
         setOpenHex((prev) => !prev);
     };
     https: return (
-        <div>
-            <CoverContainer>
-                <ConverInnerContainer>
-                    <Register>커버등록</Register>
-                    <ColorContainer>
-                        단색
-                        <ColorChoose>
-                            {colors.map((color, index) => (
-                                <Color
-                                    key={index}
-                                    style={{ background: color }}
-                                    onClick={() => handleColorClick(color)}
-                                ></Color>
-                            ))}
+        <CoverContainer>
+            <ConverInnerContainer>
+                <Register style={{ fontSize: '18px' }}>커버등록</Register>
+                <ColorContainer>
+                    단색
+                    <ColorChoose>
+                        {colors.map((color, index) => (
                             <Color
-                                style={{ background: '#FFF', border: '1px solid black' }}
-                                onClick={() => handleColorClick('#fff')}
-                            />
-                            <Color style={{ background: '#D9D9D9' }} onClick={toggleHex}>
-                                {plus}
-                            </Color>
-                        </ColorChoose>
-                    </ColorContainer>
-                    <ImageContainer>
-                        이미지
-                        <ImageChoose>
-                            {urls.map((url, index) => (
-                                <Image
-                                    key={index}
-                                    style={{
-                                        backgroundImage: `url('${url}')`,
-                                        backgroundSize: 'cover',
-                                        backgroundRepeat: 'no-repeat',
-                                        backgroundPosition: 'center',
-                                    }}
-                                    onClick={() => handleImageClick(backurls[index])}
-                                ></Image>
-                            ))}
-                        </ImageChoose>
-                    </ImageContainer>
-                </ConverInnerContainer>
-                {openHex ? (
-                    <div
-                        style={{
-                            display: 'flex',
-                            justifyContent: 'center',
-                            height: '252px',
-                            marginLeft: '8px',
-                            marginTop: '37px',
-                        }}
-                    >
-                        <ChromePicker
-                            disableAlpha={false}
-                            color={color}
-                            onChange={(selectedColor) => handleColorChange(selectedColor)}
+                                key={index}
+                                style={{ background: color }}
+                                onClick={() => handleColorClick(color)}
+                            ></Color>
+                        ))}
+                        <Color
+                            style={{
+                                background: '#FFF',
+                                border: '1px solid black',
+                            }}
+                            onClick={() => handleColorClick('#fff')}
                         />
-                    </div>
-                ) : null}
-            </CoverContainer>
-        </div>
+                        <Color
+                            style={{ background: '#D9D9D9' }}
+                            onClick={toggleHex}
+                        >
+                            {plus}
+                        </Color>
+                    </ColorChoose>
+                </ColorContainer>
+                <ImageContainer>
+                    이미지
+                    <ImageChoose>
+                        {urls.map((url, index) => (
+                            <Image
+                                key={index}
+                                style={{
+                                    backgroundImage: `url('${url}')`,
+                                    backgroundSize: 'cover',
+                                    backgroundRepeat: 'no-repeat',
+                                    backgroundPosition: 'center',
+                                }}
+                                onClick={() =>
+                                    handleImageClick(backurls[index])
+                                }
+                            ></Image>
+                        ))}
+                    </ImageChoose>
+                </ImageContainer>
+            </ConverInnerContainer>
+            {openHex ? (
+                <div
+                    style={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        height: '252px',
+                        marginLeft: '8px',
+                        marginTop: '37px',
+                    }}
+                >
+                    <ChromePicker
+                        disableAlpha={false}
+                        color={color}
+                        onChange={(selectedColor) =>
+                            handleColorChange(selectedColor)
+                        }
+                    />
+                </div>
+            ) : null}
+        </CoverContainer>
     );
 };
 export default Cover;
