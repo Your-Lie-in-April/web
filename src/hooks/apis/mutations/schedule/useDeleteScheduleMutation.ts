@@ -1,16 +1,16 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { QUERY_KEY } from '#/constants/queryKey';
-import { putSchedule } from '#/apis/schedule';
+import { deleteSchedule } from '#/apis/schedule';
 
 /**
- * PUT projects/{projectId}/schedules
+ * Delete projects/{projectId}/schedules
  *
- * 프로젝트의 시간표를 수정하는 api 입니다.
+ * 프로젝트의 시간표를 삭제하는 api 입니다.
  */
-const usePutScheduleQuery = (projectId: number) => {
+const useDeleteScheduleMutation = (projectId: number) => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: () => putSchedule(projectId),
+        mutationFn: () => deleteSchedule(projectId),
         onSuccess: () => {
             void queryClient.invalidateQueries({
                 queryKey: QUERY_KEY.SCHEDULE_PROJECT(projectId),
@@ -19,4 +19,4 @@ const usePutScheduleQuery = (projectId: number) => {
     });
 };
 
-export default usePutScheduleQuery;
+export default useDeleteScheduleMutation;

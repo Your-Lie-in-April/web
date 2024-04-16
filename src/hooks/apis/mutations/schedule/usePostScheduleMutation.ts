@@ -7,7 +7,7 @@ import { postSchedule } from '#/apis/schedule';
  * 
  * 프로젝트의 시간표를 생성하는 api 입니다.
  */
-const usePostScheduleQuery = (projectId: number) => {
+const usePostScheduleMutation = (projectId: number) => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: () => postSchedule(projectId),
@@ -19,4 +19,4 @@ const usePostScheduleQuery = (projectId: number) => {
     });
 };
 
-export default usePostScheduleQuery;
+export default usePostScheduleMutation;
