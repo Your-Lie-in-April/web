@@ -1,5 +1,5 @@
-import { API } from '#/constants/api';
-import getAPIResponseData from '#/utils/getAPIResponseData';
+import { API } from '../constants/api';
+import getAPIResponseData from '../utils/getAPIResponseData';
 import {
     ProjectEntity,
     ProjectResDto,
@@ -129,7 +129,7 @@ export const deleteProjectMemberSelf = async (projectId: number) => {
 
 // 보관한 프로젝트 목록 조회
 export const getProjectIsStored = async () => {
-    return await getAPIResponseData<ProjectsStoredResDto>({
+    return await getAPIResponseData<ProjectsStoredResDto[]>({
         method: 'GET',
         url: API.PROJECT_STORED,
     });

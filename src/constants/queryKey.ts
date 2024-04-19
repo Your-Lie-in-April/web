@@ -28,4 +28,9 @@ export const QUERY_KEY = {
         projectId,
         memberId,
     ],
+    SCHEDULE_SHOW: (projectId: Id, scheduleDayRequst: list) => [
+        'schedule',
+        projectId,
+        scheduleDayRequst,
+    ],
 };

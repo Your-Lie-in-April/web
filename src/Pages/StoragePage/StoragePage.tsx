@@ -1,11 +1,8 @@
 import styled, { createGlobalStyle } from 'styled-components';
 import AfterLogin from '../Layouts/AfterLogin';
-import ArrowIcon from './Icon/ArrowIcon';
 import StorageProjectList from './StorageProjectList';
-import SummertimeSadnessIcon from './Icon/Summertime_sadness ';
-import LightningIcon from './Icon/LightningIcon';
-import SpringIcon from './Icon/SpringIcon';
 import GraphicIcons from './Icon/GraphicIcons';
+import useProjectStoredQuery from '../../hooks/apis/queries/project/useProjectStoredQuery';
 
 const GlobalStyle = createGlobalStyle`
 body {
@@ -48,6 +45,8 @@ const SearchField = styled.input`
 `;
 
 const StoragePage = () => {
+    const { data, isLoading, isError } = useProjectStoredQuery();
+
     return (
         <>
             <GlobalStyle />
@@ -78,7 +77,16 @@ const StoragePage = () => {
                         <Title>프로젝트 보관함</Title>
                         <SearchField placeholder="프로젝트 검색" />
                     </div>
-                    <StorageProjectList />
+
+                    {isLoading ? (
+                        <div>Loading...</div>
+                    ) : isError ? (
+                        <div>Error fetching data</div>
+                    ) : !data ? (
+                        <div>No data available</div>
+                    ) : (
+                        <StorageProjectList projects={data} />
+                    )}
                 </div>
             </div>
             <div style={{ width: '100vw', height: '172px' }}></div>

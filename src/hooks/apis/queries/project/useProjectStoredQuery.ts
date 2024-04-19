@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
-import { QUERY_KEY } from '#/constants/queryKey';
-import { getProjectIsStored } from '#/apis/project';
+import { QUERY_KEY } from '../../../../constants/queryKey';
+import { getProjectIsStored } from '../../../../apis/project';
+import { worker } from '../../../../mocks/browser';
 
 /**
  * GET /v1/projects/stored
@@ -11,7 +12,10 @@ import { getProjectIsStored } from '#/apis/project';
 const useProjectStoredQuery = () => {
     return useQuery({
         queryKey: QUERY_KEY.PROJECT_STORED(),
-        queryFn: () => getProjectIsStored(),
+        // queryFn: () => getProjectIsStored(),
+        queryFn: () => {
+            return worker.inject('/v1/projects/stored');
+        },
     });
 };
 

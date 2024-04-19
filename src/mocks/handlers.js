@@ -32,25 +32,51 @@ const ScheduleList = [
             {
                 dayOfWeek: 'mon',
                 schedule: [
-                    { startAt: '2024-01-31T17:00:00+09:00', endAt: '2024-01-31T20:30:00+09:00' },
-                    { startAt: '2024-01-31T21:30:00+09:00', endAt: '2024-01-31T22:30:00+09:00' },
+                    {
+                        startAt: '2024-01-31T17:00:00+09:00',
+                        endAt: '2024-01-31T20:30:00+09:00',
+                    },
+                    {
+                        startAt: '2024-01-31T21:30:00+09:00',
+                        endAt: '2024-01-31T22:30:00+09:00',
+                    },
                 ],
             },
             {
                 dayOfWeek: 'tue',
-                schedule: [{ startAt: '2024-02-4T10:30:00+09:00', endAt: '2024-02-4T11:30:00+09:00' }],
+                schedule: [
+                    {
+                        startAt: '2024-02-4T10:30:00+09:00',
+                        endAt: '2024-02-4T11:30:00+09:00',
+                    },
+                ],
             },
             {
                 dayOfWeek: 'wed',
-                schedule: [{ startAt: '2024-02-4T10:30:00+09:00', endAt: '2024-02-4T11:30:00+09:00' }],
+                schedule: [
+                    {
+                        startAt: '2024-02-4T10:30:00+09:00',
+                        endAt: '2024-02-4T11:30:00+09:00',
+                    },
+                ],
             },
             {
                 dayOfWeek: 'thu',
-                schedule: [{ startAt: '2024-02-4T10:30:00+09:00', endAt: '2024-02-4T11:30:00+09:00' }],
+                schedule: [
+                    {
+                        startAt: '2024-02-4T10:30:00+09:00',
+                        endAt: '2024-02-4T11:30:00+09:00',
+                    },
+                ],
             },
             {
                 dayOfWeek: 'fri',
-                schedule: [{ startAt: '2024-02-4T10:30:00+09:00', endAt: '2024-02-4T11:30:00+09:00' }],
+                schedule: [
+                    {
+                        startAt: '2024-02-4T10:30:00+09:00',
+                        endAt: '2024-02-4T11:30:00+09:00',
+                    },
+                ],
             },
         ],
     },
@@ -60,25 +86,51 @@ const ScheduleList = [
             {
                 dayOfWeek: 'mon',
                 schedule: [
-                    { startAt: '2024-01-31T17:00:00+09:00', endAt: '2024-01-31T20:30:00+09:00' },
-                    { startAt: '2024-01-31T21:30:00+09:00', endAt: '2024-01-31T22:30:00+09:00' },
+                    {
+                        startAt: '2024-01-31T17:00:00+09:00',
+                        endAt: '2024-01-31T20:30:00+09:00',
+                    },
+                    {
+                        startAt: '2024-01-31T21:30:00+09:00',
+                        endAt: '2024-01-31T22:30:00+09:00',
+                    },
                 ],
             },
             {
                 dayOfWeek: 'tue',
-                schedule: [{ startAt: '2024-02-4T10:30:00+09:00', endAt: '2024-02-4T11:30:00+09:00' }],
+                schedule: [
+                    {
+                        startAt: '2024-02-4T10:30:00+09:00',
+                        endAt: '2024-02-4T11:30:00+09:00',
+                    },
+                ],
             },
             {
                 dayOfWeek: 'wed',
-                schedule: [{ startAt: '2024-02-4T10:30:00+09:00', endAt: '2024-02-4T11:30:00+09:00' }],
+                schedule: [
+                    {
+                        startAt: '2024-02-4T10:30:00+09:00',
+                        endAt: '2024-02-4T11:30:00+09:00',
+                    },
+                ],
             },
             {
                 dayOfWeek: 'thu',
-                schedule: [{ startAt: '2024-02-4T10:30:00+09:00', endAt: '2024-02-4T11:30:00+09:00' }],
+                schedule: [
+                    {
+                        startAt: '2024-02-4T10:30:00+09:00',
+                        endAt: '2024-02-4T11:30:00+09:00',
+                    },
+                ],
             },
             {
                 dayOfWeek: 'fri',
-                schedule: [{ startAt: '2024-02-4T10:30:00+09:00', endAt: '2024-02-4T11:30:00+09:00' }],
+                schedule: [
+                    {
+                        startAt: '2024-02-4T10:30:00+09:00',
+                        endAt: '2024-02-4T11:30:00+09:00',
+                    },
+                ],
             },
         ],
     },
@@ -343,7 +395,9 @@ export const handlers = [
     //회원 정보 조회
     http.get('/v1/members/:memberId', (request) => {
         const MemberId = request.params.memberId;
-        const MemberResponse = List.find((member) => member.memberId === parseInt(MemberId));
+        const MemberResponse = List.find(
+            (member) => member.memberId === parseInt(MemberId)
+        );
         if (MemberResponse) {
             return HttpResponse.json({
                 status: 'SUCCESS',
@@ -389,6 +443,7 @@ export const handlers = [
             data: null,
         });
     }),
+
     // Project //
     // 1. 프로젝트 전체 조회
     http.get('/v1/projects/all', () => {
@@ -436,7 +491,9 @@ export const handlers = [
     // 5. 프로젝트에 속해있는 유저 전체 조회
     http.get('/v1/projects/:projectId/members', ({ params }) => {
         const { projectId } = params;
-        const project = projectList.find((project) => project.projectId === parseInt(projectId));
+        const project = projectList.find(
+            (project) => project.projectId === parseInt(projectId)
+        );
 
         if (!project) {
             return HttpResponse.json({
@@ -534,7 +591,9 @@ export const handlers = [
         const { projectId } = request.params;
         const { memberId, url } = request.body;
 
-        const project = projectList.find((project) => project.projectId === parseInt(projectId));
+        const project = projectList.find(
+            (project) => project.projectId === parseInt(projectId)
+        );
 
         if (!project) {
             return HttpResponse.json({
@@ -544,7 +603,9 @@ export const handlers = [
             });
         }
 
-        const invitedUser = projectInvitations[projectId]?.find((invitedUser) => invitedUser.url === url);
+        const invitedUser = projectInvitations[projectId]?.find(
+            (invitedUser) => invitedUser.url === url
+        );
 
         if (!invitedUser || invitedUser.memberId !== memberId) {
             return HttpResponse.json({
@@ -562,6 +623,15 @@ export const handlers = [
         });
     }),
 
+    // 보관함페이지 프로젝트보기
+    http.get('/v1/projects/stored', () => {
+        return HttpResponse.json({
+            status: 'SUCCESS',
+            message: '보관함프로젝트 조회 성공',
+            data: projectList,
+        });
+    }),
+
     //Schedule
     //시간표 전체 조회
     http.get('/v1/schedules/all', () => {
@@ -576,7 +646,9 @@ export const handlers = [
         const { startdata, enddata } = time.params;
         const filteredSchedules = ScheduleList.map((schedule) => ({
             ...schedule,
-            schedule: schedule.schedule.filter((item) => item.startAt >= startdata && item.endAt <= enddata),
+            schedule: schedule.schedule.filter(
+                (item) => item.startAt >= startdata && item.endAt <= enddata
+            ),
         }));
         return HttpResponse.json({
             status: 'SUCCESS',
@@ -589,7 +661,8 @@ export const handlers = [
         const projectId = request.params.projcetId;
         const memberId = request.params.memberId;
         const filteredSchedules = ScheduleList.filter(
-            (schedule) => (schedule.projcetId === schedule.memberId) === memberId
+            (schedule) =>
+                (schedule.projcetId === schedule.memberId) === memberId
         );
         return HttpResponse.json({
             status: 'SUCCESS',
