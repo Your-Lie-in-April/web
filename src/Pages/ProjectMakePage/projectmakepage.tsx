@@ -1,51 +1,43 @@
 import { FC, useState } from 'react';
-import styled from 'styled-components';
+import styled, { createGlobalStyle } from 'styled-components';
 import Info from './Info';
-import SelectTime from './projectcalendar';
 import ProjectTime from './projecttime';
 import AfterLogin from '../Layouts/AfterLogin';
 import ProjectCalendar from './projectcalendar';
 import { useNavigate } from 'react-router';
-const ProjectMakePageContainer = styled.div`
-    margin-left: auto;
-    margin-right: auto;
-    width: 1920px;
-    height: 1920px;
 
+const GlobalStyle = createGlobalStyle`
+  body {
+    width : 100%;
+    min-width : 1366px;
+    height : 1920px;
+    margin: 0 auto;
     background-color: #212121;
-    overflow: auto;
+    -ms-overflow-style: none;
+  }
 
-    body {
-        -ms-overflow-style: none;
-    }
-
-    ::-webkit-scrollbar {
-        display: none;
-    }
+  ::-webkit-scrollbar {
+    display: none;
+  }
 `;
+
 const Container = styled.div`
     display: flex;
-    width 1916px;
-    height: 764px;
+    width: 100%;
     background-color: white;
     flex-direction: column;
     align-items: center;
-    gap: 16px;
-   
+
+    gap: 78px;
 `;
+
 const TimeContainer = styled.div`
     display: flex;
-    width: 1122px;
-    height: 530px;
-    padding: 109px 389px;
     gap: 240px;
-    position: relative;
+    width: 1122px;
 `;
+
 const SButton = styled.button`
-    position: absolute;
-    bottom: 109px;
-    left: 50%;
-    transform: translateX(-50%);
     width: 289px;
     height: 62px;
     padding: 12px 44px;
@@ -66,6 +58,7 @@ const SButtonText = styled.text`
     font-weight: 700;
     line-height: normal;
 `;
+
 const ProjectMakePage: FC = () => {
     const [startDate, setStartDate] = useState<Date | null>(new Date());
     const [endDate, setEndDate] = useState<Date | null>(new Date());
@@ -75,10 +68,25 @@ const ProjectMakePage: FC = () => {
         navigate('/project');
     };
     return (
-        <ProjectMakePageContainer>
+        <>
+            <GlobalStyle />
             <AfterLogin />
+            <div
+                style={{
+                    height: '20px',
+                    width: '100%',
+                    backgroundColor: '#212121',
+                }}
+            />
             <Info />
-            <Container style={{ marginTop: '24px' }}>
+            <div
+                style={{
+                    height: '109px',
+                    width: '100%',
+                    backgroundColor: 'white',
+                }}
+            />
+            <Container>
                 <TimeContainer>
                     <ProjectCalendar
                         selectRange={true}
@@ -97,12 +105,19 @@ const ProjectMakePage: FC = () => {
                             setEndDate(end || new Date());
                         }}
                     />
-                    <SButton onClick={handleProject}>
-                        <SButtonText>프로젝트 만들기</SButtonText>
-                    </SButton>
                 </TimeContainer>
+                <SButton onClick={handleProject}>
+                    <SButtonText>프로젝트 만들기</SButtonText>
+                </SButton>
             </Container>
-        </ProjectMakePageContainer>
+            <div
+                style={{
+                    height: '109px',
+                    width: '100%',
+                    backgroundColor: 'white',
+                }}
+            />
+        </>
     );
 };
 

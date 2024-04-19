@@ -12,7 +12,7 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import { useState } from 'react';
 import MemberScheduleGrid from './Schedule/MemberScheduleGrid';
 import Info from '../ProjectMakePage/Info';
-import Project from '../MainPage/Project';
+import Project from '../MainPage/components/Project';
 import ProjectCalendar from '../ProjectMakePage/projectcalendar';
 const GlobalStyle = createGlobalStyle`
   body {
@@ -122,7 +122,6 @@ const ProjectPage = () => {
                     display: 'flex',
                     flexDirection: 'column',
                     gap: '32px',
-                    
                 }}
             >
                 <div>

@@ -21,7 +21,7 @@ const Box = styled.div`
     justify-content: flex-end;
     gap: 22px;
     box-sizing: border-box;
-    z-index: 1;
+    z-index: 100;
 
     margin-top: 1.5rem;
 `;

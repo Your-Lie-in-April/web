@@ -97,7 +97,7 @@ const CommonButton = styled.button<CommonButtonProps>`
   }
 `;
 
-const InvitationModal = ({}) => {
+const InvitationModal = () => {
   const [link, setLink] = useState<string>('');
   const [isBtnClick, setIsBtnClick] = useState<boolean>(false);
   const [isVisible, setIsVisible] = useState<boolean>(true);
