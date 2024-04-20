@@ -151,14 +151,16 @@ const projectList = [
         fri: true,
         sat: false,
         sun: false,
-        isStored: false,
+        isStored: true,
         coverImageUrl: null,
-        color: 'FFFFFF',
+        color: 'A5CEF2',
     },
     {
         projectId: 2,
         title: 'spring',
-        description: '앱센터 봄 프로젝트',
+        description:
+            '앱센터 15.5기 앱센터 15.5기앱센터 15.5기앱센터 봄 프로젝트',
+
         startDate: '2024-03-01',
         endDate: '2024-04-27',
         starTime: '10:00:00',
@@ -170,9 +172,9 @@ const projectList = [
         fri: true,
         sat: false,
         sun: false,
-        isStored: false,
+        isStored: true,
         coverImageUrl: null,
-        color: 'FFFFFF',
+        color: 'FFCB3C',
     },
     {
         projectId: 3,
@@ -212,6 +214,44 @@ const projectList = [
         coverImageUrl: null,
         color: 'FFFFFF',
     },
+    {
+        projectId: 5,
+        title: '프로젝트5',
+        description: '프로젝트설명5',
+        startDate: '2024-01-31',
+        endDate: '2024-02-27',
+        starTime: '09:00:00',
+        endTime: '21:00:00',
+        mon: true,
+        tue: true,
+        wed: true,
+        thu: true,
+        fri: true,
+        sat: false,
+        sun: false,
+        isStored: true,
+        coverImageUrl: null,
+        color: 'EB5757',
+    },
+    {
+        projectId: 5,
+        title: '프로젝트6',
+        description: '프로젝트설명6',
+        startDate: '2024-01-31',
+        endDate: '2024-02-27',
+        starTime: '09:00:00',
+        endTime: '21:00:00',
+        mon: true,
+        tue: true,
+        wed: true,
+        thu: true,
+        fri: true,
+        sat: false,
+        sun: false,
+        isStored: true,
+        coverImageUrl: null,
+        color: 'EB5757',
+    },
 ];
 
 // 프로젝트 썸네일 리스트
@@ -226,15 +266,16 @@ const ProjectThumbnailList = [
     {
         projectId: 2,
         title: 'spring',
-        description: '앱센터 봄 프로젝트',
-        color: 'FFFFFF',
+        description:
+            '앱센터 15.5기 앱센터 15.5기앱센터 15.5기앱센터 봄 프로젝트',
+        color: 'FFCB3C',
         coverImageUrl: null,
     },
     {
         projectId: 3,
         title: 'summer',
         description: '앱센터 여름 프로젝트',
-        color: 'FFFFFF',
+        color: 'null',
         coverImageUrl: null,
     },
     {
@@ -625,10 +666,13 @@ export const handlers = [
 
     // 보관함페이지 프로젝트보기
     http.get('/v1/projects/stored', () => {
+        const isStoredProjectList = projectList.filter(
+            (project) => project.isStored === true
+        );
         return HttpResponse.json({
             status: 'SUCCESS',
             message: '보관함프로젝트 조회 성공',
-            data: projectList,
+            data: isStoredProjectList,
         });
     }),
 

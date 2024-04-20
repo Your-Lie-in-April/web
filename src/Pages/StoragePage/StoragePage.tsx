@@ -3,11 +3,13 @@ import AfterLogin from '../Layouts/AfterLogin';
 import StorageProjectList from './StorageProjectList';
 import GraphicIcons from './Icon/GraphicIcons';
 import useProjectStoredQuery from '../../hooks/apis/queries/project/useProjectStoredQuery';
+import { useEffect, useState } from 'react';
 
 const GlobalStyle = createGlobalStyle`
 body {
   width : 100%;
   min-width : 1366px;
+  min-height : 1200px;
   margin: 0 auto;
   background-color: #212121;
   -ms-overflow-style: none;
@@ -41,56 +43,67 @@ const SearchField = styled.input`
     box-sizing: border-box;
     border: none;
     outline: none;
-    z-index: 0;
 `;
 
 const StoragePage = () => {
-    const { data, isLoading, isError } = useProjectStoredQuery();
+    const { data, isLoading, error } = useProjectStoredQuery();
+    const [projects, setProjects] = useState([]);
+
+    useEffect(() => {
+        if (data) {
+            setProjects(data.data);
+        }
+    }, [data]);
+
+    console.log('조회', projects);
+    if (error) {
+        return <div>Error fetching projects: {error.message}</div>;
+    }
 
     return (
         <>
             <GlobalStyle />
-            <GraphicIcons />
-            <div
-                style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: '130px',
-                }}
-            >
-                <AfterLogin />
-                <div
-                    style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: '49px',
-                        alignItems: 'center',
-                    }}
-                >
+            {isLoading && <div>Loading...</div>}
+
+            {data && (
+                <>
+                    <GraphicIcons />
                     <div
                         style={{
                             display: 'flex',
                             flexDirection: 'column',
-                            gap: '48px',
+                            gap: '130px',
                         }}
                     >
-                        <Title>프로젝트 보관함</Title>
-                        <SearchField placeholder="프로젝트 검색" />
-                    </div>
+                        <AfterLogin />
+                        <div
+                            style={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                gap: '49px',
+                                alignItems: 'center',
 
-                    {isLoading ? (
-                        <div>Loading...</div>
-                    ) : isError ? (
-                        <div>Error fetching data</div>
-                    ) : !data ? (
-                        <div>No data available</div>
-                    ) : (
-                        <StorageProjectList projects={data} />
-                    )}
-                </div>
-            </div>
-            <div style={{ width: '100vw', height: '172px' }}></div>
+                                zIndex: '3',
+                            }}
+                        >
+                            <div
+                                style={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    gap: '48px',
+                                }}
+                            >
+                                <Title>프로젝트 보관함</Title>
+                                <SearchField placeholder="프로젝트 검색" />
+                            </div>
+                            <StorageProjectList projects={projects} />
+                        </div>
+                    </div>
+                    <div style={{ width: '100vw', height: '172px' }}></div>
+                </>
+            )}
         </>
     );
 };
+
 export default StoragePage;

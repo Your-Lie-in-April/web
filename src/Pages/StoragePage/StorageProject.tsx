@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
@@ -6,17 +6,24 @@ import { useState } from 'react';
 import DeleteProject from '../Modal/DeleteProject';
 import { ProjectsStoredResDto } from '#/types/project';
 
-const ProjectBox = styled.div`
+interface ProjectBoxProps {
+    color?: string;
+}
+
+const ProjectBox = styled.div<ProjectBoxProps>`
     position: relative;
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
     width: 300px;
     height: 300px;
-    background-color: #b79fff;
+
     border-radius: 16px;
     display: flex;
     color: #ffffff;
+
+    background-color: ${(props) =>
+        props.color ? `#${props.color}` : '#b79fff'};
 `;
 
 const TextBox = styled.div`
@@ -137,7 +144,7 @@ const StorageProject = ({ project }: { project: ProjectsStoredResDto }) => {
 
     return (
         <>
-            <ProjectBox>
+            <ProjectBox color={project.color}>
                 {showMore && (
                     <MoreBox>
                         <div

@@ -19,7 +19,7 @@ export const QUERY_KEY = {
         projectId,
         memberId,
     ],
-    PROJECT_STORED: () => ['project', { isStoreed: true }],
+    PROJECT_STORED: () => ['project', { isStored: true }],
 
     SCHEDULE: ['schedule'],
     SCHEDULE_PROJECT: (projectId: Id) => ['schedule', projectId],
