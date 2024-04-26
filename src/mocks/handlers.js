@@ -1,427 +1,11 @@
 import { http, HttpResponse } from 'msw';
-import { useEffect } from 'react';
-
-const List = [
-    {
-        memberId: 1,
-        email: 'example@example.com',
-        nickname: 'namu',
-        state: '완벽한 하루',
-        profileImageURL: 'https://xxx.kakao.co.kr/.../aaa.jpg',
-    },
-    {
-        memberId: 2,
-        email: 'example2@example.com',
-        nickname: 'gojaeng',
-        state: '화이팅',
-        profileImageURL: 'https://xxx.kakao.co.kr/.../aaa.jpg',
-    },
-    {
-        memberId: 3,
-        email: 'example3@example.com',
-        nickname: 'milk',
-        state: '우유',
-        profileImageURL: 'https://xxx.kakao.co.kr/.../aaa.jpg',
-    },
-];
-
-const ScheduleList = [
-    {
-        nickname: 'namu',
-        schedule: [
-            {
-                dayOfWeek: 'mon',
-                schedule: [
-                    {
-                        startAt: '2024-01-31T17:00:00+09:00',
-                        endAt: '2024-01-31T20:30:00+09:00',
-                    },
-                    {
-                        startAt: '2024-01-31T21:30:00+09:00',
-                        endAt: '2024-01-31T22:30:00+09:00',
-                    },
-                ],
-            },
-            {
-                dayOfWeek: 'tue',
-                schedule: [
-                    {
-                        startAt: '2024-02-4T10:30:00+09:00',
-                        endAt: '2024-02-4T11:30:00+09:00',
-                    },
-                ],
-            },
-            {
-                dayOfWeek: 'wed',
-                schedule: [
-                    {
-                        startAt: '2024-02-4T10:30:00+09:00',
-                        endAt: '2024-02-4T11:30:00+09:00',
-                    },
-                ],
-            },
-            {
-                dayOfWeek: 'thu',
-                schedule: [
-                    {
-                        startAt: '2024-02-4T10:30:00+09:00',
-                        endAt: '2024-02-4T11:30:00+09:00',
-                    },
-                ],
-            },
-            {
-                dayOfWeek: 'fri',
-                schedule: [
-                    {
-                        startAt: '2024-02-4T10:30:00+09:00',
-                        endAt: '2024-02-4T11:30:00+09:00',
-                    },
-                ],
-            },
-        ],
-    },
-    {
-        nickname: 'gojaeng',
-        schedule: [
-            {
-                dayOfWeek: 'mon',
-                schedule: [
-                    {
-                        startAt: '2024-01-31T17:00:00+09:00',
-                        endAt: '2024-01-31T20:30:00+09:00',
-                    },
-                    {
-                        startAt: '2024-01-31T21:30:00+09:00',
-                        endAt: '2024-01-31T22:30:00+09:00',
-                    },
-                ],
-            },
-            {
-                dayOfWeek: 'tue',
-                schedule: [
-                    {
-                        startAt: '2024-02-4T10:30:00+09:00',
-                        endAt: '2024-02-4T11:30:00+09:00',
-                    },
-                ],
-            },
-            {
-                dayOfWeek: 'wed',
-                schedule: [
-                    {
-                        startAt: '2024-02-4T10:30:00+09:00',
-                        endAt: '2024-02-4T11:30:00+09:00',
-                    },
-                ],
-            },
-            {
-                dayOfWeek: 'thu',
-                schedule: [
-                    {
-                        startAt: '2024-02-4T10:30:00+09:00',
-                        endAt: '2024-02-4T11:30:00+09:00',
-                    },
-                ],
-            },
-            {
-                dayOfWeek: 'fri',
-                schedule: [
-                    {
-                        startAt: '2024-02-4T10:30:00+09:00',
-                        endAt: '2024-02-4T11:30:00+09:00',
-                    },
-                ],
-            },
-        ],
-    },
-];
-const projectList = [
-    {
-        projectId: 1,
-        title: 'timepiece',
-        description: '앱센터 15.5기 겨울방학 프로젝트',
-        startDate: '2024-01-31',
-        endDate: '2024-02-27',
-        starTime: '09:00:00',
-        endTime: '21:00:00',
-        mon: true,
-        tue: true,
-        wed: true,
-        thu: true,
-        fri: true,
-        sat: false,
-        sun: false,
-        isStored: true,
-        coverImageUrl: null,
-        color: 'A5CEF2',
-    },
-    {
-        projectId: 2,
-        title: 'spring',
-        description:
-            '앱센터 15.5기 앱센터 15.5기앱센터 15.5기앱센터 봄 프로젝트',
-
-        startDate: '2024-03-01',
-        endDate: '2024-04-27',
-        starTime: '10:00:00',
-        endTime: '22:00:00',
-        mon: false,
-        tue: true,
-        wed: true,
-        thu: true,
-        fri: true,
-        sat: false,
-        sun: false,
-        isStored: true,
-        coverImageUrl: null,
-        color: 'FFCB3C',
-    },
-    {
-        projectId: 3,
-        title: 'summer',
-        description: '앱센터 여름 프로젝트',
-        startDate: '2024-06-31',
-        endDate: '2024-08-27',
-        starTime: '09:00:00',
-        endTime: '23:00:00',
-        mon: true,
-        tue: true,
-        wed: true,
-        thu: true,
-        fri: true,
-        sat: false,
-        sun: false,
-        isStored: false,
-        coverImageUrl: null,
-        color: 'FFFFFF',
-    },
-    {
-        projectId: 4,
-        title: 'fall',
-        description: '앱센터 가을 프로젝트',
-        startDate: '2024-09-31',
-        endDate: '2024-12-27',
-        starTime: '12:30:00',
-        endTime: '22:00:00',
-        mon: false,
-        tue: true,
-        wed: true,
-        thu: true,
-        fri: true,
-        sat: false,
-        sun: false,
-        isStored: false,
-        coverImageUrl: null,
-        color: 'FFFFFF',
-    },
-    {
-        projectId: 5,
-        title: '프로젝트5',
-        description: '프로젝트설명5',
-        startDate: '2024-01-31',
-        endDate: '2024-02-27',
-        starTime: '09:00:00',
-        endTime: '21:00:00',
-        mon: true,
-        tue: true,
-        wed: true,
-        thu: true,
-        fri: true,
-        sat: false,
-        sun: false,
-        isStored: true,
-        coverImageUrl: null,
-        color: 'EB5757',
-    },
-    {
-        projectId: 5,
-        title: '프로젝트6',
-        description: '프로젝트설명6',
-        startDate: '2024-01-31',
-        endDate: '2024-02-27',
-        starTime: '09:00:00',
-        endTime: '21:00:00',
-        mon: true,
-        tue: true,
-        wed: true,
-        thu: true,
-        fri: true,
-        sat: false,
-        sun: false,
-        isStored: true,
-        coverImageUrl: null,
-        color: 'EB5757',
-    },
-];
-
-// 프로젝트 썸네일 리스트
-const ProjectThumbnailList = [
-    {
-        projectId: 1,
-        title: 'timepiece',
-        description: '앱센터 15.5기 겨울방학 프로젝트',
-        color: 'FFFFFF',
-        coverImageUrl: null,
-    },
-    {
-        projectId: 2,
-        title: 'spring',
-        description:
-            '앱센터 15.5기 앱센터 15.5기앱센터 15.5기앱센터 봄 프로젝트',
-        color: 'FFCB3C',
-        coverImageUrl: null,
-    },
-    {
-        projectId: 3,
-        title: 'summer',
-        description: '앱센터 여름 프로젝트',
-        color: 'null',
-        coverImageUrl: null,
-    },
-    {
-        projectId: 4,
-        title: 'fall',
-        description: '앱센터 가을 프로젝트',
-        color: 'FFFFFF',
-        coverImageUrl: null,
-    },
-];
-
-// 핀 프로젝트
-const PinProjectList = [
-    {
-        projectId: 1,
-        title: 'timepiece',
-        description: '앱센터 15.5기 겨울방학 프로젝트',
-        startDate: '2024-01-31',
-        endDate: '2024-02-27',
-        starTime: '09:00:00',
-        endTime: '21:00:00',
-        mon: true,
-        tue: true,
-        wed: true,
-        thu: true,
-        fri: true,
-        sat: false,
-        sun: false,
-        isStored: false,
-        coverImageUrl: null,
-        color: 'FFFFFF',
-        memberCount: 2,
-        schedule: [
-            {
-                nickname: 'namu',
-                schedule: [
-                    {
-                        dayOfWeek: 'mon',
-                        schedule: [
-                            {
-                                startAt: '2024-01-31T17:00:00+09:00',
-                                endAt: '2024-01-31T20:30:00+09:00',
-                            },
-                            {
-                                startAt: '2024-01-31T21:30:00+09:00',
-                                endAt: '2024-01-31T22:30:00+09:00',
-                            },
-                        ],
-                    },
-                    {
-                        dayOfWeek: 'tue',
-                        schedule: [
-                            {
-                                startAt: '2024-02-4T10:30:00+09:00',
-                                endAt: '2024-02-4T11:30:00+09:00',
-                            },
-                        ],
-                    },
-                    {
-                        dayOfWeek: 'wed',
-                        schedule: [
-                            {
-                                startAt: '2024-02-4T10:30:00+09:00',
-                                endAt: '2024-02-4T11:30:00+09:00',
-                            },
-                        ],
-                    },
-                    {
-                        dayOfWeek: 'thu',
-                        schedule: [
-                            {
-                                startAt: '2024-02-4T10:30:00+09:00',
-                                endAt: '2024-02-4T11:30:00+09:00',
-                            },
-                        ],
-                    },
-                    {
-                        dayOfWeek: 'fri',
-                        schedule: [
-                            {
-                                startAt: '2024-02-4T10:30:00+09:00',
-                                endAt: '2024-02-4T11:30:00+09:00',
-                            },
-                        ],
-                    },
-                ],
-            },
-            {
-                nickname: 'flog',
-                schedule: [
-                    {
-                        dayOfWeek: 'mon',
-                        schedule: [
-                            {
-                                startAt: '2024-01-31T17:00:00+09:00',
-                                endAt: '2024-01-31T20:30:00+09:00',
-                            },
-                            {
-                                startAt: '2024-01-31T21:30:00+09:00',
-                                endAt: '2024-01-31T22:30:00+09:00',
-                            },
-                        ],
-                    },
-                    {
-                        dayOfWeek: 'tue',
-                        schedule: [
-                            {
-                                startAt: '2024-02-4T10:30:00+09:00',
-                                endAt: '2024-02-4T11:30:00+09:00',
-                            },
-                        ],
-                    },
-                    {
-                        dayOfWeek: 'wed',
-                        schedule: [
-                            {
-                                startAt: '2024-02-4T10:30:00+09:00',
-                                endAt: '2024-02-4T11:30:00+09:00',
-                            },
-                        ],
-                    },
-                    {
-                        dayOfWeek: 'thu',
-                        schedule: [
-                            {
-                                startAt: '2024-02-4T10:30:00+09:00',
-                                endAt: '2024-02-4T11:30:00+09:00',
-                            },
-                        ],
-                    },
-                    {
-                        dayOfWeek: 'fri',
-                        schedule: [
-                            {
-                                startAt: '2024-02-4T10:30:00+09:00',
-                                endAt: '2024-02-4T11:30:00+09:00',
-                            },
-                        ],
-                    },
-                ],
-            },
-        ],
-    },
-];
-
-const invitationLinks = {};
+import {
+    memberList,
+    scheduleList,
+    projectList,
+    pinProjectList,
+    projectThumbnailList,
+} from './mockData';
 
 export const handlers = [
     //Member//
@@ -430,13 +14,13 @@ export const handlers = [
         return HttpResponse.json({
             status: 'SUCCESS',
             message: '회원 전체 조회 성공',
-            data: List,
+            data: memberList,
         });
     }),
     //회원 정보 조회
     http.get('/v1/members/:memberId', (request) => {
         const MemberId = request.params.memberId;
-        const MemberResponse = List.find(
+        const MemberResponse = memberList.find(
             (member) => member.memberId === parseInt(MemberId)
         );
         if (MemberResponse) {
@@ -501,7 +85,7 @@ export const handlers = [
         return HttpResponse.json({
             status: 'SUCCESS',
             message: '소속 프로젝트 전체 조회(썸네일) 성공',
-            data: ProjectThumbnailList,
+            data: projectThumbnailList,
         });
     }),
 
@@ -511,7 +95,7 @@ export const handlers = [
         return HttpResponse.json({
             status: 'SUCCESS',
             message: '핀 설정된 프로젝트 조회 성공',
-            data: PinProjectList,
+            data: pinProjectList,
         });
     }),
 
@@ -682,13 +266,13 @@ export const handlers = [
         return HttpResponse.json({
             status: 'SUCCESS',
             message: '시간표 전체 조회 성공',
-            data: ScheduleList,
+            data: scheduleList,
         });
     }),
     //프로젝트 내 모든 사용자 시간표 조회
     http.get('/v1/projects/:projectId/schedules', () => {
         const { startdata, enddata } = time.params;
-        const filteredSchedules = ScheduleList.map((schedule) => ({
+        const filteredSchedules = scheduleList.map((schedule) => ({
             ...schedule,
             schedule: schedule.schedule.filter(
                 (item) => item.startAt >= startdata && item.endAt <= enddata
@@ -704,7 +288,7 @@ export const handlers = [
     http.get('/v1/projects/:projectId/members/:memberId/schedules', () => {
         const projectId = request.params.projcetId;
         const memberId = request.params.memberId;
-        const filteredSchedules = ScheduleList.filter(
+        const filteredSchedules = scheduleList.filter(
             (schedule) =>
                 (schedule.projcetId === schedule.memberId) === memberId
         );
