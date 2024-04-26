@@ -83,7 +83,7 @@ const StoragePage = () => {
                                 gap: '49px',
                                 alignItems: 'center',
 
-                                zIndex: '3',
+                                zIndex: '1',
                             }}
                         >
                             <div

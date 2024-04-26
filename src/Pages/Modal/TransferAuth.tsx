@@ -4,7 +4,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import React, { useState } from 'react';
 import { ModalBlackOut, ModalContainer } from './ModalCommon';
-
+import ModalPortal from '../../utils/ModalPotal';
 
 const Box = styled.div`
     width: 406px;
@@ -148,7 +148,7 @@ const TransferAuthModal = () => {
     console.log(selectMem);
 
     return (
-        <>
+        <ModalPortal>
             <ModalBlackOut />
             <ModalContainer>
                 <Box>
@@ -242,7 +242,7 @@ const TransferAuthModal = () => {
                     </div>
                 </Box>
             </ModalContainer>
-        </>
+        </ModalPortal>
     );
 };
 

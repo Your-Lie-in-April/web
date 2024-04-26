@@ -9,7 +9,7 @@ const AfterLoginDiv = styled.div`
     display: flex;
     align-items: flex-end;
     justify-content: space-between;
-    z-index: 1;
+    z-index: 2;
     color: #000000;
     font-style: normal;
 `;
@@ -57,11 +57,15 @@ const AfterLogin: FC = () => {
     return (
         <>
             <AfterLoginDiv>
-                <div style={{ justifyContent: 'flex-start', flexBasis: '20%' }} />
+                <div
+                    style={{ justifyContent: 'flex-start', flexBasis: '20%' }}
+                />
                 <Logo>TIME PIECE</Logo>
                 <MyPageDiv>
                     <MyPageBtn onClick={onSetIsMyPageModal}>My page</MyPageBtn>
-                    {isMyPageModal && <MyPageModal onSetIsMyPageModal={onSetIsMyPageModal} />}
+                    {isMyPageModal && (
+                        <MyPageModal onSetIsMyPageModal={onSetIsMyPageModal} />
+                    )}
                 </MyPageDiv>
             </AfterLoginDiv>
         </>

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 import { ModalBlackOut, ModalContainer } from './ModalCommon';
+import ModalPortal from '../../utils/ModalPotal';
 
 const Box = styled.div`
     width: 504px;
@@ -86,7 +87,7 @@ const ChangeNickName: React.FC<ChangeNickNameProps> = ({
     };
 
     return (
-        <>
+        <ModalPortal>
             <ModalBlackOut />
             <ModalContainer>
                 <Box>
@@ -117,7 +118,7 @@ const ChangeNickName: React.FC<ChangeNickNameProps> = ({
                     </div>
                 </Box>
             </ModalContainer>
-        </>
+        </ModalPortal>
     );
 };
 export default ChangeNickName;

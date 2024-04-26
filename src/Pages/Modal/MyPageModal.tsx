@@ -23,7 +23,7 @@ const Box = styled.div`
     box-sizing: border-box;
     z-index: 100;
 
-    margin-top: 1.5rem;
+    margin-top: 1.3rem;
 `;
 
 const CloseButton = styled.button`
