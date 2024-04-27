@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
@@ -190,7 +190,13 @@ const StorageProject = ({ project }: { project: ProjectsStoredResDto }) => {
                     </TextBox>
                 </div>
             </ProjectBox>
-            {isClick && <DeleteProject onClose={onClickItem} />}
+            {isClick && (
+                <DeleteProject
+                    onClose={onClickItem}
+                    projectId={parseInt(project.projectId)}
+                    title={project.title}
+                />
+            )}
         </>
     );
 };

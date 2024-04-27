@@ -2,7 +2,8 @@ import styled from 'styled-components';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import { useState } from 'react';
 import { ModalBlackOut, ModalContainer } from './ModalCommon';
-import ModalPortal from '../../utils/ModalPotal';
+import ModalPortal from '#/utils/ModalPotal';
+import useDeleteProjectMutation from '#/hooks/apis/mutations/project/useDeleteProjectMutation';
 
 const Box = styled.div`
     width: 406px;
@@ -75,16 +76,34 @@ const ButtonsContainer = styled.div`
 `;
 
 interface DeleteProjectProps {
+    projectId: number;
+    title: string;
     onClose: () => void;
 }
 
-const DeleteProject: React.FC<DeleteProjectProps> = ({ onClose }) => {
+const DeleteProject: React.FC<DeleteProjectProps> = ({
+    projectId,
+    title,
+    onClose,
+}) => {
     const [isBtnClick, setIsBtnClick] = useState<boolean>(false);
 
     const onSetIsBtnClick = () => {
         setIsBtnClick(!isBtnClick);
         onClose();
     };
+
+    const mutation = useDeleteProjectMutation(projectId);
+
+    const handleConfirm = () => {
+        mutation.mutate(projectId, {
+            onSuccess: () => {
+                onClose();
+            },
+        });
+    };
+
+    console.log(projectId);
 
     return (
         <ModalPortal>
@@ -112,11 +131,11 @@ const DeleteProject: React.FC<DeleteProjectProps> = ({ onClose }) => {
                             }}
                         >
                             <InfoCircleIcon sx={{ fontSize: '32px' }} />
-                            <PeojectName>프로젝트명</PeojectName>
-                            <Title>프로젝트명을 삭제하겠습니까?</Title>
+                            <PeojectName>{title}</PeojectName>
+                            <Title>{title}을 삭제하겠습니까?</Title>
                         </div>
                         <ButtonsContainer style={{ alignSelf: 'flex-end' }}>
-                            <ConfirmBtn onClick={onSetIsBtnClick}>
+                            <ConfirmBtn onClick={handleConfirm}>
                                 확인
                             </ConfirmBtn>
                             <CancelBtn onClick={onSetIsBtnClick}>

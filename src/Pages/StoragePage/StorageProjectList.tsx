@@ -15,7 +15,6 @@ const NoProject = styled.div`
     flex-direction: column;
     align-items: center;
     gap: 4px;
-  
 
     color: #d9d9d9;
     text-align: center;
@@ -27,18 +26,13 @@ const NoProject = styled.div`
     text-transform: capitalize;
 `;
 
-const noProjectPic = 'src/pics/no_project.png';
-
 const StorageProjectList = ({
     projects,
 }: {
     projects: ProjectsStoredResDto[];
 }) => {
     return !projects ? (
-        <NoProject>
-            <img src={noProjectPic} />
-            No Project
-        </NoProject>
+        <NoProject>No Project</NoProject>
     ) : (
         <GridContainer>
             {projects.map((project) => (

@@ -2,8 +2,7 @@ import styled, { createGlobalStyle } from 'styled-components';
 import AfterLogin from '../Layouts/AfterLogin';
 import StorageProjectList from './StorageProjectList';
 import GraphicIcons from './Icon/GraphicIcons';
-import useProjectStoredQuery from '../../hooks/apis/queries/project/useProjectStoredQuery';
-import { useEffect, useState } from 'react';
+import { useProjectStoredQuery } from '#/hooks/apis/queries/project/useProjectStoredQuery';
 
 const GlobalStyle = createGlobalStyle`
 body {
@@ -46,25 +45,12 @@ const SearchField = styled.input`
 `;
 
 const StoragePage = () => {
-    const { data, isLoading, error } = useProjectStoredQuery();
-    const [projects, setProjects] = useState([]);
+    const { data } = useProjectStoredQuery();
 
-    useEffect(() => {
-        if (data) {
-            setProjects(data.data);
-        }
-    }, [data]);
-
-    console.log('조회', projects);
-    if (error) {
-        return <div>Error fetching projects: {error.message}</div>;
-    }
-
+    console.log(data);
     return (
         <>
             <GlobalStyle />
-            {isLoading && <div>Loading...</div>}
-
             {data && (
                 <>
                     <GraphicIcons />
@@ -96,7 +82,7 @@ const StoragePage = () => {
                                 <Title>프로젝트 보관함</Title>
                                 <SearchField placeholder="프로젝트 검색" />
                             </div>
-                            <StorageProjectList projects={projects} />
+                            <StorageProjectList projects={data} />
                         </div>
                     </div>
                     <div style={{ width: '100vw', height: '172px' }}></div>
