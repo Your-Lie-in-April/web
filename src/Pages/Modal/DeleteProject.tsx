@@ -93,16 +93,6 @@ const DeleteProject: React.FC<DeleteProjectProps> = ({
         onClose();
     };
 
-    const mutation = useDeleteProjectMutation(projectId);
-
-    const handleConfirm = () => {
-        mutation.mutate(projectId, {
-            onSuccess: () => {
-                onClose();
-            },
-        });
-    };
-
     console.log(projectId);
 
     return (
@@ -135,9 +125,7 @@ const DeleteProject: React.FC<DeleteProjectProps> = ({
                             <Title>{title}을 삭제하겠습니까?</Title>
                         </div>
                         <ButtonsContainer style={{ alignSelf: 'flex-end' }}>
-                            <ConfirmBtn onClick={handleConfirm}>
-                                확인
-                            </ConfirmBtn>
+                            <ConfirmBtn>확인</ConfirmBtn>
                             <CancelBtn onClick={onSetIsBtnClick}>
                                 취소
                             </CancelBtn>

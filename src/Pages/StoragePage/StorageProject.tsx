@@ -4,7 +4,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { useState } from 'react';
 import DeleteProject from '../Modal/DeleteProject';
-import { ProjectsStoredResDto } from '#/types/project';
+import { ProjectThumbnailResponse } from '#/types/project';
 
 interface ProjectBoxProps {
     color?: string;
@@ -130,7 +130,7 @@ const MoreText = styled.div`
     text-transform: uppercase;
 `;
 
-const StorageProject = ({ project }: { project: ProjectsStoredResDto }) => {
+const StorageProject = ({ project }: { project: ProjectThumbnailResponse }) => {
     const [showMore, setShowMore] = useState<boolean>(false);
     const [isClick, setIsClick] = useState<boolean>(false);
 
@@ -141,6 +141,8 @@ const StorageProject = ({ project }: { project: ProjectsStoredResDto }) => {
     const onClickItem = () => {
         setIsClick(!isClick);
     };
+
+    console.log('개별 프로젝트 : ', project);
 
     return (
         <>
@@ -193,7 +195,7 @@ const StorageProject = ({ project }: { project: ProjectsStoredResDto }) => {
             {isClick && (
                 <DeleteProject
                     onClose={onClickItem}
-                    projectId={parseInt(project.projectId)}
+                    projectId={project.projectId}
                     title={project.title}
                 />
             )}

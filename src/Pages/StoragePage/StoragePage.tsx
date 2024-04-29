@@ -45,9 +45,10 @@ const SearchField = styled.input`
 `;
 
 const StoragePage = () => {
+    // userProjectStoredQuery 의 반환이 객체이므로 -> 객체로 받음?
     const { data } = useProjectStoredQuery();
 
-    console.log(data);
+    console.log('data :', data);
     return (
         <>
             <GlobalStyle />

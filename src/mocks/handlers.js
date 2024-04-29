@@ -250,13 +250,10 @@ export const handlers = [
 
     // 보관함페이지 프로젝트보기
     http.get('/v1/projects/stored', () => {
-        const isStoredProjectList = projectList.filter(
-            (project) => project.isStored === true
-        );
         return HttpResponse.json({
             status: 'SUCCESS',
             message: '보관함프로젝트 조회 성공',
-            data: isStoredProjectList,
+            data: projectThumbnailList,
         });
     }),
 
@@ -269,6 +266,7 @@ export const handlers = [
             data: scheduleList,
         });
     }),
+
     //프로젝트 내 모든 사용자 시간표 조회
     http.get('/v1/projects/:projectId/schedules', () => {
         const { startdata, enddata } = time.params;

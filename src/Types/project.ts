@@ -134,12 +134,4 @@ export type ProjectSelfOutReqDto = Pick<ProjectEntity, 'projectId'>;
 
 // GET /v1/projects/stored
 // 보관한 프로젝트 목록 조회
-export type ProjectsStoredResDto = Pick<
-    ProjectEntity,
-    | 'projectId'
-    | 'title'
-    | 'description'
-    | 'isStored'
-    | 'coverImageUrl'
-    | 'color'
->;
+export type ProjectsStoredResDto = ProjectThumbnailResponse[];

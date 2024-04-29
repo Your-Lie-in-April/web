@@ -27,18 +27,20 @@ const NoProject = styled.div`
 `;
 
 const StorageProjectList = ({
-    projects,
+    projects = [],
 }: {
-    projects: ProjectsStoredResDto[];
+    projects: ProjectsStoredResDto | undefined;
 }) => {
-    return !projects ? (
-        <NoProject>No Project</NoProject>
-    ) : (
+    console.log('모든 프로젝트리스트 : ', projects);
+
+    return projects ? (
         <GridContainer>
             {projects.map((project) => (
                 <StorageProject key={project.projectId} project={project} />
             ))}
         </GridContainer>
+    ) : (
+        <NoProject>No Project</NoProject>
     );
 };
 
