@@ -1,5 +1,5 @@
-import { API } from '#/constants/api';
-import getAPIResponseData from '#/utils/getAPIResponseData';
+import { API } from '../constants/api';
+import getAPIResponseData from '../utils/getAPIResponseData';
 import {
     ProjectEntity,
     ProjectResDto,

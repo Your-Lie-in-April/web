@@ -1,16 +1,14 @@
 import styled, { createGlobalStyle } from 'styled-components';
 import AfterLogin from '../Layouts/AfterLogin';
-import ArrowIcon from './Icon/ArrowIcon';
 import StorageProjectList from './StorageProjectList';
-import SummertimeSadnessIcon from './Icon/Summertime_sadness ';
-import LightningIcon from './Icon/LightningIcon';
-import SpringIcon from './Icon/SpringIcon';
 import GraphicIcons from './Icon/GraphicIcons';
+import { useProjectStoredQuery } from '#/hooks/apis/queries/project/useProjectStoredQuery';
 
 const GlobalStyle = createGlobalStyle`
 body {
   width : 100%;
   min-width : 1366px;
+  min-height : 1200px;
   margin: 0 auto;
   background-color: #212121;
   -ms-overflow-style: none;
@@ -44,45 +42,55 @@ const SearchField = styled.input`
     box-sizing: border-box;
     border: none;
     outline: none;
-    z-index: 0;
 `;
 
 const StoragePage = () => {
+    // userProjectStoredQuery 의 반환이 객체이므로 -> 객체로 받음?
+    const { data } = useProjectStoredQuery();
+
+    console.log('data :', data);
     return (
         <>
             <GlobalStyle />
-            <GraphicIcons />
-            <div
-                style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: '130px',
-                }}
-            >
-                <AfterLogin />
-                <div
-                    style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: '49px',
-                        alignItems: 'center',
-                    }}
-                >
+            {data && (
+                <>
+                    <GraphicIcons />
                     <div
                         style={{
                             display: 'flex',
                             flexDirection: 'column',
-                            gap: '48px',
+                            gap: '130px',
                         }}
                     >
-                        <Title>프로젝트 보관함</Title>
-                        <SearchField placeholder="프로젝트 검색" />
+                        <AfterLogin />
+                        <div
+                            style={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                gap: '49px',
+                                alignItems: 'center',
+
+                                zIndex: '1',
+                            }}
+                        >
+                            <div
+                                style={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    gap: '48px',
+                                }}
+                            >
+                                <Title>프로젝트 보관함</Title>
+                                <SearchField placeholder="프로젝트 검색" />
+                            </div>
+                            <StorageProjectList projects={data} />
+                        </div>
                     </div>
-                    <StorageProjectList />
-                </div>
-            </div>
-            <div style={{ width: '100vw', height: '172px' }}></div>
+                    <div style={{ width: '100vw', height: '172px' }}></div>
+                </>
+            )}
         </>
     );
 };
+
 export default StoragePage;

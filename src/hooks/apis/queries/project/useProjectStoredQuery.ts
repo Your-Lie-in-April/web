@@ -1,6 +1,6 @@
-import { useQuery } from '@tanstack/react-query';
-import { QUERY_KEY } from '#/constants/queryKey';
 import { getProjectIsStored } from '#/apis/project';
+import { QUERY_KEY } from '#/constants/queryKey';
+import { useQuery } from '@tanstack/react-query';
 
 /**
  * GET /v1/projects/stored
@@ -8,11 +8,11 @@ import { getProjectIsStored } from '#/apis/project';
  * 보관한 프로젝트 목록을 조회하는 api 입니다.
  */
 
-const useProjectStoredQuery = () => {
-    return useQuery({
+export const useProjectStoredQuery = () => {
+    const { data } = useQuery({
         queryKey: QUERY_KEY.PROJECT_STORED(),
         queryFn: () => getProjectIsStored(),
     });
-};
 
-export default useProjectStoredQuery;
+    return { data };
+};

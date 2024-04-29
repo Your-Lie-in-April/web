@@ -6,12 +6,13 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import ProjectPage from './Pages/ProjectPage/ProjectPage';
 import StoragePage from './Pages/StoragePage/StoragePage';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 const queryClient = new QueryClient();
 
 function App() {
     return (
         <QueryClientProvider client={queryClient}>
+            <ReactQueryDevtools initialIsOpen={false} />
             <Router>
                 <Routes>
                     <Route path="/" element={<MainPage />} />

@@ -23,7 +23,7 @@ const Box = styled.div`
     box-sizing: border-box;
     z-index: 100;
 
-    margin-top: 1.5rem;
+    margin-top: 1.3rem;
 `;
 
 const CloseButton = styled.button`
@@ -157,15 +157,24 @@ const MyPageModal: React.FC<MyPageModalProps> = ({ onSetIsMyPageModal }) => {
                     <MyEmailText>----------@gmail.com</MyEmailText>
                 </div>
                 <StatusBox>
-                    <div style={{ justifyContent: 'flex-start', flexBasis: '10%' }} />
+                    <div
+                        style={{
+                            justifyContent: 'flex-start',
+                            flexBasis: '10%',
+                        }}
+                    />
                     <StatusText>현재 상태메시지</StatusText>
                     <EditButton onClick={onSetEditStatusModal}>
                         <EditIcon />
                     </EditButton>
                 </StatusBox>
-                <StorageBtn onClick={handlemyproject}>프로젝트 보관함</StorageBtn>
+                <StorageBtn onClick={handlemyproject}>
+                    프로젝트 보관함
+                </StorageBtn>
             </Box>
-            {editStatusModal && <ChangeStatus onSetEditStatusModal={onSetEditStatusModal} />}
+            {editStatusModal && (
+                <ChangeStatus onSetEditStatusModal={onSetEditStatusModal} />
+            )}
         </>
     );
 };
