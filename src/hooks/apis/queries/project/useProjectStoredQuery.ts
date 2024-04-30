@@ -13,6 +13,5 @@ export const useProjectStoredQuery = () => {
         queryKey: QUERY_KEY.PROJECT_STORED(),
         queryFn: () => getProjectIsStored(),
     });
-
-    return { data };
+    return data;
 };
