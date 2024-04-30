@@ -69,7 +69,7 @@ export const postNewProject = async (body: ProjectPostReqDto) => {
 
 // 프로젝트 삭제
 export const deleteProject = async (projectId: number) => {
-    return await getAPIResponseData<ProjectEntity, ProjectDeleteReqDto>({
+    return await getAPIResponseData({
         method: 'DELETE',
         url: API.PROJECT_ID(projectId),
     });
