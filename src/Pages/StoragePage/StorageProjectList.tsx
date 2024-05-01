@@ -28,10 +28,11 @@ const NoProject = styled.div`
 
 const StorageProjectList = () => {
     const projects = useProjectStoredQuery();
-    console.log(projects);
+
+    console.log('projectsList : ', projects);
     return projects ? (
         <GridContainer>
-            {projects.data.map((project) => (
+            {projects.map((project) => (
                 <StorageProject key={project.projectId} project={project} />
             ))}
         </GridContainer>

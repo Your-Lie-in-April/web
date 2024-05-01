@@ -3,7 +3,7 @@ type ScheduleItem = {
     endAt: string;
 };
 
-type DaySchedule = {
+export type DaySchedule = {
     dayOfWeek: string;
     schedule: ScheduleItem[];
 };

@@ -1,8 +1,9 @@
 import axios, { AxiosRequestConfig } from 'axios';
+import axiosInstance from './axiosInstance';
 
 const getAPIResponseData = async <T, D = T>(option: AxiosRequestConfig<D>) => {
     try {
-        const result = await axios<T>(option);
+        const result = await axiosInstance<T>(option);
         return result.data;
     } catch (e) {
         if (axios.isAxiosError(e)) {
