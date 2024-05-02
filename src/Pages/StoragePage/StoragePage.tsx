@@ -2,7 +2,6 @@ import styled, { createGlobalStyle } from 'styled-components';
 import AfterLogin from '../Layouts/AfterLogin';
 import StorageProjectList from './StorageProjectList';
 import GraphicIcons from './Icon/GraphicIcons';
-import { useProjectStoredQuery } from '#/hooks/apis/queries/project/useProjectStoredQuery';
 
 const GlobalStyle = createGlobalStyle`
 body {
@@ -45,50 +44,45 @@ const SearchField = styled.input`
 `;
 
 const StoragePage = () => {
-    // userProjectStoredQuery 의 반환이 객체이므로 -> 객체로 받음?
-    const { data } = useProjectStoredQuery();
-
-    console.log('data :', data);
     return (
         <>
             <GlobalStyle />
-            {data && (
-                <>
-                    <GraphicIcons />
+
+            <>
+                <GraphicIcons />
+                <div
+                    style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '130px',
+                    }}
+                >
+                    <AfterLogin />
                     <div
                         style={{
                             display: 'flex',
                             flexDirection: 'column',
-                            gap: '130px',
+                            gap: '49px',
+                            alignItems: 'center',
+
+                            zIndex: '1',
                         }}
                     >
-                        <AfterLogin />
                         <div
                             style={{
                                 display: 'flex',
                                 flexDirection: 'column',
-                                gap: '49px',
-                                alignItems: 'center',
-
-                                zIndex: '1',
+                                gap: '48px',
                             }}
                         >
-                            <div
-                                style={{
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    gap: '48px',
-                                }}
-                            >
-                                <Title>프로젝트 보관함</Title>
-                                <SearchField placeholder="프로젝트 검색" />
-                            </div>
-                            <StorageProjectList projects={data} />
+                            <Title>프로젝트 보관함</Title>
+                            <SearchField placeholder="프로젝트 검색" />
                         </div>
+                        <StorageProjectList />
                     </div>
-                    <div style={{ width: '100vw', height: '172px' }}></div>
-                </>
-            )}
+                </div>
+                <div style={{ width: '100vw', height: '172px' }}></div>
+            </>
         </>
     );
 };

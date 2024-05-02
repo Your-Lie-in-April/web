@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import StorageProject from './StorageProject';
-import { ProjectsStoredResDto } from '../../types/project';
+import { useProjectStoredQuery } from '#/hooks/apis/queries/project/useProjectStoredQuery';
 
 const GridContainer = styled.div`
     display: grid;
@@ -26,13 +26,10 @@ const NoProject = styled.div`
     text-transform: capitalize;
 `;
 
-const StorageProjectList = ({
-    projects = [],
-}: {
-    projects: ProjectsStoredResDto | undefined;
-}) => {
-    console.log('모든 프로젝트리스트 : ', projects);
+const StorageProjectList = () => {
+    const projects = useProjectStoredQuery();
 
+    console.log('projectsList : ', projects);
     return projects ? (
         <GridContainer>
             {projects.map((project) => (

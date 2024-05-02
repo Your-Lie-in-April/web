@@ -3,7 +3,7 @@ import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import { useState } from 'react';
 import { ModalBlackOut, ModalContainer } from './ModalCommon';
 import ModalPortal from '#/utils/ModalPotal';
-import useDeleteProjectMutation from '#/hooks/apis/mutations/project/useDeleteProjectMutation';
+import useDeleteProject from '#/hooks/useDeleteProject';
 
 const Box = styled.div`
     width: 406px;
@@ -87,8 +87,14 @@ const DeleteProject: React.FC<DeleteProjectProps> = ({
     onClose,
 }) => {
     const [isBtnClick, setIsBtnClick] = useState<boolean>(false);
+    const { deleteProject } = useDeleteProject();
 
-    const onSetIsBtnClick = () => {
+    const onConfirmDelete = () => {
+        deleteProject(projectId);
+        onClose();
+    };
+
+    const onCancel = () => {
         setIsBtnClick(!isBtnClick);
         onClose();
     };
@@ -125,10 +131,10 @@ const DeleteProject: React.FC<DeleteProjectProps> = ({
                             <Title>{title}을 삭제하겠습니까?</Title>
                         </div>
                         <ButtonsContainer style={{ alignSelf: 'flex-end' }}>
-                            <ConfirmBtn>확인</ConfirmBtn>
-                            <CancelBtn onClick={onSetIsBtnClick}>
-                                취소
-                            </CancelBtn>
+                            <ConfirmBtn onClick={onConfirmDelete}>
+                                확인
+                            </ConfirmBtn>
+                            <CancelBtn onClick={onCancel}>취소</CancelBtn>
                         </ButtonsContainer>
                     </div>
                 </Box>

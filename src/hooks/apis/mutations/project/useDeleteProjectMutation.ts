@@ -8,10 +8,10 @@ import { deleteProject } from '#/apis/project';
  * 프로젝트를 삭제하는 api 입니다.
  */
 
-const useDeleteProjectMutation = (projectId: number) => {
+const useDeleteProjectMutation = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: () => deleteProject(projectId),
+        mutationFn: deleteProject,
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: QUERY_KEY.PROJECT });
         },
