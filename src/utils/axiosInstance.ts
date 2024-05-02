@@ -2,7 +2,7 @@ import axios, { AxiosInstance } from 'axios';
 
 const baseURL = import.meta.env.DEV
     ? 'http://localhost:5173'
-    : 'https://timepiece-server.inuappcenter.kr';
+    : 'https://timepiece.inuappcenter.kr';
 
 const axiosInstance: AxiosInstance = axios.create({
     baseURL: baseURL,
