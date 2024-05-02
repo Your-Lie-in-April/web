@@ -1,8 +1,11 @@
-import axios from 'axios';
+import axios, { AxiosInstance } from 'axios';
 
-const axiosInstance = axios.create({
-    // baseURL: 'https://timepiece-server.inuappcenter.kr',
-    baseURL: 'http://localhost:5173',
+const baseURL = import.meta.env.DEV
+    ? 'http://localhost:5173'
+    : 'https://timepiece-server.inuappcenter.kr';
+
+const axiosInstance: AxiosInstance = axios.create({
+    baseURL: baseURL,
     timeout: 5000,
 });
 
