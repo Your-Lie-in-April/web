@@ -4,6 +4,7 @@ import Banner from './components/Banner';
 import BeforeLogin from '../Layouts/BeforeLogin';
 import { createGlobalStyle } from 'styled-components';
 import { useLocation } from 'react-router-dom';
+import { Http } from '#/constants/backendURL';
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -149,16 +150,18 @@ function useQuery() {
 const Login: FC = () => {
     const query = useQuery();
     console.log('Current URL:', location.href);
-    const URL = 'https://timepiece-server.inuappcenter.kr';
+    const URL = Http;
 
     const oAuth = () => {
         window.location.href = URL + '/oauth2/authorization/google';
     };
     useEffect(() => {
-        const accessToken = localStorage.get('access_token') || '';
-        const refreshToken = sessionStorage.get('refresh_token') || '';
+        const accessToken = query.get('access_token') || '';
+        const refreshToken = query.get('refresh_token') || '';
+        const memberId = query.get('member_id') || '';
         localStorage.setItem('accesstoken', accessToken);
         sessionStorage.setItem('refreshToken', refreshToken);
+        localStorage.setItem('member_id', memberId);
         console.log('Access Token:', accessToken);
         console.log('Refresh Token:', refreshToken);
     }, [location.search]);
@@ -213,8 +216,6 @@ const Login: FC = () => {
                     </BannerWrapper>
                 </Container>
             </div>
-            {/* <div style={{ position: 'absolute', top: '467px', zIndex: '1' }}>{arrow}</div>
-            <div style={{ position: 'absolute', top: '-66px', left: '524px' }}>{biglightning}</div> */}
         </>
     );
 };

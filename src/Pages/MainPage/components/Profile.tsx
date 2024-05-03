@@ -1,4 +1,6 @@
-import { FC } from 'react';
+import { Http } from '#/constants/backendURL';
+import { MemberEntity } from '../../../Types/member';
+import { FC, useState, useEffect } from 'react';
 import styled from 'styled-components';
 
 const defaultImg = 'src/pics/default.png';
@@ -27,12 +29,35 @@ const Text = styled.div`
 `;
 
 const Profile: FC = () => {
+    const [userData, setUserData] = useState<MemberEntity>();
+    const memberId = 4;
+    useEffect(() => {
+        const accessToken = localStorage.getItem('access_token');
+        const fetchUser = async () => {
+            try {
+                const response = await fetch(Http + `/v1/members/${memberId}`, {
+                    method: 'GET',
+                    headers: {
+                        Accept: 'application/json',
+                        Authorization: `Bearer ${accessToken}`,
+                    },
+                });
+                const data = await response.json();
+                console.log(data);
+                setUserData(data?.data);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+        fetchUser();
+    }, []);
+
     return (
         <LoginDiv>
             <ImageDiv>
-                <img src={defaultImg} alt="Default Image" />
+                <img src={userData?.profileImageUrl || defaultImg} alt="Profile Image" />
             </ImageDiv>
-            <Text>로그인 되어 있지 않음</Text>
+            <Text>{userData ? userData.state : '로그인 되어 있지 않음'}</Text>
         </LoginDiv>
     );
 };
