@@ -52,7 +52,6 @@ const MainPage: FC = () => {
             console.log('Refresh Token:', refreshToken);
         } else {
             console.log('인증정보없음');
-            navigate('/login');
         }
     }, [query, navigate]);
     return (
