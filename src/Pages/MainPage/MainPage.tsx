@@ -1,4 +1,4 @@
-import { FC, useEffect } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import Alarm from './components/Alarm';
@@ -10,6 +10,7 @@ import ProjectList from './components/ProjectList';
 import Pinned from './components/Pinned';
 import { createGlobalStyle } from 'styled-components';
 import Profile from './components/Profile';
+import AfterLogin from '../Layouts/AfterLogin';
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -42,14 +43,13 @@ function useQuery() {
 const MainPage: FC = () => {
     const query = useQuery();
     const navigate = useNavigate();
-
+    const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
     useEffect(() => {
         const accessToken = query.get('access_token');
         const refreshToken = query.get('refresh_token');
 
         if (accessToken && refreshToken) {
-            console.log('Access Token:', accessToken);
-            console.log('Refresh Token:', refreshToken);
+            setIsLoggedIn(true);
         } else {
             console.log('인증정보없음');
         }
@@ -57,8 +57,8 @@ const MainPage: FC = () => {
     return (
         <>
             <GlobalStyle />
-            <BeforeLogin />
 
+            {isLoggedIn ? <AfterLogin /> : <BeforeLogin />}
             <Banner />
             <div
                 style={{
