@@ -53,9 +53,6 @@ const MyPageBtn = styled.button`
 const AfterLogin: FC = () => {
     const [isMyPageModal, setIsMyPageModal] = useState(false);
     const navigate = useNavigate();
-    const handleLoginClick = () => {
-        navigate('/login');
-    };
     const onSetIsMyPageModal = () => {
         setIsMyPageModal((prev) => !prev);
     };

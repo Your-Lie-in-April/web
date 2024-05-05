@@ -45,11 +45,19 @@ const MainPage: FC = () => {
     const navigate = useNavigate();
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
     useEffect(() => {
-        const accessToken = query.get('access_token');
-        const refreshToken = query.get('refresh_token');
+        const accessToken = query.get('access_token') || '';
+        const refreshToken = query.get('refresh_token') || '';
+        const memberId = query.get('member_id') || '';
+        localStorage.setItem('access_token', accessToken);
+        localStorage.setItem('refresh_token', refreshToken);
+        localStorage.setItem('member_id', memberId);
+        console.log(accessToken);
+        console.log(refreshToken);
+        console.log(memberId);
 
         if (accessToken && refreshToken) {
             setIsLoggedIn(true);
+            console.log('로그인되었음');
         } else {
             console.log('인증정보없음');
         }

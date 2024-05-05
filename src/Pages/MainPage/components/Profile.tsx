@@ -1,7 +1,9 @@
 import { Http } from '#/constants/backendURL';
+import { access } from 'fs';
 import { MemberEntity } from '../../../Types/member';
 import { FC, useState, useEffect } from 'react';
 import styled from 'styled-components';
+import { useLocation } from 'react-router-dom';
 
 const defaultImg = 'src/pics/default.png';
 const LoginDiv = styled.div`
@@ -28,18 +30,25 @@ const Text = styled.div`
     margin-top: 12px;
 `;
 
+function useQuery() {
+    const location = useLocation();
+    return new URLSearchParams(location.search);
+}
+
 const Profile: FC = () => {
     const [userData, setUserData] = useState<MemberEntity>();
-    const memberId = 4;
     useEffect(() => {
         const accessToken = localStorage.getItem('access_token');
+        const memberId = localStorage.getItem('member_id');
+        console.log(accessToken);
+        console.log(memberId);
         const fetchUser = async () => {
             try {
                 const response = await fetch(Http + `/v1/members/${memberId}`, {
                     method: 'GET',
                     headers: {
-                        Accept: 'application/json',
-                        Authorization: `Bearer ${accessToken}`,
+                        Accept: '*/*',
+                        Authorization: `Bearer ${accessToken}'`,
                     },
                 });
                 const data = await response.json();

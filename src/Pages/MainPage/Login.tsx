@@ -150,20 +150,16 @@ function useQuery() {
 const Login: FC = () => {
     const query = useQuery();
     console.log('Current URL:', location.href);
-    const URL = Http;
 
     const oAuth = () => {
-        window.location.href = URL + '/oauth2/authorization/google';
+        window.location.href = Http + '/oauth2/authorization/google';
     };
     useEffect(() => {
-        const accessToken = query.get('access_token') || '';
-        const refreshToken = query.get('refresh_token') || '';
-        const memberId = query.get('member_id') || '';
-        localStorage.setItem('accesstoken', accessToken);
-        sessionStorage.setItem('refreshToken', refreshToken);
-        localStorage.setItem('member_id', memberId);
-        console.log('Access Token:', accessToken);
-        console.log('Refresh Token:', refreshToken);
+        const accessToken = localStorage.getItem('accesstoken');
+        const memberId = localStorage.getItem('member_id');
+
+        console.log(accessToken);
+        console.log(memberId);
     }, [location.search]);
 
     return (
