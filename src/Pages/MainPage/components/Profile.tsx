@@ -3,7 +3,7 @@ import { access } from 'fs';
 import { MemberEntity } from '../../../Types/member';
 import { FC, useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { useLocation } from 'react-router-dom';
+import { useUserContext } from '../MainPage';
 
 const defaultImg = 'src/pics/default.png';
 const LoginDiv = styled.div`
@@ -38,31 +38,9 @@ const Text = styled.div`
     margin-top: 12px;
 `;
 
-const Profile: FC = () => {
-    const [userData, setUserData] = useState<MemberEntity>();
-    useEffect(() => {
-        const accessToken = localStorage.getItem('access_token');
-        const memberId = localStorage.getItem('member_id');
-        console.log(accessToken);
-        console.log(memberId);
-        const fetchUser = async () => {
-            try {
-                const response = await fetch(Http + `/v1/members/${memberId}`, {
-                    method: 'GET',
-                    headers: {
-                        Accept: '*/*',
-                        Authorization: `Bearer ${accessToken}'`,
-                    },
-                });
-                const data = await response.json();
-                console.log(data);
-                setUserData(data?.data);
-            } catch (error) {
-                console.error('Error fetching data:', error);
-            }
-        };
-        fetchUser();
-    }, []);
+const Profile: React.FC = () => {
+    const { userData, setUserData } = useUserContext();
+    console.log(userData);
 
     return (
         <LoginDiv>

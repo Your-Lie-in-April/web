@@ -4,6 +4,7 @@ import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined';
 import { useState } from 'react';
 import ChangeStatus from './ChangeStatus';
 import { useNavigate } from 'react-router-dom';
+import { useUserContext } from '../MainPage/MainPage';
 
 const Box = styled.div`
     width: 300px;
@@ -130,6 +131,7 @@ interface MyPageModalProps {
 
 const MyPageModal: React.FC<MyPageModalProps> = ({ onSetIsMyPageModal }) => {
     const [editStatusModal, setEditStatusModal] = useState(false);
+    const { userData, setUserData } = useUserContext();
 
     const onSetEditStatusModal = () => {
         setEditStatusModal((prev) => !prev);
@@ -154,7 +156,7 @@ const MyPageModal: React.FC<MyPageModalProps> = ({ onSetIsMyPageModal }) => {
                     }}
                 >
                     <MyImg />
-                    <MyEmailText>----------@gmail.com</MyEmailText>
+                    <MyEmailText>{userData?.email}</MyEmailText>
                 </div>
                 <StatusBox>
                     <div
@@ -163,18 +165,14 @@ const MyPageModal: React.FC<MyPageModalProps> = ({ onSetIsMyPageModal }) => {
                             flexBasis: '10%',
                         }}
                     />
-                    <StatusText>현재 상태메시지</StatusText>
+                    <StatusText>{userData?.state}</StatusText>
                     <EditButton onClick={onSetEditStatusModal}>
                         <EditIcon />
                     </EditButton>
                 </StatusBox>
-                <StorageBtn onClick={handlemyproject}>
-                    프로젝트 보관함
-                </StorageBtn>
+                <StorageBtn onClick={handlemyproject}>프로젝트 보관함</StorageBtn>
             </Box>
-            {editStatusModal && (
-                <ChangeStatus onSetEditStatusModal={onSetEditStatusModal} />
-            )}
+            {editStatusModal && <ChangeStatus onSetEditStatusModal={onSetEditStatusModal} />}
         </>
     );
 };

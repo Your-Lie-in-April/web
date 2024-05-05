@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useState, createContext, useContext, ReactNode } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import Alarm from './components/Alarm';
@@ -11,6 +11,8 @@ import Pinned from './components/Pinned';
 import { createGlobalStyle } from 'styled-components';
 import Profile from './components/Profile';
 import AfterLogin from '../Layouts/AfterLogin';
+import { Http } from '#/constants/backendURL';
+import { MemberEntity } from '#/Types/member';
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -40,10 +42,31 @@ function useQuery() {
     return new URLSearchParams(location.search);
 }
 
+type UserContextType = {
+    userData: MemberEntity | null;
+    setUserData: (userData: MemberEntity | null) => void;
+};
+
+const UserContext = createContext<UserContextType | null>(null);
+
+export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+    const [userData, setUserData] = useState<MemberEntity | null>(null);
+
+    return <UserContext.Provider value={{ userData, setUserData }}>{children}</UserContext.Provider>;
+};
+
+export const useUserContext = () => {
+    const context = useContext(UserContext);
+    if (context === null) throw new Error('useUserContext must be used within a UserProvider');
+    return context;
+};
+
 const MainPage: FC = () => {
+    const { userData, setUserData } = useUserContext();
     const query = useQuery();
     const navigate = useNavigate();
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+
     useEffect(() => {
         const accessToken = query.get('access_token') || '';
         const refreshToken = query.get('refresh_token') || '';
@@ -62,6 +85,30 @@ const MainPage: FC = () => {
             console.log('인증정보없음');
         }
     }, [query, navigate]);
+
+    useEffect(() => {
+        const accessToken = localStorage.getItem('access_token');
+        const memberId = localStorage.getItem('member_id');
+        console.log(accessToken);
+        console.log(memberId);
+        const fetchUser = async () => {
+            try {
+                const response = await fetch(Http + `/v1/members/${memberId}`, {
+                    method: 'GET',
+                    headers: {
+                        Accept: '*/*',
+                        Authorization: `Bearer ${accessToken}`,
+                    },
+                });
+                const data = await response.json();
+                console.log(data);
+                setUserData(data?.data);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+        fetchUser();
+    }, []);
     return (
         <>
             <GlobalStyle />
