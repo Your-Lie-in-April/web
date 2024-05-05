@@ -41,11 +41,17 @@ const StyleCloseIconBtn = styled(CancelOutlinedIcon)`
     color: #a4a4a4;
 `;
 
-const MyImg = styled.img`
+const MyImg = styled.div`
     width: 80px;
     height: 80px;
     border-radius: 50%;
-    background: #aeaeae;
+    overflow: hidden;
+`;
+
+const StyledImage = styled.img`
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 `;
 
 const MyEmailText = styled.text`
@@ -155,7 +161,9 @@ const MyPageModal: React.FC<MyPageModalProps> = ({ onSetIsMyPageModal }) => {
                         gap: '8px',
                     }}
                 >
-                    <MyImg />
+                    <MyImg>
+                        <StyledImage src={userData?.profileImageUrl} />
+                    </MyImg>
                     <MyEmailText>{userData?.email}</MyEmailText>
                 </div>
                 <StatusBox>
