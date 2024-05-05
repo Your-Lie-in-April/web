@@ -20,20 +20,23 @@ const ImageDiv = styled.div`
     width: 112px;
     height: 112px;
     margin-top: 16px;
+    border-radius: 200px;
+    overflow: hidden;
+`;
+
+const StyledImage = styled.img`
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 `;
 
 const Text = styled.div`
     font-family: 'pretendard';
     font-weight: 500;
     font-size: 14px;
-    color: #a4a4a4;
+    color: black;
     margin-top: 12px;
 `;
-
-function useQuery() {
-    const location = useLocation();
-    return new URLSearchParams(location.search);
-}
 
 const Profile: FC = () => {
     const [userData, setUserData] = useState<MemberEntity>();
@@ -64,8 +67,9 @@ const Profile: FC = () => {
     return (
         <LoginDiv>
             <ImageDiv>
-                <img src={userData?.profileImageUrl || defaultImg} alt="Profile Image" />
+                <StyledImage src={userData?.profileImageUrl || defaultImg} alt="Profile Image" />
             </ImageDiv>
+            <Text>{userData?.email}</Text>
             <Text>{userData ? userData.state : '로그인 되어 있지 않음'}</Text>
         </LoginDiv>
     );
