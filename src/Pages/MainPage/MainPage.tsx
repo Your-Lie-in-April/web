@@ -108,7 +108,7 @@ const MainPage: FC = () => {
             }
         };
         fetchUser();
-    }, []);
+    }, [userData?.nickname, userData?.state]);
     return (
         <>
             <GlobalStyle />

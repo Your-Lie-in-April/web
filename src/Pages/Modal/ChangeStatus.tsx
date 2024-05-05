@@ -111,6 +111,7 @@ const ChangeStatus: React.FC<ChangeStatusProps> = ({ onSetEditStatusModal }) => 
             console.error('업데이트 실패:', error);
         }
     };
+
     return (
         <ModalPortal>
             <ModalBlackOut />
