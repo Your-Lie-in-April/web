@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { ModalBlackOut, ModalContainer } from './ModalCommon';
 import ModalPortal from '../../utils/ModalPotal';
+import { useUserContext } from '../MainPage/MainPage';
 
 const Box = styled.div`
     width: 500px;
@@ -79,9 +80,8 @@ interface ChangeStatusProps {
     onSetEditStatusModal: () => void;
 }
 
-const ChangeStatus: React.FC<ChangeStatusProps> = ({
-    onSetEditStatusModal,
-}) => {
+const ChangeStatus: React.FC<ChangeStatusProps> = ({ onSetEditStatusModal }) => {
+    const { userData, setUserData } = useUserContext();
     return (
         <ModalPortal>
             <ModalBlackOut />
@@ -108,15 +108,11 @@ const ChangeStatus: React.FC<ChangeStatusProps> = ({
                             }}
                         >
                             <Title>상태메시지를 작성해주세요</Title>
-                            <StatusField type="text" />
+                            <StatusField type="text" placeholder={userData?.state} />
                         </div>
                         <ButtonsContainer style={{ alignSelf: 'flex-end' }}>
-                            <ConfirmBtn onClick={onSetEditStatusModal}>
-                                확인
-                            </ConfirmBtn>
-                            <CancelBtn onClick={onSetEditStatusModal}>
-                                취소
-                            </CancelBtn>
+                            <ConfirmBtn onClick={onSetEditStatusModal}>확인</ConfirmBtn>
+                            <CancelBtn onClick={onSetEditStatusModal}>취소</CancelBtn>
                         </ButtonsContainer>
                     </div>
                 </Box>
