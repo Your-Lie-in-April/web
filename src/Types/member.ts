@@ -1,11 +1,11 @@
 import { ProjectEntity } from './project';
 
 export type MemberEntity = {
-    id: number;
-    email: string;
-    nickname: string;
-    state: string;
-    profileImageUrl: string;
+    id?: number;
+    email?: string;
+    nickname?: string;
+    state?: string;
+    profileImageUrl?: string;
 };
 
 /**

@@ -2,6 +2,8 @@ import styled from 'styled-components';
 import { ModalBlackOut, ModalContainer } from './ModalCommon';
 import ModalPortal from '../../utils/ModalPotal';
 import { useUserContext } from '../MainPage/MainPage';
+import { useState } from 'react';
+import { Http } from '#/constants/backendURL';
 
 const Box = styled.div`
     width: 500px;
@@ -82,6 +84,33 @@ interface ChangeStatusProps {
 
 const ChangeStatus: React.FC<ChangeStatusProps> = ({ onSetEditStatusModal }) => {
     const { userData, setUserData } = useUserContext();
+    const [newState, setNewState] = useState(userData?.state || '');
+    const accessToken = localStorage.getItem('access_token');
+
+    const handleStatusChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setNewState(e.target.value);
+    };
+
+    const updateStatus = async () => {
+        try {
+            const response = await fetch(`${Http}/v1/members/${newState}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${accessToken}`,
+                    credential: 'include',
+                },
+                body: JSON.stringify({ state: newState }),
+            });
+            if (!response.ok) throw new Error('Status update failed');
+
+            const updatedUserData = await response.json();
+            setUserData({ ...userData, state: updatedUserData.state });
+            onSetEditStatusModal();
+        } catch (error) {
+            console.error('업데이트 실패:', error);
+        }
+    };
     return (
         <ModalPortal>
             <ModalBlackOut />
@@ -108,10 +137,10 @@ const ChangeStatus: React.FC<ChangeStatusProps> = ({ onSetEditStatusModal }) => 
                             }}
                         >
                             <Title>상태메시지를 작성해주세요</Title>
-                            <StatusField type="text" placeholder={userData?.state} />
+                            <StatusField type="text" placeholder={userData?.state} onChange={handleStatusChange} />
                         </div>
                         <ButtonsContainer style={{ alignSelf: 'flex-end' }}>
-                            <ConfirmBtn onClick={onSetEditStatusModal}>확인</ConfirmBtn>
+                            <ConfirmBtn onClick={updateStatus}>확인</ConfirmBtn>
                             <CancelBtn onClick={onSetEditStatusModal}>취소</CancelBtn>
                         </ButtonsContainer>
                     </div>
