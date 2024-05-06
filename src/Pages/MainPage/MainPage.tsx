@@ -12,7 +12,7 @@ import { createGlobalStyle } from 'styled-components';
 import Profile from './components/Profile';
 import AfterLogin from '../Layouts/AfterLogin';
 import { Http } from '#/constants/backendURL';
-import { MemberEntity } from '#/Types/member';
+import { MemberEntity } from '#/Types/membertype';
 
 const GlobalStyle = createGlobalStyle`
   body {

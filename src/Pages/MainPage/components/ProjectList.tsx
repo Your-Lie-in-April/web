@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Project from './Project';
 import styled from 'styled-components';
 import { Http } from '#/constants/backendURL';
-import { ProjectEntity } from '#/Types/project';
+import { ProjectEntity } from '#/Types/projecttype';
 
 const GridContainer = styled.div`
     display: grid;

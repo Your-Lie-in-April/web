@@ -4,7 +4,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { useState } from 'react';
 import DeleteProject from '../Modal/DeleteProject';
-import { ProjectThumbnailResponse } from '#/types/project';
+import { ProjectThumbnailResponse } from '#/Types/projecttype';
 
 interface ProjectBoxProps {
     color?: string;
@@ -22,8 +22,7 @@ const ProjectBox = styled.div<ProjectBoxProps>`
     display: flex;
     color: #ffffff;
 
-    background-color: ${(props) =>
-        props.color ? `#${props.color}` : '#b79fff'};
+    background-color: ${(props) => (props.color ? `#${props.color}` : '#b79fff')};
 `;
 
 const TextBox = styled.div`
@@ -157,15 +156,11 @@ const StorageProject = ({ project }: { project: ProjectThumbnailResponse }) => {
                             }}
                         >
                             <MoreItem>
-                                <AddCircleIcon
-                                    sx={{ fontSize: 48, color: '#F1F1F1' }}
-                                />
+                                <AddCircleIcon sx={{ fontSize: 48, color: '#F1F1F1' }} />
                                 <MoreText>자세히보기</MoreText>
                             </MoreItem>
                             <MoreItem onClick={onClickItem}>
-                                <DeleteIcon
-                                    sx={{ fontSize: 48, color: '#F1F1F1' }}
-                                />
+                                <DeleteIcon sx={{ fontSize: 48, color: '#F1F1F1' }} />
                                 <MoreText>삭제하기</MoreText>
                             </MoreItem>
                         </div>
@@ -180,10 +175,7 @@ const StorageProject = ({ project }: { project: ProjectThumbnailResponse }) => {
                 >
                     <MoreDiv>
                         <MoreButton>
-                            <StyledMoreBtn
-                                sx={{ fontSize: 32 }}
-                                onClick={toggleMoreBtn}
-                            />
+                            <StyledMoreBtn sx={{ fontSize: 32 }} onClick={toggleMoreBtn} />
                         </MoreButton>
                     </MoreDiv>
                     <TextBox>
@@ -192,13 +184,7 @@ const StorageProject = ({ project }: { project: ProjectThumbnailResponse }) => {
                     </TextBox>
                 </div>
             </ProjectBox>
-            {isClick && (
-                <DeleteProject
-                    onClose={onClickItem}
-                    projectId={project.projectId}
-                    title={project.title}
-                />
-            )}
+            {isClick && <DeleteProject onClose={onClickItem} projectId={project.projectId} title={project.title} />}
         </>
     );
 };
