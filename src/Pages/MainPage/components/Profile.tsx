@@ -40,7 +40,6 @@ const Text = styled.div`
 
 const Profile: React.FC = () => {
     const { userData, setUserData } = useUserContext();
-    console.log(userData);
 
     return (
         <LoginDiv>

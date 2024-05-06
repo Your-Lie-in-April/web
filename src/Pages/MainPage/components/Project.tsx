@@ -3,8 +3,10 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import PushPinOutlinedIcon from '@mui/icons-material/PushPinOutlined';
 import InboxOutlinedIcon from '@mui/icons-material/InboxOutlined';
 import CancelIcon from '@mui/icons-material/Cancel';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import LeaveProject from '../../Modal/LeaveProject';
+import { Http } from '#/constants/backendURL';
+import { ProjectEntity } from '../../../Types/project';
 
 interface MoreTextProps extends React.HTMLAttributes<HTMLDivElement> {
     isMove?: boolean;
@@ -135,9 +137,14 @@ const CancelBtn = styled(CancelIcon)`
     height: 36px;
 `;
 
-const Project = () => {
+interface ProjectProps {
+    project: ProjectEntity;
+}
+
+const Project: React.FC<ProjectProps> = ({ project }) => {
     const [showMore, setShowMore] = useState<boolean>(false);
     const [isCancleBtn, setIsCancelBtn] = useState<boolean>(false);
+    const [projects, setProjects] = useState<ProjectEntity>();
 
     const toggleMoreBtn = () => {
         setShowMore(!showMore);
@@ -148,63 +155,37 @@ const Project = () => {
     };
 
     return (
-        <>
-            <ProjectBox>
-                <div
-                    style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: '4px',
-                    }}
-                >
-                    <MoreDiv>
-                        {showMore && (
-                            <>
-                                <StyledButton>
-                                    <CancelBtn
-                                        onClick={onClickCancelBtn}
-                                        sx={{ fontSize: 36 }}
-                                    />
-                                </StyledButton>
-                                <MoreBox>
-                                    <MoreItem>
-                                        <PushPinOutlinedIcon
-                                            sx={{ fontSize: 18 }}
-                                        />
-                                        <MoreText>상단고정</MoreText>
-                                    </MoreItem>
-
-                                    <MoreItem>
-                                        <InboxOutlinedIcon
-                                            sx={{ fontSize: 18 }}
-                                        />
-                                        <MoreText isMove>보관함이동</MoreText>
-                                    </MoreItem>
-                                </MoreBox>
-                            </>
-                        )}
-                        <StyledButton>
-                            <StyledMoreBtn
-                                sx={{ fontSize: 32 }}
-                                onClick={toggleMoreBtn}
-                            />
-                        </StyledButton>
-                    </MoreDiv>
-                    <TextBox>
-                        <ProjectName>
-                            2023 여름방학 프로젝트2023 여름방학 프로젝트2023
-                            여름방학 프로젝트
-                        </ProjectName>
-                        <DetailText>
-                            2023 앱센터 프로젝트 입니다.2023 앱센터 프로젝트
-                            입니다.2023 앱센터 프로젝트 입니다.2023 앱센터
-                            프로젝트 입니다.
-                        </DetailText>
-                    </TextBox>
-                </div>
-            </ProjectBox>
+        <ProjectBox>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                <MoreDiv>
+                    {showMore && (
+                        <>
+                            <StyledButton onClick={onClickCancelBtn}>
+                                <CancelBtn sx={{ fontSize: 36 }} />
+                            </StyledButton>
+                            <MoreBox>
+                                <MoreItem>
+                                    <PushPinOutlinedIcon sx={{ fontSize: 18 }} />
+                                    <MoreText>상단고정</MoreText>
+                                </MoreItem>
+                                <MoreItem>
+                                    <InboxOutlinedIcon sx={{ fontSize: 18 }} />
+                                    <MoreText isMove>보관함이동</MoreText>
+                                </MoreItem>
+                            </MoreBox>
+                        </>
+                    )}
+                    <StyledButton onClick={toggleMoreBtn}>
+                        <StyledMoreBtn sx={{ fontSize: 32 }} />
+                    </StyledButton>
+                </MoreDiv>
+                <TextBox>
+                    <ProjectName>{project.title}</ProjectName>
+                    <DetailText>{project.description}</DetailText>
+                </TextBox>
+            </div>
             {isCancleBtn && <LeaveProject onClose={onClickCancelBtn} />}
-        </>
+        </ProjectBox>
     );
 };
 

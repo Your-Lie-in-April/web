@@ -1,5 +1,5 @@
-import { MemberResDto } from './member';
-import { ScheduleWeekResponse } from './schedule';
+import { MemberResDto } from '../apis/member';
+import { ScheduleWeekResponse } from '../apis/schedule';
 
 export type ProjectEntity = {
     projectId: string;
