@@ -6,7 +6,7 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import { useEffect, useState } from 'react';
 import LeaveProject from '../../Modal/LeaveProject';
 import { Http } from '#/constants/backendURL';
-import { ProjectEntity } from '../../../Types/project';
+import { ProjectEntity } from '../../../Types/projecttype';
 
 interface MoreTextProps extends React.HTMLAttributes<HTMLDivElement> {
     isMove?: boolean;
@@ -144,7 +144,8 @@ interface ProjectProps {
 const Project: React.FC<ProjectProps> = ({ project }) => {
     const [showMore, setShowMore] = useState<boolean>(false);
     const [isCancleBtn, setIsCancelBtn] = useState<boolean>(false);
-    const [projects, setProjects] = useState<ProjectEntity>();
+    const [isPinned, setIsPinned] = useState<boolean>(false);
+    const accessToken = localStorage.getItem('access_token');
 
     const toggleMoreBtn = () => {
         setShowMore(!showMore);
@@ -152,6 +153,26 @@ const Project: React.FC<ProjectProps> = ({ project }) => {
 
     const onClickCancelBtn = () => {
         setIsCancelBtn(!isCancleBtn);
+    };
+
+    const handlePin = async () => {
+        try {
+            const response = await fetch(`${Http}/v1/members/pin/${project.projectId}`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${accessToken}`,
+                    credentials: 'include',
+                },
+                body: JSON.stringify({ projectId: project.projectId }),
+            });
+            if (!response.ok) throw new Error('뭔가 이상');
+            setIsPinned(true);
+            const result = await response.json();
+            console.log('상단 고정 결과:', result);
+        } catch (error) {
+            console.error('업데이트 실패:', error);
+        }
     };
 
     return (
@@ -164,7 +185,7 @@ const Project: React.FC<ProjectProps> = ({ project }) => {
                                 <CancelBtn sx={{ fontSize: 36 }} />
                             </StyledButton>
                             <MoreBox>
-                                <MoreItem>
+                                <MoreItem onClick={handlePin}>
                                     <PushPinOutlinedIcon sx={{ fontSize: 18 }} />
                                     <MoreText>상단고정</MoreText>
                                 </MoreItem>
