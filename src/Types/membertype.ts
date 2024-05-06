@@ -1,4 +1,4 @@
-import { ProjectEntity } from './project';
+import { ProjectEntity } from './projecttype';
 
 export type MemberEntity = {
     id?: number;

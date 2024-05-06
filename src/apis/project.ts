@@ -16,7 +16,7 @@ import {
     ProjectTransferPrivilegeReqDto,
     ProjectSelfOutReqDto,
     ProjectsStoredResDto,
-} from '#/types/project';
+} from '#/Types/projecttype';
 
 // 프로젝트 전체 조회
 export const getProjectAll = async () => {
@@ -93,10 +93,7 @@ export const postProjectInviteLink = async (projectId: number) => {
 };
 
 // 회원 강퇴
-export const deleteProjectMember = async (
-    projectId: number,
-    memberId: number
-) => {
+export const deleteProjectMember = async (projectId: number, memberId: number) => {
     return await getAPIResponseData<ProjectDeleteMemberReqDto>({
         method: 'DELETE',
         url: API.PROJECT_REMOVE_MEMBER(projectId, memberId),

@@ -7,7 +7,7 @@ import {
     MemberNicknameReqDto,
     ProjectStoreResDto,
     ProjectPinResDto,
-} from '#/types/member';
+} from '#/Types/membertype';
 
 // 멤버 전체 조회
 export const getMemberAll = async () => {
