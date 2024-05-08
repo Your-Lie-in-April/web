@@ -30,7 +30,7 @@ const ProjectList = () => {
         if (accessToken != '') fetchProjects();
     }, []);
 
-    return accessToken == null ? (
+    return accessToken == '' ? (
         <div>빈칸</div>
     ) : (
         <GridContainer>
