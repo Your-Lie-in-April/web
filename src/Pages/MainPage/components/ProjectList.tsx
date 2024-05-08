@@ -28,7 +28,7 @@ const ProjectList = () => {
         };
 
         if (accessToken != '') fetchProjects();
-    }, []);
+    }, [accessToken]);
 
     return accessToken == '' ? (
         <div>빈칸</div>
