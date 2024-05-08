@@ -1,5 +1,9 @@
-import { FC } from 'react';
+import { Http } from '#/constants/backendURL';
+import { access } from 'fs';
+import { MemberEntity } from '../../../Types/membertype';
+import { FC, useState, useEffect } from 'react';
 import styled from 'styled-components';
+import { useUserContext } from '../MainPage';
 
 const defaultImg = 'src/pics/default.png';
 const LoginDiv = styled.div`
@@ -16,23 +20,34 @@ const ImageDiv = styled.div`
     width: 112px;
     height: 112px;
     margin-top: 16px;
+    border-radius: 200px;
+    overflow: hidden;
+`;
+
+const StyledImage = styled.img`
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 `;
 
 const Text = styled.div`
     font-family: 'pretendard';
     font-weight: 500;
     font-size: 14px;
-    color: #a4a4a4;
+    color: black;
     margin-top: 12px;
 `;
 
-const Profile: FC = () => {
+const Profile: React.FC = () => {
+    const { userData, setUserData } = useUserContext();
+
     return (
         <LoginDiv>
             <ImageDiv>
-                <img src={defaultImg} alt="Default Image" />
+                <StyledImage src={userData?.profileImageUrl || defaultImg} alt="Profile Image" />
             </ImageDiv>
-            <Text>로그인 되어 있지 않음</Text>
+            <Text>{userData?.email}</Text>
+            <Text>{userData ? userData.state : '로그인 되어 있지 않음'}</Text>
         </LoginDiv>
     );
 };

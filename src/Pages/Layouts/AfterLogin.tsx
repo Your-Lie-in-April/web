@@ -1,6 +1,7 @@
 import { FC, useState } from 'react';
 import styled from 'styled-components';
 import MyPageModal from '../Modal/MyPageModal';
+import { useNavigate } from 'react-router-dom';
 
 const AfterLoginDiv = styled.div`
     width: 100%;
@@ -51,21 +52,20 @@ const MyPageBtn = styled.button`
 
 const AfterLogin: FC = () => {
     const [isMyPageModal, setIsMyPageModal] = useState(false);
+    const navigate = useNavigate();
     const onSetIsMyPageModal = () => {
         setIsMyPageModal((prev) => !prev);
     };
     return (
         <>
             <AfterLoginDiv>
-                <div
-                    style={{ justifyContent: 'flex-start', flexBasis: '20%' }}
-                />
-                <Logo>TIME PIECE</Logo>
+                <div style={{ justifyContent: 'flex-start', flexBasis: '20%' }} />
+                <Logo onClick={() => navigate('/')} style={{ cursor: 'pointer' }}>
+                    TIME PIECE
+                </Logo>
                 <MyPageDiv>
                     <MyPageBtn onClick={onSetIsMyPageModal}>My page</MyPageBtn>
-                    {isMyPageModal && (
-                        <MyPageModal onSetIsMyPageModal={onSetIsMyPageModal} />
-                    )}
+                    {isMyPageModal && <MyPageModal onSetIsMyPageModal={onSetIsMyPageModal} />}
                 </MyPageDiv>
             </AfterLoginDiv>
         </>

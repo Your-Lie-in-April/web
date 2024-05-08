@@ -13,12 +13,10 @@ import { useState } from 'react';
 import MemberScheduleGrid from './Schedule/member/MemberScheduleGrid';
 import Info from '../ProjectMakePage/Info';
 import Project from '../MainPage/components/Project';
-import ProjectCalendar from '../ProjectMakePage/projectcalendar';
+import ScheduleCalendar from './Schedule/schedulecalendar';
 const GlobalStyle = createGlobalStyle`
   body {
-    width : 100%;
-    min-width : 1366px;
-    margin: 0 auto;
+    margin: 0;
     background-color: #FFFFFF;
     -ms-overflow-style: none;
   }
@@ -29,7 +27,7 @@ const GlobalStyle = createGlobalStyle`
 `;
 
 const Divider = styled.div`
-    width: 100%;
+    width: 100vw;
     height: 20px;
     background-color: #212121;
 `;
@@ -101,9 +99,6 @@ const StyledCalendarWrapper = styled.div`
         height: 22px;
         margin-bottom: 1em;
     }
-    .react-calendar__viewContainer {
-        pointer-events: none;
-    }
 `;
 const ProjectPage = () => {
     const [seeMemTime, setSeeMemTime] = useState(true);
@@ -122,6 +117,8 @@ const ProjectPage = () => {
                     display: 'flex',
                     flexDirection: 'column',
                     gap: '32px',
+                    width: '100vw',
+                    margin: '0 auto',
                 }}
             >
                 <div>
@@ -157,34 +154,17 @@ const ProjectPage = () => {
                                     gap: '12px',
                                 }}
                             >
-                                <div
-                                    style={{
-                                        position: 'relative',
-                                        left: '-50px',
-                                    }}
-                                >
-                                    <StyledCalendarWrapper
-                                        style={{ width: '20px' }}
-                                    >
-                                        <ProjectCalendar
-                                            startDate={startDate}
-                                            endDate={endDate}
-                                            selectRange={false}
-                                        />
+                                <div style={{ position: 'relative', left: '-50px' }}>
+                                    <StyledCalendarWrapper style={{ width: '20px' }}>
+                                        <ScheduleCalendar startDate={startDate} endDate={endDate} selectRange={false} />
                                     </StyledCalendarWrapper>
                                 </div>
                                 <Alarm />
                             </div>
                         </MainBox>
                         <MemTimeBtn onClick={toggleMemTime}>
-                            {seeMemTime
-                                ? '멤버 시간표 닫기'
-                                : '멤버 시간표 열기'}
-                            {seeMemTime ? (
-                                <ArrowDropUpIcon className="icon" />
-                            ) : (
-                                <ArrowDropDownIcon className="icon" />
-                            )}
+                            {seeMemTime ? '멤버 시간표 닫기' : '멤버 시간표 열기'}
+                            {seeMemTime ? <ArrowDropUpIcon className="icon" /> : <ArrowDropDownIcon className="icon" />}
                         </MemTimeBtn>
                         {seeMemTime && <MemberScheduleGrid />}
                     </div>

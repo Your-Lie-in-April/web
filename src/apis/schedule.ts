@@ -7,7 +7,7 @@ import {
     SchedulePostReqDto,
     SchedulePutReqDto,
     SchdeuleDeleteReqDto,
-} from '#/types/schedule';
+} from '#/Types/scheduletype';
 
 // 시간표 전체 조회
 export const getScheduleAll = async () => {
@@ -26,10 +26,7 @@ export const getScheduleAllMember = async (projectId: number) => {
 };
 
 // 사용자 시간표 조회
-export const getScheduleMember = async (
-    projectId: number,
-    memberId: number
-) => {
+export const getScheduleMember = async (projectId: number, memberId: number) => {
     return await getAPIResponseData<ScheduleMemberResDto>({
         method: 'GET',
         url: API.SCHEDULE_MEMBER(projectId, memberId),

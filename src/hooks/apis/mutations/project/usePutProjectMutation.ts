@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { QUERY_KEY } from '#/constants/queryKey';
 import { putProject } from '#/apis/project';
-import { ProjectPutReqDto } from '#/types/project';
+import { ProjectPutReqDto } from '#/Types/projecttype';
 
 /**
  * PUT projects/{projectId}

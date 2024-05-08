@@ -4,6 +4,7 @@ import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined';
 import { useState } from 'react';
 import ChangeStatus from './ChangeStatus';
 import { useNavigate } from 'react-router-dom';
+import { useUserContext } from '../MainPage/MainPage';
 
 const Box = styled.div`
     width: 300px;
@@ -40,11 +41,17 @@ const StyleCloseIconBtn = styled(CancelOutlinedIcon)`
     color: #a4a4a4;
 `;
 
-const MyImg = styled.img`
+const MyImg = styled.div`
     width: 80px;
     height: 80px;
     border-radius: 50%;
-    background: #aeaeae;
+    overflow: hidden;
+`;
+
+const StyledImage = styled.img`
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 `;
 
 const MyEmailText = styled.text`
@@ -130,6 +137,7 @@ interface MyPageModalProps {
 
 const MyPageModal: React.FC<MyPageModalProps> = ({ onSetIsMyPageModal }) => {
     const [editStatusModal, setEditStatusModal] = useState(false);
+    const { userData, setUserData } = useUserContext();
 
     const onSetEditStatusModal = () => {
         setEditStatusModal((prev) => !prev);
@@ -153,8 +161,10 @@ const MyPageModal: React.FC<MyPageModalProps> = ({ onSetIsMyPageModal }) => {
                         gap: '8px',
                     }}
                 >
-                    <MyImg />
-                    <MyEmailText>----------@gmail.com</MyEmailText>
+                    <MyImg>
+                        <StyledImage src={userData?.profileImageUrl} />
+                    </MyImg>
+                    <MyEmailText>{userData?.email}</MyEmailText>
                 </div>
                 <StatusBox>
                     <div
@@ -163,18 +173,14 @@ const MyPageModal: React.FC<MyPageModalProps> = ({ onSetIsMyPageModal }) => {
                             flexBasis: '10%',
                         }}
                     />
-                    <StatusText>현재 상태메시지</StatusText>
+                    <StatusText>{userData?.state}</StatusText>
                     <EditButton onClick={onSetEditStatusModal}>
                         <EditIcon />
                     </EditButton>
                 </StatusBox>
-                <StorageBtn onClick={handlemyproject}>
-                    프로젝트 보관함
-                </StorageBtn>
+                <StorageBtn onClick={handlemyproject}>프로젝트 보관함</StorageBtn>
             </Box>
-            {editStatusModal && (
-                <ChangeStatus onSetEditStatusModal={onSetEditStatusModal} />
-            )}
+            {editStatusModal && <ChangeStatus onSetEditStatusModal={onSetEditStatusModal} />}
         </>
     );
 };
