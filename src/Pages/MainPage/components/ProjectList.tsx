@@ -27,10 +27,12 @@ const ProjectList = () => {
             setProjects(data.data);
         };
 
-        fetchProjects();
-    }, []);
+        if (accessToken != '') fetchProjects();
+    }, [accessToken]);
 
-    return (
+    return accessToken == '' ? (
+        <div>빈칸</div>
+    ) : (
         <GridContainer>
             {projects.map((project) => (
                 <Project key={project.projectId} project={project} />

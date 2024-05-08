@@ -68,23 +68,21 @@ const MainPage: FC = () => {
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
 
     useEffect(() => {
-        const accessToken = query.get('access_token') || '';
-        const refreshToken = query.get('refresh_token') || '';
-        const memberId = query.get('member_id') || '';
-        localStorage.setItem('access_token', accessToken);
-        localStorage.setItem('refresh_token', refreshToken);
-        localStorage.setItem('member_id', memberId);
-        console.log(accessToken);
-        console.log(refreshToken);
-        console.log(memberId);
+        const accessToken = query.get('access_token') || localStorage.getItem('access_token');
+        const refreshToken = query.get('refresh_token') || localStorage.getItem('refresh_token');
+        const memberId = query.get('member_id') || localStorage.getItem('member_id');
+
+
+        if (accessToken) localStorage.setItem('access_token', accessToken);
+        if (refreshToken) localStorage.setItem('refresh_token', refreshToken);
+        if (memberId) localStorage.setItem('member_id', memberId);
 
         if (accessToken && refreshToken) {
             setIsLoggedIn(true);
-            console.log('로그인되었음');
         } else {
-            console.log('인증정보없음');
+            setIsLoggedIn(false);
         }
-    }, [query, navigate]);
+    }, []);
 
     useEffect(() => {
         const accessToken = localStorage.getItem('access_token');

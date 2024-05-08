@@ -12,6 +12,7 @@ import { UserProvider } from './Pages/MainPage/MainPage';
 const queryClient = new QueryClient();
 
 function App() {
+    const URL = "/"
     return (
         <UserProvider>
             <QueryClientProvider client={queryClient}>
