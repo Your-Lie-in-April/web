@@ -145,7 +145,6 @@ const Project: React.FC<ProjectProps> = ({ project }) => {
     const [showMore, setShowMore] = useState<boolean>(false);
     const [isCancleBtn, setIsCancelBtn] = useState<boolean>(false);
     const [isPinned, setIsPinned] = useState<boolean>(false);
-    const accessToken = localStorage.getItem('access_token');
 
     const toggleMoreBtn = () => {
         setShowMore(!showMore);
@@ -157,6 +156,7 @@ const Project: React.FC<ProjectProps> = ({ project }) => {
 
     const handlePin = async () => {
         try {
+            const accessToken = localStorage.getItem('access_token');
             const response = await fetch(`${Http}/v1/members/pin/${project.projectId}`, {
                 method: 'PATCH',
                 headers: {

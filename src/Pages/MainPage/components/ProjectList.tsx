@@ -16,6 +16,7 @@ const ProjectList = () => {
     const [projects, setProjects] = useState<ProjectEntity[]>([]);
     const accessToken = localStorage.getItem('access_token');
     useEffect(() => {
+        const accessToken = localStorage.getItem('access_token');
         const fetchProjects = async () => {
             const response = await fetch(`${Http}/v1/projects/all`, {
                 headers: {

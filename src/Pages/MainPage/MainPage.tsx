@@ -13,6 +13,7 @@ import Profile from './components/Profile';
 import AfterLogin from '../Layouts/AfterLogin';
 import { Http } from '#/constants/backendURL';
 import { MemberEntity } from '#/Types/membertype';
+import MemberSchedule from '../ProjectPage/Schedule/member/MemberSchedule';
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -61,7 +62,11 @@ export const useUserContext = () => {
     return context;
 };
 
-const MainPage: FC = () => {
+interface MainPageProps {
+    memberId: number;
+}
+
+const MainPage: FC<MainPageProps> = ({ memberId }) => {
     const { userData, setUserData } = useUserContext();
     const query = useQuery();
     const navigate = useNavigate();
@@ -71,7 +76,6 @@ const MainPage: FC = () => {
         const accessToken = query.get('access_token') || localStorage.getItem('access_token');
         const refreshToken = query.get('refresh_token') || localStorage.getItem('refresh_token');
         const memberId = query.get('member_id') || localStorage.getItem('member_id');
-
 
         if (accessToken) localStorage.setItem('access_token', accessToken);
         if (refreshToken) localStorage.setItem('refresh_token', refreshToken);
@@ -164,7 +168,7 @@ const MainPage: FC = () => {
                                 <Search />
                                 <NewProject />
                             </div>
-                            <Pinned />
+                            <Pinned memberId={memberId} />
                         </div>
                         <ProjectList />
                     </div>
