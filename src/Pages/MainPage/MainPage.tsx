@@ -61,89 +61,51 @@ export const useUserContext = () => {
     return context;
 };
 
-const MainPage: React.FC = () => {
-    const { userData, setUserData } = useUserContext() as UserContextType;
+const MainPage: FC = () => {
+    const { userData, setUserData } = useUserContext();
     const query = useQuery();
     const navigate = useNavigate();
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
-    const [isLoading, setIsLoading] = useState<boolean>(true);
 
     useEffect(() => {
         const accessToken = query.get('access_token') || localStorage.getItem('access_token');
         const refreshToken = query.get('refresh_token') || localStorage.getItem('refresh_token');
         const memberId = query.get('member_id') || localStorage.getItem('member_id');
 
-        if (accessToken && refreshToken && memberId) {
-            validateAndFetchUserData(accessToken, refreshToken, memberId).finally(() => {
-                setIsLoading(false);
-            });
+        if (accessToken) localStorage.setItem('access_token', accessToken);
+        if (refreshToken) localStorage.setItem('refresh_token', refreshToken);
+        if (memberId) localStorage.setItem('member_id', memberId);
+
+        if (accessToken && refreshToken) {
+            setIsLoggedIn(true);
         } else {
-            console.log('액세스 토큰, 리프레시 토큰 또는 회원 ID가 없습니다.');
-            setIsLoading(false);
+            setIsLoggedIn(false);
         }
     }, []);
 
     useEffect(() => {
-        if (userData) {
-            console.log('유저데이터:', userData);
-        }
-    }, [userData]);
-
-    const reissueToken = async (refreshToken: string): Promise<string | undefined> => {
-        try {
-            const response = await fetch(`${Http}/v1/auth/reissue`, {
-                method: 'GET',
-                headers: { Authorization: `Bearer ${refreshToken}` },
-            });
-
-            if (!response.ok) {
-                const errorBody = await response.text();
-                console.error(`토큰 재발급 실패: ${errorBody}`);
-                throw new Error('토큰 재발급 실패');
+        const accessToken = localStorage.getItem('access_token');
+        const memberId = localStorage.getItem('member_id');
+        console.log(accessToken);
+        console.log(memberId);
+        const fetchUser = async () => {
+            try {
+                const response = await fetch(Http + `/v1/members/${memberId}`, {
+                    method: 'GET',
+                    headers: {
+                        Accept: '*/*',
+                        Authorization: `Bearer ${accessToken}`,
+                    },
+                });
+                const data = await response.json();
+                console.log(data);
+                setUserData(data?.data);
+            } catch (error) {
+                console.error('Error fetching data:', error);
             }
-
-            const data = await response.json();
-            localStorage.setItem('access_token', data.accessToken);
-            localStorage.setItem('refresh_token', data.refreshToken);
-            setIsLoggedIn(true);
-            return data.accessToken;
-        } catch (error) {
-            console.error('토큰 재발급 실패:', error);
-            setIsLoggedIn(false);
-            alert('세션이 만료되었습니다. 다시 로그인 해주세요.');
-            navigate('/login');
-        }
-    };
-
-    const validateAndFetchUserData = async (
-        accessToken: string,
-        refreshToken: string,
-        memberId: string
-    ): Promise<void> => {
-        try {
-            const response = await fetch(`${Http}/v1/members/${memberId}`, {
-                method: 'GET',
-                headers: {
-                    Accept: '*/*',
-                    Authorization: `Bearer ${accessToken}`,
-                },
-            });
-
-            if (response.status === 401 && refreshToken) {
-                console.log('토큰이 만료되었습니다. 재발급을 시도합니다.');
-                const newAccessToken = await reissueToken(refreshToken);
-                if (newAccessToken) {
-                    return validateAndFetchUserData(newAccessToken, refreshToken, memberId);
-                }
-            }
-
-            const data = await response.json();
-            setUserData(data?.data);
-        } catch (error) {
-            console.error('사용자 데이터 가져오기 실패:', error);
-        }
-    };
-
+        };
+        fetchUser();
+    }, [userData?.nickname, userData?.state]);
     return (
         <>
             <GlobalStyle />
