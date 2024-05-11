@@ -2,7 +2,10 @@ import styled from 'styled-components';
 import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined';
 import InboxOutlinedIcon from '@mui/icons-material/InboxOutlined';
 import Info from '../ProjectMakePage/Info';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { ProjectEntity } from '#/Types/projecttype';
+import { Http } from '#/constants/backendURL';
 
 const Container = styled.div`
     position: relative;
@@ -69,13 +72,37 @@ interface ProjectInfoDetailProps {
     onClick: () => void;
 }
 export const ProjectInfoDetail: React.FC<ProjectInfoDetailProps> = ({ onClick }) => {
+    const { projectId } = useParams();
+    const [projectData, setProjectData] = useState<ProjectEntity | null>(null);
+    useEffect(() => {
+        const accessToken = localStorage.getItem('access_token');
+        const fetchProjectData = async () => {
+            const url = `${Http}/v1/projects/${projectId}`;
+            const headers = {
+                Accept: '*/*',
+                Authorization: `Bearer ${accessToken}`,
+            };
+
+            try {
+                const response = await fetch(url, { headers });
+                if (!response.ok) {
+                    throw new Error('데이터 가져오기 실패');
+                }
+                const data = await response.json();
+                setProjectData(data.data);
+                console.log('프로젝트 데이터:', data);
+            } catch (error) {
+                console.error('API 요청 중 에러 발생:', error);
+            }
+        };
+
+        fetchProjectData();
+    }, []);
     return (
         <Container>
             <ProjectInfoDiv>
-                <CommonText style={{ fontSize: '42px', fontWeight: '700' }}>
-                    프로젝트제목프로젝트제목프로젝트제목프로젝트
-                </CommonText>
-                <CommonText>프로젝트내용내용내용내용내용내용</CommonText>
+                <CommonText style={{ fontSize: '42px', fontWeight: '700' }}>{projectData?.title}</CommonText>
+                <CommonText>{projectData?.description}</CommonText>
                 <div style={{ width: '100%', display: 'flex' }}>
                     <div
                         style={{
