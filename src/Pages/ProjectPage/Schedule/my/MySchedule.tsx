@@ -15,8 +15,7 @@ const Box = styled.div`
     flex-direction: column;
     gap: 12px;
     padding: 5px 5px 8px 3px;
-    align-items: center;
-    justify-content: flex-end;
+    justify-content: space-between;
 `;
 
 const CommonText = styled.div`
@@ -60,9 +59,11 @@ const EditBtn = styled.button`
 
 const MySchedule = () => {
     const [isEditModal, setIsEditModal] = useState(false);
+
     const onSetIsEditModal = () => {
         setIsEditModal((prev) => !prev);
     };
+
     return (
         <>
             <Box>

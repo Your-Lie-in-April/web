@@ -22,6 +22,82 @@ export const memberList = [
     },
 ];
 
+export const mySchedules = {
+    schedule: [
+        {
+            dayOfWeek: 'mon',
+            schedule: [
+                {
+                    startAt: '2024-05-13T16:30:00+09:00',
+                    endAt: '2024-05-13T20:00:00+09:00',
+                },
+                {
+                    startAt: '2024-05-13T21:00:00+09:00',
+                    endAt: '2024-05-13T22:00:00+09:00',
+                },
+                {
+                    startAt: '2024-05-20T20:00:00+09:00',
+                    endAt: '2024-05-20T23:00:00+09:00',
+                },
+            ],
+        },
+        {
+            dayOfWeek: 'tue',
+            schedule: [
+                {
+                    startAt: '2024-05-14T09:30:00+09:00',
+                    endAt: '2024-05-14T10:30:00+09:00',
+                },
+            ],
+        },
+        {
+            dayOfWeek: 'wed',
+            schedule: [
+                {
+                    startAt: '2024-05-15T09:30:00+09:00',
+                    endAt: '2024-05-15T10:30:00+09:00',
+                },
+            ],
+        },
+        {
+            dayOfWeek: 'thu',
+            schedule: [
+                {
+                    startAt: '2024-05-23T09:30:00+09:00',
+                    endAt: '2024-05-23T10:30:00+09:00',
+                },
+            ],
+        },
+        {
+            dayOfWeek: 'fri',
+            schedule: [
+                {
+                    startAt: '2024-05-24T09:30:00+09:00',
+                    endAt: '2024-05-24T10:30:00+09:00',
+                },
+            ],
+        },
+        {
+            dayOfWeek: 'sat',
+            schedule: [
+                {
+                    startAt: '2024-05-25T09:30:00+09:00',
+                    endAt: '2024-05-25T10:30:00+09:00',
+                },
+            ],
+        },
+        {
+            dayOfWeek: 'sun',
+            schedule: [
+                {
+                    startAt: '2024-05-26T09:30:00+09:00',
+                    endAt: '2024-05-26T10:30:00+09:00',
+                },
+            ],
+        },
+    ],
+};
+
 export const scheduleList = [
     {
         nickname: 'namu',
@@ -132,6 +208,7 @@ export const scheduleList = [
         ],
     },
 ];
+
 export const projectList = [
     {
         projectId: 1,
@@ -307,6 +384,26 @@ export const projectList = [
         color: '00c7b0',
     },
 ];
+
+export const projectInfo = {
+    projectId: 1,
+    title: 'timepiece',
+    description: '앱센터 15.5기 겨울방학 프로젝트',
+    startDate: '2024-05-13',
+    endDate: '2024-05-27',
+    starTime: '09:00:00',
+    endTime: '21:00:00',
+    mon: true,
+    tue: true,
+    wed: true,
+    thu: true,
+    fri: true,
+    sat: false,
+    sun: false,
+    isStored: true,
+    coverImageUrl: null,
+    color: 'A5CEF2',
+};
 
 // 프로젝트 썸네일 리스트
 export const projectThumbnailList = [

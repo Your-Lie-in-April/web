@@ -26,7 +26,10 @@ export const getScheduleAllMember = async (projectId: number) => {
 };
 
 // 사용자 시간표 조회
-export const getScheduleMember = async (projectId: number, memberId: number) => {
+export const getScheduleMember = async (
+    projectId: number,
+    memberId: number
+) => {
     return await getAPIResponseData<ScheduleMemberResDto>({
         method: 'GET',
         url: API.SCHEDULE_MEMBER(projectId, memberId),

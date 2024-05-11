@@ -23,6 +23,7 @@ function App() {
                         <Route path="/login" element={<Login />} />
                         <Route path="projectmake" element={<ProjectMakePage />} />
                         <Route path="project" element={<ProjectPage />} />
+                        <Route path="project/:projectId" element={<ProjectPage />} />
                         <Route path="myproject" element={<StoragePage />} />
                     </Routes>
                 </Router>

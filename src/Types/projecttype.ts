@@ -74,6 +74,10 @@ export type ProjectCreateUpdateRequest = {
 // 프로젝트 전체 리스트를 조회했을 때 응답 객체 타입
 export type ProjectResDto = ProjectEntity[];
 
+// GET /v1/projects/{projectId}
+// 특정 프로젝트의 정보 조회시 응답객체
+export type ProjectInfoResDto = ProjectEntity;
+
 // GET /v1/projects/members/{memberId}
 // 유저가 소속된 프로젝트를 조회했을 때 응답객체
 export type ProjectThumbnailResDto = ProjectThumbnailResponse[];
