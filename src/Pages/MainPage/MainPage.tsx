@@ -66,24 +66,28 @@ const MainPage: React.FC = () => {
     const query = useQuery();
     const navigate = useNavigate();
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+    const [isLoading, setIsLoading] = useState<boolean>(true);
 
     useEffect(() => {
-        const accessToken: string | null = query.get('access_token') || localStorage.getItem('access_token');
-        const refreshToken: string | null = query.get('refresh_token') || localStorage.getItem('refresh_token');
-        const memberId: string | null = query.get('member_id') || localStorage.getItem('member_id');
-
-        if (accessToken) localStorage.setItem('access_token', accessToken);
-        if (refreshToken) localStorage.setItem('refresh_token', refreshToken);
-        if (memberId) localStorage.setItem('member_id', memberId);
-
-        setIsLoggedIn(!!accessToken && !!refreshToken);
+        const accessToken = query.get('access_token') || localStorage.getItem('access_token');
+        const refreshToken = query.get('refresh_token') || localStorage.getItem('refresh_token');
+        const memberId = query.get('member_id') || localStorage.getItem('member_id');
 
         if (accessToken && refreshToken && memberId) {
-            validateAndFetchUserData(accessToken, refreshToken, memberId);
+            validateAndFetchUserData(accessToken, refreshToken, memberId).finally(() => {
+                setIsLoading(false);
+            });
         } else {
             console.log('액세스 토큰, 리프레시 토큰 또는 회원 ID가 없습니다.');
+            setIsLoading(false);
         }
     }, []);
+
+    useEffect(() => {
+        if (userData) {
+            console.log('유저데이터:', userData);
+        }
+    }, [userData]);
 
     const reissueToken = async (refreshToken: string): Promise<string | undefined> => {
         try {
