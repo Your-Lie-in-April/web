@@ -1,7 +1,7 @@
 import { ProjectEntity } from './projecttype';
 
 export type MemberEntity = {
-    id?: number;
+    memberId?: number;
     email?: string;
     nickname?: string;
     state?: string;
@@ -16,7 +16,7 @@ export type MemberResDto = MemberEntity[];
 /**
  * GET members/${memberId}
  */
-export type MemberInfoResDto = Pick<MemberEntity, 'id'>;
+export type MemberInfoResDto = Pick<MemberEntity, 'memberId'>;
 
 /**
  * PUT members/${status}

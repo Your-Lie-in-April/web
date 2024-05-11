@@ -33,8 +33,8 @@ export type PinProjectResponse = {
     projectId: number;
     title: string;
     description: string;
-    startDate: Date;
-    endDate: Date;
+    startDate: number;
+    endDate: number;
     startTime: Date;
     endTime: Date;
     mon: boolean;
