@@ -65,8 +65,10 @@ const SettingBtn = styled.button`
     background: transparent;
     box-sizing: border-box;
 `;
-
-export const ProjectInfoDetail = ({ onClick }) => {
+interface ProjectInfoDetailProps {
+    onClick: () => void;
+}
+export const ProjectInfoDetail: React.FC<ProjectInfoDetailProps> = ({ onClick }) => {
     return (
         <Container>
             <ProjectInfoDiv>
@@ -89,15 +91,11 @@ export const ProjectInfoDetail = ({ onClick }) => {
                     >
                         <SettingDiv>
                             <SettingBtn onClick={onClick}>
-                                <BorderColorOutlinedIcon
-                                    style={{ fontSize: '18px' }}
-                                />
+                                <BorderColorOutlinedIcon style={{ fontSize: '18px' }} />
                                 커버 수정
                             </SettingBtn>
                             <SettingBtn>
-                                <InboxOutlinedIcon
-                                    style={{ fontSize: '18px' }}
-                                />
+                                <InboxOutlinedIcon style={{ fontSize: '18px' }} />
                                 프로젝트 보관
                             </SettingBtn>
                         </SettingDiv>
@@ -111,15 +109,7 @@ export const ProjectInfoDetail = ({ onClick }) => {
 const ProjectInfo = () => {
     const [editCover, setEditCover] = useState(false);
 
-    return (
-        <>
-            {editCover ? (
-                <Info />
-            ) : (
-                <ProjectInfoDetail onClick={() => setEditCover(true)} />
-            )}
-        </>
-    );
+    return <>{editCover ? <Info /> : <ProjectInfoDetail onClick={() => setEditCover(true)} />}</>;
 };
 
 export default ProjectInfo;
