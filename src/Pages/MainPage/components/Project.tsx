@@ -205,7 +205,7 @@ const Project: React.FC<ProjectProps> = ({ project }) => {
                     <DetailText>{project.description}</DetailText>
                 </TextBox>
             </div>
-            {isCancleBtn && <LeaveProject onClose={onClickCancelBtn} />}
+            {isCancleBtn && <LeaveProject projectId={project.projectId} onClose={onClickCancelBtn} />}
         </ProjectBox>
     );
 };
