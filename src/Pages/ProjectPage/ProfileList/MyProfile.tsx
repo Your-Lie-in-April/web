@@ -161,7 +161,7 @@ const MyProfile = () => {
                         <MyEmailText>{userData?.email}</MyEmailText>
                     </div>
                 </div>
-                <MyStatus>현재상태메세지</MyStatus>
+                <MyStatus>{userData?.state}</MyStatus>
             </MyProfileBox>
             {isEditModal && <ChangeNickName onSetIsEditModal={onSetIsEditModal} onNickChange={handleNickChange} />}
         </>
