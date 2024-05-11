@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import LeaveProject from '../../Modal/LeaveProject';
 import { Http } from '#/constants/backendURL';
 import { ProjectEntity } from '../../../Types/projecttype';
+import { useNavigate } from 'react-router-dom';
 
 interface MoreTextProps extends React.HTMLAttributes<HTMLDivElement> {
     isMove?: boolean;
@@ -145,6 +146,7 @@ const Project: React.FC<ProjectProps> = ({ project }) => {
     const [showMore, setShowMore] = useState<boolean>(false);
     const [isCancleBtn, setIsCancelBtn] = useState<boolean>(false);
     const [isPinned, setIsPinned] = useState<boolean>(false);
+    const navigate = useNavigate();
 
     const toggleMoreBtn = () => {
         setShowMore(!showMore);
@@ -176,7 +178,7 @@ const Project: React.FC<ProjectProps> = ({ project }) => {
     };
 
     return (
-        <ProjectBox>
+        <ProjectBox onClick={() => navigate(`/project/${project.projectId}`)}>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
                 <MoreDiv>
                     {showMore && (
