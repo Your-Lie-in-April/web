@@ -4,6 +4,7 @@ import { useUserContext } from '../MainPage';
 import { useEffect, useState } from 'react';
 import { PinProjectResponse } from '#/Types/projecttype';
 import { Http } from '#/constants/backendURL';
+import { Navigate, useNavigate } from 'react-router-dom';
 const PinnedBox = styled.div`
     width: 950px;
     height: 400px;
@@ -12,6 +13,7 @@ const PinnedBox = styled.div`
     color: #ffffff;
     padding: 16px;
     box-sizing: border-box;
+    cursor: pointer;
 `;
 
 const ProjectBox = styled.div`
@@ -77,6 +79,7 @@ const DetailText = styled.text`
 
 const Pinned: React.FC = () => {
     const { userData } = useUserContext();
+    const navigation = useNavigate();
     const [pinnedProjects, setPinnedProjects] = useState<PinProjectResponse | null>(null);
     useEffect(() => {
         const accessToken = localStorage.getItem('access_token');
@@ -105,16 +108,12 @@ const Pinned: React.FC = () => {
         fetchPinnedProjects();
     }, [userData]);
 
-    const formatDate = (dateStr: number) => {
-        return new Date(dateStr).toLocaleDateString('ko-KR', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-        });
+    const handleNavigation = () => {
+        navigation(`/project/${pinnedProjects?.projectId}`);
     };
 
     return (
-        <PinnedBox>
+        <PinnedBox onClick={handleNavigation}>
             <div style={{ display: 'flex', flexDirection: 'column' }}>
                 <StyledButton>
                     <PushPinOutlinedIcon sx={{ fontSize: 36 }} />
