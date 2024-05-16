@@ -9,12 +9,14 @@ import Alarm from './Alarm';
 import MemberSchedule from './Schedule/member/MemberSchedule';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import MemberScheduleGrid from './Schedule/member/MemberScheduleGrid';
 import Info from '../ProjectMakePage/Info';
 import Project from '../MainPage/components/Project';
 import ScheduleCalendar from './Schedule/schedulecalendar';
 import { useParams } from 'react-router-dom';
+import { Http } from '#/constants/backendURL';
+import { MemberEntity } from '#/Types/membertype';
 const GlobalStyle = createGlobalStyle`
   body {
     margin: 0;
@@ -106,12 +108,38 @@ const ProjectPage: React.FC = () => {
     const [seeMemTime, setSeeMemTime] = useState(true);
     const [startDate, setStartDate] = useState<Date | null>(null);
     const [endDate, setEndDate] = useState<Date | null>(null);
+    const [members, setMembers] = useState<MemberEntity[]>([]);
     const { projectId } = useParams<{ projectId: string }>();
 
     const toggleMemTime = () => {
         setSeeMemTime(!seeMemTime);
     };
 
+    useEffect(() => {
+        const accessToken = localStorage.getItem('access_token');
+        const fetchMember = async () => {
+            try {
+                const response = await fetch(`${Http}/v1/projects/${projectId}/members`, {
+                    method: 'GET',
+                    headers: {
+                        Accept: '*/*',
+                        Authorization: `Bearer ${accessToken}`,
+                    },
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to fetch pinned projects');
+                }
+
+                const data = await response.json();
+                console.log('멤버', data.data);
+                setMembers(data.data);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+        fetchMember();
+    }, [projectId]);
     return (
         <>
             <GlobalStyle />
@@ -139,7 +167,7 @@ const ProjectPage: React.FC = () => {
                         }}
                     >
                         <MainBox>
-                            <ProfileList projectId={projectId} />
+                            <ProfileList projectId={projectId} members={members} />
                             <div
                                 style={{
                                     display: 'flex',
@@ -169,7 +197,7 @@ const ProjectPage: React.FC = () => {
                             {seeMemTime ? '멤버 시간표 닫기' : '멤버 시간표 열기'}
                             {seeMemTime ? <ArrowDropUpIcon className="icon" /> : <ArrowDropDownIcon className="icon" />}
                         </MemTimeBtn>
-                        {seeMemTime && <MemberScheduleGrid />}
+                        {seeMemTime && <MemberScheduleGrid projectId={projectId} members={members} />}
                     </div>
                 </Box>
             </div>

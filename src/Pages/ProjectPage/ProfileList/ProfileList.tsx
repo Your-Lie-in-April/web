@@ -56,42 +56,16 @@ const MemberList = styled.div`
 `;
 interface ProfileListProps {
     projectId: string | undefined;
+    members: MemberEntity[];
 }
 
-const ProfileList: React.FC<ProfileListProps> = ({ projectId }) => {
+const ProfileList: React.FC<ProfileListProps> = ({ members }) => {
     const [showDeleteBtn, setShowDeleteBtn] = useState(false);
     const [showInviteModal, setShowInviteModal] = useState(false);
-    const [members, setMembers] = useState<MemberEntity[]>([]);
     const { userData, setUserData } = useUserContext();
     const toggleDeleteBtn = () => {
         setShowDeleteBtn((prev) => !prev);
     };
-
-    useEffect(() => {
-        const accessToken = localStorage.getItem('access_token');
-        const fetchMember = async () => {
-            try {
-                const response = await fetch(`${Http}/v1/projects/${projectId}/members`, {
-                    method: 'GET',
-                    headers: {
-                        Accept: '*/*',
-                        Authorization: `Bearer ${accessToken}`,
-                    },
-                });
-
-                if (!response.ok) {
-                    throw new Error('Failed to fetch pinned projects');
-                }
-
-                const data = await response.json();
-                console.log('멤버', data.data);
-                setMembers(data.data);
-            } catch (error) {
-                console.error(error);
-            }
-        };
-        fetchMember();
-    }, [projectId, userData]);
 
     return (
         <Box>
