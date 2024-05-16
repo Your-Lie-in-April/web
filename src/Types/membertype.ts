@@ -6,6 +6,7 @@ export type MemberEntity = {
     nickname?: string;
     state?: string;
     profileImageUrl?: string;
+    isPrivileged?: boolean;
 };
 
 /**

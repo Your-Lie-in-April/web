@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import MyProfile from './MyProfile';
 import MemberProfile from './MemberProfile';
@@ -6,6 +6,9 @@ import LeaderProfile from './LeaderProfile';
 import InvitationModal from '../../Modal/InvitationModal';
 import InviteBtn from '../Buttons/InviteBtn';
 import { useUserContext } from '#/Pages/MainPage/MainPage';
+import { Http } from '#/constants/backendURL';
+import { MemberEntity } from '#/Types/membertype';
+
 const Box = styled.div`
     width: 286px;
     height: 600px;
@@ -51,14 +54,44 @@ const MemberList = styled.div`
         background-color: transparent;
     }
 `;
+interface ProfileListProps {
+    projectId: string | undefined;
+}
 
-const ProfileList = () => {
+const ProfileList: React.FC<ProfileListProps> = ({ projectId }) => {
     const [showDeleteBtn, setShowDeleteBtn] = useState(false);
     const [showInviteModal, setShowInviteModal] = useState(false);
+    const [members, setMembers] = useState<MemberEntity[]>([]);
     const { userData, setUserData } = useUserContext();
     const toggleDeleteBtn = () => {
         setShowDeleteBtn((prev) => !prev);
     };
+
+    useEffect(() => {
+        const accessToken = localStorage.getItem('access_token');
+        const fetchMember = async () => {
+            try {
+                const response = await fetch(`${Http}/v1/projects/${projectId}/members`, {
+                    method: 'GET',
+                    headers: {
+                        Accept: '*/*',
+                        Authorization: `Bearer ${accessToken}`,
+                    },
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to fetch pinned projects');
+                }
+
+                const data = await response.json();
+                console.log('멤버', data.data);
+                setMembers(data.data);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+        fetchMember();
+    }, [projectId, userData]);
 
     return (
         <Box>
@@ -77,14 +110,13 @@ const ProfileList = () => {
                     <InviteBtn />
                 </div>
                 <MemberList>
-                    <LeaderProfile toggleDeleteBtn={toggleDeleteBtn} />
-                    <MemberProfile showDeleteBtn={showDeleteBtn} />
-                    <MemberProfile showDeleteBtn={showDeleteBtn} />
-                    <MemberProfile showDeleteBtn={showDeleteBtn} />
-                    <MemberProfile showDeleteBtn={showDeleteBtn} />
-                    <MemberProfile showDeleteBtn={showDeleteBtn} />
-                    <MemberProfile showDeleteBtn={showDeleteBtn} />
-                    <MemberProfile showDeleteBtn={showDeleteBtn} />
+                    {members.map((member) =>
+                        member.isPrivileged ? (
+                            <LeaderProfile key={member.memberId} member={member} toggleDeleteBtn={toggleDeleteBtn} />
+                        ) : (
+                            <MemberProfile key={member.memberId} member={member} showDeleteBtn={showDeleteBtn} />
+                        )
+                    )}
                 </MemberList>
             </MemberListBox>
         </Box>

@@ -14,6 +14,7 @@ import MemberScheduleGrid from './Schedule/member/MemberScheduleGrid';
 import Info from '../ProjectMakePage/Info';
 import Project from '../MainPage/components/Project';
 import ScheduleCalendar from './Schedule/schedulecalendar';
+import { useParams } from 'react-router-dom';
 const GlobalStyle = createGlobalStyle`
   body {
     margin: 0;
@@ -100,10 +101,12 @@ const StyledCalendarWrapper = styled.div`
         margin-bottom: 1em;
     }
 `;
-const ProjectPage = () => {
+
+const ProjectPage: React.FC = () => {
     const [seeMemTime, setSeeMemTime] = useState(true);
     const [startDate, setStartDate] = useState<Date | null>(null);
     const [endDate, setEndDate] = useState<Date | null>(null);
+    const { projectId } = useParams<{ projectId: string }>();
 
     const toggleMemTime = () => {
         setSeeMemTime(!seeMemTime);
@@ -136,7 +139,7 @@ const ProjectPage = () => {
                         }}
                     >
                         <MainBox>
-                            <ProfileList />
+                            <ProfileList projectId={projectId} />
                             <div
                                 style={{
                                     display: 'flex',

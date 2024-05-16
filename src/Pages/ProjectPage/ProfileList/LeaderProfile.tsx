@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import MoreBtn from '../Buttons/MoreBtn';
 import { useUserContext } from '#/Pages/MainPage/MainPage';
+import { MemberEntity } from '#/Types/membertype';
 
 const LeaderProfileBox = styled.div`
     width: 100%;
@@ -58,7 +59,13 @@ const CommonText = styled.div`
     line-height: normal;
 `;
 const defaultImg = 'src/pics/default.png';
-const LeaderProfile = ({ toggleDeleteBtn }: { toggleDeleteBtn: React.MouseEventHandler<HTMLButtonElement> }) => {
+const LeaderProfile = ({
+    toggleDeleteBtn,
+    member,
+}: {
+    toggleDeleteBtn: React.MouseEventHandler<HTMLButtonElement>;
+    member: MemberEntity;
+}) => {
     const { userData, setUserData } = useUserContext();
     return (
         <LeaderProfileBox>
