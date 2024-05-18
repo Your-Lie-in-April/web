@@ -2,6 +2,8 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import ConfirmCopyLink from './ConfirmCopyLink';
 import ModalPortal from '../../utils/ModalPotal';
+import { Http } from '#/constants/backendURL';
+import { ProjectEntity } from '#/Types/projecttype';
 
 interface CommonButtonProps {
     primary?: boolean;
@@ -97,22 +99,46 @@ const CommonButton = styled.button<CommonButtonProps>`
         outline: none;
     }
 `;
+interface InvitationModalProps {
+    projectId: string | undefined;
+    projectData: ProjectEntity | null;
+}
 
-const InvitationModal = () => {
+const InvitationModal: React.FC<InvitationModalProps> = ({ projectData, projectId }) => {
     const [link, setLink] = useState<string>('');
     const [isBtnClick, setIsBtnClick] = useState<boolean>(false);
     const [isVisible, setIsVisible] = useState<boolean>(true);
-    const [showConfirmCopyLink, setShowConfirmCopyLink] =
-        useState<boolean>(false);
-    const [isModalCompleteHidden, setIsModalCompleteHidden] =
-        useState<boolean>(false);
+    const [showConfirmCopyLink, setShowConfirmCopyLink] = useState<boolean>(false);
+    const [isModalCompleteHidden, setIsModalCompleteHidden] = useState<boolean>(false);
+    const accessToken = localStorage.getItem('access_token');
+
+    const makeInvitation = async () => {
+        try {
+            const response = await fetch(`${Http}/v1/projects/${projectId}/invitation`, {
+                method: 'POST',
+                headers: {
+                    Accept: '*/*',
+                    Authorization: `Bearer ${accessToken}`,
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error('회원 초대 링크 생성 실패');
+            }
+
+            const data = await response.json();
+            console.log('링크', data.data);
+            setLink(`${Http}` + data.data);
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
     // 링크 생성 로직
     // 수정필요**
     const generateLink = () => {
         setIsBtnClick(false);
-        const generatedLink = '프로젝트 페이지 url https://www.example.com';
-        setLink(generatedLink);
+        makeInvitation();
     };
 
     const clickBack = () => {
@@ -140,6 +166,7 @@ const InvitationModal = () => {
             alert('초대코드 복사에 실패했습니다😭');
         }
     };
+    console.log('인바이트모달', projectData);
 
     return (
         <>
@@ -168,22 +195,14 @@ const InvitationModal = () => {
                                         height: '100%',
                                     }}
                                 >
-                                    <Title>프로젝트명</Title>
+                                    <Title>{projectData?.title}</Title>
                                     <InviteField value={link} readOnly />
                                 </div>
-                                <ButtonsContainer
-                                    style={{ alignSelf: 'flex-end' }}
-                                >
-                                    <CommonButton
-                                        primary={!isBtnClick}
-                                        onClick={generateLink}
-                                    >
+                                <ButtonsContainer style={{ alignSelf: 'flex-end' }}>
+                                    <CommonButton primary={!isBtnClick} onClick={generateLink}>
                                         링크생성
                                     </CommonButton>
-                                    <CommonButton
-                                        primary={isBtnClick}
-                                        onClick={() => onClickCopyLink(link)}
-                                    >
+                                    <CommonButton primary={isBtnClick} onClick={() => onClickCopyLink(link)}>
                                         링크복사
                                     </CommonButton>
                                 </ButtonsContainer>
