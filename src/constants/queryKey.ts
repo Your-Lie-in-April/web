@@ -27,10 +27,11 @@ export const QUERY_KEY = {
     // 스케줄 관련 쿼리키 ---------------------------------------------------
     SCHEDULE: ['schedule'],
     SCHEDULE_PROJECT: (projectId: Id) => ['schedule', projectId],
-    SCHEDULE_MEMBER: (projectId: Id, memberId?: Id) => [
+    SCHEDULE_MEMBER: (projectId: Id, memberId: Id, condition: string) => [
         'schedule',
         projectId,
         memberId,
+        condition,
     ],
     SCHEDULE_SHOW: (projectId: Id, scheduleDayRequst: []) => [
         'schedule',

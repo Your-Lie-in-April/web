@@ -3,8 +3,8 @@ import { ProjectContext } from './projectContext';
 import dayjs from 'dayjs';
 
 interface DateContextValue {
-    selectedDate: Date | null;
-    setSelectedDate: React.Dispatch<React.SetStateAction<Date | null>>;
+    selectedDate: string | null;
+    setSelectedDate: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
 export const DateContext = createContext<DateContextValue | undefined>(
@@ -14,12 +14,15 @@ export const DateContext = createContext<DateContextValue | undefined>(
 export const DateProvider: React.FC<{ children: React.ReactNode }> = ({
     children,
 }) => {
+    const today = dayjs(new Date()).format('YYYY-MM-DD');
     const { projectInfo } = useContext(ProjectContext);
     const startDateString = projectInfo?.startDate;
-    const startDate = startDateString ? dayjs(startDateString).toDate() : null;
+    const startDate = startDateString
+        ? dayjs(startDateString).format('YYYY-MM-DD')
+        : today;
 
-    const [selectedDate, setSelectedDate] = useState<Date | null>(
-        projectInfo ? startDate : null
+    const [selectedDate, setSelectedDate] = useState<string | null>(
+        projectInfo ? startDate : today
     );
 
     return (

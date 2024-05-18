@@ -2,11 +2,9 @@ import React, { FC, useContext } from 'react';
 import dayjs from 'dayjs';
 import styled from 'styled-components';
 import Calendar from 'react-calendar';
-import { isWithinInterval } from 'date-fns';
 import '/src/styles/calendarcss.css';
 import { ProjectContext } from '#/hooks/context/projectContext';
 import { DateContext } from '#/hooks/context/dateContext';
-import { getWeekRange } from './timeCalculate';
 
 const StyledCalendarDiv = styled.div`
     .react-calendar__tile {
@@ -71,8 +69,6 @@ const ScheduleCalendar: FC = () => {
         : null;
     const endDate = projectInfo?.endDate ? new Date(projectInfo.endDate) : null;
 
-    console.log(startDate, endDate);
-
     const contextValues = useContext(DateContext);
     const { selectedDate, setSelectedDate } = contextValues || {};
 
@@ -85,9 +81,9 @@ const ScheduleCalendar: FC = () => {
         return null;
     };
 
-    const handleDateChange = (date: Date) => {
-        if (setSelectedDate) {
-            setSelectedDate(date);
+    const handleDateChange = (date: Date | Date[] | null) => {
+        if (date instanceof Date && setSelectedDate) {
+            setSelectedDate(date.toISOString());
         }
     };
 

@@ -1,4 +1,4 @@
-import { startOfWeek, endOfWeek, getDay } from 'date-fns';
+import { startOfWeek, endOfWeek } from 'date-fns';
 import { DaySchedule, ScheduleWeekResponse } from '#/Types/scheduletype';
 
 const DayOfWeek = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];

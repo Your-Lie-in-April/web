@@ -12,7 +12,7 @@ import { UserProvider } from './Pages/MainPage/MainPage';
 const queryClient = new QueryClient();
 
 function App() {
-    const URL = "/"
+    const URL = '/';
     return (
         <UserProvider>
             <QueryClientProvider client={queryClient}>
@@ -21,9 +21,14 @@ function App() {
                     <Routes>
                         <Route path="/" element={<MainPage />} />
                         <Route path="/login" element={<Login />} />
-                        <Route path="projectmake" element={<ProjectMakePage />} />
-                        <Route path="project" element={<ProjectPage />} />
-                        <Route path="project/:projectId" element={<ProjectPage />} />
+                        <Route
+                            path="projectmake"
+                            element={<ProjectMakePage />}
+                        />
+                        <Route
+                            path="project/:projectId"
+                            element={<ProjectPage />}
+                        />
                         <Route path="myproject" element={<StoragePage />} />
                     </Routes>
                 </Router>

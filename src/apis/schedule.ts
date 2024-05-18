@@ -25,14 +25,16 @@ export const getScheduleAllMember = async (projectId: number) => {
     });
 };
 
-// 사용자 시간표 조회
+// 특정 사용자 시간표 조회
 export const getScheduleMember = async (
     projectId: number,
-    memberId: number
+    memberId: number,
+    condition: string
 ) => {
     return await getAPIResponseData<ScheduleMemberResDto>({
         method: 'GET',
         url: API.SCHEDULE_MEMBER(projectId, memberId),
+        params: { condition },
     });
 };
 

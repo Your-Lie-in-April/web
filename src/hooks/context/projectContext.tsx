@@ -1,24 +1,32 @@
 import { ProjectEntity } from '#/Types/projecttype';
-import { createContext, ReactNode } from 'react';
+import { createContext, ReactNode, useState, useEffect } from 'react';
 import useProjectInfoQuery from '#/hooks/apis/queries/project/useProjectInfoQuery';
+import { useParams } from 'react-router-dom';
 
 type ProjectContextType = {
-    projectInfo: ProjectEntity | undefined;
+    projectInfo: ProjectEntity | null;
 };
 
 export const ProjectContext = createContext<ProjectContextType>({
-    projectInfo: undefined,
+    projectInfo: null,
 });
 
 export const ProjectProvider: React.FC<{ children: ReactNode }> = ({
     children,
 }) => {
-    // 프로젝트 아이디 수정하기 --> 선택된 아이디로 수정하기
-    const projectId = 1;
-    const { data: projectData } = useProjectInfoQuery(projectId);
+    const { projectId } = useParams();
+
+    const { data: projectData } = useProjectInfoQuery(Number(projectId));
+    const [projectInfo, setProjectInfo] = useState<ProjectEntity | null>(null);
+
+    useEffect(() => {
+        if (projectData) {
+            setProjectInfo(projectData);
+        }
+    }, [projectData]);
 
     return (
-        <ProjectContext.Provider value={{ projectInfo: projectData }}>
+        <ProjectContext.Provider value={{ projectInfo }}>
             {children}
         </ProjectContext.Provider>
     );

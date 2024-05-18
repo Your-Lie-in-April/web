@@ -1,12 +1,11 @@
 import styled from 'styled-components';
 import TimeCircle from '../TimeCircle';
 import useScheduleMemberQuery from '#/hooks/apis/queries/schedule/useScheduleMemberQuery';
-import { useContext, useEffect, useState } from 'react';
+import { useContext } from 'react';
 import { useUserContext } from '#/Pages/MainPage/MainPage';
 import { ProjectContext } from '#/hooks/context/projectContext';
 import { DateContext } from '#/hooks/context/dateContext';
-import { DaySchedule } from '#/Types/scheduletype';
-import { filterScheduleByWeekRange } from '../filterSchedule';
+import dayjs from 'dayjs';
 
 const CommonText = styled.div`
     color: #000000;
@@ -51,38 +50,29 @@ const MyTime = () => {
     const { userData } = useUserContext();
     // const userId = userData?.id;
     const userId = 1;
-    const projectId = 1;
 
     // 프로젝트 정보 가져옴
     const { projectInfo } = useContext(ProjectContext);
-    // const projectId = projectInfo?.projectId;
+    const projectId = projectInfo?.projectId;
+
+    // 달력 선택 날짜 가져옴
+    const dateContext = useContext(DateContext);
+    const condition =
+        dayjs(dateContext?.selectedDate).format('YYYY-MM-DD') ?? '';
 
     // 스케줄 데이터 가져옴
     const { data: scheduleData } = useScheduleMemberQuery(
         Number(projectId),
-        Number(userId)
+        Number(userId),
+        condition
     );
 
-    // 달력 선택 날짜 가져옴
-    const dateContext = useContext(DateContext);
-    const selectedDate = dateContext ? dateContext.selectedDate : null;
-
-    const [filteredScheduleData, setFilteredScheduleData] = useState<
-        DaySchedule[] | undefined
-    >(undefined);
-
-    console.log('filter: ', filteredScheduleData);
-
-    // 스케줄 필터링
-    useEffect(() => {
-        if (scheduleData && selectedDate) {
-            const filteredData = filterScheduleByWeekRange(
-                scheduleData,
-                selectedDate
-            );
-            setFilteredScheduleData(filteredData);
-        }
-    }, [scheduleData, selectedDate]);
+    console.log(
+        'myTime_projectId, condition, scheduleData ',
+        projectId,
+        condition,
+        scheduleData
+    );
 
     return (
         <TimeTableDiv>
@@ -106,8 +96,7 @@ const MyTime = () => {
                         gap: '2px',
                     }}
                 >
-                    {filteredScheduleData?.map((daySchedule, idx) => {
-                        const day = daySchedule.dayOfWeek;
+                    {scheduleData?.map((daySchedule, idx) => {
                         return (
                             <div
                                 key={idx}
