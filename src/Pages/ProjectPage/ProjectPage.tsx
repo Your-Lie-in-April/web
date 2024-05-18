@@ -9,11 +9,15 @@ import Alarm from './Alarm';
 import MemberSchedule from './Schedule/member/MemberSchedule';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import MemberScheduleGrid from './Schedule/member/MemberScheduleGrid';
 import Info from '../ProjectMakePage/Info';
 import Project from '../MainPage/components/Project';
 import ScheduleCalendar from './Schedule/schedulecalendar';
+import { useParams } from 'react-router-dom';
+import { Http } from '#/constants/backendURL';
+import { MemberEntity } from '#/Types/membertype';
+import { ProjectEntity } from '#/Types/projecttype';
 const GlobalStyle = createGlobalStyle`
   body {
     margin: 0;
@@ -100,14 +104,68 @@ const StyledCalendarWrapper = styled.div`
         margin-bottom: 1em;
     }
 `;
-const ProjectPage = () => {
+
+const ProjectPage: React.FC = () => {
     const [seeMemTime, setSeeMemTime] = useState(true);
     const [startDate, setStartDate] = useState<Date | null>(null);
     const [endDate, setEndDate] = useState<Date | null>(null);
+    const [members, setMembers] = useState<MemberEntity[]>([]);
+    const [projectData, setProjectData] = useState<ProjectEntity | null>(null);
+    const { projectId } = useParams<{ projectId: string }>();
 
     const toggleMemTime = () => {
         setSeeMemTime(!seeMemTime);
     };
+
+    useEffect(() => {
+        const accessToken = localStorage.getItem('access_token');
+        const fetchMember = async () => {
+            try {
+                const response = await fetch(`${Http}/v1/projects/${projectId}/members`, {
+                    method: 'GET',
+                    headers: {
+                        Accept: '*/*',
+                        Authorization: `Bearer ${accessToken}`,
+                    },
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to fetch pinned projects');
+                }
+
+                const data = await response.json();
+                console.log('멤버', data.data);
+                setMembers(data.data);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+        fetchMember();
+    }, [projectId]);
+
+    useEffect(() => {
+        const accessToken = localStorage.getItem('access_token');
+        const fetchProjectData = async () => {
+            const url = `${Http}/v1/projects/${projectId}`;
+            const headers = {
+                Accept: '*/*',
+                Authorization: `Bearer ${accessToken}`,
+            };
+
+            try {
+                const response = await fetch(url, { headers });
+                if (!response.ok) {
+                    throw new Error('데이터 가져오기 실패');
+                }
+                const data = await response.json();
+                setProjectData(data.data);
+                console.log('프로젝트 데이터:', data);
+            } catch (error) {
+                console.error('API 요청 중 에러 발생:', error);
+            }
+        };
+        fetchProjectData();
+    }, [projectId]);
 
     return (
         <>
@@ -124,7 +182,7 @@ const ProjectPage = () => {
                 <div>
                     <AfterLogin />
                     <Divider />
-                    <ProjectInfo />
+                    <ProjectInfo projectData={projectData} />
                 </div>
                 <Box>
                     <div
@@ -136,7 +194,7 @@ const ProjectPage = () => {
                         }}
                     >
                         <MainBox>
-                            <ProfileList />
+                            <ProfileList projectId={projectId} members={members} projectData={projectData} />
                             <div
                                 style={{
                                     display: 'flex',
@@ -166,7 +224,7 @@ const ProjectPage = () => {
                             {seeMemTime ? '멤버 시간표 닫기' : '멤버 시간표 열기'}
                             {seeMemTime ? <ArrowDropUpIcon className="icon" /> : <ArrowDropDownIcon className="icon" />}
                         </MemTimeBtn>
-                        {seeMemTime && <MemberScheduleGrid />}
+                        {seeMemTime && <MemberScheduleGrid projectId={projectId} members={members} />}
                     </div>
                 </Box>
             </div>

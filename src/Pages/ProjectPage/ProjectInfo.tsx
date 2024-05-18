@@ -2,7 +2,10 @@ import styled from 'styled-components';
 import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined';
 import InboxOutlinedIcon from '@mui/icons-material/InboxOutlined';
 import Info from '../ProjectMakePage/Info';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { ProjectEntity } from '#/Types/projecttype';
+import { Http } from '#/constants/backendURL';
 
 const Container = styled.div`
     position: relative;
@@ -65,15 +68,16 @@ const SettingBtn = styled.button`
     background: transparent;
     box-sizing: border-box;
 `;
-
-export const ProjectInfoDetail = ({ onClick }) => {
+interface ProjectInfoDetailProps {
+    onClick: () => void;
+    projectData: ProjectEntity | null;
+}
+export const ProjectInfoDetail: React.FC<ProjectInfoDetailProps> = ({ onClick, projectData }) => {
     return (
         <Container>
             <ProjectInfoDiv>
-                <CommonText style={{ fontSize: '42px', fontWeight: '700' }}>
-                    프로젝트제목프로젝트제목프로젝트제목프로젝트
-                </CommonText>
-                <CommonText>프로젝트내용내용내용내용내용내용</CommonText>
+                <CommonText style={{ fontSize: '42px', fontWeight: '700' }}>{projectData?.title}</CommonText>
+                <CommonText>{projectData?.description}</CommonText>
                 <div style={{ width: '100%', display: 'flex' }}>
                     <div
                         style={{
@@ -89,15 +93,11 @@ export const ProjectInfoDetail = ({ onClick }) => {
                     >
                         <SettingDiv>
                             <SettingBtn onClick={onClick}>
-                                <BorderColorOutlinedIcon
-                                    style={{ fontSize: '18px' }}
-                                />
+                                <BorderColorOutlinedIcon style={{ fontSize: '18px' }} />
                                 커버 수정
                             </SettingBtn>
                             <SettingBtn>
-                                <InboxOutlinedIcon
-                                    style={{ fontSize: '18px' }}
-                                />
+                                <InboxOutlinedIcon style={{ fontSize: '18px' }} />
                                 프로젝트 보관
                             </SettingBtn>
                         </SettingDiv>
@@ -107,18 +107,14 @@ export const ProjectInfoDetail = ({ onClick }) => {
         </Container>
     );
 };
-
-const ProjectInfo = () => {
+interface ProjectDetailProps {
+    projectData: ProjectEntity | null;
+}
+const ProjectInfo: React.FC<ProjectDetailProps> = ({ projectData }) => {
     const [editCover, setEditCover] = useState(false);
 
     return (
-        <>
-            {editCover ? (
-                <Info />
-            ) : (
-                <ProjectInfoDetail onClick={() => setEditCover(true)} />
-            )}
-        </>
+        <>{editCover ? <Info /> : <ProjectInfoDetail onClick={() => setEditCover(true)} projectData={projectData} />}</>
     );
 };
 
