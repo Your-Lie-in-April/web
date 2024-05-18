@@ -70,34 +70,9 @@ const SettingBtn = styled.button`
 `;
 interface ProjectInfoDetailProps {
     onClick: () => void;
+    projectData: ProjectEntity | null;
 }
-export const ProjectInfoDetail: React.FC<ProjectInfoDetailProps> = ({ onClick }) => {
-    const { projectId } = useParams();
-    const [projectData, setProjectData] = useState<ProjectEntity | null>(null);
-    useEffect(() => {
-        const accessToken = localStorage.getItem('access_token');
-        const fetchProjectData = async () => {
-            const url = `${Http}/v1/projects/${projectId}`;
-            const headers = {
-                Accept: '*/*',
-                Authorization: `Bearer ${accessToken}`,
-            };
-
-            try {
-                const response = await fetch(url, { headers });
-                if (!response.ok) {
-                    throw new Error('데이터 가져오기 실패');
-                }
-                const data = await response.json();
-                setProjectData(data.data);
-                console.log('프로젝트 데이터:', data);
-            } catch (error) {
-                console.error('API 요청 중 에러 발생:', error);
-            }
-        };
-
-        fetchProjectData();
-    }, []);
+export const ProjectInfoDetail: React.FC<ProjectInfoDetailProps> = ({ onClick, projectData }) => {
     return (
         <Container>
             <ProjectInfoDiv>
@@ -132,11 +107,16 @@ export const ProjectInfoDetail: React.FC<ProjectInfoDetailProps> = ({ onClick })
         </Container>
     );
 };
-
-const ProjectInfo = () => {
+interface ProjectDetailProps {
+    projectData: ProjectEntity | null;
+}
+const ProjectInfo: React.FC<ProjectDetailProps> = ({ projectData }) => {
     const [editCover, setEditCover] = useState(false);
+    console.log('프로젝트인포', projectData);
 
-    return <>{editCover ? <Info /> : <ProjectInfoDetail onClick={() => setEditCover(true)} />}</>;
+    return (
+        <>{editCover ? <Info /> : <ProjectInfoDetail onClick={() => setEditCover(true)} projectData={projectData} />}</>
+    );
 };
 
 export default ProjectInfo;

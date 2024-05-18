@@ -17,6 +17,7 @@ import ScheduleCalendar from './Schedule/schedulecalendar';
 import { useParams } from 'react-router-dom';
 import { Http } from '#/constants/backendURL';
 import { MemberEntity } from '#/Types/membertype';
+import { ProjectEntity } from '#/Types/projecttype';
 const GlobalStyle = createGlobalStyle`
   body {
     margin: 0;
@@ -109,6 +110,7 @@ const ProjectPage: React.FC = () => {
     const [startDate, setStartDate] = useState<Date | null>(null);
     const [endDate, setEndDate] = useState<Date | null>(null);
     const [members, setMembers] = useState<MemberEntity[]>([]);
+    const [projectData, setProjectData] = useState<ProjectEntity | null>(null);
     const { projectId } = useParams<{ projectId: string }>();
 
     const toggleMemTime = () => {
@@ -140,6 +142,31 @@ const ProjectPage: React.FC = () => {
         };
         fetchMember();
     }, [projectId]);
+
+    useEffect(() => {
+        const accessToken = localStorage.getItem('access_token');
+        const fetchProjectData = async () => {
+            const url = `${Http}/v1/projects/${projectId}`;
+            const headers = {
+                Accept: '*/*',
+                Authorization: `Bearer ${accessToken}`,
+            };
+
+            try {
+                const response = await fetch(url, { headers });
+                if (!response.ok) {
+                    throw new Error('데이터 가져오기 실패');
+                }
+                const data = await response.json();
+                setProjectData(data.data);
+                console.log('프로젝트 데이터:', data);
+            } catch (error) {
+                console.error('API 요청 중 에러 발생:', error);
+            }
+        };
+        fetchProjectData();
+    }, [projectId]);
+
     return (
         <>
             <GlobalStyle />
@@ -155,7 +182,7 @@ const ProjectPage: React.FC = () => {
                 <div>
                     <AfterLogin />
                     <Divider />
-                    <ProjectInfo />
+                    <ProjectInfo projectData={projectData} />
                 </div>
                 <Box>
                     <div
@@ -167,7 +194,7 @@ const ProjectPage: React.FC = () => {
                         }}
                     >
                         <MainBox>
-                            <ProfileList projectId={projectId} members={members} />
+                            <ProfileList projectId={projectId} members={members} projectData={projectData} />
                             <div
                                 style={{
                                     display: 'flex',

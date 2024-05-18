@@ -8,6 +8,7 @@ import InviteBtn from '../Buttons/InviteBtn';
 import { useUserContext } from '#/Pages/MainPage/MainPage';
 import { Http } from '#/constants/backendURL';
 import { MemberEntity } from '#/Types/membertype';
+import { ProjectEntity } from '#/Types/projecttype';
 
 const Box = styled.div`
     width: 286px;
@@ -57,15 +58,17 @@ const MemberList = styled.div`
 interface ProfileListProps {
     projectId: string | undefined;
     members: MemberEntity[];
+    projectData: ProjectEntity | null;
 }
 
-const ProfileList: React.FC<ProfileListProps> = ({ members }) => {
+const ProfileList: React.FC<ProfileListProps> = ({ members, projectId, projectData }) => {
     const [showDeleteBtn, setShowDeleteBtn] = useState(false);
     const [showInviteModal, setShowInviteModal] = useState(false);
     const { userData, setUserData } = useUserContext();
     const toggleDeleteBtn = () => {
         setShowDeleteBtn((prev) => !prev);
     };
+    console.log('프로파일리스트', projectData);
 
     return (
         <Box>
@@ -81,7 +84,7 @@ const ProfileList: React.FC<ProfileListProps> = ({ members }) => {
                     }}
                 >
                     <CommonText style={{ color: '#ffffff' }}>멤버</CommonText>
-                    <InviteBtn />
+                    <InviteBtn projectId={projectId} projectData={projectData} />
                 </div>
                 <MemberList>
                     {members.map((member) =>
