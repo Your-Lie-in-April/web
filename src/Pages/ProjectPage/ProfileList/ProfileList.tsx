@@ -68,7 +68,6 @@ const ProfileList: React.FC<ProfileListProps> = ({ members, projectId, projectDa
     const toggleDeleteBtn = () => {
         setShowDeleteBtn((prev) => !prev);
     };
-    console.log('프로파일리스트', projectData);
 
     return (
         <Box>

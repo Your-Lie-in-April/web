@@ -128,7 +128,7 @@ const InvitationModal: React.FC<InvitationModalProps> = ({ projectData, projectI
 
             const data = await response.json();
             console.log('링크', data.data);
-            setLink(`${Http}` + data.data);
+            setLink(`${Http}/v1/invitation/` + data.data);
         } catch (error) {
             console.error(error);
         }

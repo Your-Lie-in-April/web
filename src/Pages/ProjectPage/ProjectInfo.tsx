@@ -112,7 +112,6 @@ interface ProjectDetailProps {
 }
 const ProjectInfo: React.FC<ProjectDetailProps> = ({ projectData }) => {
     const [editCover, setEditCover] = useState(false);
-    console.log('프로젝트인포', projectData);
 
     return (
         <>{editCover ? <Info /> : <ProjectInfoDetail onClick={() => setEditCover(true)} projectData={projectData} />}</>
