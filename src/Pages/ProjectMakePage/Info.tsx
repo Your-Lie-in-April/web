@@ -1,6 +1,7 @@
 import { FC, useState, ChangeEvent } from 'react';
 import styled from 'styled-components';
 import Cover from './cover';
+import { ProjectEntity } from '#/Types/projecttype';
 
 interface ContentTextProps {
     focused: boolean;
@@ -121,15 +122,14 @@ const Make = styled.button`
     }
 `;
 
+
 const Info: FC = () => {
     const [content, setContent] = useState<string>('');
     const [isTitleClicked, setIsTitleClicked] = useState<boolean>(false);
     const [isContentClicked, setIsContentClicked] = useState<boolean>(false);
     const [isCoverClicked, setIsCoverClicked] = useState<boolean>(false);
     const [selectedColor, setSelectedColor] = useState<string | null>(null);
-    const [selectedImageUrl, setSelectedImageUrl] = useState<string | null>(
-        null
-    );
+    const [selectedImageUrl, setSelectedImageUrl] = useState<string | null>(null);
     const [selectedHex, setSelectedHex] = useState<string | null>(null);
 
     const handleTextareaChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
@@ -183,11 +183,7 @@ const Info: FC = () => {
                             onBlur={() => {
                                 setIsTitleClicked(false);
                             }}
-                            placeholder={
-                                isTitleClicked === true
-                                    ? ''
-                                    : '프로젝트 제목을 작성해주세요'
-                            }
+                            placeholder={isTitleClicked === true ? '' : '프로젝트 제목을 작성해주세요'}
                         ></TitleText>
                     </Title>
                     <Content>
@@ -197,11 +193,7 @@ const Info: FC = () => {
                             onChange={handleTextareaChange}
                             onFocus={() => setIsContentClicked(true)}
                             onBlur={() => setIsContentClicked(false)}
-                            placeholder={
-                                isContentClicked === true
-                                    ? ''
-                                    : '프로젝트 내용을 작성해주세요'
-                            }
+                            placeholder={isContentClicked === true ? '' : '프로젝트 내용을 작성해주세요'}
                         />
                     </Content>
                 </TitleContainer>

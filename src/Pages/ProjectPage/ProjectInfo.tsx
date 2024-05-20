@@ -1,11 +1,11 @@
 import styled from 'styled-components';
 import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined';
 import InboxOutlinedIcon from '@mui/icons-material/InboxOutlined';
-import Info from '../ProjectMakePage/Info';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { ProjectEntity } from '#/Types/projecttype';
 import { Http } from '#/constants/backendURL';
+import InfoEdit from './infoedit';
 
 const Container = styled.div`
     position: relative;
@@ -114,7 +114,13 @@ const ProjectInfo: React.FC<ProjectDetailProps> = ({ projectData }) => {
     const [editCover, setEditCover] = useState(false);
 
     return (
-        <>{editCover ? <Info /> : <ProjectInfoDetail onClick={() => setEditCover(true)} projectData={projectData} />}</>
+        <>
+            {editCover ? (
+                <InfoEdit projectData={projectData} setEditCover={setEditCover}/>
+            ) : (
+                <ProjectInfoDetail onClick={() => setEditCover(true)} projectData={projectData} />
+            )}
+        </>
     );
 };
 
