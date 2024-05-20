@@ -150,20 +150,12 @@ interface CoverProps {
     setEditCover: Dispatch<SetStateAction<boolean>>;
 }
 
-const Cover: FC<CoverProps> = ({
-    onColorSelect,
-    onImageSelect,
-    onHexSelect,
-    title,
-    content,
-    projectData,
-    setEditCover,
-}) => {
-    const [color, setColor] = useState<string>('#ffffff');
+const Cover: FC<CoverProps> = ({ onColorSelect, onImageSelect, onHexSelect, title, content, projectData }) => {
+    const [color, setColor] = useState(projectData?.color || '');
     const [openHex, setOpenHex] = useState<boolean>(false);
-    const navigate = useNavigate();
 
     const handleColorClick = (color: string) => {
+        setColor(color);
         onColorSelect(color);
     };
     const handleImageClick = (url: string) => {
@@ -187,18 +179,18 @@ const Cover: FC<CoverProps> = ({
     };
     const updateProject = async () => {
         const accessToken = localStorage.getItem('access_token');
+        const effectiveTitle = title || projectData?.title;
+        const effectiveDescription = content || projectData?.description;
+        const effectiveColor = color || projectData?.color;
+        const effectiveCoverImageUrl = null || projectData?.coverImageUrl;
+
         const payload = {
-            title: title,
-            description: content,
-            color: color,
-            coverImageUrl: null,
-            startDate: '2024-01-18',
-            endDate: '2024-02-18',
-            startTime: '09:00:00',
-            endTime: '22:00:00',
-            daysOfWeek: ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'],
-            isStored: false,
+            title: effectiveTitle,
+            description: effectiveDescription,
+            color: effectiveColor,
+            coverImageUrl: effectiveCoverImageUrl,
         };
+        console.log(payload);
         try {
             const response = await fetch(Http + `/v1/projects/${projectData?.projectId}`, {
                 method: 'PUT',
