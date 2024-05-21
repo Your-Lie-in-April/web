@@ -3,6 +3,7 @@ import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import { useState } from 'react';
 import { ModalBlackOut, ModalContainer } from './ModalCommon';
 import ModalPortal from '../../utils/ModalPotal';
+import { Http } from '#/constants/backendURL';
 
 const Box = styled.div`
     width: 406px;
@@ -76,13 +77,37 @@ const ButtonsContainer = styled.div`
 
 interface DeleteProjectProps {
     onClose: () => void;
+    projectId: string;
 }
 
-const LeaveProject: React.FC<DeleteProjectProps> = ({ onClose }) => {
+const LeaveProject: React.FC<DeleteProjectProps> = ({ onClose, projectId }) => {
     const [isBtnClick, setIsBtnClick] = useState<boolean>(false);
 
-    const onSetIsBtnClick = () => {
-        setIsBtnClick(!isBtnClick);
+    const handleCancel = () => {
+        setIsBtnClick(false);
+        onClose();
+    };
+
+    const handleDelete = async () => {
+        setIsBtnClick(true);
+        try {
+            const accessToken = localStorage.getItem('access_token');
+            const response = await fetch(`${Http}/v1/projects/${projectId}/me`, {
+                method: 'DELETE',
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                },
+            });
+            if (!response.ok) {
+                if (response.status === 400) {
+                    window.alert('관리자는 나갈 수 없습니다.');
+                }
+                throw new Error(`나가기 실패: ${response.status}`);
+            }
+            console.log('나가기 성공');
+        } catch (error) {
+            console.error('문제 발생:', error);
+        }
         onClose();
     };
 
@@ -116,12 +141,8 @@ const LeaveProject: React.FC<DeleteProjectProps> = ({ onClose }) => {
                             <Title>해당 프로젝트에서 나가겠습니까?</Title>
                         </div>
                         <ButtonsContainer style={{ alignSelf: 'flex-end' }}>
-                            <ConfirmBtn onClick={onSetIsBtnClick}>
-                                확인
-                            </ConfirmBtn>
-                            <CancelBtn onClick={onSetIsBtnClick}>
-                                취소
-                            </CancelBtn>
+                            <ConfirmBtn onClick={handleDelete}>확인</ConfirmBtn>
+                            <CancelBtn onClick={handleCancel}>취소</CancelBtn>
                         </ButtonsContainer>
                     </div>
                 </Box>

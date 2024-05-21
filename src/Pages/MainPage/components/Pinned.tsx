@@ -1,6 +1,10 @@
 import styled from 'styled-components';
 import PushPinOutlinedIcon from '@mui/icons-material/PushPinOutlined';
-
+import { useUserContext } from '../MainPage';
+import { useEffect, useState } from 'react';
+import { PinProjectResponse } from '#/Types/projecttype';
+import { Http } from '#/constants/backendURL';
+import { Navigate, useNavigate } from 'react-router-dom';
 const PinnedBox = styled.div`
     width: 950px;
     height: 400px;
@@ -9,6 +13,7 @@ const PinnedBox = styled.div`
     color: #ffffff;
     padding: 16px;
     box-sizing: border-box;
+    cursor: pointer;
 `;
 
 const ProjectBox = styled.div`
@@ -72,9 +77,43 @@ const DetailText = styled.text`
     align-items: flex-start;
 `;
 
-const Pinned = () => {
+const Pinned: React.FC = () => {
+    const { userData } = useUserContext();
+    const navigation = useNavigate();
+    const [pinnedProjects, setPinnedProjects] = useState<PinProjectResponse | null>(null);
+    useEffect(() => {
+        const accessToken = localStorage.getItem('access_token');
+        const fetchPinnedProjects = async () => {
+            try {
+                const response = await fetch(`${Http}/v1/projects/members/${userData?.memberId}/pin`, {
+                    method: 'GET',
+                    headers: {
+                        Accept: '*/*',
+                        Authorization: `Bearer ${accessToken}`,
+                    },
+                });
+                console.log(userData);
+
+                if (!response.ok) {
+                    throw new Error('Failed to fetch pinned projects');
+                }
+
+                const data = await response.json();
+                console.log(data.data[0]);
+                setPinnedProjects(data.data[0]);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+        fetchPinnedProjects();
+    }, [userData]);
+
+    const handleNavigation = () => {
+        navigation(`/project/${pinnedProjects?.projectId}`);
+    };
+
     return (
-        <PinnedBox>
+        <PinnedBox onClick={handleNavigation}>
             <div style={{ display: 'flex', flexDirection: 'column' }}>
                 <StyledButton>
                     <PushPinOutlinedIcon sx={{ fontSize: 36 }} />
@@ -82,15 +121,14 @@ const Pinned = () => {
                 <ProjectBox>
                     <TextDiv>
                         <ProjectText>
-                            프로젝트명
                             <br />
-                            프로젝트명
+                            {pinnedProjects?.title}
                         </ProjectText>
-                        <DetailText>멤버 00명</DetailText>
+                        <DetailText>멤버 {pinnedProjects?.memberCount}명</DetailText>
                         <DetailText>
                             프로젝트 기간
                             <span />
-                            20XX.XX.XX ~20XX.XX.XX
+                            {pinnedProjects?.startDate} ~{pinnedProjects?.endDate}
                         </DetailText>
                     </TextDiv>
                     <ScheduleBox />

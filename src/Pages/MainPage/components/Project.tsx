@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import LeaveProject from '../../Modal/LeaveProject';
 import { Http } from '#/constants/backendURL';
 import { ProjectEntity } from '../../../Types/projecttype';
+import { useNavigate } from 'react-router-dom';
 
 interface MoreTextProps extends React.HTMLAttributes<HTMLDivElement> {
     isMove?: boolean;
@@ -145,7 +146,7 @@ const Project: React.FC<ProjectProps> = ({ project }) => {
     const [showMore, setShowMore] = useState<boolean>(false);
     const [isCancleBtn, setIsCancelBtn] = useState<boolean>(false);
     const [isPinned, setIsPinned] = useState<boolean>(false);
-    const accessToken = localStorage.getItem('access_token');
+    const navigate = useNavigate();
 
     const toggleMoreBtn = () => {
         setShowMore(!showMore);
@@ -157,6 +158,7 @@ const Project: React.FC<ProjectProps> = ({ project }) => {
 
     const handlePin = async () => {
         try {
+            const accessToken = localStorage.getItem('access_token');
             const response = await fetch(`${Http}/v1/members/pin/${project.projectId}`, {
                 method: 'PATCH',
                 headers: {
@@ -176,7 +178,7 @@ const Project: React.FC<ProjectProps> = ({ project }) => {
     };
 
     return (
-        <ProjectBox>
+        <ProjectBox onClick={() => navigate(`/project/${project.projectId}`)}>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
                 <MoreDiv>
                     {showMore && (
@@ -205,7 +207,7 @@ const Project: React.FC<ProjectProps> = ({ project }) => {
                     <DetailText>{project.description}</DetailText>
                 </TextBox>
             </div>
-            {isCancleBtn && <LeaveProject onClose={onClickCancelBtn} />}
+            {isCancleBtn && <LeaveProject projectId={project.projectId} onClose={onClickCancelBtn} />}
         </ProjectBox>
     );
 };

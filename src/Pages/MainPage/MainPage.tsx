@@ -72,7 +72,6 @@ const MainPage: FC = () => {
         const refreshToken = query.get('refresh_token') || localStorage.getItem('refresh_token');
         const memberId = query.get('member_id') || localStorage.getItem('member_id');
 
-
         if (accessToken) localStorage.setItem('access_token', accessToken);
         if (refreshToken) localStorage.setItem('refresh_token', refreshToken);
         if (memberId) localStorage.setItem('member_id', memberId);
