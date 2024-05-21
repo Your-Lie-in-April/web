@@ -173,83 +173,81 @@ const ProjectPage: React.FC = () => {
     }, [projectId]);
 
     return (
-        <>
-            <ProjectProvider>
-                <DateProvider>
-                    <GlobalStyle />
-                    <div
-                        style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            gap: '32px',
-                            width: '100vw',
-                            margin: '0 auto',
-                        }}
-                    >
-                        <div>
-                            <AfterLogin />
-                            <Divider />
-                            <ProjectInfo projectData={projectData} />
-                        </div>
-                        <Box>
-                            <div
-                                style={{
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    gap: '24px',
-                                    alignItems: 'center',
-                                }}
-                            >
-                                <MainBox>
-                                    <ProfileList
-                                        projectId={projectId}
-                                        members={members}
-                                        projectData={projectData}
-                                    />
-                                    <div
-                                        style={{
-                                            display: 'flex',
-                                            flexDirection: 'column',
-                                            gap: '12px',
-                                        }}
-                                    >
-                                        <TeamSchedule />
-                                        <MySchedule />
-                                    </div>
-                                    <div
-                                        style={{
-                                            display: 'flex',
-                                            flexDirection: 'column',
-                                            gap: '12px',
-                                        }}
-                                    >
-                                        <ScheduleCalendar />
-                                        <Alarm />
-                                    </div>
-                                </MainBox>
-                                <MemTimeBtn onClick={toggleMemTime}>
-                                    {seeMemTime
-                                        ? '멤버 시간표 닫기'
-                                        : '멤버 시간표 열기'}
-                                    {seeMemTime ? (
-                                        <ArrowDropUpIcon className="icon" />
-                                    ) : (
-                                        <ArrowDropDownIcon className="icon" />
-                                    )}
-                                </MemTimeBtn>
-                                {seeMemTime && (
-                                    <MemberScheduleGrid
-                                        projectId={projectId}
-                                        members={members}
-                                    />
-                                )}
-                            </div>
-                        </Box>
+        <ProjectProvider>
+            <DateProvider>
+                <GlobalStyle />
+                <div
+                    style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '32px',
+                        width: '100vw',
+                        margin: '0 auto',
+                    }}
+                >
+                    <div>
+                        <AfterLogin />
+                        <Divider />
+                        <ProjectInfo projectData={projectData} />
                     </div>
-                    <div style={{ height: '400px' }}></div>
-                </DateProvider>
-            </ProjectProvider>
-        </>
+                    <Box>
+                        <div
+                            style={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                gap: '24px',
+                                alignItems: 'center',
+                            }}
+                        >
+                            <MainBox>
+                                <ProfileList
+                                    projectId={projectId}
+                                    members={members}
+                                    projectData={projectData}
+                                />
+                                <div
+                                    style={{
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        gap: '12px',
+                                    }}
+                                >
+                                    <TeamSchedule />
+                                    <MySchedule />
+                                </div>
+                                <div
+                                    style={{
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        gap: '12px',
+                                    }}
+                                >
+                                    <ScheduleCalendar />
+                                    <Alarm />
+                                </div>
+                            </MainBox>
+                            <MemTimeBtn onClick={toggleMemTime}>
+                                {seeMemTime
+                                    ? '멤버 시간표 닫기'
+                                    : '멤버 시간표 열기'}
+                                {seeMemTime ? (
+                                    <ArrowDropUpIcon className="icon" />
+                                ) : (
+                                    <ArrowDropDownIcon className="icon" />
+                                )}
+                            </MemTimeBtn>
+                            {seeMemTime && (
+                                <MemberScheduleGrid
+                                    projectId={projectId}
+                                    members={members}
+                                />
+                            )}
+                        </div>
+                    </Box>
+                </div>
+                <div style={{ height: '400px' }}></div>
+            </DateProvider>
+        </ProjectProvider>
     );
 };
 export default ProjectPage;

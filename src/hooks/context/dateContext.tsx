@@ -1,6 +1,7 @@
-import React, { createContext, useContext, useState } from 'react';
-import { ProjectContext } from './projectContext';
+// dateContext.tsx
+import React, { createContext, useState, useEffect } from 'react';
 import dayjs from 'dayjs';
+import { useProjectContext } from './projectContext';
 
 interface DateContextValue {
     selectedDate: string | null;
@@ -15,15 +16,18 @@ export const DateProvider: React.FC<{ children: React.ReactNode }> = ({
     children,
 }) => {
     const today = dayjs(new Date()).format('YYYY-MM-DD');
-    const { projectInfo } = useContext(ProjectContext);
-    const startDateString = projectInfo?.startDate;
-    const startDate = startDateString
-        ? dayjs(startDateString).format('YYYY-MM-DD')
-        : today;
+    const { projectData } = useProjectContext();
+    const [selectedDate, setSelectedDate] = useState<string | null>(today);
 
-    const [selectedDate, setSelectedDate] = useState<string | null>(
-        projectInfo ? startDate : today
-    );
+    useEffect(() => {
+        if (projectData) {
+            const startDateString = projectData.startDate;
+            const startDate = startDateString
+                ? dayjs(startDateString).format('YYYY-MM-DD')
+                : today;
+            setSelectedDate(startDate);
+        }
+    }, [projectData, today]);
 
     return (
         <DateContext.Provider value={{ selectedDate, setSelectedDate }}>

@@ -63,14 +63,13 @@ const StyledCalendar = styled(Calendar)`
 `;
 
 const ScheduleCalendar: FC = () => {
-    const { projectInfo } = useContext(ProjectContext);
-    const startDate = projectInfo?.startDate
-        ? new Date(projectInfo.startDate)
+    const { projectData } = useContext(ProjectContext);
+    const startDate = projectData?.startDate
+        ? new Date(projectData.startDate)
         : null;
-    const endDate = projectInfo?.endDate ? new Date(projectInfo.endDate) : null;
+    const endDate = projectData?.endDate ? new Date(projectData.endDate) : null;
 
-    const contextValues = useContext(DateContext);
-    const { selectedDate, setSelectedDate } = contextValues || {};
+    const { selectedDate, setSelectedDate } = useContext(DateContext) || {};
 
     const tileClassName = ({ date }: { date: Date }) => {
         if (startDate && endDate) {
