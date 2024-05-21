@@ -33,7 +33,7 @@ const GlobalStyle = createGlobalStyle`
 `;
 
 const Divider = styled.div`
-    width: 100vw;
+    width: 100%;
     height: 20px;
     background-color: #212121;
 `;
@@ -181,8 +181,7 @@ const ProjectPage: React.FC = () => {
                         display: 'flex',
                         flexDirection: 'column',
                         gap: '32px',
-                        width: '100vw',
-                        margin: '0 auto',
+                        width: '100%',
                     }}
                 >
                     <div>
