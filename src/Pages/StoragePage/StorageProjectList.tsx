@@ -36,22 +36,22 @@ const StorageProjectList = () => {
 
     const accessToken = localStorage.getItem('access_token');
 
-    useEffect(() => {
-        const fetchProjects = async () => {
-            const response = await fetch(
-                `${Http}/v1/projects/stored?page=${page}&size=${size}`,
-                {
-                    headers: {
-                        Authorization: `Bearer ${accessToken}`,
-                    },
-                }
-            );
-            const data = await response.json();
-            console.log(data);
-            setProjects((prevProjects) => [...prevProjects, ...data.data]);
-            setHasMore(data.data.length > 0);
-        };
+    const fetchProjects = async () => {
+        const response = await fetch(
+            `${Http}/v1/projects/stored?page=${page}&size=${size}`,
+            {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                },
+            }
+        );
+        const data = await response.json();
+        console.log(data);
+        setProjects((prevProjects) => [...prevProjects, ...data.data]);
+        setHasMore(data.data.length > 0);
+    };
 
+    useEffect(() => {
         if (accessToken !== '' && hasMore) {
             fetchProjects();
         }
@@ -71,10 +71,22 @@ const StorageProjectList = () => {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
+    // 프로젝트 목록 다시 가져오기
+    const refreshProjects = async () => {
+        setPage(0);
+        setProjects([]);
+        setHasMore(true);
+        await fetchProjects();
+    };
+
     return projects.length > 0 ? (
         <GridContainer>
             {projects.map((project) => (
-                <StorageProject key={project.projectId} project={project} />
+                <StorageProject
+                    key={project.projectId}
+                    project={project}
+                    refreshProjects={refreshProjects}
+                />
             ))}
         </GridContainer>
     ) : (

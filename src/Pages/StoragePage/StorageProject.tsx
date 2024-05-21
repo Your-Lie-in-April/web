@@ -132,9 +132,13 @@ const MoreText = styled.div`
 
 interface ProjectStorageProps {
     project: ProjectEntity;
+    refreshProjects: () => Promise<void>;
 }
 
-const StorageProject: React.FC<ProjectStorageProps> = ({ project }) => {
+const StorageProject: React.FC<ProjectStorageProps> = ({
+    project,
+    refreshProjects,
+}) => {
     const [showMore, setShowMore] = useState<boolean>(false);
     const [isClick, setIsClick] = useState<boolean>(false);
 
@@ -199,6 +203,7 @@ const StorageProject: React.FC<ProjectStorageProps> = ({ project }) => {
                     onClose={onClickItem}
                     projectId={Number(project.projectId)}
                     title={project.title}
+                    refreshProjects={refreshProjects}
                 />
             )}
         </>
