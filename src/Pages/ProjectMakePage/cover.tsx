@@ -1,21 +1,12 @@
-import { FC, useState, useCallback } from 'react';
+import { FC, useState, useCallback, Dispatch, SetStateAction } from 'react';
 import styled from 'styled-components';
 import { ChromePicker, ColorResult } from 'react-color';
-
-interface CoverProps {
-    onColorSelect: (color: string) => void;
-    onImageSelect: (url: string) => void;
-    onHexSelect: (color: string) => void;
-}
+import { ProjectEntity } from '#/Types/projecttype';
+import { Http } from '#/constants/backendURL';
+import { useNavigate } from 'react-router-dom';
 
 const plus = (
-    <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="18"
-        height="18"
-        viewBox="0 0 18 18"
-        fill="none"
-    >
+    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
         <path
             fill-rule="evenodd"
             clip-rule="evenodd"
@@ -123,14 +114,7 @@ const HEXContainer = styled.div`
     box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.25);
     margin-top: 8px;
 `;
-const colors = [
-    '#633AE2',
-    '#FFCB3B',
-    '#64AFF5',
-    '#C2D57A',
-    '#EB5757',
-    '#212121',
-];
+const colors = ['#633AE2', '#FFCB3B', '#64AFF5', '#C2D57A', '#EB5757', '#212121'];
 const urls = [
     'https://s3-alpha-sig.figma.com/img/1428/5f05/043a78e2fa12ac2136b1383ece3b805c?Expires=1711324800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=M3ntrL8DfrFbmumQgCKrlg3oUpu2ek2~CRQ0p~YoWuMLNolGDMLFt5K3mYnDR51ePGVP6BiF3ErD5lQ3Dy73z7dZJXkae3kfhHqxEB9wEPwaGYR-SFK6JF9tTmLbAPucfPfXx~mY9XQqJjET-9FnHlosOEJUxsOG6oaV7BLkoW6yQIGnCdN3Z7632r-egffAjaFYPjnjWckV4M3QA2fxWPDIxMTWk7KeZRPRw6PX9ex7~-nzkaKEVbCeljSut98EXDSkmwZ8CHsN9MQrsXv6xkRXiC3-CLuNhCdOZWl~MeWvkRQqKpexGKrK6xpsEK-jcUuotxYd4N-hIQa84XDMJQ__',
     'https://s3-alpha-sig.figma.com/img/efb8/74df/f4f778f0a5ad5ba05f81b2233e6fd797?Expires=1711324800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=Gjo2BbRHGO9ZrhwvAhQ41gm1pHLYU0gqqhZFYkH3JyvgfRmvLffd-~fxsqwJb4LyPoOqwZVq4Bm9gSsdMkud4wsJGV0ZI5PG42oFrK2D9OuCR8RQygT~QIyYkzByuIEkHyOmeVLFl-MuEnWKiCACpSHL94zShGZ4WMFHho0LiKLzusPTQx8Lfm~PBTFFoxlYqqSZ6N~LtKH5Q54qsyAe-wUcxoAQ8wx30hG8QSfIZo3uFjc-oTE1HKvuhn0lgnTX-liWecluvRMmiyHK7-jYWY7EtmNheeyGT3l3g0bV~9qunhGjoShKrASPyX2ynvCSWiKcc4k-Wwz5CjqlfHih-g__',
@@ -156,15 +140,22 @@ const backurls = [
     'https://s3-alpha-sig.figma.com/img/9ec7/03fd/37e40de737e425f7b7c36080e0220504?Expires=1710720000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=Sm6ELb~YJvtu2GS2F0B5WWx6fDfHT9~M5m7fw99PaHZ3E65cyi9xPYIHpzMlY1S84n0dS8uuXNPeaVOZAjnoi9qNSYWCIuFeQalz3UJRtj-T1iPMVwZ9GRGIdTzWarhcznUnnzOjYMBSO0iuyaYK1jz8znQBG0gG-B7WnFu-TmZvXtXiCmPyW-CHKxipm2Zvw19wTkWXqG8AzctgDcqb6-2z8EIv3OLtaCBnQmiXI-ELgHyODMDPakE9vCj6RR7GT8kKdpBsMoQGKPMjOaqRxJFFrVd2CKqzEAIKKkfmHzSMih4w3f3ZntrvwN3OnwVChAEno~3zSHmJIxkP42pDoQ__',
 ];
 
-const Cover: FC<CoverProps> = ({
-    onColorSelect,
-    onImageSelect,
-    onHexSelect,
-}) => {
-    const [color, setColor] = useState<string>('#ffffff');
+interface CoverProps {
+    onColorSelect: (color: string) => void;
+    onImageSelect: (url: string) => void;
+    onHexSelect: (color: string) => void;
+    title: string;
+    content: string;
+    projectData: ProjectEntity | null;
+    setEditCover: Dispatch<SetStateAction<boolean>>;
+}
+
+const Cover: FC<CoverProps> = ({ onColorSelect, onImageSelect, onHexSelect, title, content, projectData }) => {
+    const [color, setColor] = useState(projectData?.color || '');
     const [openHex, setOpenHex] = useState<boolean>(false);
 
     const handleColorClick = (color: string) => {
+        setColor(color);
         onColorSelect(color);
     };
     const handleImageClick = (url: string) => {
@@ -186,10 +177,47 @@ const Cover: FC<CoverProps> = ({
     const toggleHex = () => {
         setOpenHex((prev) => !prev);
     };
-    https: return (
+    const updateProject = async () => {
+        const accessToken = localStorage.getItem('access_token');
+        const effectiveTitle = title || projectData?.title;
+        const effectiveDescription = content || projectData?.description;
+        const effectiveColor = color || projectData?.color;
+        const effectiveCoverImageUrl = null || projectData?.coverImageUrl;
+
+        const payload = {
+            title: effectiveTitle,
+            description: effectiveDescription,
+            color: effectiveColor,
+            coverImageUrl: effectiveCoverImageUrl,
+        };
+        console.log(payload);
+        try {
+            const response = await fetch(Http + `/v1/projects/${projectData?.projectId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${accessToken}`,
+                },
+                body: JSON.stringify(payload),
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to update the project');
+            }
+
+            const jsonResponse = await response.json();
+            console.log('Project updated:', jsonResponse);
+            window.location.reload();
+        } catch (error) {
+            console.error('Error updating project:', error);
+        }
+    };
+    return (
         <CoverContainer>
             <ConverInnerContainer>
-                <Register style={{ fontSize: '18px' }}>커버등록</Register>
+                <Register style={{ fontSize: '18px' }} onClick={updateProject}>
+                    커버등록
+                </Register>
                 <ColorContainer>
                     단색
                     <ColorChoose>
@@ -207,10 +235,7 @@ const Cover: FC<CoverProps> = ({
                             }}
                             onClick={() => handleColorClick('#ffffff')}
                         />
-                        <Color
-                            style={{ background: '#D9D9D9' }}
-                            onClick={toggleHex}
-                        >
+                        <Color style={{ background: '#D9D9D9' }} onClick={toggleHex}>
                             {plus}
                         </Color>
                     </ColorChoose>
@@ -227,9 +252,7 @@ const Cover: FC<CoverProps> = ({
                                     backgroundRepeat: 'no-repeat',
                                     backgroundPosition: 'center',
                                 }}
-                                onClick={() =>
-                                    handleImageClick(backurls[index])
-                                }
+                                onClick={() => handleImageClick(backurls[index])}
                             ></Image>
                         ))}
                     </ImageChoose>
@@ -248,9 +271,7 @@ const Cover: FC<CoverProps> = ({
                     <ChromePicker
                         disableAlpha={false}
                         color={color}
-                        onChange={(selectedColor) =>
-                            handleColorChange(selectedColor)
-                        }
+                        onChange={(selectedColor) => handleColorChange(selectedColor)}
                     />
                 </div>
             ) : null}
