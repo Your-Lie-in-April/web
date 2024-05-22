@@ -1,17 +1,17 @@
 import styled from 'styled-components';
 import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined';
 import InboxOutlinedIcon from '@mui/icons-material/InboxOutlined';
-import Info from '../ProjectMakePage/Info';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { ProjectEntity } from '#/Types/projecttype';
 import { Http } from '#/constants/backendURL';
+import InfoEdit from './infoedit';
 
 const Container = styled.div`
     position: relative;
     width: 100%;
     height: 200px;
-    background: #d9d9d9;
+    background: ${(props) => props.color || '#d9d9d9'};
     box-sizing: border-box;
     padding-top: 28px;
 `;
@@ -40,7 +40,6 @@ const CommonText = styled.div`
 const SettingDiv = styled.div`
     position: absolute;
     bottom: 16px;
-
     width: 221px;
     height: 34px;
     display: flex;
@@ -74,7 +73,7 @@ interface ProjectInfoDetailProps {
 }
 export const ProjectInfoDetail: React.FC<ProjectInfoDetailProps> = ({ onClick, projectData }) => {
     return (
-        <Container>
+        <Container color={projectData?.color}>
             <ProjectInfoDiv>
                 <CommonText style={{ fontSize: '42px', fontWeight: '700' }}>{projectData?.title}</CommonText>
                 <CommonText>{projectData?.description}</CommonText>
@@ -114,7 +113,13 @@ const ProjectInfo: React.FC<ProjectDetailProps> = ({ projectData }) => {
     const [editCover, setEditCover] = useState(false);
 
     return (
-        <>{editCover ? <Info /> : <ProjectInfoDetail onClick={() => setEditCover(true)} projectData={projectData} />}</>
+        <>
+            {editCover ? (
+                <InfoEdit projectData={projectData} setEditCover={setEditCover} />
+            ) : (
+                <ProjectInfoDetail onClick={() => setEditCover(true)} projectData={projectData} />
+            )}
+        </>
     );
 };
 
