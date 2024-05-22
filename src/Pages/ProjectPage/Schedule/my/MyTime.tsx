@@ -1,14 +1,12 @@
 import styled from 'styled-components';
-import TimeCircle from '../TimeCircle';
-import useScheduleMemberQuery from '#/hooks/apis/queries/schedule/useScheduleMemberQuery';
 import { useContext, useEffect, useState } from 'react';
 import { useUserContext } from '#/Pages/MainPage/MainPage';
 import { ProjectContext } from '#/hooks/context/projectContext';
 import { DateContext } from '#/hooks/context/dateContext';
 import dayjs from 'dayjs';
 import { Http } from '#/constants/backendURL';
-import { ProjectEntity } from '#/Types/projecttype';
 import { ScheduleWeekResponse } from '#/Types/scheduletype';
+import TimeSchedule from '../TimeSchedule';
 
 const CommonText = styled.div`
     color: #000000;
@@ -25,17 +23,6 @@ const TimeTableDiv = styled.div`
     display: flex;
 `;
 
-const DayTextList = styled.div`
-    height: 216.57px;
-    display: flex;
-    flex-direction: column;
-    gap: 11px;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 1.06px;
-    align-self: flex-end;
-`;
-
 const HourTextList = styled.div`
     width: 574px;
     display: flex;
@@ -45,7 +32,6 @@ const HourTextList = styled.div`
     justify-content: space-between;
 `;
 
-const DayOfWeek = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
 const HoursOfDay = [...Array(16).keys()].map((_, index) => index + 9);
 
 const MyTime = () => {
@@ -60,7 +46,7 @@ const MyTime = () => {
     // 달력 선택 날짜 가져옴
     const date = useContext(DateContext);
     const condition = dayjs(date?.selectedDate).format('YYYY-MM-DD') ?? '';
-    console.log(`condition : ${condition}`)
+    console.log(`condition : ${condition}`);
 
     const [scheduleData, setSchdeuleData] =
         useState<ScheduleWeekResponse | null>(null);
@@ -94,69 +80,35 @@ const MyTime = () => {
         fetchSchedule();
     }, [projectId, memberId, condition]);
 
+    const [progress, setProgress] = useState(0);
+    const [currentTime, setCurrentTime] = useState(new Date());
+
+    useEffect(() => {
+        const timer = setInterval(() => {
+            setCurrentTime(new Date());
+            setProgress((prevProgress) => {
+                if (prevProgress >= 100) {
+                    clearInterval(timer);
+                    return 100;
+                }
+                return prevProgress + 10;
+            });
+        }, 1000);
+
+        return () => {
+            clearInterval(timer);
+        };
+    }, []);
 
     return (
         <TimeTableDiv>
-            <DayTextList>
-                {DayOfWeek.map((day, idx) => (
-                    <CommonText style={{ height: '24.081px' }} key={idx}>
-                        {day}
-                    </CommonText>
-                ))}
-            </DayTextList>
             <div style={{ display: 'flex', flexDirection: 'column' }}>
-                <HourTextList style={{ alignSelf: 'flex-start' }}>
+                <HourTextList style={{ alignSelf: 'flex-end' }}>
                     {HoursOfDay.slice(0, 15).map((hour, idx) => (
                         <CommonText key={idx}>{hour}</CommonText>
                     ))}
                 </HourTextList>
-                <div
-                    style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: '2px',
-                    }}
-                >
-                    {scheduleData?.map((daySchedule, idx) => {
-                        return (
-                            <div
-                                key={idx}
-                                style={{
-                                    display: 'flex',
-                                    flexDirection: 'row',
-                                }}
-                            >
-                                {HoursOfDay.slice(0, HoursOfDay.length - 1).map(
-                                    (hour, hourIdx) => (
-                                        <TimeCircle
-                                            key={hourIdx}
-                                            hour={hour}
-                                            isScheduled={
-                                                daySchedule.schedule.some(
-                                                    (scheduleItem) =>
-                                                        new Date(
-                                                            scheduleItem.startAt
-                                                        ).getHours() === hour &&
-                                                        new Date(
-                                                            scheduleItem.endAt
-                                                        ).getHours() > hour
-                                                ) || false
-                                            }
-                                            scheduleItems={
-                                                daySchedule.schedule.filter(
-                                                    (scheduleItem) =>
-                                                        new Date(
-                                                            scheduleItem.startAt
-                                                        ).getHours() === hour
-                                                ) || []
-                                            }
-                                        />
-                                    )
-                                )}
-                            </div>
-                        );
-                    })}
-                </div>
+                <TimeSchedule currentTime={currentTime} />
             </div>
         </TimeTableDiv>
     );
