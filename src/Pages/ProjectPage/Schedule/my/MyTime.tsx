@@ -1,11 +1,14 @@
 import styled from 'styled-components';
 import TimeCircle from '../TimeCircle';
 import useScheduleMemberQuery from '#/hooks/apis/queries/schedule/useScheduleMemberQuery';
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useUserContext } from '#/Pages/MainPage/MainPage';
 import { ProjectContext } from '#/hooks/context/projectContext';
 import { DateContext } from '#/hooks/context/dateContext';
 import dayjs from 'dayjs';
+import { Http } from '#/constants/backendURL';
+import { ProjectEntity } from '#/Types/projecttype';
+import { ScheduleWeekResponse } from '#/Types/scheduletype';
 
 const CommonText = styled.div`
     color: #000000;
@@ -48,31 +51,49 @@ const HoursOfDay = [...Array(16).keys()].map((_, index) => index + 9);
 const MyTime = () => {
     // 유저데이터가져옴
     const { userData } = useUserContext();
-    // const userId = userData?.id;
-    const userId = 1;
+    const memberId = userData?.memberId;
 
     // 프로젝트 정보 가져옴
-    const { projectInfo } = useContext(ProjectContext);
-    const projectId = projectInfo?.projectId;
+    const { projectData } = useContext(ProjectContext);
+    const projectId = projectData?.projectId;
 
     // 달력 선택 날짜 가져옴
-    const dateContext = useContext(DateContext);
-    const condition =
-        dayjs(dateContext?.selectedDate).format('YYYY-MM-DD') ?? '';
+    const date = useContext(DateContext);
+    const condition = dayjs(date?.selectedDate).format('YYYY-MM-DD') ?? '';
+    console.log(`condition : ${condition}`)
 
+    const [scheduleData, setSchdeuleData] =
+        useState<ScheduleWeekResponse | null>(null);
     // 스케줄 데이터 가져옴
-    const { data: scheduleData } = useScheduleMemberQuery(
-        Number(projectId),
-        Number(userId),
-        condition
-    );
+    useEffect(() => {
+        const accessToken = localStorage.getItem('access_token');
+        const fetchSchedule = async () => {
+            try {
+                const response = await fetch(
+                    `${Http}/v1/projects/${projectId}/members/${memberId}/schedules?condition=${condition}`,
+                    {
+                        method: 'GET',
+                        headers: {
+                            Accept: '*/*',
+                            Authorization: `Bearer ${accessToken}`,
+                        },
+                    }
+                );
 
-    console.log(
-        'myTime_projectId, condition, scheduleData ',
-        projectId,
-        condition,
-        scheduleData
-    );
+                if (!response.ok) {
+                    throw new Error('Failed to fetch pinned projects');
+                }
+
+                const data = await response.json();
+                console.log('내 스케줄', data.data);
+                setSchdeuleData(data.data);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+        fetchSchedule();
+    }, [projectId, memberId, condition]);
+
 
     return (
         <TimeTableDiv>

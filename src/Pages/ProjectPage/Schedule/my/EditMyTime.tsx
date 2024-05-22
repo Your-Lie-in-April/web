@@ -46,10 +46,7 @@ const HourTextList = styled.div`
 const DayOfWeek = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
 const HoursOfDay = [...Array(15).keys()].map((_, index) => index + 9);
 
-const EditMyTime: React.FC = (props) => {
-    // 내 기존 시간표를 불러옴
-    // let myOriginTime = props.myOriginTime;
-
+const EditMyTime: React.FC = () => {
     const [firstClickSlot, setFirstClickSlot] = useState<number>(0);
     const [firstClickSlotState, setFirstClickSlotState] =
         useState<boolean>(false);
