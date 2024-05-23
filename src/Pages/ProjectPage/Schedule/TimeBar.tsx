@@ -1,11 +1,13 @@
 import React from 'react';
+import { ScheduleItem } from '#/Types/scheduletype';
+import { dateToPercent } from './dateToPercent';
 
 interface ProgressBarProps {
     hours: number[];
-    currentHour: number;
+    schedule: ScheduleItem[];
 }
 
-const ProgressBar: React.FC<ProgressBarProps> = ({ hours, currentHour }) => {
+const ProgressBar: React.FC<ProgressBarProps> = ({ hours, schedule }) => {
     const totalWidth = hours.length * 40;
 
     return (
@@ -19,7 +21,7 @@ const ProgressBar: React.FC<ProgressBarProps> = ({ hours, currentHour }) => {
                 display: 'flex',
             }}
         >
-            {hours.map((hour, index) => (
+            {hours.map((hour) => (
                 <div
                     key={hour}
                     style={{
@@ -31,7 +33,25 @@ const ProgressBar: React.FC<ProgressBarProps> = ({ hours, currentHour }) => {
                         borderColor: '#7D7D7D',
                     }}
                 >
-                   
+                    {schedule.map((item, index) => {
+                        const startPercent = dateToPercent(new Date(item.startTime));
+                        const endPercent = dateToPercent(new Date(item.endTime));
+
+                        return (
+                            <div
+                                key={index}
+                                style={{
+                                    position: 'absolute',
+                                    top: 0,
+                                    left: `${startPercent}%`,
+                                    width: `${endPercent - startPercent}%`,
+                                    height: '100%',
+                                    backgroundColor: '#FF0000',
+                                    borderRadius: '20px',
+                                }}
+                            />
+                        );
+                    })}
                 </div>
             ))}
         </div>

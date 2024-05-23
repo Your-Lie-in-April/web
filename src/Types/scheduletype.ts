@@ -1,10 +1,10 @@
 export type ScheduleItem = {
-    startAt: string;
-    endAt: string;
+    startTime: string;
+    endTime: string;
 };
 
 export type DaySchedule = {
-    dayOfWeek: string;
+    daysOfWeek: string;
     schedule: ScheduleItem[];
 };
 

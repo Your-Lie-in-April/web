@@ -80,25 +80,7 @@ const MyTime = () => {
         fetchSchedule();
     }, [projectId, memberId, condition]);
 
-    const [progress, setProgress] = useState(0);
-    const [currentTime, setCurrentTime] = useState(new Date());
-
-    useEffect(() => {
-        const timer = setInterval(() => {
-            setCurrentTime(new Date());
-            setProgress((prevProgress) => {
-                if (prevProgress >= 100) {
-                    clearInterval(timer);
-                    return 100;
-                }
-                return prevProgress + 10;
-            });
-        }, 1000);
-
-        return () => {
-            clearInterval(timer);
-        };
-    }, []);
+    
 
     return (
         <TimeTableDiv>
@@ -108,7 +90,7 @@ const MyTime = () => {
                         <CommonText key={idx}>{hour}</CommonText>
                     ))}
                 </HourTextList>
-                <TimeSchedule currentTime={currentTime} />
+                <TimeSchedule scheduleData={scheduleData} />
             </div>
         </TimeTableDiv>
     );
