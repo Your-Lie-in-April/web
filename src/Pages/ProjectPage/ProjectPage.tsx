@@ -6,20 +6,18 @@ import ProfileList from './ProfileList/ProfileList';
 import MySchedule from './Schedule/my/MySchedule';
 import TeamSchedule from './Schedule/team/TeamSchedule';
 import Alarm from './Alarm';
-import MemberSchedule from './Schedule/member/MemberSchedule';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import { useEffect, useState } from 'react';
 import MemberScheduleGrid from './Schedule/member/MemberScheduleGrid';
-import Info from '../ProjectMakePage/Info';
-import Project from '../MainPage/components/Project';
-import ScheduleCalendar from './Schedule/schedulecalendar';
 import { useParams } from 'react-router-dom';
 import { Http } from '#/constants/backendURL';
 import { MemberEntity } from '#/Types/membertype';
 import { ProjectEntity } from '#/Types/projecttype';
 import { ProjectProvider } from '#/hooks/context/projectContext';
 import { DateProvider } from '#/hooks/context/dateContext';
+import ScheduleCalendar from './Schedule/scheduleCalendar';
+
 const GlobalStyle = createGlobalStyle`
   body {
     margin: 0;
@@ -73,44 +71,9 @@ const MemTimeBtn = styled.button`
         height: 22px;
     }
 `;
-const StyledCalendarWrapper = styled.div`
-    .react-calendar__tile {
-        padding: 3px;
-        font-size: 24px;
-    }
-    &--active {
-        background-color: inherit;
-        border-radius: 0;
-    }
-    .react-calendar {
-        width: 290px;
-        height: 294px;
-        border-radius: 10px;
-        background: #fbfbfb;
-        box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.25);
-        font-family: Arial, Helvetica, sans-serif;
-        line-height: normal;
-    }
-    .react-calendar__month-view__weekdays {
-        text-align: center;
-        text-transform: uppercase;
-        font: inherit;
-        font-size: 0.75em;
-        font-weight: bold;
-        gap: 2px;
-        width: 279px;
-    }
-    .react-calendar__navigation {
-        display: flex;
-        height: 22px;
-        margin-bottom: 1em;
-    }
-`;
 
 const ProjectPage: React.FC = () => {
     const [seeMemTime, setSeeMemTime] = useState(true);
-    const [startDate, setStartDate] = useState<Date | null>(null);
-    const [endDate, setEndDate] = useState<Date | null>(null);
     const [members, setMembers] = useState<MemberEntity[]>([]);
     const [projectData, setProjectData] = useState<ProjectEntity | null>(null);
     const { projectId } = useParams<{ projectId: string }>();

@@ -1,9 +1,9 @@
-export const dateToPercent = (date: Date) => {
+export const dateToPixel = (date: Date, totalWidth: number) => {
     const hours = date.getHours();
     const minutes = date.getMinutes();
 
-    const totalMinutes = hours * 60 + minutes;
-    const totalMinutesInDay = 24 * 60;
+    const totalMinutes = (hours - 9) * 60 + minutes;
+    const totalMinutesInRange = 15 * 60;
 
-    return (totalMinutes / totalMinutesInDay) * 100;
+    return (totalMinutes / totalMinutesInRange) * totalWidth;
 };

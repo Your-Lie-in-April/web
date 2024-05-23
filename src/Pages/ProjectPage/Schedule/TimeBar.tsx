@@ -1,13 +1,12 @@
 import React from 'react';
 import { ScheduleItem } from '#/Types/scheduletype';
-import { dateToPercent } from './dateToPercent';
 
-interface ProgressBarProps {
+interface TimeBarProps {
     hours: number[];
     schedule: ScheduleItem[];
 }
 
-const ProgressBar: React.FC<ProgressBarProps> = ({ hours, schedule }) => {
+const TimeBar: React.FC<TimeBarProps> = ({ hours, schedule }) => {
     const totalWidth = hours.length * 40;
 
     return (
@@ -30,32 +29,56 @@ const ProgressBar: React.FC<ProgressBarProps> = ({ hours, schedule }) => {
                         backgroundColor: '#D9D9D9',
                         position: 'relative',
                         borderRadius: '20px',
-                        borderColor: '#7D7D7D',
+                        overflow: 'hidden',
                     }}
                 >
-                    {schedule.map((item, index) => {
-                        const startPercent = dateToPercent(new Date(item.startTime));
-                        const endPercent = dateToPercent(new Date(item.endTime));
-
-                        return (
-                            <div
-                                key={index}
-                                style={{
-                                    position: 'absolute',
-                                    top: 0,
-                                    left: `${startPercent}%`,
-                                    width: `${endPercent - startPercent}%`,
-                                    height: '100%',
-                                    backgroundColor: '#FF0000',
-                                    borderRadius: '20px',
-                                }}
-                            />
-                        );
-                    })}
+                    {schedule
+                        .filter((item) => {
+                            const itemStartHour = new Date(
+                                item.startTime
+                            ).getHours();
+                            const itemEndHour = new Date(
+                                item.endTime
+                            ).getHours();
+                            return itemStartHour <= hour && itemEndHour >= hour;
+                        })
+                        .map((item, index) => {
+                            const itemStartHour = new Date(
+                                item.startTime
+                            ).getHours();
+                            const itemEndHour = new Date(
+                                item.endTime
+                            ).getHours();
+                            const startMinute =
+                                itemStartHour === hour
+                                    ? new Date(item.startTime).getMinutes()
+                                    : 0;
+                            const endMinute =
+                                itemEndHour === hour
+                                    ? new Date(item.endTime).getMinutes()
+                                    : 59;
+                            const startPosition = (startMinute / 60) * 40;
+                            const endPosition = (endMinute / 60) * 40;
+                            return (
+                                <div
+                                    key={index}
+                                    style={{
+                                        position: 'absolute',
+                                        top: 0,
+                                        left: `${startPosition}px`,
+                                        width: `${
+                                            endPosition - startPosition
+                                        }px`,
+                                        height: '100%',
+                                        backgroundColor: '#633AE2',
+                                    }}
+                                />
+                            );
+                        })}
                 </div>
             ))}
         </div>
     );
 };
 
-export default ProgressBar;
+export default TimeBar;

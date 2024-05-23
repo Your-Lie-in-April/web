@@ -1,6 +1,6 @@
 import React from 'react';
-import ProgressBar from './TimeBar';
 import { ScheduleWeekResponse } from '#/Types/scheduletype';
+import TimeBar from './TimeBar';
 
 interface TimeScheduleProps {
     scheduleData: ScheduleWeekResponse | null;
@@ -44,12 +44,18 @@ const TimeSchedule: React.FC<TimeScheduleProps> = ({ scheduleData }) => {
                             width: '42px',
                             textAlign: 'center',
                             lineHeight: '29.804px',
+                            color: '#000000',
+                            fontSize: '18px',
+                            fontWeight: '400',
+                            fontStyle: 'normal',
+                            fontFamily: 'Pretendard',
                         }}
                     >
                         {daysOfWeekMap[day]}
                     </div>
+                    <div style={{ width: '2px' }} />
                     <div style={{ flex: 1 }}>
-                        <ProgressBar
+                        <TimeBar
                             hours={hours}
                             schedule={getScheduleForDay(day)}
                         />
