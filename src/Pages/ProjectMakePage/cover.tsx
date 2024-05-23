@@ -189,6 +189,10 @@ const Cover: FC<CoverProps> = ({ onColorSelect, onImageSelect, onHexSelect, titl
             description: effectiveDescription,
             color: effectiveColor,
             coverImageUrl: effectiveCoverImageUrl,
+            startDate: projectData?.startDate,
+            endDate: projectData?.endDate,
+            daysOfWeek: projectData?.daysOfWeek,
+            isStored: projectData?.isStored,
         };
         console.log(payload);
         try {
