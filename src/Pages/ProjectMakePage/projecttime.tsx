@@ -1,4 +1,4 @@
-import React, { FC, useState, useRef, useEffect } from 'react';
+import React, { FC, useState, useRef, useEffect, Dispatch, SetStateAction } from 'react';
 import ReactDatePicker from 'react-datepicker';
 import styled from 'styled-components';
 import { ko } from 'date-fns/locale/ko';
@@ -15,7 +15,6 @@ const DateContainer = styled.div`
     flex-direction: column;
     align-items: center;
     margin: 0 20px;
-   
 `;
 
 const SDatePicker = styled(ReactDatePicker)`
@@ -131,24 +130,27 @@ const Weekend = styled.div<{ selected: boolean }>`
     }
 `;
 
-type ProjectTimeProps = {
+interface ProjectTimeProps {
     startDate: Date | null;
     endDate: Date | null;
-    onDateChange?: (startDate: Date | null, endDate: Date | null) => void;
-};
+    onDateChange: (start: Date | null, end: Date | null) => void;
+    starttime: string;
+    setStartTime: Dispatch<SetStateAction<string>>;
+    endtime: string;
+    setEndTime: Dispatch<SetStateAction<string>>;
+    selectedDays: string[];
+    setSelectedDays: Dispatch<SetStateAction<string[]>>;
+}
 
-const ProjectTime: FC<ProjectTimeProps> = ({
-    startDate,
-    endDate,
-    onDateChange,
-}) => {
-    const [selectedDays, setSelectedDays] = useState<number[]>([]);
+const ProjectTime: FC<ProjectTimeProps> = ({ startDate, endDate, onDateChange }) => {
+    const [selectedDays, setSelectedDays] = useState<string[]>([]);
     const [isStartOpen, setIsStartOpen] = useState<boolean>(false);
     const [isEndOpen, setIsEndOpen] = useState<boolean>(false);
     const [starttime, setStartTime] = useState('AM 00:00');
     const [endtime, setEndTime] = useState('AM 00:00');
     const startDropdownRef = useRef<HTMLDivElement>(null);
     const endDropdownRef = useRef<HTMLDivElement>(null);
+    const dayNames = ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'];
 
     const Times = [];
     for (let hour = 0; hour < 24; hour++) {
@@ -167,31 +169,33 @@ const ProjectTime: FC<ProjectTimeProps> = ({
             });
         }
     }
+    useEffect(() => {
+        console.log('업데이트된 selectedDays:', selectedDays);
+    }, [selectedDays]);
 
-    const toggleWeekend = (dayIndex: number) => {
-        if (selectedDays.includes(dayIndex)) {
-            setSelectedDays(selectedDays.filter((day) => day !== dayIndex));
-        } else {
-            setSelectedDays([...selectedDays, dayIndex]);
-        }
-        onDateChange?.(startDate, endDate);
+    const toggleWeekend = (day: string) => {
+        console.log(`Toggling day: ${day}`);
+
+        setSelectedDays((currentDays) => {
+            if (currentDays.includes(day)) {
+                const newSelectedDays = currentDays.filter((d) => d !== day);
+                console.log('Selected days after removal:', newSelectedDays);
+                return newSelectedDays;
+            } else {
+                const newSelectedDays = [...currentDays, day];
+                console.log('Selected days after addition:', newSelectedDays);
+                return newSelectedDays;
+            }
+        });
     };
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
-            if (
-                startDropdownRef.current &&
-                !startDropdownRef.current.contains(event.target as Node) &&
-                isStartOpen
-            ) {
+            if (startDropdownRef.current && !startDropdownRef.current.contains(event.target as Node) && isStartOpen) {
                 setIsStartOpen(false);
             }
 
-            if (
-                endDropdownRef.current &&
-                !endDropdownRef.current.contains(event.target as Node) &&
-                isEndOpen
-            ) {
+            if (endDropdownRef.current && !endDropdownRef.current.contains(event.target as Node) && isEndOpen) {
                 setIsEndOpen(false);
             }
         };
@@ -209,6 +213,22 @@ const ProjectTime: FC<ProjectTimeProps> = ({
 
     const endSelect = () => {
         setIsEndOpen(!isEndOpen);
+    };
+
+    const formatTime = (time: string) => {
+        // 가정: `time`은 "PM 10:30"과 같은 형태입니다.
+        const [ampm, timeString] = time.split(' ');
+        let [hour, minute] = timeString.split(':').map(Number);
+
+        // 12시간제를 24시간제로 변환
+        if (ampm === 'PM' && hour !== 12) {
+            hour += 12;
+        } else if (ampm === 'AM' && hour === 12) {
+            hour = 0; // 자정은 00시로 처리
+        }
+
+        // 시간, 분, 초를 포맷에 맞춰 문자열로 반환
+        return `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}:00`;
     };
 
     return (
@@ -256,14 +276,11 @@ const ProjectTime: FC<ProjectTimeProps> = ({
 
             <MakeWeekend>
                 <Text>생성할 요일</Text>
+
                 <WeekendContainer>
-                    {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((day, index) => (
-                        <Weekend
-                            key={index}
-                            selected={selectedDays.includes(index)}
-                            onClick={() => toggleWeekend(index)}
-                        >
-                            {day}
+                    {dayNames.map((day, index) => (
+                        <Weekend key={index} selected={selectedDays.includes(day)} onClick={() => toggleWeekend(day)}>
+                            {day.substring(0, 1)}
                         </Weekend>
                     ))}
                 </WeekendContainer>
@@ -280,10 +297,7 @@ const ProjectTime: FC<ProjectTimeProps> = ({
             >
                 <DateContainer style={{ gap: '4px' }}>
                     <Text>시간표 시작시간</Text>
-                    <TimePicker
-                        style={{ marginTop: '4px' }}
-                        onClick={startSelect}
-                    >
+                    <TimePicker style={{ marginTop: '4px' }} onClick={startSelect}>
                         {starttime}
                     </TimePicker>
                     {isStartOpen && (
@@ -292,8 +306,9 @@ const ProjectTime: FC<ProjectTimeProps> = ({
                                 <TimeOption
                                     key={index}
                                     onClick={() => {
-                                        setStartTime(time.label);
-                                        setIsStartOpen(false);
+                                        const formattedTime = formatTime(time.label);
+                                        setStartTime(formattedTime);
+                                        setIsEndOpen(false);
                                     }}
                                 >
                                     {time.label}
@@ -302,16 +317,11 @@ const ProjectTime: FC<ProjectTimeProps> = ({
                         </TimePickerContainer>
                     )}
                 </DateContainer>
-                <Separator style={{ marginLeft: '28px', marginRight: '28px' }}>
-                    ~
-                </Separator>
+                <Separator style={{ marginLeft: '28px', marginRight: '28px' }}>~</Separator>
 
                 <DateContainer style={{ gap: '4px' }}>
                     <Text>시간표 종료시간</Text>
-                    <TimePicker
-                        style={{ marginTop: '4px' }}
-                        onClick={endSelect}
-                    >
+                    <TimePicker style={{ marginTop: '4px' }} onClick={endSelect}>
                         {endtime}
                     </TimePicker>
                     {isEndOpen && (
@@ -320,7 +330,8 @@ const ProjectTime: FC<ProjectTimeProps> = ({
                                 <TimeOption
                                     key={index}
                                     onClick={() => {
-                                        setEndTime(time.label);
+                                        const formattedTime = formatTime(time.label);
+                                        setEndTime(formattedTime);
                                         setIsEndOpen(false);
                                     }}
                                 >

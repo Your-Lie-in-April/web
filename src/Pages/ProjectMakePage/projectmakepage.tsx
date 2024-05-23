@@ -1,10 +1,11 @@
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import styled, { createGlobalStyle } from 'styled-components';
 import Info from './Info';
 import ProjectTime from './projecttime';
 import AfterLogin from '../Layouts/AfterLogin';
 import ProjectCalendar from './projectcalendar';
 import { useNavigate } from 'react-router';
+import { Http } from '#/constants/backendURL';
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -62,10 +63,57 @@ const SButtonText = styled.text`
 const ProjectMakePage: FC = () => {
     const [startDate, setStartDate] = useState<Date | null>(new Date());
     const [endDate, setEndDate] = useState<Date | null>(new Date());
-
+    const [content, setContent] = useState<string>('');
+    const [title, setTitle] = useState<string>('');
+    const [color, setColor] = useState<string>('#fff');
+    const [img, setImg] = useState<string>('');
+    const [starttime, setStartTime] = useState('AM 00:00');
+    const [endtime, setEndTime] = useState('AM 00:00');
+    const [selectedDays, setSelectedDays] = useState<string[]>([]);
     const navigate = useNavigate();
     const handleProject = () => {
         navigate('/project');
+    };
+
+    useEffect(() => {
+        console.log('업데이트된 페이로드:', selectedDays);
+    }, [selectedDays]);
+
+    const makeProject = async () => {
+        const accessToken = localStorage.getItem('access_token');
+        const payload = {
+            title: title,
+            description: content,
+            color: color,
+            coverImageUrl: img,
+            startDate: startDate?.toISOString().substring(0, 10),
+            endDate: endDate?.toISOString().substring(0, 10),
+            starttime: starttime,
+            endtime: endtime,
+            daysOfWeek: selectedDays,
+            isStored: false,
+        };
+        console.log(payload);
+        // try {
+        //     const response = await fetch(Http + `/v1/projects/`, {
+        //         method: 'POST',
+        //         headers: {
+        //             'Content-Type': 'application/json',
+        //             Authorization: `Bearer ${accessToken}`,
+        //         },
+        //         body: JSON.stringify(payload),
+        //     });
+
+        //     if (!response.ok) {
+        //         throw new Error('프로젝트 생성 실패');
+        //     }
+
+        //     const jsonResponse = await response.json();
+        //     console.log('Project 생성:', jsonResponse);
+        //     window.location.reload();
+        // } catch (error) {
+        //     console.error('Error make project:', error);
+        // }
     };
     return (
         <>
@@ -78,7 +126,7 @@ const ProjectMakePage: FC = () => {
                     backgroundColor: '#212121',
                 }}
             />
-            <Info />
+            <Info setContent={setContent} setTitle={setTitle} setColor={setColor} setImg={setImg} />
             <div
                 style={{
                     height: '109px',
@@ -104,10 +152,16 @@ const ProjectMakePage: FC = () => {
                             setStartDate(start || new Date());
                             setEndDate(end || new Date());
                         }}
+                        starttime={starttime}
+                        setStartTime={setStartTime}
+                        endtime={endtime}
+                        setEndTime={setEndTime}
+                        selectedDays={selectedDays}
+                        setSelectedDays={setSelectedDays}
                     />
                 </TimeContainer>
                 <SButton onClick={handleProject}>
-                    <SButtonText>프로젝트 만들기</SButtonText>
+                    <SButtonText onClick={makeProject}>프로젝트 만들기</SButtonText>
                 </SButton>
             </Container>
             <div

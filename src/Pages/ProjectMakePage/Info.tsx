@@ -1,4 +1,4 @@
-import { FC, useState, ChangeEvent } from 'react';
+import { FC, useState, ChangeEvent, Dispatch, SetStateAction } from 'react';
 import styled from 'styled-components';
 import Cover from './cover';
 import { ProjectEntity } from '#/Types/projecttype';
@@ -122,12 +122,14 @@ const Make = styled.button`
         outline: none;
     }
 `;
+interface InfoProps {
+    setContent: Dispatch<SetStateAction<string>>;
+    setTitle: Dispatch<SetStateAction<string>>;
+    setColor: Dispatch<SetStateAction<string>>;
+    setImg: Dispatch<SetStateAction<string>>;
+}
 
-const Info: FC = () => {
-    const [content, setContent] = useState<string>('');
-    const [title, setTitle] = useState<string>('');
-    const [color, setColor] = useState<string>('#fff');
-    const [img, setImg] = useState<string>('');
+const Info: FC<InfoProps> = ({ setContent, setTitle, setColor, setImg }) => {
     const [isTitleClicked, setIsTitleClicked] = useState<boolean>(false);
     const [isContentClicked, setIsContentClicked] = useState<boolean>(false);
     const [isCoverClicked, setIsCoverClicked] = useState<boolean>(false);
@@ -198,7 +200,6 @@ const Info: FC = () => {
                     </Title>
                     <Content>
                         <ContentText
-                            value={content}
                             focused
                             onChange={handleTextareaChange}
                             onFocus={() => setIsContentClicked(true)}
