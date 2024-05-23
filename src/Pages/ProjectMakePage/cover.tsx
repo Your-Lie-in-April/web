@@ -144,10 +144,10 @@ interface CoverProps {
     onColorSelect: (color: string) => void;
     onImageSelect: (url: string) => void;
     onHexSelect: (color: string) => void;
-    title: string;
-    content: string;
-    projectData: ProjectEntity | null;
-    setEditCover: Dispatch<SetStateAction<boolean>>;
+    title?: string;
+    content?: string;
+    projectData?: ProjectEntity | null;
+    setEditCover?: Dispatch<SetStateAction<boolean>>;
 }
 
 const Cover: FC<CoverProps> = ({ onColorSelect, onImageSelect, onHexSelect, title, content, projectData }) => {

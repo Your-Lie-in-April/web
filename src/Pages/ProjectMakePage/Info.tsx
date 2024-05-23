@@ -122,9 +122,9 @@ const Make = styled.button`
     }
 `;
 
-
 const Info: FC = () => {
     const [content, setContent] = useState<string>('');
+    const [title, setTitle] = useState<string>('');
     const [isTitleClicked, setIsTitleClicked] = useState<boolean>(false);
     const [isContentClicked, setIsContentClicked] = useState<boolean>(false);
     const [isCoverClicked, setIsCoverClicked] = useState<boolean>(false);
@@ -139,6 +139,10 @@ const Info: FC = () => {
         if (lines.length <= 2) {
             setContent(limitedText);
         }
+    };
+
+    const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setTitle(e.target.value);
     };
 
     const toggleCover = () => {
@@ -183,6 +187,7 @@ const Info: FC = () => {
                             onBlur={() => {
                                 setIsTitleClicked(false);
                             }}
+                            onChange={handleTitleChange}
                             placeholder={isTitleClicked === true ? '' : '프로젝트 제목을 작성해주세요'}
                         ></TitleText>
                     </Title>
