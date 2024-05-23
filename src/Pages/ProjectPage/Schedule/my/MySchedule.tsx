@@ -3,6 +3,7 @@ import { useState } from 'react';
 import EditMySchedule from './EditMySchedule';
 import MyTime from './MyTime';
 
+
 const Box = styled.div`
     width: 661px;
     height: 294px;

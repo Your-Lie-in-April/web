@@ -8,7 +8,7 @@ export type DaySchedule = {
     schedule: ScheduleItem[];
 };
 
-type UserSchedule = {
+export type UserSchedule = {
     nickname: string;
     schedule: DaySchedule[];
 };
