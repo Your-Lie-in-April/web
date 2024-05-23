@@ -144,15 +144,13 @@ interface CoverProps {
     onColorSelect: (color: string) => void;
     onImageSelect: (url: string) => void;
     onHexSelect: (color: string) => void;
-    title?: string;
-    content?: string;
-    projectData?: ProjectEntity | null;
-    setEditCover?: Dispatch<SetStateAction<boolean>>;
+    toggleCover: () => void;
 }
 
-const Cover: FC<CoverProps> = ({ onColorSelect, onImageSelect, onHexSelect, title, content, projectData }) => {
-    const [color, setColor] = useState(projectData?.color || '');
+const Cover: FC<CoverProps> = ({ onColorSelect, onImageSelect, onHexSelect, toggleCover }) => {
+    const [color, setColor] = useState('#fff');
     const [openHex, setOpenHex] = useState<boolean>(false);
+    const [img, setImg] = useState<string>('');
 
     const handleColorClick = (color: string) => {
         setColor(color);
@@ -160,6 +158,7 @@ const Cover: FC<CoverProps> = ({ onColorSelect, onImageSelect, onHexSelect, titl
     };
     const handleImageClick = (url: string) => {
         onImageSelect(url);
+        setImg(url);
     };
 
     const handleColorChange = useCallback(
@@ -177,49 +176,10 @@ const Cover: FC<CoverProps> = ({ onColorSelect, onImageSelect, onHexSelect, titl
     const toggleHex = () => {
         setOpenHex((prev) => !prev);
     };
-    const updateProject = async () => {
-        const accessToken = localStorage.getItem('access_token');
-        const effectiveTitle = title || projectData?.title;
-        const effectiveDescription = content || projectData?.description;
-        const effectiveColor = color || projectData?.color;
-        const effectiveCoverImageUrl = null || projectData?.coverImageUrl;
-
-        const payload = {
-            title: effectiveTitle,
-            description: effectiveDescription,
-            color: effectiveColor,
-            coverImageUrl: effectiveCoverImageUrl,
-            startDate: projectData?.startDate,
-            endDate: projectData?.endDate,
-            daysOfWeek: projectData?.daysOfWeek,
-            isStored: projectData?.isStored,
-        };
-        console.log(payload);
-        try {
-            const response = await fetch(Http + `/v1/projects/${projectData?.projectId}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${accessToken}`,
-                },
-                body: JSON.stringify(payload),
-            });
-
-            if (!response.ok) {
-                throw new Error('Failed to update the project');
-            }
-
-            const jsonResponse = await response.json();
-            console.log('Project updated:', jsonResponse);
-            window.location.reload();
-        } catch (error) {
-            console.error('Error updating project:', error);
-        }
-    };
     return (
         <CoverContainer>
             <ConverInnerContainer>
-                <Register style={{ fontSize: '18px' }} onClick={updateProject}>
+                <Register style={{ fontSize: '18px' }} onClick={toggleCover}>
                     커버등록
                 </Register>
                 <ColorContainer>

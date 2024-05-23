@@ -2,6 +2,7 @@ import { FC, useState, ChangeEvent } from 'react';
 import styled from 'styled-components';
 import Cover from './cover';
 import { ProjectEntity } from '#/Types/projecttype';
+import { describe } from 'node:test';
 
 interface ContentTextProps {
     focused: boolean;
@@ -125,6 +126,8 @@ const Make = styled.button`
 const Info: FC = () => {
     const [content, setContent] = useState<string>('');
     const [title, setTitle] = useState<string>('');
+    const [color, setColor] = useState<string>('#fff');
+    const [img, setImg] = useState<string>('');
     const [isTitleClicked, setIsTitleClicked] = useState<boolean>(false);
     const [isContentClicked, setIsContentClicked] = useState<boolean>(false);
     const [isCoverClicked, setIsCoverClicked] = useState<boolean>(false);
@@ -153,12 +156,14 @@ const Info: FC = () => {
         setSelectedColor(color);
         setSelectedImageUrl(null);
         setSelectedHex(null);
+        setColor(color);
     };
 
     const handleImageSelect = (url: string) => {
         setSelectedImageUrl(url);
         setSelectedColor(null);
         setSelectedHex(null);
+        setImg(url);
     };
 
     const handleHexSelect = (color: string) => {
@@ -216,6 +221,7 @@ const Info: FC = () => {
                                 onColorSelect={handleColorSelect}
                                 onImageSelect={handleImageSelect}
                                 onHexSelect={handleHexSelect}
+                                toggleCover={toggleCover}
                             />
                         </div>
                     )}
