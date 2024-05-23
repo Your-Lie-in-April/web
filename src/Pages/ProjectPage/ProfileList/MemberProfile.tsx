@@ -25,6 +25,14 @@ const MemberImg = styled.image`
     height: 46px;
     border-radius: 50%;
     background: #d9d9d9;
+    border: 2px solid #633ae2;
+    box-sizing: border-box;
+    overflow: hidden;
+`;
+const StyledImage = styled.img`
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 `;
 
 const CommonText = styled.div`
@@ -47,7 +55,7 @@ const DeleteBtn = styled(RemoveCircleOutlineIcon)`
         cursor: pointer;
     }
 `;
-
+const defaultImg = 'src/pics/default.png';
 const MemberProfile = ({ showDeleteBtn, member }: { showDeleteBtn: boolean; member: MemberEntity }) => {
     const [deleteMemModal, SetDeleteMemModal] = useState(false);
 
@@ -59,7 +67,9 @@ const MemberProfile = ({ showDeleteBtn, member }: { showDeleteBtn: boolean; memb
         <>
             <MemberProfileBox>
                 <MemberProfileDiv>
-                    <MemberImg />
+                    <MemberImg>
+                        <StyledImage src={member?.profileImageUrl || defaultImg} alt="Profile Image" />
+                    </MemberImg>
                     <div
                         style={{
                             display: 'flex',
@@ -76,14 +86,14 @@ const MemberProfile = ({ showDeleteBtn, member }: { showDeleteBtn: boolean; memb
                                 justifyContent: 'center',
                             }}
                         >
-                            <CommonText>닉네임(본인)</CommonText>
+                            <CommonText>{member?.nickname}</CommonText>
                             <CommonText
                                 style={{
                                     fontSize: '10px',
                                     fontWeight: '400',
                                 }}
                             >
-                                상태메세지
+                                {member?.state}
                             </CommonText>
                         </div>
                         <DeleteBtn
