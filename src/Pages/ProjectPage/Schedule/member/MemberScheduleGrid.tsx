@@ -19,7 +19,7 @@ const MemberScheduleGrid: React.FC<MemberScheduleGridProps> = ({ members }) => {
     return (
         <GridContainer>
             {members.map((member) => (
-                <MemberSchedule key={member.memberId} members={members} />
+                <MemberSchedule key={member.memberId} member={member} />
             ))}
         </GridContainer>
     );

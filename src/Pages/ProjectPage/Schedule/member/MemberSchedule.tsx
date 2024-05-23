@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import MemeberTime from './MemberTime';
+import MemberTime from './MemberTime';
 import { MemberEntity } from '#/Types/membertype';
 
 const Box = styled.div`
@@ -39,16 +39,16 @@ const Title = styled(CommonText)`
 `;
 
 interface MemberScheduleProps {
-    members: MemberEntity[];
+    member: MemberEntity;
 }
 
-const MemberSchedule: React.FC<MemberScheduleProps> = ({ members }) => {
+const MemberSchedule: React.FC<MemberScheduleProps> = ({ member }) => {
     return (
         <Box>
-            {members.map((member) => (
-                <Title key={member.memberId}>{member?.nickname}의 시간표</Title>
-            ))}
-            <MemeberTime />
+            <div key={member.memberId}>
+                <Title>{member.nickname}의 시간표</Title>
+                <MemberTime member={member} />
+            </div>
         </Box>
     );
 };

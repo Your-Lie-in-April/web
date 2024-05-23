@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import TimeCircle from '../TimeCircle';
+import { MemberEntity } from '#/Types/membertype';
 
 const CommonText = styled.div`
     color: #000000;
@@ -39,9 +40,13 @@ const HourTextList = styled.div`
 
 const DayOfWeek = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
 const HoursOfDay = [...Array(16).keys()].map((_, index) => index + 9);
-
-const MemeberTime = () => {
+interface MemeberTimeProps {
+    member: MemberEntity;
+}
+const MemberTime: React.FC<MemeberTimeProps> = ({ member }) => {
     const filteredHours = HoursOfDay.slice(0, 15);
+    console.log(member);
+
     return (
         <TimeTableDiv>
             <DayTextList>
@@ -51,42 +56,26 @@ const MemeberTime = () => {
                     </CommonText>
                 ))}
             </DayTextList>
-            <div
-                style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: '7.3px',
-                }}
-            >
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '7.3px' }}>
                 <HourTextList style={{ alignSelf: 'flex-start' }}>
                     {filteredHours.map((hour, idx) => (
                         <CommonText key={idx}>{hour}</CommonText>
                     ))}
                 </HourTextList>
-                <div
-                    style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: '3.73px',
-                    }}
-                >
-                    {DayOfWeek.map((day, idx) => (
-                        <div
-                            key={idx}
-                            style={{ display: 'flex', flexDirection: 'row' }}
-                        >
-                            {HoursOfDay.slice(0, HoursOfDay.length - 1).map(
-                                (hour, hourIdx) => (
-                                    <TimeCircle
-                                        key={hourIdx}
-                                        style={{
-                                            border: 'none',
-                                            width: '37.282px',
-                                            height: '27.962px',
-                                        }}
-                                    />
-                                )
-                            )}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '3.73px' }}>
+                    {DayOfWeek.map((day, dayIdx) => (
+                        <div key={dayIdx} style={{ display: 'flex', flexDirection: 'row' }}>
+                            {filteredHours.map((hour, hourIdx) => (
+                                <TimeCircle
+                                    key={hourIdx}
+                                    style={{
+                                        border: 'none',
+                                        width: '37.282px',
+                                        height: '27.962px',
+                                        //backgroundColor: member.schedule[day][hour] ? 'blue' : 'transparent',
+                                    }}
+                                />
+                            ))}
                         </div>
                     ))}
                 </div>
@@ -95,4 +84,4 @@ const MemeberTime = () => {
     );
 };
 
-export default MemeberTime;
+export default MemberTime;
