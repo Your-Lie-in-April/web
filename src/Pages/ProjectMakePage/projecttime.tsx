@@ -142,12 +142,19 @@ interface ProjectTimeProps {
     setSelectedDays: Dispatch<SetStateAction<string[]>>;
 }
 
-const ProjectTime: FC<ProjectTimeProps> = ({ startDate, endDate, onDateChange }) => {
-    const [selectedDays, setSelectedDays] = useState<string[]>([]);
+const ProjectTime: FC<ProjectTimeProps> = ({
+    startDate,
+    endDate,
+    onDateChange,
+    starttime,
+    setStartTime,
+    endtime,
+    setEndTime,
+    selectedDays,
+    setSelectedDays,
+}) => {
     const [isStartOpen, setIsStartOpen] = useState<boolean>(false);
     const [isEndOpen, setIsEndOpen] = useState<boolean>(false);
-    const [starttime, setStartTime] = useState('AM 00:00');
-    const [endtime, setEndTime] = useState('AM 00:00');
     const startDropdownRef = useRef<HTMLDivElement>(null);
     const endDropdownRef = useRef<HTMLDivElement>(null);
     const dayNames = ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'];
@@ -169,9 +176,6 @@ const ProjectTime: FC<ProjectTimeProps> = ({ startDate, endDate, onDateChange })
             });
         }
     }
-    useEffect(() => {
-        console.log('업데이트된 selectedDays:', selectedDays);
-    }, [selectedDays]);
 
     const toggleWeekend = (day: string) => {
         console.log(`Toggling day: ${day}`);
@@ -179,11 +183,9 @@ const ProjectTime: FC<ProjectTimeProps> = ({ startDate, endDate, onDateChange })
         setSelectedDays((currentDays) => {
             if (currentDays.includes(day)) {
                 const newSelectedDays = currentDays.filter((d) => d !== day);
-                console.log('Selected days after removal:', newSelectedDays);
                 return newSelectedDays;
             } else {
                 const newSelectedDays = [...currentDays, day];
-                console.log('Selected days after addition:', newSelectedDays);
                 return newSelectedDays;
             }
         });

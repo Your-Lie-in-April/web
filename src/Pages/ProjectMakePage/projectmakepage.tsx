@@ -71,14 +71,6 @@ const ProjectMakePage: FC = () => {
     const [endtime, setEndTime] = useState('AM 00:00');
     const [selectedDays, setSelectedDays] = useState<string[]>([]);
     const navigate = useNavigate();
-    const handleProject = () => {
-        navigate('/project');
-    };
-
-    useEffect(() => {
-        console.log('업데이트된 페이로드:', selectedDays);
-    }, [selectedDays]);
-
     const formatTime = (time: string) => {
         const [ampm, timeString] = time.split(' ');
         let [hour, minute] = timeString.split(':').map(Number);
@@ -96,18 +88,18 @@ const ProjectMakePage: FC = () => {
         const payload = {
             title: title,
             description: content,
-            color: color,
-            coverImageUrl: img,
             startDate: startDate?.toISOString().substring(0, 10),
             endDate: endDate?.toISOString().substring(0, 10),
             starttime: formatTime(starttime),
             endtime: formatTime(endtime),
             daysOfWeek: selectedDays,
             isStored: false,
+            color: color,
+            coverImageUrl: img,
         };
         console.log(payload);
         try {
-            const response = await fetch(Http + `/v1/projects/`, {
+            const response = await fetch(Http + `/v1/projects`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -122,7 +114,7 @@ const ProjectMakePage: FC = () => {
 
             const jsonResponse = await response.json();
             console.log('Project 생성:', jsonResponse);
-            window.location.reload();
+            navigate('/');
         } catch (error) {
             console.error('Error make project:', error);
         }
@@ -172,8 +164,8 @@ const ProjectMakePage: FC = () => {
                         setSelectedDays={setSelectedDays}
                     />
                 </TimeContainer>
-                <SButton onClick={handleProject}>
-                    <SButtonText onClick={makeProject}>프로젝트 만들기</SButtonText>
+                <SButton onClick={makeProject}>
+                    <SButtonText>프로젝트 만들기</SButtonText>
                 </SButton>
             </Container>
             <div
