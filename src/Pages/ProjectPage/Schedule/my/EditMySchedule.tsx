@@ -3,6 +3,8 @@ import EditMyTime from './EditMyTime';
 import React, { useContext, useState } from 'react';
 import { DateContext } from '#/hooks/context/dateContext';
 import { formatScheduleData } from '../formatScheduleData';
+import { Http } from '#/constants/backendURL';
+import { useParams } from 'react-router-dom';
 
 const ModalBlackOut = styled.div`
     width: 100%;
@@ -98,6 +100,15 @@ interface SelectedSlot {
     minute: number;
 }
 
+interface ScheduleData {
+    schedule: {
+        schedule: {
+            startTime: string;
+            endTime: string;
+        }[];
+    }[];
+}
+
 interface EditMyScheduleProps {
     onSetIsEditModal: () => void;
 }
@@ -105,16 +116,76 @@ interface EditMyScheduleProps {
 const EditMySchedule: React.FC<EditMyScheduleProps> = ({
     onSetIsEditModal,
 }) => {
+    const { projectId } = useParams<{ projectId: string }>();
     const { weekDates } = useContext(DateContext) || {};
     const [selection, setSelection] = useState<{ [key: number]: SelectedSlot }>(
         {}
     );
-    const [firstClickSlotState, setFirstClickSlotState] = useState<boolean>(false);
+
+    const postSchedule = async (scheduleData: ScheduleData) => {
+        const accessToken = localStorage.getItem('access_token');
+        try {
+            const response = await fetch(
+                Http + `/v1/projects/${projectId}/schedules`,
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${accessToken}`,
+                    },
+                    body: JSON.stringify(scheduleData),
+                }
+            );
+
+            if (!response.ok) {
+                throw new Error('Failed to post the schedule');
+            }
+
+            const jsonResponse = await response.json();
+            console.log('my Schedule post:', jsonResponse);
+            window.location.reload();
+        } catch (error) {
+            console.error('Error updating project:', error);
+        }
+    };
+
+    const updateSchedule = async (scheduleData: ScheduleData) => {
+        const accessToken = localStorage.getItem('access_token');
+        try {
+            const response = await fetch(
+                Http + `/v1/projects/${projectId}/schedules`,
+                {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${accessToken}`,
+                    },
+                    body: JSON.stringify(scheduleData),
+                }
+            );
+
+            if (!response.ok) {
+                throw new Error('Failed to update the schedule');
+            }
+
+            const jsonResponse = await response.json();
+            console.log('my Schedule updated:', jsonResponse);
+            window.location.reload();
+        } catch (error) {
+            console.error('Error updating project:', error);
+        }
+    };
 
     const handleConfirm = () => {
         const scheduleData = formatScheduleData(selection);
         console.log(scheduleData);
-        // 서버로 scheduleData 전송하는 로직 추가
+
+        if (Object.keys(selection).length > 0) {
+            postSchedule(scheduleData);
+        } else {
+            updateSchedule(scheduleData);
+        }
+
         onSetIsEditModal();
     };
 
@@ -128,7 +199,6 @@ const EditMySchedule: React.FC<EditMyScheduleProps> = ({
                         weekDates={weekDates || []}
                         selection={selection}
                         setSelection={setSelection}
-                        
                     />
                 </Box>
                 <ConfirmBtn onClick={handleConfirm}>시간표 등록하기</ConfirmBtn>
