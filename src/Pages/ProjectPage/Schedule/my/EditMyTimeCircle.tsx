@@ -1,11 +1,18 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
+import React from 'react';
 
 interface TimeSlotProps {
     id: number;
     isSelected: boolean;
-    onSelectSlot: (id: number) => void;
+    onSelectSlot: (
+        id: number,
+        date: string,
+        hour: number,
+        minute: number
+    ) => void;
     onMouseEnter: () => void;
+    date: string;
+    hour: number;
+    minute: number;
 }
 
 export const TimeSlotLeft: React.FC<TimeSlotProps> = ({
@@ -13,9 +20,12 @@ export const TimeSlotLeft: React.FC<TimeSlotProps> = ({
     isSelected,
     onSelectSlot,
     onMouseEnter,
+    date,
+    hour,
+    minute,
 }) => {
     const handleMouseDown = () => {
-        onSelectSlot(id);
+        onSelectSlot(id, date, hour, minute);
     };
 
     const handleMouseEnter = () => {
@@ -48,9 +58,12 @@ export const TimeSlotRight: React.FC<TimeSlotProps> = ({
     isSelected,
     onSelectSlot,
     onMouseEnter,
+    date,
+    hour,
+    minute,
 }) => {
     const handleMouseDown = () => {
-        onSelectSlot(id);
+        onSelectSlot(id, date, hour, minute);
     };
 
     const handleMouseEnter = () => {

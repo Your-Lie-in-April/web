@@ -1,6 +1,8 @@
 import styled from 'styled-components';
 import EditMyTime from './EditMyTime';
-import React from 'react';
+import React, { useContext, useState } from 'react';
+import { DateContext } from '#/hooks/context/dateContext';
+import { formatScheduleData } from '../formatScheduleData';
 
 const ModalBlackOut = styled.div`
     width: 100%;
@@ -90,24 +92,46 @@ const ConfirmBtn = styled.button`
     }
 `;
 
-interface ChangeScheduleProps {
+interface SelectedSlot {
+    date: string;
+    hour: number;
+    minute: number;
+}
+
+interface EditMyScheduleProps {
     onSetIsEditModal: () => void;
 }
 
-const EditMySchedule: React.FC<ChangeScheduleProps> = ({
+const EditMySchedule: React.FC<EditMyScheduleProps> = ({
     onSetIsEditModal,
 }) => {
+    const { weekDates } = useContext(DateContext) || {};
+    const [selection, setSelection] = useState<{ [key: number]: SelectedSlot }>(
+        {}
+    );
+    const [firstClickSlotState, setFirstClickSlotState] = useState<boolean>(false);
+
+    const handleConfirm = () => {
+        const scheduleData = formatScheduleData(selection);
+        console.log(scheduleData);
+        // 서버로 scheduleData 전송하는 로직 추가
+        onSetIsEditModal();
+    };
+
     return (
         <>
             <ModalBlackOut />
             <ModalContainer>
                 <Box>
                     <Title>나의 시간표</Title>
-                    <EditMyTime />
+                    <EditMyTime
+                        weekDates={weekDates || []}
+                        selection={selection}
+                        setSelection={setSelection}
+                        
+                    />
                 </Box>
-                <ConfirmBtn onClick={onSetIsEditModal}>
-                    시간표 등록하기
-                </ConfirmBtn>
+                <ConfirmBtn onClick={handleConfirm}>시간표 등록하기</ConfirmBtn>
             </ModalContainer>
         </>
     );

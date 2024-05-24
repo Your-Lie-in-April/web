@@ -1,10 +1,11 @@
-import React, { FC, useContext } from 'react';
+import React, { FC, useContext, useEffect, useState } from 'react';
 import dayjs from 'dayjs';
 import styled from 'styled-components';
 import Calendar from 'react-calendar';
 import '/src/styles/calendarcss.css';
 import { ProjectContext } from '#/hooks/context/projectContext';
 import { DateContext } from '#/hooks/context/dateContext';
+import { getWeekDates } from './weekUtils';
 
 const StyledCalendarDiv = styled.div`
     .react-calendar__tile {
