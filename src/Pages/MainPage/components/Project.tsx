@@ -178,7 +178,7 @@ const Project: React.FC<ProjectProps> = ({ project }) => {
     };
 
     return (
-        <ProjectBox onClick={() => navigate(`/project/${project.projectId}`)}>
+        <ProjectBox>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
                 <MoreDiv>
                     {showMore && (
@@ -202,7 +202,7 @@ const Project: React.FC<ProjectProps> = ({ project }) => {
                         <StyledMoreBtn sx={{ fontSize: 32 }} />
                     </StyledButton>
                 </MoreDiv>
-                <TextBox>
+                <TextBox onClick={() => navigate(`/project/${project.projectId}`)}>
                     <ProjectName>{project.title}</ProjectName>
                     <DetailText>{project.description}</DetailText>
                 </TextBox>
