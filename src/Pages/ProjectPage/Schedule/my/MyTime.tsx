@@ -7,6 +7,7 @@ import dayjs from 'dayjs';
 import { Http } from '#/constants/backendURL';
 import { ScheduleWeekResponse } from '#/Types/scheduletype';
 import TimeSchedule from '../TimeSchedule';
+import { useParams } from 'react-router-dom';
 
 const CommonText = styled.div`
     color: #000000;
@@ -30,8 +31,8 @@ const HourTextList = styled.div`
     gap: 11px;
     align-items: center;
     justify-content: space-between;
-    align-items: flex-start; 
-    margin-left: 45px; 
+    align-items: flex-start;
+    margin-left: 45px;
 `;
 
 const HoursOfDay = [...Array(16).keys()].map((_, index) => index + 9);
@@ -41,9 +42,9 @@ const MyTime = () => {
     const { userData } = useUserContext();
     const memberId = userData?.memberId;
 
-    // 프로젝트 정보 가져옴
-    const { projectData } = useContext(ProjectContext);
-    const projectId = projectData?.projectId;
+    // 프로젝트 ID 가져옴
+    const { projectId } = useParams();
+    console.log(`myTime projectId: ${projectId}`);
 
     // 달력 선택 날짜 가져옴
     const date = useContext(DateContext);
@@ -55,6 +56,7 @@ const MyTime = () => {
     // 스케줄 데이터 가져옴
     useEffect(() => {
         const accessToken = localStorage.getItem('access_token');
+        const memberId = localStorage.getItem('member_id');
         const fetchSchedule = async () => {
             try {
                 const response = await fetch(
