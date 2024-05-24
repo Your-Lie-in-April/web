@@ -5,6 +5,8 @@ import {
     projectList,
     pinProjectList,
     projectThumbnailList,
+    projectInfo,
+    mySchedules,
 } from './mockData';
 
 export const handlers = [
@@ -76,6 +78,15 @@ export const handlers = [
             status: 'SUCCESS',
             message: '프로젝트 전체 조회 성공',
             data: projectList,
+        });
+    }),
+
+    // 특정 아이디 프로젝트 정보 조회
+    http.get('/v1/projects/1', () => {
+        return HttpResponse.json({
+            status: 'SUCCESS',
+            message: '프로젝트 전체 조회 성공',
+            data: projectInfo,
         });
     }),
 
@@ -283,17 +294,11 @@ export const handlers = [
         });
     }),
     //사용자 시간표 조회
-    http.get('/v1/projects/:projectId/members/:memberId/schedules', () => {
-        const projectId = request.params.projcetId;
-        const memberId = request.params.memberId;
-        const filteredSchedules = scheduleList.filter(
-            (schedule) =>
-                (schedule.projcetId === schedule.memberId) === memberId
-        );
+    http.get('/v1/projects/1/members/1/schedules', () => {
         return HttpResponse.json({
             status: 'SUCCESS',
             message: '사용자 시간표 조회 성공',
-            data: filteredSchedules,
+            data: mySchedules,
         });
     }),
     //시간표 생성

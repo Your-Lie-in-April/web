@@ -79,19 +79,25 @@ interface DeleteProjectProps {
     projectId: number;
     title: string;
     onClose: () => void;
+    refreshProjects: () => Promise<void>;
 }
 
 const DeleteProject: React.FC<DeleteProjectProps> = ({
     projectId,
     title,
     onClose,
+    refreshProjects,
 }) => {
     const [isBtnClick, setIsBtnClick] = useState<boolean>(false);
-    const { deleteProject } = useDeleteProject();
 
-    const onConfirmDelete = () => {
-        deleteProject(projectId);
-        onClose();
+    const deleteProject = useDeleteProject();
+
+    const onConfirmDelete = async () => {
+        const deleted = await deleteProject(projectId);
+        if (deleted) {
+            onClose();
+            refreshProjects();
+        }
     };
 
     const onCancel = () => {

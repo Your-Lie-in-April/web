@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import MemeberTime from './MemberTime';
-import { MemberEntity } from '#/Types/membertype';
+import { UserSchedule } from '#/Types/scheduletype';
+import MemberTime from './MemberTime';
 
 const Box = styled.div`
     width: 631px;
@@ -32,23 +32,20 @@ const Title = styled(CommonText)`
     display: flex;
     justify-content: center;
     align-items: center;
-
     text-align: center;
     font-size: 20px;
     font-weight: 500;
 `;
 
 interface MemberScheduleProps {
-    members: MemberEntity[];
+    scheduleData: UserSchedule;
 }
 
-const MemberSchedule: React.FC<MemberScheduleProps> = ({ members }) => {
+const MemberSchedule: React.FC<MemberScheduleProps> = ({ scheduleData }) => {
     return (
         <Box>
-            {members.map((member) => (
-                <Title key={member.memberId}>{member?.nickname}의 시간표</Title>
-            ))}
-            <MemeberTime />
+            <Title>{scheduleData.nickname}의 시간표</Title>
+            <MemberTime scheduleData={scheduleData.schedule} />
         </Box>
     );
 };

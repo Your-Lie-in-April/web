@@ -22,6 +22,123 @@ export const memberList = [
     },
 ];
 
+export const mySchedules = [
+    {
+        dayOfWeek: 'mon',
+        schedule: [
+            {
+                startAt: '2024-05-13T09:30:00+09:00',
+                endAt: '2024-05-13T10:30:00+09:00',
+            },
+            {
+                startAt: '2024-05-13T12:00:00+09:00',
+                endAt: '2024-05-13T13:30:00+09:00',
+            },
+            {
+                startAt: '2024-05-13T22:00:00+09:00',
+                endAt: '2024-05-13T23:00:00+09:00',
+            },
+        ],
+    },
+    {
+        dayOfWeek: 'tue',
+        schedule: [
+            {
+                startAt: '2024-05-14T10:00:00+09:00',
+                endAt: '2024-05-14T11:30:00+09:00',
+            },
+            {
+                startAt: '2024-05-14T14:00:00+09:00',
+                endAt: '2024-05-14T15:30:00+09:00',
+            },
+        ],
+    },
+    {
+        dayOfWeek: 'wed',
+        schedule: [
+            {
+                startAt: '2024-05-15T09:30:00+09:00',
+                endAt: '2024-05-15T11:00:00+09:00',
+            },
+            {
+                startAt: '2024-05-15T13:00:00+09:00',
+                endAt: '2024-05-15T14:30:00+09:00',
+            },
+            {
+                startAt: '2024-05-15T16:00:00+09:00',
+                endAt: '2024-05-15T17:30:00+09:00',
+            },
+        ],
+    },
+    {
+        dayOfWeek: 'thu',
+        schedule: [
+            {
+                startAt: '2024-05-16T08:00:00+09:00',
+                endAt: '2024-05-16T09:30:00+09:00',
+            },
+            {
+                startAt: '2024-05-16T11:00:00+09:00',
+                endAt: '2024-05-16T12:30:00+09:00',
+            },
+            {
+                startAt: '2024-05-16T14:00:00+09:00',
+                endAt: '2024-05-16T15:30:00+09:00',
+            },
+        ],
+    },
+    {
+        dayOfWeek: 'fri',
+        schedule: [
+            {
+                startAt: '2024-05-17T10:30:00+09:00',
+                endAt: '2024-05-17T12:00:00+09:00',
+            },
+            {
+                startAt: '2024-05-17T13:30:00+09:00',
+                endAt: '2024-05-17T15:00:00+09:00',
+            },
+            {
+                startAt: '2024-05-17T16:30:00+09:00',
+                endAt: '2024-05-17T18:00:00+09:00',
+            },
+        ],
+    },
+    {
+        dayOfWeek: 'sat',
+        schedule: [
+            {
+                startAt: '2024-05-18T09:00:00+09:00',
+                endAt: '2024-05-18T10:30:00+09:00',
+            },
+            {
+                startAt: '2024-05-18T12:00:00+09:00',
+                endAt: '2024-05-18T13:30:00+09:00',
+            },
+            {
+                startAt: '2024-05-18T15:00:00+09:00',
+                endAt: '2024-05-18T16:30:00+09:00',
+            },
+        ],
+    },
+    {
+        dayOfWeek: 'sun',
+        schedule: [
+            {
+                startAt: '2024-05-19T10:00:00+09:00',
+                endAt: '2024-05-19T11:30:00+09:00',
+            },
+            {
+                startAt: '2024-05-19T13:00:00+09:00',
+                endAt: '2024-05-19T14:30:00+09:00',
+            },
+            {
+                startAt: '2024-05-19T16:00:00+09:00',
+                endAt: '2024-05-19T17:30:00+09:00',
+            },
+        ],
+    },
+];
 export const scheduleList = [
     {
         nickname: 'namu',
@@ -132,6 +249,7 @@ export const scheduleList = [
         ],
     },
 ];
+
 export const projectList = [
     {
         projectId: 1,
@@ -307,6 +425,26 @@ export const projectList = [
         color: '00c7b0',
     },
 ];
+
+export const projectInfo = {
+    projectId: 1,
+    title: 'timepiece',
+    description: '앱센터 15.5기 겨울방학 프로젝트',
+    startDate: '2024-05-13',
+    endDate: '2024-05-27',
+    starTime: '09:00:00',
+    endTime: '21:00:00',
+    mon: true,
+    tue: true,
+    wed: true,
+    thu: true,
+    fri: true,
+    sat: false,
+    sun: false,
+    isStored: true,
+    coverImageUrl: null,
+    color: 'A5CEF2',
+};
 
 // 프로젝트 썸네일 리스트
 export const projectThumbnailList = [

@@ -8,7 +8,6 @@ import {
     ProjectSearchResDto,
     ProjectAllMemberDto,
     ProjectPostReqDto,
-    ProjectDeleteReqDto,
     ProjectPutReqDto,
     ProjectInviteLinkReqDto,
     ProjectDeleteMemberReqDto,
@@ -16,6 +15,7 @@ import {
     ProjectTransferPrivilegeReqDto,
     ProjectSelfOutReqDto,
     ProjectsStoredResDto,
+    ProjectInfoResDto,
 } from '#/Types/projecttype';
 
 // 프로젝트 전체 조회
@@ -23,6 +23,14 @@ export const getProjectAll = async () => {
     return await getAPIResponseData<ProjectResDto>({
         method: 'GET',
         url: API.PROJECT_ALL,
+    });
+};
+
+// 특정 프로젝트 정보 조회
+export const getProjectInfo = async (projectId: number) => {
+    return await getAPIResponseData<ProjectInfoResDto>({
+        method: 'GET',
+        url: API.PROJECT_ID(projectId),
     });
 };
 
@@ -93,7 +101,10 @@ export const postProjectInviteLink = async (projectId: number) => {
 };
 
 // 회원 강퇴
-export const deleteProjectMember = async (projectId: number, memberId: number) => {
+export const deleteProjectMember = async (
+    projectId: number,
+    memberId: number
+) => {
     return await getAPIResponseData<ProjectDeleteMemberReqDto>({
         method: 'DELETE',
         url: API.PROJECT_REMOVE_MEMBER(projectId, memberId),
