@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { DaySchedule } from '#/Types/scheduletype';
+import MemberTimeBar from './MemberTimeBar';
 
 const CommonText = styled.div`
     color: #000000;
@@ -17,14 +18,14 @@ const TimeTableDiv = styled.div`
 `;
 
 const HourTextList = styled.div`
-    width: 536px;
+    width: 532px;
     display: flex;
     flex-direction: row;
-    gap: 7.46px;
+    gap: 7px;
     align-items: center;
     justify-content: space-between;
     align-items: flex-start;
-    margin-left: 45px;
+    margin-left: 46px;
 `;
 
 const HoursOfDay = [...Array(16).keys()].map((_, index) => index + 9);
@@ -95,10 +96,10 @@ const MemberTime: React.FC<MemberTimeProps> = ({ scheduleData }) => {
                             </div>
                             <div style={{ width: '2px' }} />
                             <div style={{ flex: 1 }}>
-                                {/* <MemberTimeBar
+                                <MemberTimeBar
                                     hours={hours}
                                     schedule={getScheduleForDay(day)}
-                                /> */}
+                                />
                             </div>
                         </div>
                     ))}

@@ -32,7 +32,6 @@ const Title = styled(CommonText)`
     display: flex;
     justify-content: center;
     align-items: center;
-
     text-align: center;
     font-size: 20px;
     font-weight: 500;
