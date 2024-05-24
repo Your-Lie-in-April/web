@@ -79,6 +79,18 @@ const ProjectMakePage: FC = () => {
         console.log('업데이트된 페이로드:', selectedDays);
     }, [selectedDays]);
 
+    const formatTime = (time: string) => {
+        const [ampm, timeString] = time.split(' ');
+        let [hour, minute] = timeString.split(':').map(Number);
+
+        if (ampm === 'PM' && hour !== 12) {
+            hour += 12;
+        } else if (ampm === 'AM' && hour === 12) {
+            hour = 0;
+        }
+        return `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}:00`;
+    };
+
     const makeProject = async () => {
         const accessToken = localStorage.getItem('access_token');
         const payload = {
@@ -88,32 +100,32 @@ const ProjectMakePage: FC = () => {
             coverImageUrl: img,
             startDate: startDate?.toISOString().substring(0, 10),
             endDate: endDate?.toISOString().substring(0, 10),
-            starttime: starttime,
-            endtime: endtime,
+            starttime: formatTime(starttime),
+            endtime: formatTime(endtime),
             daysOfWeek: selectedDays,
             isStored: false,
         };
         console.log(payload);
-        // try {
-        //     const response = await fetch(Http + `/v1/projects/`, {
-        //         method: 'POST',
-        //         headers: {
-        //             'Content-Type': 'application/json',
-        //             Authorization: `Bearer ${accessToken}`,
-        //         },
-        //         body: JSON.stringify(payload),
-        //     });
+        try {
+            const response = await fetch(Http + `/v1/projects/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${accessToken}`,
+                },
+                body: JSON.stringify(payload),
+            });
 
-        //     if (!response.ok) {
-        //         throw new Error('프로젝트 생성 실패');
-        //     }
+            if (!response.ok) {
+                throw new Error('프로젝트 생성 실패');
+            }
 
-        //     const jsonResponse = await response.json();
-        //     console.log('Project 생성:', jsonResponse);
-        //     window.location.reload();
-        // } catch (error) {
-        //     console.error('Error make project:', error);
-        // }
+            const jsonResponse = await response.json();
+            console.log('Project 생성:', jsonResponse);
+            window.location.reload();
+        } catch (error) {
+            console.error('Error make project:', error);
+        }
     };
     return (
         <>

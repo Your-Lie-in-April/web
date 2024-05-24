@@ -215,22 +215,6 @@ const ProjectTime: FC<ProjectTimeProps> = ({ startDate, endDate, onDateChange })
         setIsEndOpen(!isEndOpen);
     };
 
-    const formatTime = (time: string) => {
-        // 가정: `time`은 "PM 10:30"과 같은 형태입니다.
-        const [ampm, timeString] = time.split(' ');
-        let [hour, minute] = timeString.split(':').map(Number);
-
-        // 12시간제를 24시간제로 변환
-        if (ampm === 'PM' && hour !== 12) {
-            hour += 12;
-        } else if (ampm === 'AM' && hour === 12) {
-            hour = 0; // 자정은 00시로 처리
-        }
-
-        // 시간, 분, 초를 포맷에 맞춰 문자열로 반환
-        return `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}:00`;
-    };
-
     return (
         <ProjectTimeContainer>
             <div
@@ -306,9 +290,8 @@ const ProjectTime: FC<ProjectTimeProps> = ({ startDate, endDate, onDateChange })
                                 <TimeOption
                                     key={index}
                                     onClick={() => {
-                                        const formattedTime = formatTime(time.label);
-                                        setStartTime(formattedTime);
-                                        setIsEndOpen(false);
+                                        setStartTime(time.label);
+                                        setIsStartOpen(false);
                                     }}
                                 >
                                     {time.label}
@@ -330,8 +313,7 @@ const ProjectTime: FC<ProjectTimeProps> = ({ startDate, endDate, onDateChange })
                                 <TimeOption
                                     key={index}
                                     onClick={() => {
-                                        const formattedTime = formatTime(time.label);
-                                        setEndTime(formattedTime);
+                                        setEndTime(time.label);
                                         setIsEndOpen(false);
                                     }}
                                 >
