@@ -145,7 +145,7 @@ const StorageProject = ({ project }: { project: ProjectThumbnailResponse }) => {
 
     return (
         <>
-            <ProjectBox color={project.color}>
+            <ProjectBox style={{ backgroundColor: project.color }}>
                 {showMore && (
                     <MoreBox>
                         <div

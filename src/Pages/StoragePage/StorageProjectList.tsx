@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import StorageProject from './StorageProject';
 import { useProjectStoredQuery } from '#/hooks/apis/queries/project/useProjectStoredQuery';
+import { ProjectThumbnailResponse } from '#/Types/projecttype';
 
 const GridContainer = styled.div`
     display: grid;
@@ -8,6 +9,7 @@ const GridContainer = styled.div`
     grid-auto-rows: minmax(auto, auto);
     column-gap: 25px;
     row-gap: 16px;
+    z-index: 999;
 `;
 
 const NoProject = styled.div`
@@ -25,11 +27,10 @@ const NoProject = styled.div`
     line-height: normal;
     text-transform: capitalize;
 `;
-
-const StorageProjectList = () => {
-    const projects = useProjectStoredQuery();
-
-    console.log('projectsList : ', projects);
+interface StorageProjectListProps {
+    projects: ProjectThumbnailResponse[];
+}
+const StorageProjectList: React.FC<StorageProjectListProps> = ({ projects }) => {
     return projects ? (
         <GridContainer>
             {projects.map((project) => (
