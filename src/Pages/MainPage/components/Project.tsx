@@ -146,6 +146,7 @@ const Project: React.FC<ProjectProps> = ({ project }) => {
     const [showMore, setShowMore] = useState<boolean>(false);
     const [isCancleBtn, setIsCancelBtn] = useState<boolean>(false);
     const [isPinned, setIsPinned] = useState<boolean>(false);
+    const [isStored, setIsStored] = useState<boolean>(false);
     const navigate = useNavigate();
 
     const toggleMoreBtn = () => {
@@ -172,6 +173,29 @@ const Project: React.FC<ProjectProps> = ({ project }) => {
             setIsPinned(true);
             const result = await response.json();
             console.log('상단 고정 결과:', result);
+            window.location.reload();
+        } catch (error) {
+            console.error('업데이트 실패:', error);
+        }
+    };
+
+    const handleStore = async () => {
+        try {
+            const accessToken = localStorage.getItem('access_token');
+            const response = await fetch(`${Http}/v1/members/storage/${project.projectId}`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${accessToken}`,
+                    credentials: 'include',
+                },
+                body: JSON.stringify({ projectId: project.projectId }),
+            });
+            if (!response.ok) throw new Error('뭔가 이상');
+            setIsStored(true);
+            const result = await response.json();
+            console.log('보관함 결과:', result);
+            window.location.reload();
         } catch (error) {
             console.error('업데이트 실패:', error);
         }
@@ -191,9 +215,9 @@ const Project: React.FC<ProjectProps> = ({ project }) => {
                                     <PushPinOutlinedIcon sx={{ fontSize: 18 }} />
                                     <MoreText>상단고정</MoreText>
                                 </MoreItem>
-                                <MoreItem>
+                                <MoreItem onClick={handleStore}>
                                     <InboxOutlinedIcon sx={{ fontSize: 18 }} />
-                                    <MoreText isMove>보관함이동</MoreText>
+                                    <MoreText>보관함이동</MoreText>
                                 </MoreItem>
                             </MoreBox>
                         </>
