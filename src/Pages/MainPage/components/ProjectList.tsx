@@ -12,14 +12,14 @@ const GridContainer = styled.div`
     row-gap: 24px;
     cursor: pointer;
 `;
-
-const ProjectList = () => {
+const ProjectList: React.FC = () => {
     const [projects, setProjects] = useState<ProjectEntity[]>([]);
     const accessToken = localStorage.getItem('access_token');
+    const memberId = localStorage.getItem('member_id');
     useEffect(() => {
         const accessToken = localStorage.getItem('access_token');
         const fetchProjects = async () => {
-            const response = await fetch(`${Http}/v1/projects/all`, {
+            const response = await fetch(`${Http}/v1/projects/members/${memberId}?page=0&size=6`, {
                 headers: {
                     Authorization: `Bearer ${accessToken}`,
                 },
