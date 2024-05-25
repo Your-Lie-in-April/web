@@ -5,6 +5,7 @@ import { DateContext } from '#/hooks/context/dateContext';
 import { formatScheduleData } from '../formatScheduleData';
 import { Http } from '#/constants/backendURL';
 import { useParams } from 'react-router-dom';
+import { ScheduleWeekResponse } from '#/Types/scheduletype';
 
 const ModalBlackOut = styled.div`
     width: 100%;
@@ -111,10 +112,12 @@ interface ScheduleData {
 
 interface EditMyScheduleProps {
     onSetIsEditModal: () => void;
+    scheduleData: ScheduleWeekResponse | null;
 }
 
 const EditMySchedule: React.FC<EditMyScheduleProps> = ({
     onSetIsEditModal,
+    scheduleData,
 }) => {
     const { projectId } = useParams<{ projectId: string }>();
     const { weekDates } = useContext(DateContext) || {};
@@ -144,11 +147,11 @@ const EditMySchedule: React.FC<EditMyScheduleProps> = ({
             const jsonResponse = await response.json();
             console.log('my Schedule post:', jsonResponse);
         } catch (error) {
-            console.error('Error updating project:', error);
+            console.error('Error posting schedule:', error);
         }
     };
 
-    const updateSchedule = async (scheduleData: ScheduleData) => {
+    const putSchedule = async (scheduleData: ScheduleData) => {
         const accessToken = localStorage.getItem('access_token');
         try {
             const response = await fetch(
@@ -169,19 +172,20 @@ const EditMySchedule: React.FC<EditMyScheduleProps> = ({
 
             const jsonResponse = await response.json();
             console.log('my Schedule updated:', jsonResponse);
+            console.log(scheduleData);
         } catch (error) {
-            console.error('Error updating project:', error);
+            console.error('Error updating schedule:', error);
         }
     };
 
     const handleConfirm = () => {
-        const scheduleData = formatScheduleData(selection);
-        console.log(scheduleData);
+        const newScheduleData = formatScheduleData(selection);
+        console.log(`schedule 수정 : ${JSON.stringify(newScheduleData)}`);
 
-        if (Object.keys(selection).length > 0) {
-            postSchedule(scheduleData);
+        if (scheduleData && scheduleData.schedule.length > 0) {
+            putSchedule(newScheduleData);
         } else {
-            updateSchedule(scheduleData);
+            postSchedule(newScheduleData);
         }
 
         onSetIsEditModal();
