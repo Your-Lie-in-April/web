@@ -143,7 +143,6 @@ const EditMySchedule: React.FC<EditMyScheduleProps> = ({
 
             const jsonResponse = await response.json();
             console.log('my Schedule post:', jsonResponse);
-            window.location.reload();
         } catch (error) {
             console.error('Error updating project:', error);
         }
@@ -170,7 +169,6 @@ const EditMySchedule: React.FC<EditMyScheduleProps> = ({
 
             const jsonResponse = await response.json();
             console.log('my Schedule updated:', jsonResponse);
-            window.location.reload();
         } catch (error) {
             console.error('Error updating project:', error);
         }
