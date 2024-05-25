@@ -65,7 +65,7 @@ const ProjectMakePage: FC = () => {
     const [endDate, setEndDate] = useState<Date | null>(new Date());
     const [content, setContent] = useState<string>('');
     const [title, setTitle] = useState<string>('');
-    const [color, setColor] = useState<string>('#fff');
+    const [color, setColor] = useState<string>('#D6CBEF');
     const [img, setImg] = useState<string>('');
     const [starttime, setStartTime] = useState('AM 00:00');
     const [endtime, setEndTime] = useState('AM 00:00');
