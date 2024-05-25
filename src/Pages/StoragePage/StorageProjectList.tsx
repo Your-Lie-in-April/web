@@ -9,7 +9,6 @@ const GridContainer = styled.div`
     grid-auto-rows: minmax(auto, auto);
     column-gap: 25px;
     row-gap: 16px;
-    z-index: 999;
 `;
 
 const NoProject = styled.div`

@@ -19,7 +19,7 @@ const ProjectBox = styled.div`
     justify-content: flex-end;
     width: 300px;
     height: 300px;
-    background-color: #b79fff;
+    background-color: ${(props) => (props.color ? `#${props.color}` : '#b79fff')};
     border-radius: 16px;
     display: flex;
     color: #ffffff;
@@ -202,7 +202,7 @@ const Project: React.FC<ProjectProps> = ({ project }) => {
     };
 
     return (
-        <ProjectBox>
+        <ProjectBox style={{ backgroundColor: project.color }}>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
                 <MoreDiv>
                     {showMore && (
