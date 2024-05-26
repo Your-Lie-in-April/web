@@ -65,7 +65,6 @@ export const useUserContext = () => {
 const MainPage: FC = () => {
     const { userData, setUserData } = useUserContext();
     const query = useQuery();
-    const navigate = useNavigate();
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
     const [projects, setProjects] = useState<ProjectEntity[]>([]);
 
@@ -123,8 +122,35 @@ const MainPage: FC = () => {
             setProjects(data.data);
         };
 
-        if (accessToken != '') fetchProjects();
+        if (accessToken) fetchProjects();
     }, []);
+
+    const fetchProjects = async (searchTerm = '') => {
+        const accessToken = localStorage.getItem('access_token');
+        const memberId = localStorage.getItem('member_id');
+        const encodedSearchTerm = encodeURIComponent(searchTerm);
+        const url = searchTerm
+            ? `${Http}/v1/projects/members/${memberId}/${encodedSearchTerm}?page=0&size=6&isStored=false`
+            : `${Http}/v1/projects/members/${memberId}?page=0&size=6`;
+
+        try {
+            const response = await fetch(url, {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                },
+            });
+            const data = await response.json();
+            console.log(url);
+            console.log(data);
+            setProjects(data.data);
+        } catch (error) {
+            console.error('Error fetching projects:', error);
+        }
+    };
+
+    const handleSearch = (searchTerm: string) => {
+        fetchProjects(searchTerm);
+    };
     return (
         <>
             <GlobalStyle />
@@ -179,7 +205,7 @@ const MainPage: FC = () => {
                                     gap: '8px',
                                 }}
                             >
-                                <Search />
+                                <Search onSearch={handleSearch} />
                                 <NewProject />
                             </div>
                             <Pinned />
