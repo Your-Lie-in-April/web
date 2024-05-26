@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import StorageProject from './StorageProject';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { ProjectEntity } from '#/Types/projecttype';
 import { Http } from '#/constants/backendURL';
 
@@ -34,60 +34,77 @@ const StorageProjectList = () => {
     const [size] = useState<number>(9);
     const [hasMore, setHasMore] = useState<boolean>(true);
 
-    const accessToken = localStorage.getItem('access_token');
+    const observer = useRef<IntersectionObserver | null>(null);
+
+    const lastProjectRef = useCallback(
+        (node: HTMLDivElement | null) => {
+            if (observer.current) observer.current.disconnect();
+            observer.current = new IntersectionObserver((entries) => {
+                if (entries[0].isIntersecting && hasMore) {
+                    setPage((prevPage) => prevPage + 1);
+                }
+            });
+            if (node) observer.current.observe(node);
+        },
+        [hasMore]
+    );
 
     const fetchProjects = async () => {
-        const response = await fetch(
-            `${Http}/v1/projects/stored?page=${page}&size=${size}`,
-            {
-                headers: {
-                    Authorization: `Bearer ${accessToken}`,
-                },
+        try {
+            const accessToken = localStorage.getItem('access_token');
+            if (accessToken) {
+                const response = await fetch(
+                    `${Http}/v1/projects/stored?page=${page}&size=${size}`,
+                    {
+                        method: 'GET',
+                        headers: {
+                            Accept: '*/*',
+                            Authorization: `Bearer ${accessToken}`,
+                        },
+                    }
+                );
+                if (!response.ok) {
+                    console.log('failed to fetch storage projects');
+                }
+                const data = await response.json();
+                console.log(data);
+                if (page === 0) {
+                    setProjects(data.data);
+                } else {
+                    setProjects((prevProjects) => [
+                        ...prevProjects,
+                        ...data.data,
+                    ]);
+                }
+                setHasMore(data.data.length > 0);
             }
-        );
-        const data = await response.json();
-        console.log(data);
-        setProjects((prevProjects) => [...prevProjects, ...data.data]);
-        setHasMore(data.data.length > 0);
-    };
-
-    useEffect(() => {
-        if (accessToken !== '' && hasMore) {
-            fetchProjects();
+        } catch (error) {
+            console.log(error);
         }
-    }, [accessToken, page, hasMore]);
+    };
 
     useEffect(() => {
-        const handleScroll = () => {
-            if (
-                window.innerHeight + document.documentElement.scrollTop >=
-                document.documentElement.offsetHeight - 100
-            ) {
-                setPage((prevPage) => prevPage + 1);
-            }
-        };
-
-        window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
-    }, []);
-
-    // 프로젝트 목록 다시 가져오기
-    const refreshProjects = async () => {
-        setPage(0);
-        setProjects([]);
-        setHasMore(true);
-        await fetchProjects();
-    };
+        fetchProjects();
+    }, [page, size]);
 
     return projects.length > 0 ? (
         <GridContainer>
-            {projects.map((project) => (
-                <StorageProject
-                    key={project.projectId}
-                    project={project}
-                    refreshProjects={refreshProjects}
-                />
-            ))}
+            {projects.map((project, index) => {
+                if (projects.length === index + 1) {
+                    return (
+                        <div key={project.projectId} ref={lastProjectRef}>
+                            <StorageProject project={project} />
+                        </div>
+                    );
+                } else {
+                    return (
+                        <StorageProject
+                            key={project.projectId}
+                            project={project}
+                        />
+                    );
+                }
+            })}
         </GridContainer>
     ) : (
         <NoProject>No Project</NoProject>
