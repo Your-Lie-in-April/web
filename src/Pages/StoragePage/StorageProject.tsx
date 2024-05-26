@@ -148,26 +148,6 @@ const StorageProject: React.FC<ProjectStorageProps> = ({ project }) => {
         setIsClick(!isClick);
     };
 
-    const deleteProject = async () => {
-        try {
-            const accessToken = localStorage.getItem('access_token');
-            const response = await fetch(`${Http}/v1/projects/${project.projectId}`, {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${accessToken}`,
-                    credentials: 'include',
-                },
-            });
-            if (!response.ok) throw new Error('뭔가 이상');
-            const result = await response.json();
-
-            console.log('프로젝트 삭제:', result);
-        } catch (error) {
-            console.error('업데이트 실패:', error);
-        }
-    };
-
     const handleStore = async () => {
         try {
             const accessToken = localStorage.getItem('access_token');
@@ -231,7 +211,7 @@ const StorageProject: React.FC<ProjectStorageProps> = ({ project }) => {
                 </div>
             </ProjectBox>
             {isClick && (
-                <DeleteProject onClose={deleteProject} projectId={Number(project.projectId)} title={project.title} />
+                <DeleteProject onClose={onClickItem} projectId={Number(project.projectId)} title={project.title} />
             )}
         </>
     );

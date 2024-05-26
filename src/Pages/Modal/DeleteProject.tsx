@@ -4,7 +4,6 @@ import { ModalBlackOut, ModalContainer } from './ModalCommon';
 import ModalPortal from '#/utils/ModalPotal';
 import { Http } from '#/constants/backendURL';
 
-
 const Box = styled.div`
     width: 406px;
     height: 182px;
@@ -81,30 +80,23 @@ interface DeleteProjectProps {
     onClose: () => void;
 }
 
-const DeleteProject: React.FC<DeleteProjectProps> = ({
-    projectId,
-    title,
-    onClose,
-}) => {
+const DeleteProject: React.FC<DeleteProjectProps> = ({ projectId, title, onClose }) => {
     const deleteProject = async () => {
         try {
             const accessToken = localStorage.getItem('access_token');
             if (accessToken) {
-                const response = await fetch(
-                    `${Http}/v1/projects/${projectId}`,
-                    {
-                        method: 'DELETE',
-                        headers: {
-                            Accept: '*/*',
-                            Authorization: `Bearer ${accessToken}`,
-                        },
-                    }
-                );
+                const response = await fetch(`${Http}/v1/projects/${projectId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        Accept: '*/*',
+                        Authorization: `Bearer ${accessToken}`,
+                    },
+                });
                 if (!response.ok) {
                     console.log('failed to delete storage project');
                 }
                 const data = await response.json();
-                console.log(data);
+                console.log('삭제삭제삭제', data);
                 onClose();
             }
         } catch (error) {
@@ -149,12 +141,10 @@ const DeleteProject: React.FC<DeleteProjectProps> = ({
                         >
                             <InfoCircleIcon sx={{ fontSize: '32px' }} />
                             <PeojectName>{title}</PeojectName>
-                            <Title>{title}을 삭제하겠습니까?</Title>
+                            <Title>삭제하겠습니까?</Title>
                         </div>
                         <ButtonsContainer style={{ alignSelf: 'flex-end' }}>
-                            <ConfirmBtn onClick={onConfirmDelete}>
-                                확인
-                            </ConfirmBtn>
+                            <ConfirmBtn onClick={onConfirmDelete}>확인</ConfirmBtn>
                             <CancelBtn onClick={onCancel}>취소</CancelBtn>
                         </ButtonsContainer>
                     </div>
