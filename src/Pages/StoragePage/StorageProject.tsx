@@ -2,11 +2,9 @@ import styled from 'styled-components';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import DeleteIcon from '@mui/icons-material/Delete';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
-import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { useState } from 'react';
 import DeleteProject from '../Modal/DeleteProject';
-import { ProjectThumbnailResponse } from '#/Types/projecttype';
-import { useNavigate, useNavigation } from 'react-router-dom';
+import { ProjectEntity } from '#/Types/projecttype';
 import { Http } from '#/constants/backendURL';
 
 interface ProjectBoxProps {
@@ -45,7 +43,6 @@ const TextBox = styled.div`
     font-style: normal;
     line-height: normal;
     text-transform: uppercase;
-    cursor: pointer;
 `;
 
 const ProjectName = styled.div`
@@ -133,10 +130,14 @@ const MoreText = styled.div`
     text-transform: uppercase;
 `;
 
-const StorageProject = ({ project }: { project: ProjectThumbnailResponse }) => {
+interface ProjectStorageProps {
+    project: ProjectEntity;
+}
+
+const StorageProject: React.FC<ProjectStorageProps> = ({ project }) => {
     const [showMore, setShowMore] = useState<boolean>(false);
     const [isClick, setIsClick] = useState<boolean>(false);
-    const navigate = useNavigate();
+
     const toggleMoreBtn = () => {
         setShowMore(!showMore);
     };
@@ -221,13 +222,15 @@ const StorageProject = ({ project }: { project: ProjectThumbnailResponse }) => {
                             <StyledMoreBtn sx={{ fontSize: 32 }} onClick={toggleMoreBtn} />
                         </MoreButton>
                     </MoreDiv>
-                    <TextBox onClick={() => navigate(`/project/${project.projectId}`)}>
+                    <TextBox>
                         <ProjectName>{project.title}</ProjectName>
                         <DetailText>{project.description}</DetailText>
                     </TextBox>
                 </div>
             </ProjectBox>
-            {isClick && <DeleteProject onClose={deleteProject} projectId={project.projectId} title={project.title} />}
+            {isClick && (
+                <DeleteProject onClose={onClickItem} projectId={Number(project.projectId)} title={project.title} />
+            )}
         </>
     );
 };

@@ -2,10 +2,6 @@ import styled, { createGlobalStyle } from 'styled-components';
 import AfterLogin from '../Layouts/AfterLogin';
 import StorageProjectList from './StorageProjectList';
 import GraphicIcons from './Icon/GraphicIcons';
-import { useEffect, useState } from 'react';
-import { Http } from '#/constants/backendURL';
-import { projectThumbnailList } from '#/mocks/mockData';
-import { ProjectThumbnailResponse } from '#/Types/projecttype';
 
 const GlobalStyle = createGlobalStyle`
 body {
@@ -48,34 +44,9 @@ const SearchField = styled.input`
 `;
 
 const StoragePage = () => {
-    const [storelist, setStoreList] = useState<ProjectThumbnailResponse[]>([]);
-    useEffect(() => {
-        const storeList = async () => {
-            try {
-                const accessToken = localStorage.getItem('access_token');
-                const response = await fetch(`${Http}/v1/projects/stored`, {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: `Bearer ${accessToken}`,
-                        credentials: 'include',
-                    },
-                });
-                if (!response.ok) throw new Error('뭔가 이상');
-                const result = await response.json();
-                setStoreList(result.data);
-                console.log('보관함 결과:', result);
-            } catch (error) {
-                console.error('업데이트 실패:', error);
-            }
-        };
-        storeList();
-    }, []);
-
     return (
         <>
             <GlobalStyle />
-
             <>
                 <GraphicIcons />
                 <div
@@ -106,7 +77,7 @@ const StoragePage = () => {
                             <Title>프로젝트 보관함</Title>
                             <SearchField placeholder="프로젝트 검색" />
                         </div>
-                        <StorageProjectList projects={storelist} />
+                        <StorageProjectList />
                     </div>
                 </div>
                 <div style={{ width: '100vw', height: '172px' }}></div>
