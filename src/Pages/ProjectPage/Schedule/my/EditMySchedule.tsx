@@ -1,6 +1,11 @@
 import styled from 'styled-components';
 import EditMyTime from './EditMyTime';
-import React from 'react';
+import React, { useContext, useState } from 'react';
+import { DateContext } from '#/hooks/context/dateContext';
+import { formatScheduleData } from '../formatScheduleData';
+import { Http } from '#/constants/backendURL';
+import { useParams } from 'react-router-dom';
+import { ScheduleWeekResponse } from '#/Types/scheduletype';
 
 const ModalBlackOut = styled.div`
     width: 100%;
@@ -90,24 +95,115 @@ const ConfirmBtn = styled.button`
     }
 `;
 
-interface ChangeScheduleProps {
-    onSetIsEditModal: () => void;
+interface SelectedSlot {
+    date: string;
+    hour: number;
+    minute: number;
 }
 
-const EditMySchedule: React.FC<ChangeScheduleProps> = ({
+interface ScheduleData {
+    schedule: {
+        schedule: {
+            startTime: string;
+            endTime: string;
+        }[];
+    }[];
+}
+
+interface EditMyScheduleProps {
+    onSetIsEditModal: () => void;
+    scheduleData: ScheduleWeekResponse | null;
+}
+
+const EditMySchedule: React.FC<EditMyScheduleProps> = ({
     onSetIsEditModal,
+    scheduleData,
 }) => {
+    const { projectId } = useParams<{ projectId: string }>();
+    const { weekDates } = useContext(DateContext) || {};
+    const [selection, setSelection] = useState<{ [key: number]: SelectedSlot }>(
+        {}
+    );
+
+    const postSchedule = async (scheduleData: ScheduleData) => {
+        const accessToken = localStorage.getItem('access_token');
+        try {
+            const response = await fetch(
+                Http + `/v1/projects/${projectId}/schedules`,
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${accessToken}`,
+                    },
+                    body: JSON.stringify(scheduleData),
+                }
+            );
+
+            if (!response.ok) {
+                throw new Error('Failed to post the schedule');
+            }
+
+            const jsonResponse = await response.json();
+            console.log('my Schedule post:', jsonResponse);
+        } catch (error) {
+            console.error('Error posting schedule:', error);
+        }
+    };
+
+    const putSchedule = async (scheduleData: ScheduleData) => {
+        const accessToken = localStorage.getItem('access_token');
+        try {
+            const response = await fetch(
+                Http + `/v1/projects/${projectId}/schedules`,
+                {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${accessToken}`,
+                    },
+                    body: JSON.stringify(scheduleData),
+                }
+            );
+
+            if (!response.ok) {
+                throw new Error('Failed to update the schedule');
+            }
+
+            const jsonResponse = await response.json();
+            console.log('my Schedule updated:', jsonResponse);
+            console.log(scheduleData);
+        } catch (error) {
+            console.error('Error updating schedule:', error);
+        }
+    };
+
+    const handleConfirm = () => {
+        const newScheduleData = formatScheduleData(selection);
+        console.log(`schedule 수정 : ${JSON.stringify(newScheduleData)}`);
+
+        if (scheduleData && scheduleData.schedule.length > 0) {
+            putSchedule(newScheduleData);
+        } else {
+            postSchedule(newScheduleData);
+        }
+
+        onSetIsEditModal();
+    };
+
     return (
         <>
             <ModalBlackOut />
             <ModalContainer>
                 <Box>
                     <Title>나의 시간표</Title>
-                    <EditMyTime />
+                    <EditMyTime
+                        weekDates={weekDates || []}
+                        selection={selection}
+                        setSelection={setSelection}
+                    />
                 </Box>
-                <ConfirmBtn onClick={onSetIsEditModal}>
-                    시간표 등록하기
-                </ConfirmBtn>
+                <ConfirmBtn onClick={handleConfirm}>시간표 등록하기</ConfirmBtn>
             </ModalContainer>
         </>
     );

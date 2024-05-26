@@ -3,6 +3,7 @@ import StorageProject from './StorageProject';
 import { useProjectStoredQuery } from '#/hooks/apis/queries/project/useProjectStoredQuery';
 import { ProjectThumbnailResponse } from '#/Types/projecttype';
 
+
 const GridContainer = styled.div`
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -26,15 +27,30 @@ const NoProject = styled.div`
     line-height: normal;
     text-transform: capitalize;
 `;
+
 interface StorageProjectListProps {
     projects: ProjectThumbnailResponse[];
 }
 const StorageProjectList: React.FC<StorageProjectListProps> = ({ projects }) => {
     return projects ? (
+
         <GridContainer>
-            {projects.map((project) => (
-                <StorageProject key={project.projectId} project={project} />
-            ))}
+            {projects.map((project, index) => {
+                if (projects.length === index + 1) {
+                    return (
+                        <div key={project.projectId} ref={lastProjectRef}>
+                            <StorageProject project={project} />
+                        </div>
+                    );
+                } else {
+                    return (
+                        <StorageProject
+                            key={project.projectId}
+                            project={project}
+                        />
+                    );
+                }
+            })}
         </GridContainer>
     ) : (
         <NoProject>No Project</NoProject>

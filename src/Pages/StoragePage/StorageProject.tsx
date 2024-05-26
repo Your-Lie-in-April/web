@@ -9,6 +9,7 @@ import { ProjectThumbnailResponse } from '#/Types/projecttype';
 import { useNavigate, useNavigation } from 'react-router-dom';
 import { Http } from '#/constants/backendURL';
 
+
 interface ProjectBoxProps {
     color?: string;
 }
@@ -25,7 +26,8 @@ const ProjectBox = styled.div<ProjectBoxProps>`
     display: flex;
     color: #ffffff;
 
-    background-color: ${(props) => (props.color ? `#${props.color}` : '#b79fff')};
+    background-color: ${(props) =>
+        props.color ? `#${props.color}` : '#b79fff'};
 `;
 
 const TextBox = styled.div`
@@ -133,7 +135,11 @@ const MoreText = styled.div`
     text-transform: uppercase;
 `;
 
-const StorageProject = ({ project }: { project: ProjectThumbnailResponse }) => {
+interface ProjectStorageProps {
+    project: ProjectEntity;
+}
+
+const StorageProject: React.FC<ProjectStorageProps> = ({ project }) => {
     const [showMore, setShowMore] = useState<boolean>(false);
     const [isClick, setIsClick] = useState<boolean>(false);
     const navigate = useNavigate();
@@ -186,6 +192,7 @@ const StorageProject = ({ project }: { project: ProjectThumbnailResponse }) => {
         }
     };
 
+
     return (
         <>
             <ProjectBox style={{ backgroundColor: project.color }}>
@@ -201,9 +208,13 @@ const StorageProject = ({ project }: { project: ProjectThumbnailResponse }) => {
                             <MoreItem onClick={handleStore}>
                                 <RestartAltIcon sx={{ fontSize: 48, color: '#F1F1F1' }} />
                                 <MoreText>보관 취소</MoreText>
+
+
                             </MoreItem>
                             <MoreItem onClick={onClickItem}>
-                                <DeleteIcon sx={{ fontSize: 48, color: '#F1F1F1' }} />
+                                <DeleteIcon
+                                    sx={{ fontSize: 48, color: '#F1F1F1' }}
+                                />
                                 <MoreText>삭제하기</MoreText>
                             </MoreItem>
                         </div>
@@ -218,7 +229,10 @@ const StorageProject = ({ project }: { project: ProjectThumbnailResponse }) => {
                 >
                     <MoreDiv>
                         <MoreButton>
-                            <StyledMoreBtn sx={{ fontSize: 32 }} onClick={toggleMoreBtn} />
+                            <StyledMoreBtn
+                                sx={{ fontSize: 32 }}
+                                onClick={toggleMoreBtn}
+                            />
                         </MoreButton>
                     </MoreDiv>
                     <TextBox onClick={() => navigate(`/project/${project.projectId}`)}>

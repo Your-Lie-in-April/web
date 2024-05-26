@@ -1,7 +1,14 @@
 import styled from 'styled-components';
-import { useState } from 'react';
 import EditMySchedule from './EditMySchedule';
 import MyTime from './MyTime';
+import { useContext, useEffect, useState } from 'react';
+import { useUserContext } from '#/Pages/MainPage/MainPage';
+import { DateContext } from '#/hooks/context/dateContext';
+import dayjs from 'dayjs';
+import { Http } from '#/constants/backendURL';
+import { ScheduleWeekResponse } from '#/Types/scheduletype';
+import { useParams } from 'react-router-dom';
+
 
 const Box = styled.div`
     width: 661px;
@@ -15,8 +22,7 @@ const Box = styled.div`
     flex-direction: column;
     gap: 12px;
     padding: 5px 5px 8px 3px;
-    align-items: center;
-    justify-content: flex-end;
+    justify-content: space-between;
 `;
 
 const CommonText = styled.div`
@@ -60,9 +66,58 @@ const EditBtn = styled.button`
 
 const MySchedule = () => {
     const [isEditModal, setIsEditModal] = useState(false);
+    
+
     const onSetIsEditModal = () => {
         setIsEditModal((prev) => !prev);
     };
+
+    // 유저데이터가져옴
+    const { userData } = useUserContext();
+    const memberId = userData?.memberId;
+
+    // 프로젝트 ID 가져옴
+    const { projectId } = useParams();
+    console.log(`myTime projectId: ${projectId}`);
+
+    // 달력 선택 날짜 가져옴
+    const date = useContext(DateContext);
+    const condition = dayjs(date?.selectedDate).format('YYYY-MM-DD') ?? '';
+    console.log(`condition : ${condition}`);
+
+    const [scheduleData, setSchdeuleData] =
+        useState<ScheduleWeekResponse | null>(null);
+    // 스케줄 데이터 가져옴
+    useEffect(() => {
+        const accessToken = localStorage.getItem('access_token');
+        const memberId = localStorage.getItem('member_id');
+        const fetchSchedule = async () => {
+            try {
+                const response = await fetch(
+                    `${Http}/v1/projects/${projectId}/members/${memberId}/schedules?condition=${condition}`,
+                    {
+                        method: 'GET',
+                        headers: {
+                            Accept: '*/*',
+                            Authorization: `Bearer ${accessToken}`,
+                        },
+                    }
+                );
+
+                if (!response.ok) {
+                    throw new Error('Failed to fetch pinned projects');
+                }
+
+                const data = await response.json();
+                console.log('내 스케줄', data.data);
+                setSchdeuleData(data.data);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+        fetchSchedule();
+    }, [projectId, memberId, condition]);
+
     return (
         <>
             <Box>
@@ -85,10 +140,13 @@ const MySchedule = () => {
                         style={{ justifyContent: 'flex-end', flexBasis: '1%' }}
                     />
                 </div>
-                <MyTime />
+                <MyTime scheduleData={scheduleData} />
             </Box>
             {isEditModal && (
-                <EditMySchedule onSetIsEditModal={onSetIsEditModal} />
+                <EditMySchedule
+                    onSetIsEditModal={onSetIsEditModal}
+                    scheduleData={scheduleData}
+                />
             )}
         </>
     );

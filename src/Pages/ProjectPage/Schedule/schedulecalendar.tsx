@@ -1,104 +1,118 @@
-import { FC, useState } from 'react';
+import React, { FC, useContext, useEffect, useState } from 'react';
 import dayjs from 'dayjs';
 import styled from 'styled-components';
 import Calendar from 'react-calendar';
-import { isWithinInterval } from 'date-fns';
 import '/src/styles/calendarcss.css';
+import { ProjectContext } from '#/hooks/context/projectContext';
+import { DateContext } from '#/hooks/context/dateContext';
+import { getWeekDates } from './weekUtils';
 
-const StyledCalendarWrapper = styled.div`
-    width: 390px;
-    height: auto;
-    display: flex;
-    justify-content: center;
-    position: relative;
-    font-size: 32px;
-
+const StyledCalendarDiv = styled.div`
+    .react-calendar__tile {
+        padding: 3px;
+        font-size: 24px;
+    }
     &--active {
         background-color: inherit;
         border-radius: 0;
     }
+    .react-calendar {
+        width: 290px;
+        height: 294px;
+        border-radius: 10px;
+        background: #fbfbfb;
+        box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.25);
+        font-family: Arial, Helvetica, sans-serif;
+        line-height: normal;
+    }
+    .react-calendar__month-view__weekdays {
+        text-align: center;
+        text-transform: uppercase;
+        font: inherit;
+        font-size: 28px;
+        font-weight: bold;
+        gap: 2px;
+        width: 278px;
+    }
+    .react-calendar__navigation {
+        display: flex;
+        height: 20px;
+        margin-bottom: 1em;
+    }
+    .highlight {
+        background-color: #b79fff;
+        color: #ffffff;
+        border-radius: 0;
+        border: none;
+    }
 `;
 
-const StyledCalendar = styled(Calendar)``;
+const StyledCalendarWrapper = styled.div`
+    width: 290px;
+    height: auto;
+    display: flex;
+    position: relative;
+    font-size: 32px;
+`;
 
-type ValuePiece = Date | null;
-type Value = ValuePiece | [ValuePiece, ValuePiece];
+const StyledCalendar = styled(Calendar)`
+    .react-calendar__tile--active {
+        background-color: inherit;
+        border-radius: 0;
+        border: none;
+    }
+`;
 
-type ScheduleCalendarProps = {
-    startDate: Date | null;
-    endDate: Date | null;
-    selectRange: boolean;
-    onDateChange?: (startDate: Date | null, endDate: Date | null) => void;
-};
+const ScheduleCalendar: FC = () => {
+    const { projectData } = useContext(ProjectContext);
+    const startDate = projectData?.startDate
+        ? new Date(projectData.startDate)
+        : null;
+    const endDate = projectData?.endDate ? new Date(projectData.endDate) : null;
 
-const ScheduleCalendar: FC<ScheduleCalendarProps> = ({ startDate, endDate, onDateChange }) => {
-    const today = new Date();
-    const [date, setDate] = useState<Value>(today);
+    const { selectedDate, setSelectedDate } = useContext(DateContext) || {};
 
-    const handleDateChange = (newDate: Value) => {
-        if (Array.isArray(newDate) && newDate[0]) {
-            const start = new Date(newDate[0]);
-            const end = new Date(start);
-            end.setDate(end.getDate() + 7);
-            setDate([start, end]);
-            onDateChange?.(start, end);
-        } else if (newDate instanceof Date) {
-            const start = new Date(newDate);
-            const end = new Date(start);
-            end.setDate(end.getDate() + 7);
-            setDate([start, end]);
-            onDateChange?.(start, end);
-        }
-    };
-
-    const tileDisabled = ({ date, view }: { date: Date; view: string }) => {
-        if (view === 'month') {
-            if (startDate) {
-                const maxDate = new Date(startDate);
-                maxDate.setDate(maxDate.getDate() + 7);
-                return date > maxDate;
+    const tileClassName = ({ date }: { date: Date }) => {
+        if (startDate && endDate) {
+            if (date >= startDate && date <= endDate) {
+                return 'highlight';
             }
         }
-        return false;
+        return null;
     };
 
-    const isWithinRange = (currentDate: Date) => {
-        if (startDate && endDate) {
-            return isWithinInterval(currentDate, { start: startDate, end: endDate });
+    const handleDateChange = (date: Date | Date[] | null) => {
+        if (date instanceof Date && setSelectedDate) {
+            setSelectedDate(date.toISOString());
         }
-        return false;
-    };
-
-    const tileContent = ({ date }: { date: Date; view: string }) => {
-        const isInRange = isWithinRange(date);
-        const isStartDate = date.getDate() === startDate?.getDate() && date.getMonth() === startDate?.getMonth();
-        const isEndDate = date.getDate() === endDate?.getDate() && date.getMonth() === endDate?.getMonth();
-
-        return (
-            <>
-                {isInRange && <div></div>}
-                {isStartDate && <div></div>}
-                {isEndDate && <div></div>}
-            </>
-        );
     };
 
     return (
-        <StyledCalendarWrapper style={{ display: 'flex', textAlign: 'center' }}>
-            <StyledCalendar
-                value={date}
-                onChange={handleDateChange}
-                formatDay={(locale, date) => dayjs(date).format('D')}
-                formatYear={(locale, date) => dayjs(date).format('YYYY')}
-                formatMonthYear={(locale, date) => dayjs(date).format('YYYY. MM')}
-                showNeighboringMonth={false}
-                next2Label={null}
-                prev2Label={null}
-                minDetail="year"
-                selectRange={false}
-                tileDisabled={tileDisabled}
-            />
-        </StyledCalendarWrapper>
+        <StyledCalendarDiv style={{ width: '20px' }}>
+            <StyledCalendarWrapper
+                style={{ display: 'flex', textAlign: 'center' }}
+            >
+                <StyledCalendar
+                    value={selectedDate}
+                    onChange={handleDateChange}
+                    formatDay={(locale, date) => dayjs(date).format('D')}
+                    formatYear={(locale, date) => dayjs(date).format('YYYY')}
+                    formatMonthYear={(locale, date) =>
+                        dayjs(date).format('YYYY. MM')
+                    }
+                    formatShortWeekday={(locale, date) =>
+                        ['S', 'M', 'T', 'W', 'T', 'F', 'S'][date.getDay()]
+                    }
+                    showNeighboringMonth={false}
+                    next2Label={null}
+                    prev2Label={null}
+                    minDetail="year"
+                    selectRange={false}
+                    tileClassName={tileClassName}
+                    calendarType="US"
+                />
+            </StyledCalendarWrapper>
+        </StyledCalendarDiv>
     );
 };
 

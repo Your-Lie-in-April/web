@@ -1,9 +1,9 @@
 import styled from 'styled-components';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
-import { useState } from 'react';
 import { ModalBlackOut, ModalContainer } from './ModalCommon';
 import ModalPortal from '#/utils/ModalPotal';
-import useDeleteProject from '#/hooks/useDeleteProject';
+import { Http } from '#/constants/backendURL';
+
 
 const Box = styled.div`
     width: 406px;
@@ -86,16 +86,37 @@ const DeleteProject: React.FC<DeleteProjectProps> = ({
     title,
     onClose,
 }) => {
-    const [isBtnClick, setIsBtnClick] = useState<boolean>(false);
-    const { deleteProject } = useDeleteProject();
+    const deleteProject = async () => {
+        try {
+            const accessToken = localStorage.getItem('access_token');
+            if (accessToken) {
+                const response = await fetch(
+                    `${Http}/v1/projects/${projectId}`,
+                    {
+                        method: 'DELETE',
+                        headers: {
+                            Accept: '*/*',
+                            Authorization: `Bearer ${accessToken}`,
+                        },
+                    }
+                );
+                if (!response.ok) {
+                    console.log('failed to delete storage project');
+                }
+                const data = await response.json();
+                console.log(data);
+                onClose();
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
     const onConfirmDelete = () => {
-        deleteProject(projectId);
-        onClose();
+        deleteProject();
     };
 
     const onCancel = () => {
-        setIsBtnClick(!isBtnClick);
         onClose();
     };
 
