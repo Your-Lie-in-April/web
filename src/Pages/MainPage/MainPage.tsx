@@ -13,6 +13,7 @@ import Profile from './components/Profile';
 import AfterLogin from '../Layouts/AfterLogin';
 import { Http } from '#/constants/backendURL';
 import { MemberEntity } from '#/Types/membertype';
+import { ProjectEntity } from '#/Types/projecttype';
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -66,6 +67,7 @@ const MainPage: FC = () => {
     const query = useQuery();
     const navigate = useNavigate();
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+    const [projects, setProjects] = useState<ProjectEntity[]>([]);
 
     useEffect(() => {
         const accessToken = query.get('access_token') || localStorage.getItem('access_token');
@@ -106,6 +108,23 @@ const MainPage: FC = () => {
         };
         fetchUser();
     }, [userData?.nickname, userData?.state]);
+
+    useEffect(() => {
+        const accessToken = localStorage.getItem('access_token');
+        const memberId = localStorage.getItem('member_id');
+        const fetchProjects = async () => {
+            const response = await fetch(`${Http}/v1/projects/members/${memberId}?page=0&size=6`, {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                },
+            });
+            const data = await response.json();
+            console.log(data);
+            setProjects(data.data);
+        };
+
+        if (accessToken != '') fetchProjects();
+    }, []);
     return (
         <>
             <GlobalStyle />
@@ -165,7 +184,7 @@ const MainPage: FC = () => {
                             </div>
                             <Pinned />
                         </div>
-                        <ProjectList />
+                        <ProjectList projects={projects} />
                     </div>
                 </div>
             </MainContainer>

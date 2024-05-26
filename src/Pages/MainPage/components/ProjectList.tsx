@@ -11,25 +11,11 @@ const GridContainer = styled.div`
     column-gap: 25px;
     row-gap: 24px;
 `;
-const ProjectList: React.FC = () => {
-    const [projects, setProjects] = useState<ProjectEntity[]>([]);
+interface ProjectListProps {
+    projects: ProjectEntity[];
+}
+const ProjectList: React.FC<ProjectListProps> = ({ projects }) => {
     const accessToken = localStorage.getItem('access_token');
-    const memberId = localStorage.getItem('member_id');
-    useEffect(() => {
-        const accessToken = localStorage.getItem('access_token');
-        const fetchProjects = async () => {
-            const response = await fetch(`${Http}/v1/projects/members/${memberId}?page=0&size=6`, {
-                headers: {
-                    Authorization: `Bearer ${accessToken}`,
-                },
-            });
-            const data = await response.json();
-            console.log(data);
-            setProjects(data.data);
-        };
-
-        if (accessToken != '') fetchProjects();
-    }, [accessToken]);
 
     return accessToken == '' ? (
         <div>빈칸</div>
