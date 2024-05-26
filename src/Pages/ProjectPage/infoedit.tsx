@@ -1,6 +1,6 @@
 import { FC, useState, ChangeEvent, SetStateAction, Dispatch } from 'react';
 import styled from 'styled-components';
-import Cover from '../ProjectMakePage/cover';
+import CoverEdit from './coveredit';
 import { ProjectEntity } from '#/Types/projecttype';
 
 interface ContentTextProps {
@@ -216,7 +216,7 @@ const InfoEdit: FC<InfoEditPros> = ({ projectData, setEditCover }) => {
                                 top: '182px',
                             }}
                         >
-                            <Cover
+                            <CoverEdit
                                 setEditCover={setEditCover}
                                 projectData={projectData}
                                 title={title}

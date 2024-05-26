@@ -1,4 +1,4 @@
-import React, { FC, useState, useRef, useEffect } from 'react';
+import React, { FC, useState, useRef, useEffect, Dispatch, SetStateAction } from 'react';
 import ReactDatePicker from 'react-datepicker';
 import styled from 'styled-components';
 import { ko } from 'date-fns/locale/ko';
@@ -15,7 +15,6 @@ const DateContainer = styled.div`
     flex-direction: column;
     align-items: center;
     margin: 0 20px;
-   
 `;
 
 const SDatePicker = styled(ReactDatePicker)`
@@ -131,24 +130,34 @@ const Weekend = styled.div<{ selected: boolean }>`
     }
 `;
 
-type ProjectTimeProps = {
+interface ProjectTimeProps {
     startDate: Date | null;
     endDate: Date | null;
-    onDateChange?: (startDate: Date | null, endDate: Date | null) => void;
-};
+    onDateChange: (start: Date | null, end: Date | null) => void;
+    starttime: string;
+    setStartTime: Dispatch<SetStateAction<string>>;
+    endtime: string;
+    setEndTime: Dispatch<SetStateAction<string>>;
+    selectedDays: string[];
+    setSelectedDays: Dispatch<SetStateAction<string[]>>;
+}
 
 const ProjectTime: FC<ProjectTimeProps> = ({
     startDate,
     endDate,
     onDateChange,
+    starttime,
+    setStartTime,
+    endtime,
+    setEndTime,
+    selectedDays,
+    setSelectedDays,
 }) => {
-    const [selectedDays, setSelectedDays] = useState<number[]>([]);
     const [isStartOpen, setIsStartOpen] = useState<boolean>(false);
     const [isEndOpen, setIsEndOpen] = useState<boolean>(false);
-    const [starttime, setStartTime] = useState('AM 00:00');
-    const [endtime, setEndTime] = useState('AM 00:00');
     const startDropdownRef = useRef<HTMLDivElement>(null);
     const endDropdownRef = useRef<HTMLDivElement>(null);
+    const dayNames = ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'];
 
     const Times = [];
     for (let hour = 0; hour < 24; hour++) {
@@ -168,30 +177,27 @@ const ProjectTime: FC<ProjectTimeProps> = ({
         }
     }
 
-    const toggleWeekend = (dayIndex: number) => {
-        if (selectedDays.includes(dayIndex)) {
-            setSelectedDays(selectedDays.filter((day) => day !== dayIndex));
-        } else {
-            setSelectedDays([...selectedDays, dayIndex]);
-        }
-        onDateChange?.(startDate, endDate);
+    const toggleWeekend = (day: string) => {
+        console.log(`Toggling day: ${day}`);
+
+        setSelectedDays((currentDays) => {
+            if (currentDays.includes(day)) {
+                const newSelectedDays = currentDays.filter((d) => d !== day);
+                return newSelectedDays;
+            } else {
+                const newSelectedDays = [...currentDays, day];
+                return newSelectedDays;
+            }
+        });
     };
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
-            if (
-                startDropdownRef.current &&
-                !startDropdownRef.current.contains(event.target as Node) &&
-                isStartOpen
-            ) {
+            if (startDropdownRef.current && !startDropdownRef.current.contains(event.target as Node) && isStartOpen) {
                 setIsStartOpen(false);
             }
 
-            if (
-                endDropdownRef.current &&
-                !endDropdownRef.current.contains(event.target as Node) &&
-                isEndOpen
-            ) {
+            if (endDropdownRef.current && !endDropdownRef.current.contains(event.target as Node) && isEndOpen) {
                 setIsEndOpen(false);
             }
         };
@@ -256,14 +262,11 @@ const ProjectTime: FC<ProjectTimeProps> = ({
 
             <MakeWeekend>
                 <Text>생성할 요일</Text>
+
                 <WeekendContainer>
-                    {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((day, index) => (
-                        <Weekend
-                            key={index}
-                            selected={selectedDays.includes(index)}
-                            onClick={() => toggleWeekend(index)}
-                        >
-                            {day}
+                    {dayNames.map((day, index) => (
+                        <Weekend key={index} selected={selectedDays.includes(day)} onClick={() => toggleWeekend(day)}>
+                            {day.substring(0, 1)}
                         </Weekend>
                     ))}
                 </WeekendContainer>
@@ -280,10 +283,7 @@ const ProjectTime: FC<ProjectTimeProps> = ({
             >
                 <DateContainer style={{ gap: '4px' }}>
                     <Text>시간표 시작시간</Text>
-                    <TimePicker
-                        style={{ marginTop: '4px' }}
-                        onClick={startSelect}
-                    >
+                    <TimePicker style={{ marginTop: '4px' }} onClick={startSelect}>
                         {starttime}
                     </TimePicker>
                     {isStartOpen && (
@@ -302,16 +302,11 @@ const ProjectTime: FC<ProjectTimeProps> = ({
                         </TimePickerContainer>
                     )}
                 </DateContainer>
-                <Separator style={{ marginLeft: '28px', marginRight: '28px' }}>
-                    ~
-                </Separator>
+                <Separator style={{ marginLeft: '28px', marginRight: '28px' }}>~</Separator>
 
                 <DateContainer style={{ gap: '4px' }}>
                     <Text>시간표 종료시간</Text>
-                    <TimePicker
-                        style={{ marginTop: '4px' }}
-                        onClick={endSelect}
-                    >
+                    <TimePicker style={{ marginTop: '4px' }} onClick={endSelect}>
                         {endtime}
                     </TimePicker>
                     {isEndOpen && (

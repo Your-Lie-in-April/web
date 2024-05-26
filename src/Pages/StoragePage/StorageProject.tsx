@@ -1,10 +1,14 @@
 import styled from 'styled-components';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import DeleteIcon from '@mui/icons-material/Delete';
+import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { useState } from 'react';
 import DeleteProject from '../Modal/DeleteProject';
-import { ProjectEntity } from '#/Types/projecttype';
+import { ProjectThumbnailResponse } from '#/Types/projecttype';
+import { useNavigate, useNavigation } from 'react-router-dom';
+import { Http } from '#/constants/backendURL';
+
 
 interface ProjectBoxProps {
     color?: string;
@@ -43,6 +47,7 @@ const TextBox = styled.div`
     font-style: normal;
     line-height: normal;
     text-transform: uppercase;
+    cursor: pointer;
 `;
 
 const ProjectName = styled.div`
@@ -137,7 +142,7 @@ interface ProjectStorageProps {
 const StorageProject: React.FC<ProjectStorageProps> = ({ project }) => {
     const [showMore, setShowMore] = useState<boolean>(false);
     const [isClick, setIsClick] = useState<boolean>(false);
-
+    const navigate = useNavigate();
     const toggleMoreBtn = () => {
         setShowMore(!showMore);
     };
@@ -146,9 +151,51 @@ const StorageProject: React.FC<ProjectStorageProps> = ({ project }) => {
         setIsClick(!isClick);
     };
 
+    const deleteProject = async () => {
+        try {
+            const accessToken = localStorage.getItem('access_token');
+            const response = await fetch(`${Http}/v1/projects/${project.projectId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${accessToken}`,
+                    credentials: 'include',
+                },
+            });
+            if (!response.ok) throw new Error('뭔가 이상');
+            const result = await response.json();
+
+            console.log('프로젝트 삭제:', result);
+        } catch (error) {
+            console.error('업데이트 실패:', error);
+        }
+    };
+
+    const handleStore = async () => {
+        try {
+            const accessToken = localStorage.getItem('access_token');
+            const response = await fetch(`${Http}/v1/members/storage/${project.projectId}`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${accessToken}`,
+                    credentials: 'include',
+                },
+                body: JSON.stringify({ projectId: project.projectId }),
+            });
+            if (!response.ok) throw new Error('뭔가 이상');
+            const result = await response.json();
+            console.log('보관함 결과:', result);
+            window.location.reload();
+        } catch (error) {
+            console.error('업데이트 실패:', error);
+        }
+    };
+
+
     return (
         <>
-            <ProjectBox color={project.color}>
+            <ProjectBox style={{ backgroundColor: project.color }}>
                 {showMore && (
                     <MoreBox>
                         <div
@@ -158,11 +205,11 @@ const StorageProject: React.FC<ProjectStorageProps> = ({ project }) => {
                                 justifyContent: 'center',
                             }}
                         >
-                            <MoreItem>
-                                <AddCircleIcon
-                                    sx={{ fontSize: 48, color: '#F1F1F1' }}
-                                />
-                                <MoreText>자세히보기</MoreText>
+                            <MoreItem onClick={handleStore}>
+                                <RestartAltIcon sx={{ fontSize: 48, color: '#F1F1F1' }} />
+                                <MoreText>보관 취소</MoreText>
+
+
                             </MoreItem>
                             <MoreItem onClick={onClickItem}>
                                 <DeleteIcon
@@ -188,19 +235,13 @@ const StorageProject: React.FC<ProjectStorageProps> = ({ project }) => {
                             />
                         </MoreButton>
                     </MoreDiv>
-                    <TextBox>
+                    <TextBox onClick={() => navigate(`/project/${project.projectId}`)}>
                         <ProjectName>{project.title}</ProjectName>
                         <DetailText>{project.description}</DetailText>
                     </TextBox>
                 </div>
             </ProjectBox>
-            {isClick && (
-                <DeleteProject
-                    onClose={onClickItem}
-                    projectId={Number(project.projectId)}
-                    title={project.title}
-                />
-            )}
+            {isClick && <DeleteProject onClose={deleteProject} projectId={project.projectId} title={project.title} />}
         </>
     );
 };

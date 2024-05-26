@@ -1,5 +1,5 @@
-import { MemberResDto } from '../apis/member';
-import { ScheduleWeekResponse } from '../apis/schedule';
+import { MemberResDto } from './membertype';
+import { ScheduleWeekResponse } from './scheduletype';
 
 export type ProjectEntity = {
     projectId: string;
@@ -9,13 +9,7 @@ export type ProjectEntity = {
     endDate?: Date | undefined;
     startTime?: Date | undefined;
     endTime?: Date | undefined;
-    mon?: boolean;
-    tue?: boolean;
-    wed?: boolean;
-    thu?: boolean;
-    fri?: boolean;
-    sat?: boolean;
-    sun?: boolean;
+    daysOfWeek?: string[];
     isStored?: boolean;
     coverImageUrl: string | null;
     color: string;

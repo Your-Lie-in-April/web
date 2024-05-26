@@ -10,27 +10,12 @@ const GridContainer = styled.div`
     grid-auto-rows: minmax(auto, auto);
     column-gap: 25px;
     row-gap: 24px;
-    cursor: pointer;
 `;
-
-const ProjectList = () => {
-    const [projects, setProjects] = useState<ProjectEntity[]>([]);
+interface ProjectListProps {
+    projects: ProjectEntity[];
+}
+const ProjectList: React.FC<ProjectListProps> = ({ projects }) => {
     const accessToken = localStorage.getItem('access_token');
-    useEffect(() => {
-        const accessToken = localStorage.getItem('access_token');
-        const fetchProjects = async () => {
-            const response = await fetch(`${Http}/v1/projects/all`, {
-                headers: {
-                    Authorization: `Bearer ${accessToken}`,
-                },
-            });
-            const data = await response.json();
-            console.log(data);
-            setProjects(data.data);
-        };
-
-        if (accessToken != '') fetchProjects();
-    }, [accessToken]);
 
     return accessToken == '' ? (
         <div>빈칸</div>

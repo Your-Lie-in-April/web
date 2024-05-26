@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { DaySchedule } from '#/Types/scheduletype';
 import MemberTimeBar from './MemberTimeBar';
 
+
 const CommonText = styled.div`
     color: #000000;
     text-align: center;

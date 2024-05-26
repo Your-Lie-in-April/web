@@ -19,7 +19,7 @@ const ProjectBox = styled.div`
     justify-content: flex-end;
     width: 300px;
     height: 300px;
-    background-color: #b79fff;
+    background-color: ${(props) => (props.color ? `#${props.color}` : '#b79fff')};
     border-radius: 16px;
     display: flex;
     color: #ffffff;
@@ -44,6 +44,7 @@ const TextBox = styled.div`
     font-style: normal;
     line-height: normal;
     text-transform: uppercase;
+    cursor: pointer;
 `;
 
 const ProjectName = styled.div`
@@ -70,7 +71,6 @@ const StyledButton = styled.button`
     border: none;
     padding: 0;
     cursor: pointer;
-
     &: focus {
         border: none;
         outline: none;
@@ -108,7 +108,6 @@ const MoreItem = styled.button`
     display: flex;
     flex-direction: column;
     align-items: center;
-    cursor: pointer;
     color: #7d7d7d;
     border: none;
     padding: 0;
@@ -146,6 +145,7 @@ const Project: React.FC<ProjectProps> = ({ project }) => {
     const [showMore, setShowMore] = useState<boolean>(false);
     const [isCancleBtn, setIsCancelBtn] = useState<boolean>(false);
     const [isPinned, setIsPinned] = useState<boolean>(false);
+    const [isStored, setIsStored] = useState<boolean>(false);
     const navigate = useNavigate();
 
     const toggleMoreBtn = () => {
@@ -172,13 +172,36 @@ const Project: React.FC<ProjectProps> = ({ project }) => {
             setIsPinned(true);
             const result = await response.json();
             console.log('상단 고정 결과:', result);
+            window.location.reload();
+        } catch (error) {
+            console.error('업데이트 실패:', error);
+        }
+    };
+
+    const handleStore = async () => {
+        try {
+            const accessToken = localStorage.getItem('access_token');
+            const response = await fetch(`${Http}/v1/members/storage/${project.projectId}`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${accessToken}`,
+                    credentials: 'include',
+                },
+                body: JSON.stringify({ projectId: project.projectId }),
+            });
+            if (!response.ok) throw new Error('뭔가 이상');
+            setIsStored(true);
+            const result = await response.json();
+            console.log('보관함 결과:', result);
+            window.location.reload();
         } catch (error) {
             console.error('업데이트 실패:', error);
         }
     };
 
     return (
-        <ProjectBox onClick={() => navigate(`/project/${project.projectId}`)}>
+        <ProjectBox style={{ backgroundColor: project.color }}>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
                 <MoreDiv>
                     {showMore && (
@@ -191,9 +214,9 @@ const Project: React.FC<ProjectProps> = ({ project }) => {
                                     <PushPinOutlinedIcon sx={{ fontSize: 18 }} />
                                     <MoreText>상단고정</MoreText>
                                 </MoreItem>
-                                <MoreItem>
+                                <MoreItem onClick={handleStore}>
                                     <InboxOutlinedIcon sx={{ fontSize: 18 }} />
-                                    <MoreText isMove>보관함이동</MoreText>
+                                    <MoreText>보관함이동</MoreText>
                                 </MoreItem>
                             </MoreBox>
                         </>
@@ -202,7 +225,7 @@ const Project: React.FC<ProjectProps> = ({ project }) => {
                         <StyledMoreBtn sx={{ fontSize: 32 }} />
                     </StyledButton>
                 </MoreDiv>
-                <TextBox>
+                <TextBox onClick={() => navigate(`/project/${project.projectId}`)}>
                     <ProjectName>{project.title}</ProjectName>
                     <DetailText>{project.description}</DetailText>
                 </TextBox>
