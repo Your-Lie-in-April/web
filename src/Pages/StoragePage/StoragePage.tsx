@@ -70,7 +70,7 @@ const StoragePage = () => {
             }
         };
         storeList();
-    }, [storelist]);
+    }, []);
 
     return (
         <>
