@@ -10,7 +10,6 @@ const GridContainer = styled.div`
     grid-auto-rows: minmax(auto, auto);
     column-gap: 25px;
     row-gap: 24px;
-    cursor: pointer;
 `;
 const ProjectList: React.FC = () => {
     const [projects, setProjects] = useState<ProjectEntity[]>([]);

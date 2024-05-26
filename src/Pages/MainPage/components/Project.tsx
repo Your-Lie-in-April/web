@@ -44,6 +44,7 @@ const TextBox = styled.div`
     font-style: normal;
     line-height: normal;
     text-transform: uppercase;
+    cursor: pointer;
 `;
 
 const ProjectName = styled.div`
@@ -70,7 +71,6 @@ const StyledButton = styled.button`
     border: none;
     padding: 0;
     cursor: pointer;
-
     &: focus {
         border: none;
         outline: none;
@@ -108,7 +108,6 @@ const MoreItem = styled.button`
     display: flex;
     flex-direction: column;
     align-items: center;
-    cursor: pointer;
     color: #7d7d7d;
     border: none;
     padding: 0;
