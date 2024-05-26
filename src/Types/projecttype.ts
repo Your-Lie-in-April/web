@@ -59,7 +59,6 @@ export type ProjectCreateUpdateRequest = {
     fri: boolean;
     sat: boolean;
     sun: boolean;
-    isStored: boolean;
     coverImageUrl: string | null;
     color: string;
 };
