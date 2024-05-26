@@ -83,23 +83,24 @@ const Pinned: React.FC = () => {
     const [pinnedProjects, setPinnedProjects] = useState<PinProjectResponse | null>(null);
     useEffect(() => {
         const accessToken = localStorage.getItem('access_token');
+        const memberId = localStorage.getItem('member_id');
+
         const fetchPinnedProjects = async () => {
             try {
-                const response = await fetch(`${Http}/v1/projects/members/${userData?.memberId}/pin`, {
+                const response = await fetch(`${Http}/v1/projects/members/${memberId}/pin`, {
                     method: 'GET',
                     headers: {
                         Accept: '*/*',
                         Authorization: `Bearer ${accessToken}`,
                     },
                 });
-                console.log(userData);
 
                 if (!response.ok) {
                     throw new Error('Failed to fetch pinned projects');
                 }
 
                 const data = await response.json();
-                console.log(data.data[0]);
+                console.log('설정된거', data);
                 setPinnedProjects(data.data[0]);
             } catch (error) {
                 console.error(error);

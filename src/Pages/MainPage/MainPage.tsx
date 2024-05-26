@@ -87,8 +87,6 @@ const MainPage: FC = () => {
     useEffect(() => {
         const accessToken = localStorage.getItem('access_token');
         const memberId = localStorage.getItem('member_id');
-        console.log(accessToken);
-        console.log(memberId);
         const fetchUser = async () => {
             try {
                 const response = await fetch(Http + `/v1/members/${memberId}`, {
@@ -99,7 +97,6 @@ const MainPage: FC = () => {
                     },
                 });
                 const data = await response.json();
-                console.log(data);
                 setUserData(data?.data);
             } catch (error) {
                 console.error('Error fetching data:', error);
@@ -118,7 +115,6 @@ const MainPage: FC = () => {
                 },
             });
             const data = await response.json();
-            console.log(data);
             setProjects(data.data);
         };
 
@@ -140,8 +136,6 @@ const MainPage: FC = () => {
                 },
             });
             const data = await response.json();
-            console.log(url);
-            console.log(data);
             setProjects(data.data);
         } catch (error) {
             console.error('Error fetching projects:', error);
