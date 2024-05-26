@@ -1,19 +1,19 @@
 import React from 'react';
 import { ScheduleItem } from '#/Types/scheduletype';
 
-interface MemberTimeBarProps {
+interface MyTimeBarProps {
     hours: number[];
     schedule: ScheduleItem[];
 }
 
-const MemberTimeBar: React.FC<MemberTimeBarProps> = ({ hours, schedule }) => {
-    const totalWidth = hours.length * 37.282;
+const MyTimeBar: React.FC<MyTimeBarProps> = ({ hours, schedule }) => {
+    const totalWidth = hours.length * 40;
 
     return (
         <div
             style={{
                 width: `${totalWidth}px`,
-                height: '27.962px',
+                height: '29.804px',
                 backgroundColor: 'transparent',
                 overflow: 'hidden',
                 position: 'relative',
@@ -24,12 +24,14 @@ const MemberTimeBar: React.FC<MemberTimeBarProps> = ({ hours, schedule }) => {
                 <div
                     key={hour}
                     style={{
-                        width: '37.282px',
+                        width: '40px',
                         height: '100%',
                         backgroundColor: '#D9D9D9',
                         position: 'relative',
                         borderRadius: '20px',
                         overflow: 'hidden',
+                        border: '1px solid #7D7D7D',
+                        boxSizing: 'border-box',
                     }}
                 >
                     <div
@@ -82,11 +84,13 @@ const MemberTimeBar: React.FC<MemberTimeBarProps> = ({ hours, schedule }) => {
                                             position: 'absolute',
                                             top: 0,
                                             left: `${startPosition}px`,
-                                            width: `${
+                                            width: `${Math.max(
+                                                0,
                                                 endPosition - startPosition
-                                            }px`,
+                                            )}px`,
                                             height: '100%',
                                             backgroundColor: '#633AE2',
+                                            boxSizing: 'border-box',
                                         }}
                                     />
                                     {endPosition - startPosition > 0 && (
@@ -112,4 +116,4 @@ const MemberTimeBar: React.FC<MemberTimeBarProps> = ({ hours, schedule }) => {
     );
 };
 
-export default MemberTimeBar;
+export default MyTimeBar;

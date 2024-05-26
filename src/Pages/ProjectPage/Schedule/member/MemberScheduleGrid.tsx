@@ -7,6 +7,7 @@ import { DateContext } from '#/hooks/context/dateContext';
 import dayjs from 'dayjs';
 import { ScheduleWeekResponse } from '#/Types/scheduletype';
 import { Http } from '#/constants/backendURL';
+import { useParams } from 'react-router-dom';
 
 const GridContainer = styled.div`
     display: grid;
@@ -22,9 +23,9 @@ interface MemberScheduleGridProps {
 }
 
 const MemberScheduleGrid: React.FC<MemberScheduleGridProps> = () => {
-    // 프로젝트 정보 가져옴
-    const { projectData } = useContext(ProjectContext);
-    const projectId = projectData?.projectId;
+    // 프로젝트 ID 가져옴
+    const { projectId } = useParams();
+    console.log(`memberTime projectId: ${projectId}`);
 
     // 달력 선택 날짜 가져옴
     const date = useContext(DateContext);

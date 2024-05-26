@@ -1,12 +1,12 @@
 import React from 'react';
 import { ScheduleWeekResponse } from '#/Types/scheduletype';
-import TimeBar from './TimeBar';
+import MyTimeBar from './MyTimeBar';
 
-interface TimeScheduleProps {
+interface MyTimeScheduleProps {
     scheduleData: ScheduleWeekResponse | null;
 }
 
-const TimeSchedule: React.FC<TimeScheduleProps> = ({ scheduleData }) => {
+const MyTimeSchedule: React.FC<MyTimeScheduleProps> = ({ scheduleData }) => {
     const daysOfWeek = [
         'SUNDAY',
         'MONDAY',
@@ -55,7 +55,7 @@ const TimeSchedule: React.FC<TimeScheduleProps> = ({ scheduleData }) => {
                     </div>
                     <div style={{ width: '2px' }} />
                     <div style={{ flex: 1 }}>
-                        <TimeBar
+                        <MyTimeBar
                             hours={hours}
                             schedule={getScheduleForDay(day)}
                         />
@@ -66,4 +66,4 @@ const TimeSchedule: React.FC<TimeScheduleProps> = ({ scheduleData }) => {
     );
 };
 
-export default TimeSchedule;
+export default MyTimeSchedule;

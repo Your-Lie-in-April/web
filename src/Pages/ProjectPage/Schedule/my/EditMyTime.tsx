@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { TimeSlotLeft, TimeSlotRight } from './EditMyTimeCircle';
+import dayjs from 'dayjs';
 
 const CommonText = styled.div`
     color: #000000;
@@ -43,50 +44,72 @@ const HourTextList = styled.div`
     margin-right: 55px;
 `;
 
-const DayOfWeek = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
 const HoursOfDay = [...Array(15).keys()].map((_, index) => index + 9);
 
-const EditMyTime: React.FC = () => {
+interface SelectedSlot {
+    date: string;
+    hour: number;
+    minute: number;
+}
+
+interface EditMyTimeProps {
+    weekDates: string[];
+    selection: { [key: number]: SelectedSlot };
+    setSelection: React.Dispatch<
+        React.SetStateAction<{ [key: number]: SelectedSlot }>
+    >;
+}
+
+const EditMyTime: React.FC<EditMyTimeProps> = ({
+    weekDates,
+    selection,
+    setSelection,
+}) => {
     const [firstClickSlot, setFirstClickSlot] = useState<number>(0);
     const [firstClickSlotState, setFirstClickSlotState] =
         useState<boolean>(false);
-    const [selection, setSelection] = useState<Set<number> | null>(null);
     const [isMouseDown, setIsMouseDown] = useState<boolean>(false);
 
     // 셀 마우스 클릭시
-    const handleMouseClick = (id: number) => {
+    const handleMouseClick = (
+        id: number,
+        date: string,
+        hour: number,
+        minute: number
+    ) => {
         setFirstClickSlot(id);
 
-        if (selection === null) {
-            setSelection(new Set([id]));
-            setFirstClickSlotState(true);
-        } else {
-            if (selection.has(id)) {
-                setFirstClickSlotState(false);
-                const newSelection = new Set(selection);
-                newSelection.delete(id);
-                setSelection(newSelection);
+        setSelection((prevSelection) => {
+            const newSelection = { ...prevSelection };
+            if (newSelection[id]) {
+                delete newSelection[id];
             } else {
+                newSelection[id] = { date, hour, minute };
                 setFirstClickSlotState(true);
-                setSelection((prevSelection) => new Set(prevSelection).add(id));
             }
-        }
+            return newSelection;
+        });
 
         setIsMouseDown(true);
     };
 
     // 마우스가 셀 안에 들어올 경우 (드래그시)
-    const handleMouseEnter = (id: number) => {
+    const handleMouseEnter = (
+        id: number,
+        date: string,
+        hour: number,
+        minute: number
+    ) => {
         if (isMouseDown) {
-            if (firstClickSlotState) {
-                setSelection((prevSelection) => new Set(prevSelection).add(id));
-            } else {
-                if (selection !== null) {
-                    const newSelection = new Set(selection);
-                    newSelection.delete(id);
-                    setSelection(newSelection);
+            setSelection((prevSelection) => {
+                const newSelection = { ...prevSelection };
+                if (firstClickSlotState) {
+                    newSelection[id] = { date, hour, minute };
+                } else {
+                    delete newSelection[id];
                 }
-            }
+                return newSelection;
+            });
         }
     };
 
@@ -95,13 +118,11 @@ const EditMyTime: React.FC = () => {
     };
 
     const isSlotSelected = (id: number) => {
-        if (selection !== null) {
-            return selection.has(id);
-        }
+        return selection[id] !== undefined;
     };
 
     useEffect(() => {
-        if (selection !== null) {
+        if (Object.keys(selection).length > 0) {
             setFirstClickSlot(0);
         }
     }, [selection]);
@@ -118,12 +139,12 @@ const EditMyTime: React.FC = () => {
             <TimeList>
                 <div style={{ display: 'flex', flexDirection: 'row' }}>
                     <DayTextList>
-                        {DayOfWeek.map((day, idx) => (
+                        {weekDates.map((date, idx) => (
                             <CommonText
                                 key={idx}
                                 style={{ lineHeight: '32.11px' }}
                             >
-                                {day}
+                                {dayjs(date).format('ddd').toLocaleUpperCase()}
                             </CommonText>
                         ))}
                     </DayTextList>
@@ -137,7 +158,7 @@ const EditMyTime: React.FC = () => {
                             padding: '8px',
                         }}
                     >
-                        {DayOfWeek.map((day, idx) => (
+                        {weekDates.map((date, idx) => (
                             <div
                                 key={idx}
                                 style={{
@@ -145,7 +166,7 @@ const EditMyTime: React.FC = () => {
                                     flexDirection: 'row',
                                 }}
                             >
-                                {HoursOfDay.map((_, hourIdx) => {
+                                {HoursOfDay.map((hour, hourIdx) => {
                                     const slotIndex = idx * 15 + hourIdx;
                                     const slotIdLeft = slotIndex * 2 + 1;
                                     const slotIdRight = slotIndex * 2 + 2;
@@ -156,7 +177,12 @@ const EditMyTime: React.FC = () => {
                                                 id={slotIdLeft}
                                                 onSelectSlot={handleMouseClick}
                                                 onMouseEnter={() =>
-                                                    handleMouseEnter(slotIdLeft)
+                                                    handleMouseEnter(
+                                                        slotIdLeft,
+                                                        date,
+                                                        hour,
+                                                        0
+                                                    )
                                                 }
                                                 isSelected={
                                                     isSlotSelected(
@@ -164,13 +190,19 @@ const EditMyTime: React.FC = () => {
                                                     ) ||
                                                     firstClickSlot == slotIdLeft
                                                 }
+                                                date={date}
+                                                hour={hour}
+                                                minute={0}
                                             />
                                             <TimeSlotRight
                                                 id={slotIdRight}
                                                 onSelectSlot={handleMouseClick}
                                                 onMouseEnter={() =>
                                                     handleMouseEnter(
-                                                        slotIdRight
+                                                        slotIdRight,
+                                                        date,
+                                                        hour,
+                                                        30
                                                     )
                                                 }
                                                 isSelected={
@@ -180,6 +212,9 @@ const EditMyTime: React.FC = () => {
                                                     firstClickSlot ===
                                                         slotIdRight
                                                 }
+                                                date={date}
+                                                hour={hour}
+                                                minute={30}
                                             />
                                         </React.Fragment>
                                     );

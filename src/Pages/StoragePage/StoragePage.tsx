@@ -47,7 +47,6 @@ const StoragePage = () => {
     return (
         <>
             <GlobalStyle />
-
             <>
                 <GraphicIcons />
                 <div
