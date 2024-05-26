@@ -6,6 +6,7 @@ import { useState } from 'react';
 import DeleteProject from '../Modal/DeleteProject';
 import { ProjectEntity } from '#/Types/projecttype';
 import { Http } from '#/constants/backendURL';
+import { useNavigate } from 'react-router-dom';
 
 interface ProjectBoxProps {
     color?: string;
@@ -43,6 +44,7 @@ const TextBox = styled.div`
     font-style: normal;
     line-height: normal;
     text-transform: uppercase;
+    cursor: pointer;
 `;
 
 const ProjectName = styled.div`
@@ -137,7 +139,7 @@ interface ProjectStorageProps {
 const StorageProject: React.FC<ProjectStorageProps> = ({ project }) => {
     const [showMore, setShowMore] = useState<boolean>(false);
     const [isClick, setIsClick] = useState<boolean>(false);
-
+    const navigate = useNavigate();
     const toggleMoreBtn = () => {
         setShowMore(!showMore);
     };
@@ -222,14 +224,14 @@ const StorageProject: React.FC<ProjectStorageProps> = ({ project }) => {
                             <StyledMoreBtn sx={{ fontSize: 32 }} onClick={toggleMoreBtn} />
                         </MoreButton>
                     </MoreDiv>
-                    <TextBox>
+                    <TextBox onClick={() => navigate(`/project/${project.projectId}`)}>
                         <ProjectName>{project.title}</ProjectName>
                         <DetailText>{project.description}</DetailText>
                     </TextBox>
                 </div>
             </ProjectBox>
             {isClick && (
-                <DeleteProject onClose={onClickItem} projectId={Number(project.projectId)} title={project.title} />
+                <DeleteProject onClose={deleteProject} projectId={Number(project.projectId)} title={project.title} />
             )}
         </>
     );
