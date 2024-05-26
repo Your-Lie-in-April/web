@@ -5,6 +5,7 @@ import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { useState } from 'react';
 import DeleteProject from '../Modal/DeleteProject';
 import { ProjectThumbnailResponse } from '#/Types/projecttype';
+import { useNavigate, useNavigation } from 'react-router-dom';
 
 interface ProjectBoxProps {
     color?: string;
@@ -132,7 +133,7 @@ const MoreText = styled.div`
 const StorageProject = ({ project }: { project: ProjectThumbnailResponse }) => {
     const [showMore, setShowMore] = useState<boolean>(false);
     const [isClick, setIsClick] = useState<boolean>(false);
-
+    const navigate = useNavigate();
     const toggleMoreBtn = () => {
         setShowMore(!showMore);
     };
@@ -140,8 +141,6 @@ const StorageProject = ({ project }: { project: ProjectThumbnailResponse }) => {
     const onClickItem = () => {
         setIsClick(!isClick);
     };
-
-    console.log('개별 프로젝트 : ', project);
 
     return (
         <>
@@ -155,7 +154,7 @@ const StorageProject = ({ project }: { project: ProjectThumbnailResponse }) => {
                                 justifyContent: 'center',
                             }}
                         >
-                            <MoreItem>
+                            <MoreItem onClick={() => navigate(`/project/${project.projectId}`)}>
                                 <AddCircleIcon sx={{ fontSize: 48, color: '#F1F1F1' }} />
                                 <MoreText>자세히보기</MoreText>
                             </MoreItem>
