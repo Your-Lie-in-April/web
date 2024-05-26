@@ -199,7 +199,6 @@ const StorageProject: React.FC<ProjectStorageProps> = ({ project }) => {
                     onClose={onClickItem}
                     projectId={Number(project.projectId)}
                     title={project.title}
-                    refreshProjects={refreshProjects}
                 />
             )}
         </>
