@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { ModalBlackOut, ModalContainer } from './ModalCommon';
-import ModalPortal from '../../utils/ModalPotal';
+import ModalPortal from '#/utils/ModalPotal';
 import { useUserContext } from '../MainPage/MainPage';
 import { useState } from 'react';
 import { Http } from '#/constants/backendURL';

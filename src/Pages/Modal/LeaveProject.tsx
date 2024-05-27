@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import { useState } from 'react';
 import { ModalBlackOut, ModalContainer } from './ModalCommon';
-import ModalPortal from '../../utils/ModalPotal';
+import ModalPortal from '#/utils/ModalPotal';
 import { Http } from '#/constants/backendURL';
 
 const Box = styled.div`

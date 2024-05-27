@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import React from 'react';
 import { ModalBlackOut, ModalContainer } from './ModalCommon';
-import ModalPortal from '../../utils/ModalPotal';
+import ModalPortal from '#/utils/ModalPotal';
 
 const Box = styled.div`
     width: 406px;

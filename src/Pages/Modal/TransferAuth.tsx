@@ -4,7 +4,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import React, { useState } from 'react';
 import { ModalBlackOut, ModalContainer } from './ModalCommon';
-import ModalPortal from '../../utils/ModalPotal';
+import ModalPortal from '#/utils/ModalPotal';
 
 const Box = styled.div`
     width: 406px;
@@ -119,7 +119,12 @@ const ButtonsContainer = styled.div`
     gap: 4px;
 `;
 
-const TransferAuthModal = () => {
+interface TransferAuthModalProps {
+    onIsAuthClick: () => void;
+}
+const TransferAuthModal: React.FC<TransferAuthModalProps> = ({
+    onIsAuthClick,
+}) => {
     const testMemList: string[] = [
         'mem1234',
         'mem5678',
@@ -145,11 +150,13 @@ const TransferAuthModal = () => {
         setIsOpen(!isOpen);
     };
 
-    console.log(selectMem);
+    const handleConfirm = () => {
+        onIsAuthClick();
+    };
 
     return (
         <ModalPortal>
-            <ModalBlackOut />
+            <ModalBlackOut onClick={onIsAuthClick} />
             <ModalContainer>
                 <Box>
                     <div
@@ -236,8 +243,10 @@ const TransferAuthModal = () => {
                                 padding: '0 20px 0 20px',
                             }}
                         >
-                            <ConfirmBtn>확인</ConfirmBtn>
-                            <CancelBtn>취소</CancelBtn>
+                            <ConfirmBtn onClick={handleConfirm}>
+                                확인
+                            </ConfirmBtn>
+                            <CancelBtn onClick={onIsAuthClick}>취소</CancelBtn>
                         </ButtonsContainer>
                     </div>
                 </Box>

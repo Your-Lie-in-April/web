@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 import ConfirmCopyLink from './ConfirmCopyLink';
-import ModalPortal from '../../utils/ModalPotal';
+import ModalPortal from '#/utils/ModalPotal';
 import { Http } from '#/constants/backendURL';
 import { ProjectEntity } from '#/Types/projecttype';
 

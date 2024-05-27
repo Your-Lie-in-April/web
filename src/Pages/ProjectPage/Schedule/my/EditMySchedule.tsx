@@ -8,6 +8,7 @@ import { useParams } from 'react-router-dom';
 import { ScheduleWeekResponse } from '#/Types/scheduletype';
 import ModalPortal from '#/utils/ModalPotal';
 
+
 const ModalBlackOut = styled.div`
     width: 100%;
     height: 100%;

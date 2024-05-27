@@ -66,6 +66,7 @@ const ProfileList: React.FC<ProfileListProps> = ({
 }) => {
     const [showDeleteBtn, setShowDeleteBtn] = useState(false);
     const { userData, setUserData } = useUserContext();
+
     const toggleDeleteBtn = () => {
         setShowDeleteBtn((prev) => !prev);
     };

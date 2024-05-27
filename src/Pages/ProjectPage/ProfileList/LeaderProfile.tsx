@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import MoreBtn from '../Buttons/MoreBtn';
 import { useUserContext } from '#/Pages/MainPage/MainPage';
 import { MemberEntity } from '#/Types/membertype';
@@ -35,21 +34,6 @@ const StyledImage = styled.img`
     object-fit: cover;
 `;
 
-const EditMemberBtn = styled.button`
-    background: none;
-    border: none;
-    padding: 0;
-    cursor: pointer;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    &: focus {
-        outline: none;
-    }
-`;
-
 const CommonText = styled.div`
     color: #000000;
     font-family: Pretendard;
@@ -71,7 +55,10 @@ const LeaderProfile = ({
         <LeaderProfileBox>
             <LeaderProfileDiv>
                 <LeaderImg>
-                    <StyledImage src={userData?.profileImageUrl || defaultImg} alt="Profile Image" />
+                    <StyledImage
+                        src={userData?.profileImageUrl || defaultImg}
+                        alt="Profile Image"
+                    />
                 </LeaderImg>
                 <div
                     style={{
