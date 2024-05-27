@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import SyncAltIcon from '@mui/icons-material/SyncAlt';
 import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
-import {  useRef, useState, useLayoutEffect } from 'react';
+import { useRef, useState, useLayoutEffect } from 'react';
 import TransferAuthModal from '#/Pages/Modal/TransferAuth';
 import ModalPortal from '#/utils/ModalPotal';
 
@@ -48,7 +48,7 @@ const MoreDetailDiv = styled.div`
     right: -55px;
 `;
 
-const MoreBtn = () => {
+const MoreBtn = ({ toggleDeleteBtn }: { toggleDeleteBtn: () => void }) => {
     const [isMoreClick, setIsMoreClick] = useState<boolean>(false);
     const [isAuthClick, setIsAuthClick] = useState<boolean>(false);
     const moreRef = useRef<HTMLButtonElement>(null);
@@ -88,6 +88,7 @@ const MoreBtn = () => {
                         style={{ top: position.top, left: position.left }}
                     >
                         <div
+                            onClick={toggleDeleteBtn}
                             style={{
                                 display: 'flex',
                                 flexDirection: 'column',

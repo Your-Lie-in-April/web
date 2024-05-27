@@ -18,6 +18,8 @@ const MemberProfileDiv = styled.div`
     display: flex;
     flex-direction: row;
     gap: 8px;
+
+    position: relative;
 `;
 
 const MemberImg = styled.image`
@@ -50,13 +52,22 @@ const DeleteBtn = styled(RemoveCircleOutlineIcon)`
     color: #d9d9d9;
     align-self: center;
 
+    position : absolute;
+    right : 5px;
+
     &:hover {
         color: #eb5757;
         cursor: pointer;
     }
 `;
 const defaultImg = 'src/pics/default.png';
-const MemberProfile = ({ showDeleteBtn, member }: { showDeleteBtn: boolean; member: MemberEntity }) => {
+const MemberProfile = ({
+    showDeleteBtn,
+    member,
+}: {
+    showDeleteBtn: boolean;
+    member: MemberEntity;
+}) => {
     const [deleteMemModal, SetDeleteMemModal] = useState(false);
 
     const onSetDeleteMemModal = () => {
@@ -68,42 +79,41 @@ const MemberProfile = ({ showDeleteBtn, member }: { showDeleteBtn: boolean; memb
             <MemberProfileBox>
                 <MemberProfileDiv>
                     <MemberImg>
-                        <StyledImage src={member?.profileImageUrl || defaultImg} alt="Profile Image" />
+                        <StyledImage
+                            src={member?.profileImageUrl || defaultImg}
+                            alt="Profile Image"
+                        />
                     </MemberImg>
+
                     <div
                         style={{
                             display: 'flex',
-                            flex: '1',
-                            alignContent: 'center',
-                            justifyContent: 'space-between',
+                            flexDirection: 'column',
+                            gap: '7px',
+                            justifyContent: 'center',
                         }}
                     >
-                        <div
+                        <CommonText>{member?.nickname}</CommonText>
+                        <CommonText
                             style={{
-                                display: 'flex',
-                                flexDirection: 'column',
-                                gap: '7px',
-                                justifyContent: 'center',
+                                fontSize: '10px',
+                                fontWeight: '400',
                             }}
                         >
-                            <CommonText>{member?.nickname}</CommonText>
-                            <CommonText
-                                style={{
-                                    fontSize: '10px',
-                                    fontWeight: '400',
-                                }}
-                            >
-                                {member?.state}
-                            </CommonText>
-                        </div>
-                        <DeleteBtn
-                            style={{ display: showDeleteBtn ? 'block' : 'none' }}
-                            onClick={onSetDeleteMemModal}
-                        />
+                            {member?.state}
+                        </CommonText>
                     </div>
+                    <DeleteBtn
+                        style={{
+                            display: showDeleteBtn ? 'block' : 'none',
+                        }}
+                        onClick={onSetDeleteMemModal}
+                    />
                 </MemberProfileDiv>
             </MemberProfileBox>
-            {deleteMemModal && <DeleteMember onSetDeleteMemModal={onSetDeleteMemModal} />}
+            {deleteMemModal && (
+                <DeleteMember onSetDeleteMemModal={onSetDeleteMemModal} />
+            )}
         </>
     );
 };

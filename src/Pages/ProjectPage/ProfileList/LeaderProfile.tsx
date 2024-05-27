@@ -86,7 +86,7 @@ const LeaderProfile = ({
                             {userData?.state}
                         </CommonText>
                     </div>
-                    <MoreBtn />
+                    <MoreBtn toggleDeleteBtn = {toggleDeleteBtn}/>
                 </div>
             </LeaderProfileDiv>
         </LeaderProfileBox>
