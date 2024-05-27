@@ -3,6 +3,7 @@ import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import React from 'react';
 import { ModalBlackOut, ModalContainer } from './ModalCommon';
 import ModalPortal from '#/utils/ModalPotal';
+import useScrollLock from '#/utils/useScrollLock';
 
 const Box = styled.div`
     width: 406px;
@@ -80,6 +81,7 @@ interface DeleteMemberProps {
 }
 
 const DeleteMember: React.FC<DeleteMemberProps> = ({ onSetDeleteMemModal }) => {
+    useScrollLock();
     return (
         <ModalPortal>
             <ModalBlackOut onClick={onSetDeleteMemModal} />

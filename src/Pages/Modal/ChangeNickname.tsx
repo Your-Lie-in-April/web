@@ -2,6 +2,7 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import { ModalBlackOut, ModalContainer } from './ModalCommon';
 import ModalPortal from '#/utils/ModalPotal';
+import useScrollLock from '#/utils/useScrollLock';
 
 
 const Box = styled.div`
@@ -92,6 +93,8 @@ const ChangeNickName: React.FC<ChangeNickNameProps> = ({
         onSetIsEditModal();
     };
 
+    useScrollLock();
+    
     return (
         <ModalPortal>
             <ModalBlackOut onClick={onSetIsEditModal} />

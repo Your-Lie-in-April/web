@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { ModalBlackOut, ModalContainer } from './ModalCommon';
 import ModalPortal from '#/utils/ModalPotal';
 import { Http } from '#/constants/backendURL';
+import useScrollLock from '#/utils/useScrollLock';
 
 const Box = styled.div`
     width: 406px;
@@ -111,6 +112,8 @@ const LeaveProject: React.FC<DeleteProjectProps> = ({ onClose, projectId }) => {
         onClose();
     };
 
+    useScrollLock();
+    
     return (
         <ModalPortal>
             <ModalBlackOut />

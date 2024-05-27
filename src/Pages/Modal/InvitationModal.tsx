@@ -4,6 +4,7 @@ import ConfirmCopyLink from './ConfirmCopyLink';
 import ModalPortal from '#/utils/ModalPotal';
 import { Http } from '#/constants/backendURL';
 import { ProjectEntity } from '#/Types/projecttype';
+import useScrollLock from '#/utils/useScrollLock';
 
 interface CommonButtonProps {
     primary?: boolean;
@@ -172,6 +173,8 @@ const InvitationModal: React.FC<InvitationModalProps> = ({
         }
     };
     console.log('인바이트모달', projectData);
+
+    useScrollLock();
 
     return (
         <>

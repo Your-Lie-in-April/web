@@ -7,7 +7,7 @@ import { Http } from '#/constants/backendURL';
 import { useParams } from 'react-router-dom';
 import { ScheduleWeekResponse } from '#/Types/scheduletype';
 import ModalPortal from '#/utils/ModalPotal';
-
+import useScrollLock from '#/utils/useScrollLock';
 
 const ModalBlackOut = styled.div`
     width: 100%;
@@ -192,6 +192,8 @@ const EditMySchedule: React.FC<EditMyScheduleProps> = ({
 
         onSetIsEditModal();
     };
+
+    useScrollLock();
 
     return (
         <ModalPortal>

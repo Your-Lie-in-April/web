@@ -5,6 +5,7 @@ import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import React, { useState } from 'react';
 import { ModalBlackOut, ModalContainer } from './ModalCommon';
 import ModalPortal from '#/utils/ModalPotal';
+import useScrollLock from '#/utils/useScrollLock';
 
 const Box = styled.div`
     width: 406px;
@@ -153,6 +154,8 @@ const TransferAuthModal: React.FC<TransferAuthModalProps> = ({
     const handleConfirm = () => {
         onIsAuthClick();
     };
+
+    useScrollLock();
 
     return (
         <ModalPortal>

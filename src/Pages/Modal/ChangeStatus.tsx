@@ -4,6 +4,7 @@ import ModalPortal from '#/utils/ModalPotal';
 import { useUserContext } from '../MainPage/MainPage';
 import { useState } from 'react';
 import { Http } from '#/constants/backendURL';
+import useScrollLock from '#/utils/useScrollLock';
 
 const Box = styled.div`
     width: 500px;
@@ -114,6 +115,8 @@ const ChangeStatus: React.FC<ChangeStatusProps> = ({
             console.error('업데이트 실패:', error);
         }
     };
+
+    useScrollLock();
 
     return (
         <ModalPortal>
