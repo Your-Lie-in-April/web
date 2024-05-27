@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import EditMySchedule from './EditMySchedule';
+import EditMySchedule from './edit/EditMySchedule';
 import MyTime from './MyTime';
 import { useContext, useEffect, useState } from 'react';
 import { useUserContext } from '#/Pages/MainPage/MainPage';

@@ -1,13 +1,13 @@
 import styled from 'styled-components';
-import EditMyTime from './EditMyTime';
 import React, { useContext, useState } from 'react';
 import { DateContext } from '#/hooks/context/dateContext';
-import { formatScheduleData } from '../formatScheduleData';
+import { formatScheduleData } from '../../formatScheduleData';
 import { Http } from '#/constants/backendURL';
 import { useParams } from 'react-router-dom';
 import { ScheduleWeekResponse } from '#/Types/scheduletype';
 import ModalPortal from '#/utils/ModalPotal';
 import useScrollLock from '#/utils/useScrollLock';
+import EditMyTime from './EditMyTime';
 
 const ModalBlackOut = styled.div`
     width: 100%;
