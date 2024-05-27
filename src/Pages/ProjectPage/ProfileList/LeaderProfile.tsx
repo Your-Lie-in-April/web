@@ -47,7 +47,7 @@ const LeaderProfile = ({
     toggleDeleteBtn,
     member,
 }: {
-    toggleDeleteBtn: React.MouseEventHandler<HTMLButtonElement>;
+    toggleDeleteBtn: () => void;
     member: MemberEntity;
 }) => {
     const { userData, setUserData } = useUserContext();
