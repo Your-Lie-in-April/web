@@ -52,6 +52,11 @@ const Button = styled.button`
     font-size: 13px;
     font-weight: 500;
     line-height: normal;
+
+    &: focus {
+        border: none;
+        outline: none;
+    }
 `;
 
 const ConfirmBtn = styled(Button)`

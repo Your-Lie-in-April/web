@@ -66,6 +66,7 @@ const CommonButton = styled.button`
     color: #ffffff;
 
     &: focus {
+        border: none;
         outline: none;
     }
 `;
