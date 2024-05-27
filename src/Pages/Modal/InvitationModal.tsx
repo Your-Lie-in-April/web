@@ -17,7 +17,7 @@ const ModalBlackOut = styled.div<{ isVisible: boolean }>`
     left: 0;
     top: 0;
     background: rgba(0, 0, 0, ${({ isVisible }) => (isVisible ? '0.5' : '0')});
-    z-index: 1;
+    z-index: 100;
     transition: background 1s ease;
 `;
 

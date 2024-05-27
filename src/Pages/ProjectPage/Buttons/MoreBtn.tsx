@@ -42,7 +42,7 @@ const MoreDetailDiv = styled.div`
     background: #ffffff;
     color: #7d7d7d;
     box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.25);
-    z-index: 10;
+    z-index: 1;
     position: absolute;
     top: calc(100% + 8px);
     right: -55px;
