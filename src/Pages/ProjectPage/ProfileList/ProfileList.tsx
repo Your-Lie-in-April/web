@@ -1,12 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
 import MyProfile from './MyProfile';
 import MemberProfile from './MemberProfile';
 import LeaderProfile from './LeaderProfile';
-import InvitationModal from '../../Modal/InvitationModal';
 import InviteBtn from '../Buttons/InviteBtn';
 import { useUserContext } from '#/Pages/MainPage/MainPage';
-import { Http } from '#/constants/backendURL';
 import { MemberEntity } from '#/Types/membertype';
 import { ProjectEntity } from '#/Types/projecttype';
 
@@ -61,10 +59,14 @@ interface ProfileListProps {
     projectData: ProjectEntity | null;
 }
 
-const ProfileList: React.FC<ProfileListProps> = ({ members, projectId, projectData }) => {
+const ProfileList: React.FC<ProfileListProps> = ({
+    members,
+    projectId,
+    projectData,
+}) => {
     const [showDeleteBtn, setShowDeleteBtn] = useState(false);
-    const [showInviteModal, setShowInviteModal] = useState(false);
     const { userData, setUserData } = useUserContext();
+
     const toggleDeleteBtn = () => {
         setShowDeleteBtn((prev) => !prev);
     };
@@ -83,14 +85,25 @@ const ProfileList: React.FC<ProfileListProps> = ({ members, projectId, projectDa
                     }}
                 >
                     <CommonText style={{ color: '#ffffff' }}>멤버</CommonText>
-                    <InviteBtn projectId={projectId} projectData={projectData} />
+                    <InviteBtn
+                        projectId={projectId}
+                        projectData={projectData}
+                    />
                 </div>
                 <MemberList>
                     {members.map((member) =>
                         member.isPrivileged ? (
-                            <LeaderProfile key={member.memberId} member={member} toggleDeleteBtn={toggleDeleteBtn} />
+                            <LeaderProfile
+                                key={member.memberId}
+                                member={member}
+                                toggleDeleteBtn={toggleDeleteBtn}
+                            />
                         ) : (
-                            <MemberProfile key={member.memberId} member={member} showDeleteBtn={showDeleteBtn} />
+                            <MemberProfile
+                                key={member.memberId}
+                                member={member}
+                                showDeleteBtn={showDeleteBtn}
+                            />
                         )
                     )}
                 </MemberList>

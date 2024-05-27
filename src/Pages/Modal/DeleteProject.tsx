@@ -1,9 +1,9 @@
 import styled from 'styled-components';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import { ModalBlackOut, ModalContainer } from './ModalCommon';
-import ModalPortal from '#/utils/ModalPotal';
 import { Http } from '#/constants/backendURL';
-
+import ModalPortal from '#/utils/ModalPotal';
+import useScrollLock from '#/utils/useScrollLock';
 
 const Box = styled.div`
     width: 406px;
@@ -122,9 +122,11 @@ const DeleteProject: React.FC<DeleteProjectProps> = ({
 
     console.log(projectId);
 
+    useScrollLock();
+
     return (
         <ModalPortal>
-            <ModalBlackOut />
+            <ModalBlackOut onClick={onClose} />
             <ModalContainer>
                 <Box>
                     <div

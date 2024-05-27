@@ -2,7 +2,8 @@ import styled from 'styled-components';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import React from 'react';
 import { ModalBlackOut, ModalContainer } from './ModalCommon';
-import ModalPortal from '../../utils/ModalPotal';
+import ModalPortal from '#/utils/ModalPotal';
+import useScrollLock from '#/utils/useScrollLock';
 
 const Box = styled.div`
     width: 406px;
@@ -52,6 +53,11 @@ const Button = styled.button`
     font-size: 13px;
     font-weight: 500;
     line-height: normal;
+
+    &: focus {
+        border: none;
+        outline: none;
+    }
 `;
 
 const ConfirmBtn = styled(Button)`
@@ -75,9 +81,10 @@ interface DeleteMemberProps {
 }
 
 const DeleteMember: React.FC<DeleteMemberProps> = ({ onSetDeleteMemModal }) => {
+    useScrollLock();
     return (
         <ModalPortal>
-            <ModalBlackOut />
+            <ModalBlackOut onClick={onSetDeleteMemModal} />
             <ModalContainer>
                 <Box>
                     <div
