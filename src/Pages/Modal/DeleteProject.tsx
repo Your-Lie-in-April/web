@@ -4,7 +4,6 @@ import { ModalBlackOut, ModalContainer } from './ModalCommon';
 import ModalPortal from '#/utils/ModalPotal';
 import { Http } from '#/constants/backendURL';
 
-
 const Box = styled.div`
     width: 406px;
     height: 182px;
@@ -124,7 +123,7 @@ const DeleteProject: React.FC<DeleteProjectProps> = ({
 
     return (
         <ModalPortal>
-            <ModalBlackOut />
+            <ModalBlackOut onClick={onClose} />
             <ModalContainer>
                 <Box>
                     <div

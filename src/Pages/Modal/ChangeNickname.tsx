@@ -88,7 +88,7 @@ const ChangeNickName: React.FC<ChangeNickNameProps> = ({
 
     return (
         <ModalPortal>
-            <ModalBlackOut />
+            <ModalBlackOut onClick={onSetIsEditModal} />
             <ModalContainer>
                 <Box>
                     <div

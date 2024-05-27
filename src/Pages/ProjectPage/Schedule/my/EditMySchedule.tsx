@@ -6,6 +6,7 @@ import { formatScheduleData } from '../formatScheduleData';
 import { Http } from '#/constants/backendURL';
 import { useParams } from 'react-router-dom';
 import { ScheduleWeekResponse } from '#/Types/scheduletype';
+import ModalPortal from '#/utils/ModalPotal';
 
 const ModalBlackOut = styled.div`
     width: 100%;
@@ -192,8 +193,8 @@ const EditMySchedule: React.FC<EditMyScheduleProps> = ({
     };
 
     return (
-        <>
-            <ModalBlackOut />
+        <ModalPortal>
+            <ModalBlackOut onClick={onSetIsEditModal} />
             <ModalContainer>
                 <Box>
                     <Title>나의 시간표</Title>
@@ -205,7 +206,7 @@ const EditMySchedule: React.FC<EditMyScheduleProps> = ({
                 </Box>
                 <ConfirmBtn onClick={handleConfirm}>시간표 등록하기</ConfirmBtn>
             </ModalContainer>
-        </>
+        </ModalPortal>
     );
 };
 

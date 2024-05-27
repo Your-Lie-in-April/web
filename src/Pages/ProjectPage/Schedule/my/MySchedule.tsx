@@ -9,7 +9,6 @@ import { Http } from '#/constants/backendURL';
 import { ScheduleWeekResponse } from '#/Types/scheduletype';
 import { useParams } from 'react-router-dom';
 
-
 const Box = styled.div`
     width: 661px;
     height: 294px;
@@ -66,7 +65,6 @@ const EditBtn = styled.button`
 
 const MySchedule = () => {
     const [isEditModal, setIsEditModal] = useState(false);
-    
 
     const onSetIsEditModal = () => {
         setIsEditModal((prev) => !prev);

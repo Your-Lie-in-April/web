@@ -102,25 +102,35 @@ const CommonButton = styled.button<CommonButtonProps>`
 interface InvitationModalProps {
     projectId: string | undefined;
     projectData: ProjectEntity | null;
+    toggleBtn: () => void;
 }
 
-const InvitationModal: React.FC<InvitationModalProps> = ({ projectData, projectId }) => {
+const InvitationModal: React.FC<InvitationModalProps> = ({
+    projectData,
+    projectId,
+    toggleBtn,
+}) => {
     const [link, setLink] = useState<string>('');
     const [isBtnClick, setIsBtnClick] = useState<boolean>(false);
     const [isVisible, setIsVisible] = useState<boolean>(true);
-    const [showConfirmCopyLink, setShowConfirmCopyLink] = useState<boolean>(false);
-    const [isModalCompleteHidden, setIsModalCompleteHidden] = useState<boolean>(false);
+    const [showConfirmCopyLink, setShowConfirmCopyLink] =
+        useState<boolean>(false);
+    const [isModalCompleteHidden, setIsModalCompleteHidden] =
+        useState<boolean>(false);
     const accessToken = localStorage.getItem('access_token');
 
     const makeInvitation = async () => {
         try {
-            const response = await fetch(`${Http}/v1/projects/${projectId}/invitation`, {
-                method: 'POST',
-                headers: {
-                    Accept: '*/*',
-                    Authorization: `Bearer ${accessToken}`,
-                },
-            });
+            const response = await fetch(
+                `${Http}/v1/projects/${projectId}/invitation`,
+                {
+                    method: 'POST',
+                    headers: {
+                        Accept: '*/*',
+                        Authorization: `Bearer ${accessToken}`,
+                    },
+                }
+            );
 
             if (!response.ok) {
                 throw new Error('회원 초대 링크 생성 실패');
@@ -135,14 +145,9 @@ const InvitationModal: React.FC<InvitationModalProps> = ({ projectData, projectI
     };
 
     // 링크 생성 로직
-    // 수정필요**
     const generateLink = () => {
         setIsBtnClick(false);
         makeInvitation();
-    };
-
-    const clickBack = () => {
-        setIsVisible(false);
     };
 
     // 복사 버튼 클릭시 모달 닫기
@@ -172,7 +177,7 @@ const InvitationModal: React.FC<InvitationModalProps> = ({ projectData, projectI
         <>
             {!isModalCompleteHidden && (
                 <ModalPortal>
-                    <ModalBlackOut isVisible={isVisible} onClick={clickBack} />
+                    <ModalBlackOut isVisible={isVisible} onClick={toggleBtn} />
                     <ModalContainer isVisible={isVisible}>
                         <Box>
                             <div
@@ -198,11 +203,19 @@ const InvitationModal: React.FC<InvitationModalProps> = ({ projectData, projectI
                                     <Title>{projectData?.title}</Title>
                                     <InviteField value={link} readOnly />
                                 </div>
-                                <ButtonsContainer style={{ alignSelf: 'flex-end' }}>
-                                    <CommonButton primary={!isBtnClick} onClick={generateLink}>
+                                <ButtonsContainer
+                                    style={{ alignSelf: 'flex-end' }}
+                                >
+                                    <CommonButton
+                                        primary={!isBtnClick}
+                                        onClick={generateLink}
+                                    >
                                         링크생성
                                     </CommonButton>
-                                    <CommonButton primary={isBtnClick} onClick={() => onClickCopyLink(link)}>
+                                    <CommonButton
+                                        primary={isBtnClick}
+                                        onClick={() => onClickCopyLink(link)}
+                                    >
                                         링크복사
                                     </CommonButton>
                                 </ButtonsContainer>

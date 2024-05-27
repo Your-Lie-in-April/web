@@ -82,7 +82,9 @@ interface ChangeStatusProps {
     onSetEditStatusModal: () => void;
 }
 
-const ChangeStatus: React.FC<ChangeStatusProps> = ({ onSetEditStatusModal }) => {
+const ChangeStatus: React.FC<ChangeStatusProps> = ({
+    onSetEditStatusModal,
+}) => {
     const { userData, setUserData } = useUserContext();
     const [newState, setNewState] = useState(userData?.state || '');
     const accessToken = localStorage.getItem('access_token');
@@ -114,7 +116,7 @@ const ChangeStatus: React.FC<ChangeStatusProps> = ({ onSetEditStatusModal }) => 
 
     return (
         <ModalPortal>
-            <ModalBlackOut />
+            <ModalBlackOut onClick={onSetEditStatusModal} />
             <ModalContainer>
                 <Box>
                     <div
@@ -138,11 +140,17 @@ const ChangeStatus: React.FC<ChangeStatusProps> = ({ onSetEditStatusModal }) => 
                             }}
                         >
                             <Title>상태메시지를 작성해주세요</Title>
-                            <StatusField type="text" placeholder={userData?.state} onChange={handleStatusChange} />
+                            <StatusField
+                                type="text"
+                                placeholder={userData?.state}
+                                onChange={handleStatusChange}
+                            />
                         </div>
                         <ButtonsContainer style={{ alignSelf: 'flex-end' }}>
                             <ConfirmBtn onClick={updateStatus}>확인</ConfirmBtn>
-                            <CancelBtn onClick={onSetEditStatusModal}>취소</CancelBtn>
+                            <CancelBtn onClick={onSetEditStatusModal}>
+                                취소
+                            </CancelBtn>
                         </ButtonsContainer>
                     </div>
                 </Box>

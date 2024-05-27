@@ -77,7 +77,7 @@ interface DeleteMemberProps {
 const DeleteMember: React.FC<DeleteMemberProps> = ({ onSetDeleteMemModal }) => {
     return (
         <ModalPortal>
-            <ModalBlackOut />
+            <ModalBlackOut onClick={onSetDeleteMemModal} />
             <ModalContainer>
                 <Box>
                     <div
