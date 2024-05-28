@@ -38,6 +38,7 @@ const NickNameField = styled.input`
     box-sizing: border-box;
     border: none;
     outline: none;
+    text-align : center;
 `;
 
 const ButtonsContainer = styled.div`
