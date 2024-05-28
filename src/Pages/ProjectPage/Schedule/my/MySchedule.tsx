@@ -103,7 +103,7 @@ const MySchedule = () => {
                 );
 
                 if (!response.ok) {
-                    throw new Error('Failed to fetch pinned projects');
+                    throw new Error('Failed to fetch projects');
                 }
 
                 const data = await response.json();
@@ -140,12 +140,13 @@ const MySchedule = () => {
                 </div>
                 <MyTime scheduleData={scheduleData} />
             </Box>
-            {isEditModal && (
+            
                 <EditMySchedule
                     onSetIsEditModal={onSetIsEditModal}
                     scheduleData={scheduleData}
+                    isEditModal={isEditModal}
                 />
-            )}
+            
         </>
     );
 };

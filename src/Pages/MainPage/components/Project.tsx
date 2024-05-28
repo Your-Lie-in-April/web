@@ -19,7 +19,8 @@ const ProjectBox = styled.div`
     justify-content: flex-end;
     width: 300px;
     height: 300px;
-    background-color: ${(props) => (props.color ? `#${props.color}` : '#b79fff')};
+    background-color: ${(props) =>
+        props.color ? `#${props.color}` : '#b79fff'};
     border-radius: 16px;
     display: flex;
     color: #ffffff;
@@ -159,15 +160,18 @@ const Project: React.FC<ProjectProps> = ({ project }) => {
     const handlePin = async () => {
         try {
             const accessToken = localStorage.getItem('access_token');
-            const response = await fetch(`${Http}/v1/members/pin/${project.projectId}`, {
-                method: 'PATCH',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${accessToken}`,
-                    credentials: 'include',
-                },
-                body: JSON.stringify({ projectId: project.projectId }),
-            });
+            const response = await fetch(
+                `${Http}/v1/members/pin/${project.projectId}`,
+                {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${accessToken}`,
+                        credentials: 'include',
+                    },
+                    body: JSON.stringify({ projectId: project.projectId }),
+                }
+            );
             if (!response.ok) throw new Error('뭔가 이상');
             setIsPinned(true);
             const result = await response.json();
@@ -181,15 +185,18 @@ const Project: React.FC<ProjectProps> = ({ project }) => {
     const handleStore = async () => {
         try {
             const accessToken = localStorage.getItem('access_token');
-            const response = await fetch(`${Http}/v1/members/storage/${project.projectId}`, {
-                method: 'PATCH',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${accessToken}`,
-                    credentials: 'include',
-                },
-                body: JSON.stringify({ projectId: project.projectId }),
-            });
+            const response = await fetch(
+                `${Http}/v1/members/storage/${project.projectId}`,
+                {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${accessToken}`,
+                        credentials: 'include',
+                    },
+                    body: JSON.stringify({ projectId: project.projectId }),
+                }
+            );
             if (!response.ok) throw new Error('뭔가 이상');
             setIsStored(true);
             const result = await response.json();
@@ -202,7 +209,9 @@ const Project: React.FC<ProjectProps> = ({ project }) => {
 
     return (
         <ProjectBox style={{ backgroundColor: project.color }}>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+            <div
+                style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}
+            >
                 <MoreDiv>
                     {showMore && (
                         <>
@@ -211,7 +220,9 @@ const Project: React.FC<ProjectProps> = ({ project }) => {
                             </StyledButton>
                             <MoreBox>
                                 <MoreItem onClick={handlePin}>
-                                    <PushPinOutlinedIcon sx={{ fontSize: 18 }} />
+                                    <PushPinOutlinedIcon
+                                        sx={{ fontSize: 18 }}
+                                    />
                                     <MoreText>상단고정</MoreText>
                                 </MoreItem>
                                 <MoreItem onClick={handleStore}>
@@ -225,12 +236,18 @@ const Project: React.FC<ProjectProps> = ({ project }) => {
                         <StyledMoreBtn sx={{ fontSize: 32 }} />
                     </StyledButton>
                 </MoreDiv>
-                <TextBox onClick={() => navigate(`/project/${project.projectId}`)}>
+                <TextBox
+                    onClick={() => navigate(`/project/${project.projectId}`)}
+                >
                     <ProjectName>{project.title}</ProjectName>
                     <DetailText>{project.description}</DetailText>
                 </TextBox>
             </div>
-            {isCancleBtn && <LeaveProject projectId={project.projectId} onClose={onClickCancelBtn} />}
+            <LeaveProject
+                projectId={project.projectId}
+                onClose={onClickCancelBtn}
+                isCancleBtn={isCancleBtn}
+            />
         </ProjectBox>
     );
 };

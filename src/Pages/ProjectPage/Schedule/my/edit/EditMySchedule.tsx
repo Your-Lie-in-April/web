@@ -113,11 +113,13 @@ interface ScheduleData {
 }
 
 interface EditMyScheduleProps {
+    isEditModal: boolean;
     onSetIsEditModal: () => void;
     scheduleData: ScheduleWeekResponse | null;
 }
 
 const EditMySchedule: React.FC<EditMyScheduleProps> = ({
+    isEditModal,
     onSetIsEditModal,
     scheduleData,
 }) => {
@@ -193,23 +195,29 @@ const EditMySchedule: React.FC<EditMyScheduleProps> = ({
         onSetIsEditModal();
     };
 
-    useScrollLock();
+    useScrollLock(isEditModal);
 
     return (
-        <ModalPortal>
-            <ModalBlackOut onClick={onSetIsEditModal} />
-            <ModalContainer>
-                <Box>
-                    <Title>나의 시간표</Title>
-                    <EditMyTime
-                        weekDates={weekDates || []}
-                        selection={selection}
-                        setSelection={setSelection}
-                    />
-                </Box>
-                <ConfirmBtn onClick={handleConfirm}>시간표 등록하기</ConfirmBtn>
-            </ModalContainer>
-        </ModalPortal>
+        <>
+            {isEditModal && (
+                <ModalPortal>
+                    <ModalBlackOut onClick={onSetIsEditModal} />
+                    <ModalContainer>
+                        <Box>
+                            <Title>나의 시간표</Title>
+                            <EditMyTime
+                                weekDates={weekDates || []}
+                                selection={selection}
+                                setSelection={setSelection}
+                            />
+                        </Box>
+                        <ConfirmBtn onClick={handleConfirm}>
+                            시간표 등록하기
+                        </ConfirmBtn>
+                    </ModalContainer>
+                </ModalPortal>
+            )}
+        </>
     );
 };
 

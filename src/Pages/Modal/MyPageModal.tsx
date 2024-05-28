@@ -178,9 +178,14 @@ const MyPageModal: React.FC<MyPageModalProps> = ({ onSetIsMyPageModal }) => {
                         <EditIcon />
                     </EditButton>
                 </StatusBox>
-                <StorageBtn onClick={handlemyproject}>프로젝트 보관함</StorageBtn>
+                <StorageBtn onClick={handlemyproject}>
+                    프로젝트 보관함
+                </StorageBtn>
             </Box>
-            {editStatusModal && <ChangeStatus onSetEditStatusModal={onSetEditStatusModal} />}
+            <ChangeStatus
+                onSetEditStatusModal={onSetEditStatusModal}
+                editStatusModal={editStatusModal}
+            />
         </>
     );
 };
