@@ -67,7 +67,7 @@ const InviteField = styled.input`
     padding: 9px 16px;
     box-sizing: border-box;
     text-align: center;
-    padding: 9px 0px;
+    padding: 9px;
     justify-content: center;
     align-items: center;
     border: none;
