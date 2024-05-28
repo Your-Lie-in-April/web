@@ -54,7 +54,7 @@ const Button = styled.button`
     font-weight: 500;
     line-height: normal;
 
-    &: focus {
+    &:focus {
         outline: none;
     }
 `;
@@ -78,12 +78,14 @@ const ButtonsContainer = styled.div`
 interface DeleteProjectProps {
     projectId: number;
     title: string;
+    isClick: boolean;
     onClose: () => void;
 }
 
 const DeleteProject: React.FC<DeleteProjectProps> = ({
     projectId,
     title,
+    isClick,
     onClose,
 }) => {
     const deleteProject = async () => {
@@ -122,47 +124,55 @@ const DeleteProject: React.FC<DeleteProjectProps> = ({
 
     console.log(projectId);
 
-    useScrollLock();
+    useScrollLock(isClick);
 
     return (
-        <ModalPortal>
-            <ModalBlackOut onClick={onClose} />
-            <ModalContainer>
-                <Box>
-                    <div
-                        style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'center',
-                            gap: '12px',
-                            width: '100%',
-                            height: '100%',
-                        }}
-                    >
-                        <div
-                            style={{
-                                display: 'flex',
-                                flexDirection: 'column',
-                                alignItems: 'center',
-                                gap: '10px',
-                                width: '100%',
-                                height: '100%',
-                            }}
-                        >
-                            <InfoCircleIcon sx={{ fontSize: '32px' }} />
-                            <PeojectName>{title}</PeojectName>
-                            <Title>{title}을 삭제하겠습니까?</Title>
-                        </div>
-                        <ButtonsContainer style={{ alignSelf: 'flex-end' }}>
-                            <ConfirmBtn onClick={onConfirmDelete}>
-                                확인
-                            </ConfirmBtn>
-                            <CancelBtn onClick={onCancel}>취소</CancelBtn>
-                        </ButtonsContainer>
-                    </div>
-                </Box>
-            </ModalContainer>
-        </ModalPortal>
+        <>
+            {isClick && (
+                <ModalPortal>
+                    <ModalBlackOut onClick={onClose} />
+                    <ModalContainer>
+                        <Box>
+                            <div
+                                style={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'center',
+                                    gap: '12px',
+                                    width: '100%',
+                                    height: '100%',
+                                }}
+                            >
+                                <div
+                                    style={{
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        alignItems: 'center',
+                                        gap: '10px',
+                                        width: '100%',
+                                        height: '100%',
+                                    }}
+                                >
+                                    <InfoCircleIcon sx={{ fontSize: '32px' }} />
+                                    <PeojectName>{title}</PeojectName>
+                                    <Title>{title}을 삭제하겠습니까?</Title>
+                                </div>
+                                <ButtonsContainer
+                                    style={{ alignSelf: 'flex-end' }}
+                                >
+                                    <ConfirmBtn onClick={onConfirmDelete}>
+                                        확인
+                                    </ConfirmBtn>
+                                    <CancelBtn onClick={onCancel}>
+                                        취소
+                                    </CancelBtn>
+                                </ButtonsContainer>
+                            </div>
+                        </Box>
+                    </ModalContainer>
+                </ModalPortal>
+            )}
+        </>
     );
 };
 

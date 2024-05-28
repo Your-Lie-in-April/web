@@ -25,7 +25,8 @@ const ProjectBox = styled.div<ProjectBoxProps>`
     display: flex;
     color: #ffffff;
 
-    background-color: ${(props) => (props.color ? `#${props.color}` : '#b79fff')};
+    background-color: ${(props) =>
+        props.color ? `#${props.color}` : '#b79fff'};
 `;
 
 const TextBox = styled.div`
@@ -148,14 +149,17 @@ const StorageProject = ({ project }: { project: ProjectThumbnailResponse }) => {
     const deleteProject = async () => {
         try {
             const accessToken = localStorage.getItem('access_token');
-            const response = await fetch(`${Http}/v1/projects/${project.projectId}`, {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${accessToken}`,
-                    credentials: 'include',
-                },
-            });
+            const response = await fetch(
+                `${Http}/v1/projects/${project.projectId}`,
+                {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${accessToken}`,
+                        credentials: 'include',
+                    },
+                }
+            );
             if (!response.ok) throw new Error('뭔가 이상');
             const result = await response.json();
 
@@ -168,15 +172,18 @@ const StorageProject = ({ project }: { project: ProjectThumbnailResponse }) => {
     const handleStore = async () => {
         try {
             const accessToken = localStorage.getItem('access_token');
-            const response = await fetch(`${Http}/v1/members/storage/${project.projectId}`, {
-                method: 'PATCH',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${accessToken}`,
-                    credentials: 'include',
-                },
-                body: JSON.stringify({ projectId: project.projectId }),
-            });
+            const response = await fetch(
+                `${Http}/v1/members/storage/${project.projectId}`,
+                {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${accessToken}`,
+                        credentials: 'include',
+                    },
+                    body: JSON.stringify({ projectId: project.projectId }),
+                }
+            );
             if (!response.ok) throw new Error('뭔가 이상');
             const result = await response.json();
             console.log('보관함 결과:', result);
@@ -199,11 +206,15 @@ const StorageProject = ({ project }: { project: ProjectThumbnailResponse }) => {
                             }}
                         >
                             <MoreItem onClick={handleStore}>
-                                <RestartAltIcon sx={{ fontSize: 48, color: '#F1F1F1' }} />
+                                <RestartAltIcon
+                                    sx={{ fontSize: 48, color: '#F1F1F1' }}
+                                />
                                 <MoreText>보관 취소</MoreText>
                             </MoreItem>
                             <MoreItem onClick={onClickItem}>
-                                <DeleteIcon sx={{ fontSize: 48, color: '#F1F1F1' }} />
+                                <DeleteIcon
+                                    sx={{ fontSize: 48, color: '#F1F1F1' }}
+                                />
                                 <MoreText>삭제하기</MoreText>
                             </MoreItem>
                         </div>
@@ -218,16 +229,28 @@ const StorageProject = ({ project }: { project: ProjectThumbnailResponse }) => {
                 >
                     <MoreDiv>
                         <MoreButton>
-                            <StyledMoreBtn sx={{ fontSize: 32 }} onClick={toggleMoreBtn} />
+                            <StyledMoreBtn
+                                sx={{ fontSize: 32 }}
+                                onClick={toggleMoreBtn}
+                            />
                         </MoreButton>
                     </MoreDiv>
-                    <TextBox onClick={() => navigate(`/project/${project.projectId}`)}>
+                    <TextBox
+                        onClick={() =>
+                            navigate(`/project/${project.projectId}`)
+                        }
+                    >
                         <ProjectName>{project.title}</ProjectName>
                         <DetailText>{project.description}</DetailText>
                     </TextBox>
                 </div>
             </ProjectBox>
-            {isClick && <DeleteProject onClose={deleteProject} projectId={project.projectId} title={project.title} />}
+            <DeleteProject
+                onClose={deleteProject}
+                projectId={project.projectId}
+                title={project.title}
+                isClick={isClick}
+            />
         </>
     );
 };

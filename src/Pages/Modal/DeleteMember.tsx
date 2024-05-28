@@ -54,7 +54,7 @@ const Button = styled.button`
     font-weight: 500;
     line-height: normal;
 
-    &: focus {
+    &:focus {
         border: none;
         outline: none;
     }
@@ -77,50 +77,60 @@ const ButtonsContainer = styled.div`
 `;
 
 interface DeleteMemberProps {
+    deleteMemModal: boolean;
     onSetDeleteMemModal: () => void;
 }
 
-const DeleteMember: React.FC<DeleteMemberProps> = ({ onSetDeleteMemModal }) => {
-    useScrollLock();
+const DeleteMember: React.FC<DeleteMemberProps> = ({
+    deleteMemModal,
+    onSetDeleteMemModal,
+}) => {
+    useScrollLock(deleteMemModal);
     return (
-        <ModalPortal>
-            <ModalBlackOut onClick={onSetDeleteMemModal} />
-            <ModalContainer>
-                <Box>
-                    <div
-                        style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'center',
-                            gap: '12px',
-                            width: '100%',
-                            height: '100%',
-                        }}
-                    >
-                        <div
-                            style={{
-                                display: 'flex',
-                                flexDirection: 'column',
-                                alignItems: 'center',
-                                gap: '10px',
-                                width: '100%',
-                                height: '100%',
-                            }}
-                        >
-                            <InfoCircleIcon sx={{ fontSize: '32px' }} />
-                            <MemberNick>닉네임</MemberNick>
-                            <Title>프로젝트에서 내보내겠습니까?</Title>
-                        </div>
-                        <ButtonsContainer style={{ alignSelf: 'flex-end' }}>
-                            <ConfirmBtn>확인</ConfirmBtn>
-                            <CancelBtn onClick={onSetDeleteMemModal}>
-                                취소
-                            </CancelBtn>
-                        </ButtonsContainer>
-                    </div>
-                </Box>
-            </ModalContainer>
-        </ModalPortal>
+        <>
+            {deleteMemModal && (
+                <ModalPortal>
+                    <ModalBlackOut onClick={onSetDeleteMemModal} />
+                    <ModalContainer>
+                        <Box>
+                            <div
+                                style={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'center',
+                                    gap: '12px',
+                                    width: '100%',
+                                    height: '100%',
+                                }}
+                            >
+                                <div
+                                    style={{
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        alignItems: 'center',
+                                        gap: '10px',
+                                        width: '100%',
+                                        height: '100%',
+                                    }}
+                                >
+                                    <InfoCircleIcon sx={{ fontSize: '32px' }} />
+                                    <MemberNick>닉네임</MemberNick>
+                                    <Title>프로젝트에서 내보내겠습니까?</Title>
+                                </div>
+                                <ButtonsContainer
+                                    style={{ alignSelf: 'flex-end' }}
+                                >
+                                    <ConfirmBtn>확인</ConfirmBtn>
+                                    <CancelBtn onClick={onSetDeleteMemModal}>
+                                        취소
+                                    </CancelBtn>
+                                </ButtonsContainer>
+                            </div>
+                        </Box>
+                    </ModalContainer>
+                </ModalPortal>
+            )}
+        </>
     );
 };
 

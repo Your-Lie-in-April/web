@@ -23,7 +23,7 @@ const BtnContainer = styled.button`
     font-weight: 500;
     line-height: normal;
 
-    &: focus {
+    &:focus {
         border: none;
         outline: none;
     }

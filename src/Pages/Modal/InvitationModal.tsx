@@ -95,7 +95,7 @@ const CommonButton = styled.button<CommonButtonProps>`
     color: #ffffff;
     background-color: ${(props) => (props.primary ? '#633AE2' : '#d9d9d9')};
 
-    &: focus {
+    &:focus {
         border: none;
         outline: none;
     }
@@ -112,6 +112,7 @@ const InvitationModal: React.FC<InvitationModalProps> = ({
     toggleBtn,
 }) => {
     const [link, setLink] = useState<string>('');
+    const [isModalOpen, setIsModalOpen] = useState<boolean>(true);
     const [isBtnClick, setIsBtnClick] = useState<boolean>(false);
     const [isVisible, setIsVisible] = useState<boolean>(true);
     const [showConfirmCopyLink, setShowConfirmCopyLink] =
@@ -158,6 +159,7 @@ const InvitationModal: React.FC<InvitationModalProps> = ({
         setTimeout(() => {
             setIsModalCompleteHidden(true);
             setShowConfirmCopyLink(true);
+            setIsModalOpen(false);
             setTimeout(() => {}, 100);
         }, 1000);
     };
@@ -174,7 +176,7 @@ const InvitationModal: React.FC<InvitationModalProps> = ({
     };
     console.log('인바이트모달', projectData);
 
-    useScrollLock();
+    useScrollLock(isModalOpen);
 
     return (
         <>

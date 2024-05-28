@@ -52,8 +52,8 @@ const DeleteBtn = styled(RemoveCircleOutlineIcon)`
     color: #d9d9d9;
     align-self: center;
 
-    position : absolute;
-    right : 5px;
+    position: absolute;
+    right: 5px;
 
     &:hover {
         color: #eb5757;
@@ -111,9 +111,10 @@ const MemberProfile = ({
                     />
                 </MemberProfileDiv>
             </MemberProfileBox>
-            {deleteMemModal && (
-                <DeleteMember onSetDeleteMemModal={onSetDeleteMemModal} />
-            )}
+            <DeleteMember
+                onSetDeleteMemModal={onSetDeleteMemModal}
+                deleteMemModal={deleteMemModal}
+            />
         </>
     );
 };

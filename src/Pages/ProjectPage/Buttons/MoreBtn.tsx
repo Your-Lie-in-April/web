@@ -114,7 +114,10 @@ const MoreBtn = ({ toggleDeleteBtn }: { toggleDeleteBtn: () => void }) => {
                     </MoreDetailDiv>
                 </ModalPortal>
             )}
-            {isAuthClick && <TransferAuthModal onIsAuthClick={onIsAuthClick} />}
+            <TransferAuthModal
+                onIsAuthClick={onIsAuthClick}
+                isAuthClick={isAuthClick}
+            />
         </EditMemberBtn>
     );
 };

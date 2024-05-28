@@ -99,7 +99,7 @@ const Button = styled.button`
     line-height: normal;
     border: none;
 
-    &: focus {
+    &:focus {
         outline: none;
     }
 `;
@@ -121,9 +121,11 @@ const ButtonsContainer = styled.div`
 `;
 
 interface TransferAuthModalProps {
+    isAuthClick: boolean;
     onIsAuthClick: () => void;
 }
 const TransferAuthModal: React.FC<TransferAuthModalProps> = ({
+    isAuthClick,
     onIsAuthClick,
 }) => {
     const testMemList: string[] = [
@@ -155,106 +157,114 @@ const TransferAuthModal: React.FC<TransferAuthModalProps> = ({
         onIsAuthClick();
     };
 
-    useScrollLock();
+    useScrollLock(isAuthClick);
 
     return (
-        <ModalPortal>
-            <ModalBlackOut onClick={onIsAuthClick} />
-            <ModalContainer>
-                <Box>
-                    <div
-                        style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'center',
-                            gap: '12px',
-                            width: '100%',
-                            height: '100%',
-                        }}
-                    >
-                        <div
-                            style={{
-                                display: 'flex',
-                                flexDirection: 'column',
-                                alignItems: 'center',
-                                gap: '10px',
-                                width: '100%',
-                                height: '100%',
-                            }}
-                        >
-                            <InfoCircleIcon sx={{ fontSize: '32px' }} />
-                            <MemPickDiv onClick={handleSetIsOpen}>
+        <>
+            {isAuthClick && (
+                <ModalPortal>
+                    <ModalBlackOut onClick={onIsAuthClick} />
+                    <ModalContainer>
+                        <Box>
+                            <div
+                                style={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'center',
+                                    gap: '12px',
+                                    width: '100%',
+                                    height: '100%',
+                                }}
+                            >
                                 <div
                                     style={{
-                                        width: '100%',
                                         display: 'flex',
-                                        flexDirection: 'row',
-                                        gap: '12px',
+                                        flexDirection: 'column',
                                         alignItems: 'center',
+                                        gap: '10px',
+                                        width: '100%',
+                                        height: '100%',
                                     }}
                                 >
-                                    <ul
-                                        style={{
-                                            width: '100%',
-                                            listStyle: 'none',
-                                        }}
-                                        onClick={handleSetIsOpen}
-                                    >
-                                        <li>{selectMem}</li>
-                                    </ul>
-                                    {isOpen ? (
-                                        <ExpandLessIcon
+                                    <InfoCircleIcon sx={{ fontSize: '32px' }} />
+                                    <MemPickDiv onClick={handleSetIsOpen}>
+                                        <div
                                             style={{
-                                                width: '12px',
-                                                height: '11px',
+                                                width: '100%',
+                                                display: 'flex',
+                                                flexDirection: 'row',
+                                                gap: '12px',
+                                                alignItems: 'center',
                                             }}
-                                        />
-                                    ) : (
-                                        <ExpandMoreIcon
-                                            style={{
-                                                width: '12px',
-                                                height: '11px',
-                                            }}
-                                        />
-                                    )}
-                                </div>
-
-                                {isOpen && (
-                                    <MemDropdown>
-                                        {testMemList.map((mem) => (
-                                            <li
-                                                key={mem}
-                                                onClick={() =>
-                                                    handleSetSelectMem(mem)
-                                                }
+                                        >
+                                            <ul
+                                                style={{
+                                                    width: '100%',
+                                                    listStyle: 'none',
+                                                }}
+                                                onClick={handleSetIsOpen}
                                             >
-                                                {mem}
-                                            </li>
-                                        ))}
-                                    </MemDropdown>
-                                )}
-                            </MemPickDiv>
+                                                <li>{selectMem}</li>
+                                            </ul>
+                                            {isOpen ? (
+                                                <ExpandLessIcon
+                                                    style={{
+                                                        width: '12px',
+                                                        height: '11px',
+                                                    }}
+                                                />
+                                            ) : (
+                                                <ExpandMoreIcon
+                                                    style={{
+                                                        width: '12px',
+                                                        height: '11px',
+                                                    }}
+                                                />
+                                            )}
+                                        </div>
 
-                            <CommonText>
-                                <MemberNick>{selectMem}</MemberNick> 에게 권한을
-                                양도하겠습니까?
-                            </CommonText>
-                        </div>
-                        <ButtonsContainer
-                            style={{
-                                alignSelf: 'flex-end',
-                                padding: '0 20px 0 20px',
-                            }}
-                        >
-                            <ConfirmBtn onClick={handleConfirm}>
-                                확인
-                            </ConfirmBtn>
-                            <CancelBtn onClick={onIsAuthClick}>취소</CancelBtn>
-                        </ButtonsContainer>
-                    </div>
-                </Box>
-            </ModalContainer>
-        </ModalPortal>
+                                        {isOpen && (
+                                            <MemDropdown>
+                                                {testMemList.map((mem) => (
+                                                    <li
+                                                        key={mem}
+                                                        onClick={() =>
+                                                            handleSetSelectMem(
+                                                                mem
+                                                            )
+                                                        }
+                                                    >
+                                                        {mem}
+                                                    </li>
+                                                ))}
+                                            </MemDropdown>
+                                        )}
+                                    </MemPickDiv>
+
+                                    <CommonText>
+                                        <MemberNick>{selectMem}</MemberNick>{' '}
+                                        에게 권한을 양도하겠습니까?
+                                    </CommonText>
+                                </div>
+                                <ButtonsContainer
+                                    style={{
+                                        alignSelf: 'flex-end',
+                                        padding: '0 20px 0 20px',
+                                    }}
+                                >
+                                    <ConfirmBtn onClick={handleConfirm}>
+                                        확인
+                                    </ConfirmBtn>
+                                    <CancelBtn onClick={onIsAuthClick}>
+                                        취소
+                                    </CancelBtn>
+                                </ButtonsContainer>
+                            </div>
+                        </Box>
+                    </ModalContainer>
+                </ModalPortal>
+            )}
+        </>
     );
 };
 
