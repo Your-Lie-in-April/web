@@ -24,10 +24,12 @@ const DateContainer = styled.div`
     flex-direction: column;
     align-items: center;
     margin: 0 20px;
+    justify-content: center;
 `;
 
 const SDatePicker = styled(ReactDatePicker)`
-    width: 166px;
+    width: 208px;
+    height: 41px;
     padding: 4px;
     font-size: 28px;
     font-weight: 400;
@@ -35,7 +37,8 @@ const SDatePicker = styled(ReactDatePicker)`
     background: #f5f5f5;
     text-align: center;
     display: flex;
-    margin-left: 14px;
+
+    box-sizing: border-box;
 
     &:hover {
         cursor: pointer;
@@ -340,22 +343,20 @@ const ProjectTime: FC<ProjectTimeProps> = ({
                     <TimePicker
                         style={{
                             marginTop: '4px',
-                            position: 'relative',
+                            marginLeft: '4px',
+                            display: 'flex',
+                            gap: '12px',
+                            padding: '4px',
+                            boxSizing: 'border-box',
                         }}
                         onClick={startSelect}
                     >
-                        {starttime}
+                        <div style={{ width: '146px' }}>{starttime}</div>
                         {!isStartOpen && (
-                            <ExpandMoreIcon
-                                sx={{ fontSize: '24px' }}
-                                style={{ position: 'absolute', right: '10px' }}
-                            />
+                            <ExpandMoreIcon sx={{ fontSize: '22px' }} />
                         )}
                         {isStartOpen && (
-                            <ExpandLessIcon
-                                sx={{ fontSize: '24px' }}
-                                style={{ position: 'absolute', right: '10px' }}
-                            />
+                            <ExpandLessIcon sx={{ fontSize: '22px' }} />
                         )}
                     </TimePicker>
 
@@ -384,21 +385,22 @@ const ProjectTime: FC<ProjectTimeProps> = ({
                 <DateContainer style={{ gap: '4px' }}>
                     <Text>시간표 종료시간</Text>
                     <TimePicker
-                        style={{ marginTop: '4px', position: 'relative' }}
+                        style={{
+                            marginTop: '4px',
+                            marginLeft: '4px',
+                            display: 'flex',
+                            gap: '12px',
+                            padding: '4px',
+                            boxSizing: 'border-box',
+                        }}
                         onClick={endSelect}
                     >
-                        {endtime}
+                        <div style={{ width: '146px' }}>{endtime}</div>
                         {!isEndOpen && (
-                            <ExpandMoreIcon
-                                sx={{ fontSize: '24px' }}
-                                style={{ position: 'absolute', right: '10px' }}
-                            />
+                            <ExpandMoreIcon sx={{ fontSize: '22px' }} />
                         )}
                         {isEndOpen && (
-                            <ExpandLessIcon
-                                sx={{ fontSize: '24px' }}
-                                style={{ position: 'absolute', right: '10px' }}
-                            />
+                            <ExpandLessIcon sx={{ fontSize: '22px' }} />
                         )}
                     </TimePicker>
                     {isEndOpen && (
