@@ -174,6 +174,8 @@ const Project: React.FC<ProjectProps> = ({ project }) => {
             setIsPinned(true);
             const result = await response.json();
             console.log('상단 고정 결과:', result);
+            window.alert('핀 설정에 성공했습니다.');
+            window.location.reload();
         } catch (error) {
             console.error('업데이트 실패:', error);
         }
