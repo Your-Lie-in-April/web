@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 import StorageProject from './StorageProject';
-import { useProjectStoredQuery } from '#/hooks/apis/queries/project/useProjectStoredQuery';
 import { ProjectThumbnailResponse } from '#/Types/projecttype';
 
 const GridContainer = styled.div`

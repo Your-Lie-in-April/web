@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 const SearchDiv = styled.div`
@@ -21,15 +21,24 @@ const SearchInput = styled.input`
     background: transparent;
     opacity: 0.9;
 `;
-const Search: FC<{ onSearch: (query: string) => void }> = ({ onSearch }) => {
+
+interface SearchProps {
+    onSearch: (query: string) => void;
+    debounceDelay?: number;
+}
+
+const Search: FC<SearchProps> = ({ onSearch, debounceDelay = 300 }) => {
     const [searchTerm, setSearchTerm] = useState('');
 
-    const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-        if (event.key === 'Enter') {
-            event.preventDefault();
+    useEffect(() => {
+        const timer = setTimeout(() => {
             onSearch(searchTerm);
-        }
-    };
+        }, debounceDelay);
+
+        return () => {
+            clearTimeout(timer);
+        };
+    }, [searchTerm, onSearch, debounceDelay]);
 
     return (
         <SearchDiv>
@@ -38,7 +47,6 @@ const Search: FC<{ onSearch: (query: string) => void }> = ({ onSearch }) => {
                 placeholder="프로젝트 검색"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                onKeyDown={handleKeyDown}
             />
         </SearchDiv>
     );
