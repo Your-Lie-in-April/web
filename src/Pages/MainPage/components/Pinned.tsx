@@ -113,7 +113,7 @@ const Pinned: React.FC = () => {
         navigation(`/project/${pinnedProjects?.projectId}`);
     };
 
-    return (
+    return pinnedProjects ? (
         <PinnedBox onClick={handleNavigation}>
             <div style={{ display: 'flex', flexDirection: 'column' }}>
                 <StyledButton>
@@ -123,20 +123,21 @@ const Pinned: React.FC = () => {
                     <TextDiv>
                         <ProjectText>
                             <br />
-                            {pinnedProjects?.title}
+                            {pinnedProjects.title}
                         </ProjectText>
-                        <DetailText>멤버 {pinnedProjects?.memberCount}명</DetailText>
+                        <DetailText>멤버 {pinnedProjects.memberCount}명</DetailText>
                         <DetailText>
                             프로젝트 기간
                             <span />
-                            {pinnedProjects?.startDate} ~{pinnedProjects?.endDate}
+                            {pinnedProjects.startDate} ~ {pinnedProjects.endDate}
                         </DetailText>
                     </TextDiv>
                     <ScheduleBox />
                 </ProjectBox>
             </div>
         </PinnedBox>
+    ) : (
+        <PinnedBox />
     );
 };
-
 export default Pinned;
