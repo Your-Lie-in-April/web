@@ -1,5 +1,12 @@
-import { FC, useEffect, useState, createContext, useContext, ReactNode } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import {
+    FC,
+    useEffect,
+    useState,
+    createContext,
+    useContext,
+    ReactNode,
+} from 'react';
+import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import Alarm from './components/Alarm';
 import NewProject from './components/NewProject';
@@ -50,15 +57,22 @@ type UserContextType = {
 
 const UserContext = createContext<UserContextType | null>(null);
 
-export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+export const UserProvider: React.FC<{ children: ReactNode }> = ({
+    children,
+}) => {
     const [userData, setUserData] = useState<MemberEntity | null>(null);
 
-    return <UserContext.Provider value={{ userData, setUserData }}>{children}</UserContext.Provider>;
+    return (
+        <UserContext.Provider value={{ userData, setUserData }}>
+            {children}
+        </UserContext.Provider>
+    );
 };
 
 export const useUserContext = () => {
     const context = useContext(UserContext);
-    if (context === null) throw new Error('useUserContext must be used within a UserProvider');
+    if (context === null)
+        throw new Error('useUserContext must be used within a UserProvider');
     return context;
 };
 
@@ -67,11 +81,15 @@ const MainPage: FC = () => {
     const query = useQuery();
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
     const [projects, setProjects] = useState<ProjectEntity[]>([]);
+    const [searchResults, setSearchResults] = useState<ProjectEntity[]>([]);
 
     useEffect(() => {
-        const accessToken = query.get('access_token') || localStorage.getItem('access_token');
-        const refreshToken = query.get('refresh_token') || localStorage.getItem('refresh_token');
-        const memberId = query.get('member_id') || localStorage.getItem('member_id');
+        const accessToken =
+            query.get('access_token') || localStorage.getItem('access_token');
+        const refreshToken =
+            query.get('refresh_token') || localStorage.getItem('refresh_token');
+        const memberId =
+            query.get('member_id') || localStorage.getItem('member_id');
 
         if (accessToken) localStorage.setItem('access_token', accessToken);
         if (refreshToken) localStorage.setItem('refresh_token', refreshToken);
@@ -112,14 +130,18 @@ const MainPage: FC = () => {
         const accessToken = localStorage.getItem('access_token');
         const memberId = localStorage.getItem('member_id');
         const fetchProjects = async () => {
-            const response = await fetch(`${Http}/v1/projects/members/${memberId}?page=0&size=6`, {
-                headers: {
-                    Authorization: `Bearer ${accessToken}`,
-                },
-            });
+            const response = await fetch(
+                `${Http}/v1/projects/members/${memberId}?page=0&size=6`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`,
+                    },
+                }
+            );
             const data = await response.json();
             console.log(data);
             setProjects(data.data);
+            setSearchResults(data.data);
         };
 
         if (accessToken) fetchProjects();
@@ -143,14 +165,19 @@ const MainPage: FC = () => {
             console.log(url);
             console.log(data);
             setProjects(data.data);
+            setSearchResults(data.data);
         } catch (error) {
             console.error('Error fetching projects:', error);
         }
     };
 
-    const handleSearch = (searchTerm: string) => {
-        fetchProjects(searchTerm);
+    const handleSearch = (query: string) => {
+        const searchProjects = projects.filter((project) =>
+            project.title.toLowerCase().includes(query.toLowerCase())
+        );
+        setSearchResults(searchProjects);
     };
+
     return (
         <>
             <GlobalStyle />
@@ -210,7 +237,7 @@ const MainPage: FC = () => {
                             </div>
                             <Pinned />
                         </div>
-                        <ProjectList projects={projects} />
+                        <ProjectList projects={searchResults} />
                     </div>
                 </div>
             </MainContainer>
