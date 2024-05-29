@@ -27,7 +27,7 @@ interface SearchProps {
     debounceDelay?: number;
 }
 
-const Search: FC<SearchProps> = ({ onSearch, debounceDelay = 300 }) => {
+const Search: FC<SearchProps> = ({ onSearch, debounceDelay = 500 }) => {
     const [searchTerm, setSearchTerm] = useState('');
 
     useEffect(() => {
