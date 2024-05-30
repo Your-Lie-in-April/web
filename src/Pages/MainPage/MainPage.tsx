@@ -1,5 +1,5 @@
 import { FC, useEffect, useState, createContext, useContext, ReactNode } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import Alarm from './components/Alarm';
 import NewProject from './components/NewProject';
@@ -67,6 +67,7 @@ const MainPage: FC = () => {
     const query = useQuery();
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
     const [projects, setProjects] = useState<ProjectEntity[]>([]);
+    const [searchResults, setSearchResults] = useState<ProjectEntity[]>([]);
 
     useEffect(() => {
         const accessToken = query.get('access_token') || localStorage.getItem('access_token');
@@ -87,6 +88,8 @@ const MainPage: FC = () => {
     useEffect(() => {
         const accessToken = localStorage.getItem('access_token');
         const memberId = localStorage.getItem('member_id');
+        console.log(accessToken);
+        console.log(memberId);
         const fetchUser = async () => {
             try {
                 const response = await fetch(Http + `/v1/members/${memberId}`, {
@@ -97,6 +100,7 @@ const MainPage: FC = () => {
                     },
                 });
                 const data = await response.json();
+                console.log(data);
                 setUserData(data?.data);
             } catch (error) {
                 console.error('Error fetching data:', error);
@@ -115,7 +119,9 @@ const MainPage: FC = () => {
                 },
             });
             const data = await response.json();
+            console.log(data);
             setProjects(data.data);
+            setSearchResults(data.data);
         };
 
         if (accessToken) fetchProjects();
@@ -136,15 +142,20 @@ const MainPage: FC = () => {
                 },
             });
             const data = await response.json();
+            console.log(url);
+            console.log(data);
             setProjects(data.data);
+            setSearchResults(data.data);
         } catch (error) {
             console.error('Error fetching projects:', error);
         }
     };
 
-    const handleSearch = (searchTerm: string) => {
-        fetchProjects(searchTerm);
+    const handleSearch = (query: string) => {
+        const searchProjects = projects.filter((project) => project.title.toLowerCase().includes(query.toLowerCase()));
+        setSearchResults(searchProjects);
     };
+
     return (
         <>
             <GlobalStyle />
@@ -204,7 +215,7 @@ const MainPage: FC = () => {
                             </div>
                             <Pinned />
                         </div>
-                        <ProjectList projects={projects} />
+                        <ProjectList projects={searchResults} />
                     </div>
                 </div>
             </MainContainer>
