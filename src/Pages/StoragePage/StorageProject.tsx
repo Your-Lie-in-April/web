@@ -2,11 +2,9 @@ import styled from 'styled-components';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import DeleteIcon from '@mui/icons-material/Delete';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
-import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { useState } from 'react';
 import DeleteProject from '../Modal/DeleteProject';
-import { ProjectThumbnailResponse } from '#/Types/projecttype';
-import { useNavigate, useNavigation } from 'react-router-dom';
+import { ProjectEntity } from '#/Types/projecttype';
 import { Http } from '#/constants/backendURL';
 
 interface ProjectBoxProps {
@@ -25,8 +23,7 @@ const ProjectBox = styled.div<ProjectBoxProps>`
     display: flex;
     color: #ffffff;
 
-    background-color: ${(props) =>
-        props.color ? `#${props.color}` : '#b79fff'};
+    background-color: ${(props) => (props.color ? `#${props.color}` : '#b79fff')};
 `;
 
 const TextBox = styled.div`
@@ -212,9 +209,7 @@ const StorageProject = ({ project }: { project: ProjectThumbnailResponse }) => {
                                 <MoreText>보관 취소</MoreText>
                             </MoreItem>
                             <MoreItem onClick={onClickItem}>
-                                <DeleteIcon
-                                    sx={{ fontSize: 48, color: '#F1F1F1' }}
-                                />
+                                <DeleteIcon sx={{ fontSize: 48, color: '#F1F1F1' }} />
                                 <MoreText>삭제하기</MoreText>
                             </MoreItem>
                         </div>
@@ -229,10 +224,7 @@ const StorageProject = ({ project }: { project: ProjectThumbnailResponse }) => {
                 >
                     <MoreDiv>
                         <MoreButton>
-                            <StyledMoreBtn
-                                sx={{ fontSize: 32 }}
-                                onClick={toggleMoreBtn}
-                            />
+                            <StyledMoreBtn sx={{ fontSize: 32 }} onClick={toggleMoreBtn} />
                         </MoreButton>
                     </MoreDiv>
                     <TextBox

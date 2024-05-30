@@ -160,28 +160,29 @@ const Project: React.FC<ProjectProps> = ({ project }) => {
     const handlePin = async () => {
         try {
             const accessToken = localStorage.getItem('access_token');
-            const response = await fetch(
-                `${Http}/v1/members/pin/${project.projectId}`,
-                {
-                    method: 'PATCH',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: `Bearer ${accessToken}`,
-                        credentials: 'include',
-                    },
-                    body: JSON.stringify({ projectId: project.projectId }),
-                }
-            );
+            const url = `${Http}/v1/members/pin/${project.projectId}`;
+            console.log('Request URL:', url);
+            const response = await fetch(url, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${accessToken}`,
+                    credentials: 'include',
+                },
+            });
+            console.log('Response:', response);
+
             if (!response.ok) throw new Error('뭔가 이상');
             setIsPinned(true);
             const result = await response.json();
             console.log('상단 고정 결과:', result);
+            window.alert('핀 설정에 성공했습니다.');
             window.location.reload();
         } catch (error) {
             console.error('업데이트 실패:', error);
         }
     };
-
+  
     const handleStore = async () => {
         try {
             const accessToken = localStorage.getItem('access_token');
@@ -251,5 +252,4 @@ const Project: React.FC<ProjectProps> = ({ project }) => {
         </ProjectBox>
     );
 };
-
 export default Project;

@@ -6,6 +6,7 @@ import {
     useContext,
     ReactNode,
 } from 'react';
+
 import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import Alarm from './components/Alarm';
@@ -172,6 +173,7 @@ const MainPage: FC = () => {
     };
 
     const handleSearch = (query: string) => {
+
         const searchProjects = projects.filter((project) =>
             project.title.toLowerCase().includes(query.toLowerCase())
         );

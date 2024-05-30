@@ -92,21 +92,18 @@ const DeleteProject: React.FC<DeleteProjectProps> = ({
         try {
             const accessToken = localStorage.getItem('access_token');
             if (accessToken) {
-                const response = await fetch(
-                    `${Http}/v1/projects/${projectId}`,
-                    {
-                        method: 'DELETE',
-                        headers: {
-                            Accept: '*/*',
-                            Authorization: `Bearer ${accessToken}`,
-                        },
-                    }
-                );
+                const response = await fetch(`${Http}/v1/projects/${projectId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        Accept: '*/*',
+                        Authorization: `Bearer ${accessToken}`,
+                    },
+                });
                 if (!response.ok) {
                     console.log('failed to delete storage project');
                 }
                 const data = await response.json();
-                console.log(data);
+                console.log('삭제삭제삭제', data);
                 onClose();
             }
         } catch (error) {
