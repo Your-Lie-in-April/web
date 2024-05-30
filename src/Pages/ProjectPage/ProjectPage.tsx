@@ -16,7 +16,7 @@ import { MemberEntity } from '#/Types/membertype';
 import { ProjectEntity } from '#/Types/projecttype';
 import { ProjectProvider } from '#/hooks/context/projectContext';
 import { DateProvider } from '#/hooks/context/dateContext';
-import ScheduleCalendar from './Schedule/scheduleCalendar';
+import ScheduleCalendar from './Schedule/schedulecalendar';
 
 const GlobalStyle = createGlobalStyle`
   body {

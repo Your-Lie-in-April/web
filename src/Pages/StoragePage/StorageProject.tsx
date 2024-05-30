@@ -6,7 +6,6 @@ import { useState } from 'react';
 import DeleteProject from '../Modal/DeleteProject';
 import { ProjectEntity } from '#/Types/projecttype';
 import { Http } from '#/constants/backendURL';
-import { useNavigate } from 'react-router-dom';
 
 interface ProjectBoxProps {
     color?: string;
@@ -132,11 +131,7 @@ const MoreText = styled.div`
     text-transform: uppercase;
 `;
 
-interface ProjectStorageProps {
-    project: ProjectEntity;
-}
-
-const StorageProject: React.FC<ProjectStorageProps> = ({ project }) => {
+const StorageProject = ({ project }: { project: ProjectThumbnailResponse }) => {
     const [showMore, setShowMore] = useState<boolean>(false);
     const [isClick, setIsClick] = useState<boolean>(false);
     const navigate = useNavigate();
@@ -148,18 +143,44 @@ const StorageProject: React.FC<ProjectStorageProps> = ({ project }) => {
         setIsClick(!isClick);
     };
 
+    const deleteProject = async () => {
+        try {
+            const accessToken = localStorage.getItem('access_token');
+            const response = await fetch(
+                `${Http}/v1/projects/${project.projectId}`,
+                {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${accessToken}`,
+                        credentials: 'include',
+                    },
+                }
+            );
+            if (!response.ok) throw new Error('뭔가 이상');
+            const result = await response.json();
+
+            console.log('프로젝트 삭제:', result);
+        } catch (error) {
+            console.error('업데이트 실패:', error);
+        }
+    };
+
     const handleStore = async () => {
         try {
             const accessToken = localStorage.getItem('access_token');
-            const response = await fetch(`${Http}/v1/members/storage/${project.projectId}`, {
-                method: 'PATCH',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${accessToken}`,
-                    credentials: 'include',
-                },
-                body: JSON.stringify({ projectId: project.projectId }),
-            });
+            const response = await fetch(
+                `${Http}/v1/members/storage/${project.projectId}`,
+                {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${accessToken}`,
+                        credentials: 'include',
+                    },
+                    body: JSON.stringify({ projectId: project.projectId }),
+                }
+            );
             if (!response.ok) throw new Error('뭔가 이상');
             const result = await response.json();
             console.log('보관함 결과:', result);
@@ -182,7 +203,9 @@ const StorageProject: React.FC<ProjectStorageProps> = ({ project }) => {
                             }}
                         >
                             <MoreItem onClick={handleStore}>
-                                <RestartAltIcon sx={{ fontSize: 48, color: '#F1F1F1' }} />
+                                <RestartAltIcon
+                                    sx={{ fontSize: 48, color: '#F1F1F1' }}
+                                />
                                 <MoreText>보관 취소</MoreText>
                             </MoreItem>
                             <MoreItem onClick={onClickItem}>
@@ -204,15 +227,22 @@ const StorageProject: React.FC<ProjectStorageProps> = ({ project }) => {
                             <StyledMoreBtn sx={{ fontSize: 32 }} onClick={toggleMoreBtn} />
                         </MoreButton>
                     </MoreDiv>
-                    <TextBox onClick={() => navigate(`/project/${project.projectId}`)}>
+                    <TextBox
+                        onClick={() =>
+                            navigate(`/project/${project.projectId}`)
+                        }
+                    >
                         <ProjectName>{project.title}</ProjectName>
                         <DetailText>{project.description}</DetailText>
                     </TextBox>
                 </div>
             </ProjectBox>
-            {isClick && (
-                <DeleteProject onClose={onClickItem} projectId={Number(project.projectId)} title={project.title} />
-            )}
+            <DeleteProject
+                onClose={deleteProject}
+                projectId={project.projectId}
+                title={project.title}
+                isClick={isClick}
+            />
         </>
     );
 };

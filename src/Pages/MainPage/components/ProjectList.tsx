@@ -1,7 +1,5 @@
-import React, { useEffect, useState } from 'react';
 import Project from './Project';
 import styled from 'styled-components';
-import { Http } from '#/constants/backendURL';
 import { ProjectEntity } from '#/Types/projecttype';
 
 const GridContainer = styled.div`
@@ -11,6 +9,7 @@ const GridContainer = styled.div`
     column-gap: 25px;
     row-gap: 24px;
 `;
+
 const NoProjectContainer = styled.div`
     display: flex;
     justify-content: center;
@@ -21,6 +20,7 @@ const NoProjectContainer = styled.div`
     color: #888;
     margin: auto;
 `;
+
 interface ProjectListProps {
     projects: ProjectEntity[];
 }

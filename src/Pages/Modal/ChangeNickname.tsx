@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 import { ModalBlackOut, ModalContainer } from './ModalCommon';
-import ModalPortal from '../../utils/ModalPotal';
+import ModalPortal from '#/utils/ModalPotal';
+import useScrollLock from '#/utils/useScrollLock';
 
 const Box = styled.div`
     width: 504px;
@@ -36,6 +37,7 @@ const NickNameField = styled.input`
     box-sizing: border-box;
     border: none;
     outline: none;
+    text-align: center;
 `;
 
 const ButtonsContainer = styled.div`
@@ -57,6 +59,11 @@ const CommonButton = styled.button`
     font-size: 13px;
     font-weight: 500;
     line-height: normal;
+
+    &:focus {
+        border: none;
+        outline: none;
+    }
 `;
 
 const ConfirmBtn = styled(CommonButton)`
@@ -70,11 +77,13 @@ const CancelBtn = styled(CommonButton)`
 `;
 
 interface ChangeNickNameProps {
+    isEditModal: boolean;
     onSetIsEditModal: () => void;
     onNickChange: (newNick: string) => void;
 }
 
 const ChangeNickName: React.FC<ChangeNickNameProps> = ({
+    isEditModal,
     onSetIsEditModal,
     onNickChange,
 }) => {
@@ -86,39 +95,49 @@ const ChangeNickName: React.FC<ChangeNickNameProps> = ({
         onSetIsEditModal();
     };
 
+    useScrollLock(isEditModal);
+
     return (
-        <ModalPortal>
-            <ModalBlackOut />
-            <ModalContainer>
-                <Box>
-                    <div
-                        style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'center',
-                            gap: '18px',
-                            width: '100%',
-                            height: '100%',
-                        }}
-                    >
-                        <Title>프로젝트에서 사용할 닉네임을 작성해주세요</Title>
-                        <NickNameField
-                            type="text"
-                            value={newNick}
-                            onChange={(e) => setNewNick(e.target.value)}
-                        />
-                        <ButtonsContainer style={{ alignSelf: 'flex-end' }}>
-                            <ConfirmBtn onClick={handleConfirm}>
-                                확인
-                            </ConfirmBtn>
-                            <CancelBtn onClick={onSetIsEditModal}>
-                                취소
-                            </CancelBtn>
-                        </ButtonsContainer>
-                    </div>
-                </Box>
-            </ModalContainer>
-        </ModalPortal>
+        <>
+            {isEditModal && (
+                <ModalPortal>
+                    <ModalBlackOut onClick={onSetIsEditModal} />
+                    <ModalContainer>
+                        <Box>
+                            <div
+                                style={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'center',
+                                    gap: '18px',
+                                    width: '100%',
+                                    height: '100%',
+                                }}
+                            >
+                                <Title>
+                                    프로젝트에서 사용할 닉네임을 작성해주세요
+                                </Title>
+                                <NickNameField
+                                    type="text"
+                                    value={newNick}
+                                    onChange={(e) => setNewNick(e.target.value)}
+                                />
+                                <ButtonsContainer
+                                    style={{ alignSelf: 'flex-end' }}
+                                >
+                                    <ConfirmBtn onClick={handleConfirm}>
+                                        확인
+                                    </ConfirmBtn>
+                                    <CancelBtn onClick={onSetIsEditModal}>
+                                        취소
+                                    </CancelBtn>
+                                </ButtonsContainer>
+                            </div>
+                        </Box>
+                    </ModalContainer>
+                </ModalPortal>
+            )}
+        </>
     );
 };
 export default ChangeNickName;

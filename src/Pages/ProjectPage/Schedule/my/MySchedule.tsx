@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import EditMySchedule from './EditMySchedule';
+import EditMySchedule from './edit/EditMySchedule';
 import MyTime from './MyTime';
 import { useContext, useEffect, useState } from 'react';
 import { useUserContext } from '#/Pages/MainPage/MainPage';
@@ -8,7 +8,6 @@ import dayjs from 'dayjs';
 import { Http } from '#/constants/backendURL';
 import { ScheduleWeekResponse } from '#/Types/scheduletype';
 import { useParams } from 'react-router-dom';
-
 
 const Box = styled.div`
     width: 661px;
@@ -66,7 +65,6 @@ const EditBtn = styled.button`
 
 const MySchedule = () => {
     const [isEditModal, setIsEditModal] = useState(false);
-    
 
     const onSetIsEditModal = () => {
         setIsEditModal((prev) => !prev);
@@ -105,7 +103,7 @@ const MySchedule = () => {
                 );
 
                 if (!response.ok) {
-                    throw new Error('Failed to fetch pinned projects');
+                    throw new Error('Failed to fetch projects');
                 }
 
                 const data = await response.json();
@@ -142,12 +140,13 @@ const MySchedule = () => {
                 </div>
                 <MyTime scheduleData={scheduleData} />
             </Box>
-            {isEditModal && (
+            
                 <EditMySchedule
                     onSetIsEditModal={onSetIsEditModal}
                     scheduleData={scheduleData}
+                    isEditModal={isEditModal}
                 />
-            )}
+            
         </>
     );
 };

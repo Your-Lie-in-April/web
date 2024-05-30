@@ -1,8 +1,9 @@
 import styled from 'styled-components';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import { ModalBlackOut, ModalContainer } from './ModalCommon';
-import ModalPortal from '#/utils/ModalPotal';
 import { Http } from '#/constants/backendURL';
+import ModalPortal from '#/utils/ModalPotal';
+import useScrollLock from '#/utils/useScrollLock';
 
 const Box = styled.div`
     width: 406px;
@@ -53,7 +54,7 @@ const Button = styled.button`
     font-weight: 500;
     line-height: normal;
 
-    &: focus {
+    &:focus {
         outline: none;
     }
 `;
@@ -77,10 +78,16 @@ const ButtonsContainer = styled.div`
 interface DeleteProjectProps {
     projectId: number;
     title: string;
+    isClick: boolean;
     onClose: () => void;
 }
 
-const DeleteProject: React.FC<DeleteProjectProps> = ({ projectId, title, onClose }) => {
+const DeleteProject: React.FC<DeleteProjectProps> = ({
+    projectId,
+    title,
+    isClick,
+    onClose,
+}) => {
     const deleteProject = async () => {
         try {
             const accessToken = localStorage.getItem('access_token');
@@ -114,43 +121,55 @@ const DeleteProject: React.FC<DeleteProjectProps> = ({ projectId, title, onClose
 
     console.log(projectId);
 
+    useScrollLock(isClick);
+
     return (
-        <ModalPortal>
-            <ModalBlackOut />
-            <ModalContainer>
-                <Box>
-                    <div
-                        style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'center',
-                            gap: '12px',
-                            width: '100%',
-                            height: '100%',
-                        }}
-                    >
-                        <div
-                            style={{
-                                display: 'flex',
-                                flexDirection: 'column',
-                                alignItems: 'center',
-                                gap: '10px',
-                                width: '100%',
-                                height: '100%',
-                            }}
-                        >
-                            <InfoCircleIcon sx={{ fontSize: '32px' }} />
-                            <PeojectName>{title}</PeojectName>
-                            <Title>삭제하겠습니까?</Title>
-                        </div>
-                        <ButtonsContainer style={{ alignSelf: 'flex-end' }}>
-                            <ConfirmBtn onClick={onConfirmDelete}>확인</ConfirmBtn>
-                            <CancelBtn onClick={onCancel}>취소</CancelBtn>
-                        </ButtonsContainer>
-                    </div>
-                </Box>
-            </ModalContainer>
-        </ModalPortal>
+        <>
+            {isClick && (
+                <ModalPortal>
+                    <ModalBlackOut onClick={onClose} />
+                    <ModalContainer>
+                        <Box>
+                            <div
+                                style={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'center',
+                                    gap: '12px',
+                                    width: '100%',
+                                    height: '100%',
+                                }}
+                            >
+                                <div
+                                    style={{
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        alignItems: 'center',
+                                        gap: '10px',
+                                        width: '100%',
+                                        height: '100%',
+                                    }}
+                                >
+                                    <InfoCircleIcon sx={{ fontSize: '32px' }} />
+                                    <PeojectName>{title}</PeojectName>
+                                    <Title>{title}을 삭제하겠습니까?</Title>
+                                </div>
+                                <ButtonsContainer
+                                    style={{ alignSelf: 'flex-end' }}
+                                >
+                                    <ConfirmBtn onClick={onConfirmDelete}>
+                                        확인
+                                    </ConfirmBtn>
+                                    <CancelBtn onClick={onCancel}>
+                                        취소
+                                    </CancelBtn>
+                                </ButtonsContainer>
+                            </div>
+                        </Box>
+                    </ModalContainer>
+                </ModalPortal>
+            )}
+        </>
     );
 };
 

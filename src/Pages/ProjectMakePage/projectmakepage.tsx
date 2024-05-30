@@ -67,7 +67,7 @@ const ProjectMakePage: FC = () => {
     const [title, setTitle] = useState<string>('');
     const [color, setColor] = useState<string>('#D6CBEF');
     const [img, setImg] = useState<string>('');
-    const [starttime, setStartTime] = useState('AM 00:00');
+    const [starttime, setStartTime] = useState('AM 09:00');
     const [endtime, setEndTime] = useState('AM 00:00');
     const [selectedDays, setSelectedDays] = useState<string[]>([]);
     const navigate = useNavigate();

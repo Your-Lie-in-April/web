@@ -2,8 +2,9 @@ import styled from 'styled-components';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import { useState } from 'react';
 import { ModalBlackOut, ModalContainer } from './ModalCommon';
-import ModalPortal from '../../utils/ModalPotal';
+import ModalPortal from '#/utils/ModalPotal';
 import { Http } from '#/constants/backendURL';
+import useScrollLock from '#/utils/useScrollLock';
 
 const Box = styled.div`
     width: 406px;
@@ -54,7 +55,7 @@ const Button = styled.button`
     font-weight: 500;
     line-height: normal;
 
-    &: focus {
+    &:focus {
         outline: none;
     }
 `;
@@ -76,11 +77,16 @@ const ButtonsContainer = styled.div`
 `;
 
 interface DeleteProjectProps {
+    isCancleBtn: boolean;
     onClose: () => void;
     projectId: string;
 }
 
-const LeaveProject: React.FC<DeleteProjectProps> = ({ onClose, projectId }) => {
+const LeaveProject: React.FC<DeleteProjectProps> = ({
+    isCancleBtn,
+    onClose,
+    projectId,
+}) => {
     const [isBtnClick, setIsBtnClick] = useState<boolean>(false);
 
     const handleCancel = () => {
@@ -92,12 +98,15 @@ const LeaveProject: React.FC<DeleteProjectProps> = ({ onClose, projectId }) => {
         setIsBtnClick(true);
         try {
             const accessToken = localStorage.getItem('access_token');
-            const response = await fetch(`${Http}/v1/projects/${projectId}/me`, {
-                method: 'DELETE',
-                headers: {
-                    Authorization: `Bearer ${accessToken}`,
-                },
-            });
+            const response = await fetch(
+                `${Http}/v1/projects/${projectId}/me`,
+                {
+                    method: 'DELETE',
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`,
+                    },
+                }
+            );
             if (!response.ok) {
                 if (response.status === 400) {
                     window.alert('관리자는 나갈 수 없습니다.');
@@ -111,43 +120,57 @@ const LeaveProject: React.FC<DeleteProjectProps> = ({ onClose, projectId }) => {
         onClose();
     };
 
+    useScrollLock(isCancleBtn);
+
     return (
-        <ModalPortal>
-            <ModalBlackOut />
-            <ModalContainer>
-                <Box>
-                    <div
-                        style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'center',
-                            gap: '12px',
-                            width: '100%',
-                            height: '100%',
-                        }}
-                    >
-                        <div
-                            style={{
-                                display: 'flex',
-                                flexDirection: 'column',
-                                alignItems: 'center',
-                                gap: '10px',
-                                width: '100%',
-                                height: '100%',
-                            }}
-                        >
-                            <InfoCircleIcon sx={{ fontSize: '32px' }} />
-                            <PeojectName>프로젝트명</PeojectName>
-                            <Title>해당 프로젝트에서 나가겠습니까?</Title>
-                        </div>
-                        <ButtonsContainer style={{ alignSelf: 'flex-end' }}>
-                            <ConfirmBtn onClick={handleDelete}>확인</ConfirmBtn>
-                            <CancelBtn onClick={handleCancel}>취소</CancelBtn>
-                        </ButtonsContainer>
-                    </div>
-                </Box>
-            </ModalContainer>
-        </ModalPortal>
+        <>
+            {isCancleBtn && (
+                <ModalPortal>
+                    <ModalBlackOut />
+                    <ModalContainer>
+                        <Box>
+                            <div
+                                style={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'center',
+                                    gap: '12px',
+                                    width: '100%',
+                                    height: '100%',
+                                }}
+                            >
+                                <div
+                                    style={{
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        alignItems: 'center',
+                                        gap: '10px',
+                                        width: '100%',
+                                        height: '100%',
+                                    }}
+                                >
+                                    <InfoCircleIcon sx={{ fontSize: '32px' }} />
+                                    <PeojectName>프로젝트명</PeojectName>
+                                    <Title>
+                                        해당 프로젝트에서 나가겠습니까?
+                                    </Title>
+                                </div>
+                                <ButtonsContainer
+                                    style={{ alignSelf: 'flex-end' }}
+                                >
+                                    <ConfirmBtn onClick={handleDelete}>
+                                        확인
+                                    </ConfirmBtn>
+                                    <CancelBtn onClick={handleCancel}>
+                                        취소
+                                    </CancelBtn>
+                                </ButtonsContainer>
+                            </div>
+                        </Box>
+                    </ModalContainer>
+                </ModalPortal>
+            )}
+        </>
     );
 };
 

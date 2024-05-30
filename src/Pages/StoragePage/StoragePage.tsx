@@ -3,6 +3,12 @@ import AfterLogin from '../Layouts/AfterLogin';
 import StorageProjectList from './StorageProjectList';
 import GraphicIcons from './Icon/GraphicIcons';
 
+import { useEffect, useState } from 'react';
+import { Http } from '#/constants/backendURL';
+import { ProjectThumbnailResponse } from '#/Types/projecttype';
+import Search from '../MainPage/components/Search';
+
+
 const GlobalStyle = createGlobalStyle`
 body {
   width : 100%;
@@ -27,26 +33,46 @@ const Title = styled.div`
     line-height: normal;
 `;
 
-const SearchField = styled.input`
-    width: 785px;
-    height: 69px;
-    border-radius: 40px;
-    background: #ffffff;
-    color: #a4a4a4;
-    font-size: 28px;
-    font-style: normal;
-    font-weight: 800;
-    line-height: normal;
-    padding: 18px 28px;
-    box-sizing: border-box;
-    border: none;
-    outline: none;
-`;
-
 const StoragePage = () => {
+    const [storelist, setStoreList] = useState<ProjectThumbnailResponse[]>([]);
+    const [searchResults, setSearchResults] = useState<
+        ProjectThumbnailResponse[]
+    >([]);
+
+    useEffect(() => {
+        const storeList = async () => {
+            try {
+                const accessToken = localStorage.getItem('access_token');
+                const response = await fetch(`${Http}/v1/projects/stored`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${accessToken}`,
+                        credentials: 'include',
+                    },
+                });
+                if (!response.ok) throw new Error('뭔가 이상');
+                const result = await response.json();
+                setStoreList(result.data);
+                setSearchResults(result.data);
+                console.log('보관함 결과:', result);
+            } catch (error) {
+                console.error('업데이트 실패:', error);
+            }
+        };
+        storeList();
+    }, []);
+
+    const handleSearch = (query: string) => {
+        const searchProjects = storelist.filter((project) =>
+            project.title.toLowerCase().includes(query.toLowerCase())
+        );
+        setSearchResults(searchProjects);
+    };
     return (
         <>
             <GlobalStyle />
+
             <>
                 <GraphicIcons />
                 <div
@@ -75,9 +101,9 @@ const StoragePage = () => {
                             }}
                         >
                             <Title>프로젝트 보관함</Title>
-                            <SearchField placeholder="프로젝트 검색" />
+                            <Search onSearch={handleSearch} />
                         </div>
-                        <StorageProjectList />
+                        <StorageProjectList projects={searchResults} />
                     </div>
                 </div>
                 <div style={{ width: '100vw', height: '172px' }}></div>

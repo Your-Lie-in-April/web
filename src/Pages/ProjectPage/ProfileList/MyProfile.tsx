@@ -123,7 +123,10 @@ const MyProfile = () => {
                     }}
                 >
                     <ImageDiv>
-                        <StyledImage src={userData?.profileImageUrl || defaultImg} alt="Profile Image" />
+                        <StyledImage
+                            src={userData?.profileImageUrl || defaultImg}
+                            alt="Profile Image"
+                        />
                     </ImageDiv>
                     <div
                         style={{
@@ -163,7 +166,11 @@ const MyProfile = () => {
                 </div>
                 <MyStatus>{userData?.state}</MyStatus>
             </MyProfileBox>
-            {isEditModal && <ChangeNickName onSetIsEditModal={onSetIsEditModal} onNickChange={handleNickChange} />}
+            <ChangeNickName
+                onSetIsEditModal={onSetIsEditModal}
+                onNickChange={handleNickChange}
+                isEditModal={isEditModal}
+            />
         </>
     );
 };

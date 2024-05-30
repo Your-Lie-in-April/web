@@ -22,7 +22,7 @@ const Box = styled.div`
     justify-content: flex-end;
     gap: 22px;
     box-sizing: border-box;
-    z-index: 100;
+    z-index: 80;
 
     margin-top: 1.3rem;
 `;
@@ -178,9 +178,14 @@ const MyPageModal: React.FC<MyPageModalProps> = ({ onSetIsMyPageModal }) => {
                         <EditIcon />
                     </EditButton>
                 </StatusBox>
-                <StorageBtn onClick={handlemyproject}>프로젝트 보관함</StorageBtn>
+                <StorageBtn onClick={handlemyproject}>
+                    프로젝트 보관함
+                </StorageBtn>
             </Box>
-            {editStatusModal && <ChangeStatus onSetEditStatusModal={onSetEditStatusModal} />}
+            <ChangeStatus
+                onSetEditStatusModal={onSetEditStatusModal}
+                editStatusModal={editStatusModal}
+            />
         </>
     );
 };

@@ -49,6 +49,10 @@ const SettingDiv = styled.div`
     border-radius: 20px;
     background: #633ae2;
     box-sizing: border-box;
+
+    &:focus {
+        outline: none;
+    }
 `;
 
 const SettingBtn = styled.button`
@@ -66,6 +70,10 @@ const SettingBtn = styled.button`
     margin: 0;
     background: transparent;
     box-sizing: border-box;
+
+    &:focus {
+        outline: none;
+    }
 `;
 interface ProjectInfoDetailProps {
     onClick: () => void;

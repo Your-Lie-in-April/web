@@ -23,7 +23,7 @@ const BtnContainer = styled.button`
     font-weight: 500;
     line-height: normal;
 
-    &: focus {
+    &:focus {
         border: none;
         outline: none;
     }
@@ -35,7 +35,6 @@ interface InviteBtnProps {
 
 const InviteBtn: React.FC<InviteBtnProps> = ({ projectId, projectData }) => {
     const [isClick, setIsClick] = useState<boolean>(false);
-    const [link, setLink] = useState<string>('');
     const toggleBtn = () => {
         setIsClick(!isClick);
     };
@@ -45,7 +44,13 @@ const InviteBtn: React.FC<InviteBtnProps> = ({ projectId, projectData }) => {
     return (
         <>
             <BtnContainer onClick={toggleBtn}>+초대하기</BtnContainer>
-            {isClick && <InvitationModal projectId={projectId} projectData={projectData} />}
+            {isClick && (
+                <InvitationModal
+                    projectId={projectId}
+                    projectData={projectData}
+                    toggleBtn = {toggleBtn}
+                />
+            )}
         </>
     );
 };
