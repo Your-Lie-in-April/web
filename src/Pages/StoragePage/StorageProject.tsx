@@ -2,9 +2,11 @@ import styled from 'styled-components';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import DeleteIcon from '@mui/icons-material/Delete';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { useState } from 'react';
 import DeleteProject from '../Modal/DeleteProject';
-import { ProjectEntity } from '#/Types/projecttype';
+import { ProjectThumbnailResponse } from '#/Types/projecttype';
+import { useNavigate, useNavigation } from 'react-router-dom';
 import { Http } from '#/constants/backendURL';
 
 interface ProjectBoxProps {
@@ -146,17 +148,14 @@ const StorageProject = ({ project }: { project: ProjectThumbnailResponse }) => {
     const deleteProject = async () => {
         try {
             const accessToken = localStorage.getItem('access_token');
-            const response = await fetch(
-                `${Http}/v1/projects/${project.projectId}`,
-                {
-                    method: 'DELETE',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: `Bearer ${accessToken}`,
-                        credentials: 'include',
-                    },
-                }
-            );
+            const response = await fetch(`${Http}/v1/projects/${project.projectId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${accessToken}`,
+                    credentials: 'include',
+                },
+            });
             if (!response.ok) throw new Error('뭔가 이상');
             const result = await response.json();
 
@@ -169,18 +168,15 @@ const StorageProject = ({ project }: { project: ProjectThumbnailResponse }) => {
     const handleStore = async () => {
         try {
             const accessToken = localStorage.getItem('access_token');
-            const response = await fetch(
-                `${Http}/v1/members/storage/${project.projectId}`,
-                {
-                    method: 'PATCH',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: `Bearer ${accessToken}`,
-                        credentials: 'include',
-                    },
-                    body: JSON.stringify({ projectId: project.projectId }),
-                }
-            );
+            const response = await fetch(`${Http}/v1/members/storage/${project.projectId}`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${accessToken}`,
+                    credentials: 'include',
+                },
+                body: JSON.stringify({ projectId: project.projectId }),
+            });
             if (!response.ok) throw new Error('뭔가 이상');
             const result = await response.json();
             console.log('보관함 결과:', result);
@@ -203,9 +199,7 @@ const StorageProject = ({ project }: { project: ProjectThumbnailResponse }) => {
                             }}
                         >
                             <MoreItem onClick={handleStore}>
-                                <RestartAltIcon
-                                    sx={{ fontSize: 48, color: '#F1F1F1' }}
-                                />
+                                <RestartAltIcon sx={{ fontSize: 48, color: '#F1F1F1' }} />
                                 <MoreText>보관 취소</MoreText>
                             </MoreItem>
                             <MoreItem onClick={onClickItem}>
@@ -227,11 +221,7 @@ const StorageProject = ({ project }: { project: ProjectThumbnailResponse }) => {
                             <StyledMoreBtn sx={{ fontSize: 32 }} onClick={toggleMoreBtn} />
                         </MoreButton>
                     </MoreDiv>
-                    <TextBox
-                        onClick={() =>
-                            navigate(`/project/${project.projectId}`)
-                        }
-                    >
+                    <TextBox onClick={() => navigate(`/project/${project.projectId}`)}>
                         <ProjectName>{project.title}</ProjectName>
                         <DetailText>{project.description}</DetailText>
                     </TextBox>
