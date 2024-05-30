@@ -2,12 +2,10 @@ import styled, { createGlobalStyle } from 'styled-components';
 import AfterLogin from '../Layouts/AfterLogin';
 import StorageProjectList from './StorageProjectList';
 import GraphicIcons from './Icon/GraphicIcons';
-
 import { useEffect, useState } from 'react';
 import { Http } from '#/constants/backendURL';
 import { ProjectThumbnailResponse } from '#/Types/projecttype';
 import Search from '../MainPage/components/Search';
-
 
 const GlobalStyle = createGlobalStyle`
 body {
@@ -35,9 +33,7 @@ const Title = styled.div`
 
 const StoragePage = () => {
     const [storelist, setStoreList] = useState<ProjectThumbnailResponse[]>([]);
-    const [searchResults, setSearchResults] = useState<
-        ProjectThumbnailResponse[]
-    >([]);
+    const [searchResults, setSearchResults] = useState<ProjectThumbnailResponse[]>([]);
 
     useEffect(() => {
         const storeList = async () => {
@@ -64,11 +60,10 @@ const StoragePage = () => {
     }, []);
 
     const handleSearch = (query: string) => {
-        const searchProjects = storelist.filter((project) =>
-            project.title.toLowerCase().includes(query.toLowerCase())
-        );
+        const searchProjects = storelist.filter((project) => project.title.toLowerCase().includes(query.toLowerCase()));
         setSearchResults(searchProjects);
     };
+
     return (
         <>
             <GlobalStyle />
