@@ -227,6 +227,14 @@ const EditMySchedule: React.FC<EditMyScheduleProps> = ({
         );
         console.log(`schedule 수정 : ${JSON.stringify(newScheduleData)}`);
 
+        // 선택한 스케줄이 없거나 모두 프로젝트 기간/날짜에 포함되지 않는 경우
+        if (newScheduleData.schedule.length === 0) {
+            console.log('Post/Update Schedule data empty');
+            setSelection({});
+            onSetIsEditModal();
+            return;
+        }
+
         try {
             if (scheduleData && scheduleData.schedule.length > 0) {
                 putSchedule(newScheduleData);
