@@ -77,6 +77,7 @@ const ProjectPage: React.FC = () => {
     const [members, setMembers] = useState<MemberEntity[]>([]);
     const [projectData, setProjectData] = useState<ProjectEntity | null>(null);
     const { projectId } = useParams<{ projectId: string }>();
+    const [isEditModal, setIsEditModal] = useState(false);
 
     const toggleMemTime = () => {
         setSeeMemTime(!seeMemTime);
@@ -175,7 +176,10 @@ const ProjectPage: React.FC = () => {
                                     }}
                                 >
                                     <TeamSchedule />
-                                    <MySchedule />
+                                    <MySchedule
+                                        isEditModal={isEditModal}
+                                        setIsEditModal={setIsEditModal}
+                                    />
                                 </div>
                                 <div
                                     style={{

@@ -61,13 +61,23 @@ const EditBtn = styled.button`
     font-weight: 400;
     line-height: normal;
     white-space: nowrap;
+
+    &:focus {
+        outline: none;
+    }
 `;
 
-const MySchedule = () => {
-    const [isEditModal, setIsEditModal] = useState(false);
+interface MyScheduleProps {
+    isEditModal: boolean;
+    setIsEditModal: React.Dispatch<React.SetStateAction<boolean>>;
+}
 
+const MySchedule: React.FC<MyScheduleProps> = ({
+    isEditModal,
+    setIsEditModal,
+}) => {
     const onSetIsEditModal = () => {
-        setIsEditModal((prev) => !prev);
+        setIsEditModal((prevState) => !prevState);
     };
 
     // 유저데이터가져옴
@@ -114,7 +124,7 @@ const MySchedule = () => {
             }
         };
         fetchSchedule();
-    }, [projectId, memberId, condition]);
+    }, [projectId, memberId, condition, isEditModal]);
 
     return (
         <>
@@ -140,13 +150,12 @@ const MySchedule = () => {
                 </div>
                 <MyTime scheduleData={scheduleData} />
             </Box>
-            
-                <EditMySchedule
-                    onSetIsEditModal={onSetIsEditModal}
-                    scheduleData={scheduleData}
-                    isEditModal={isEditModal}
-                />
-            
+
+            <EditMySchedule
+                onSetIsEditModal={onSetIsEditModal}
+                scheduleData={scheduleData}
+                isEditModal={isEditModal}
+            />
         </>
     );
 };

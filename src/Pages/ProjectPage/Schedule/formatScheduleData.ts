@@ -6,11 +6,18 @@ interface SelectedSlot {
     minute: number;
 }
 
-export const formatScheduleData = (selection: {
-    [key: number]: SelectedSlot;
-}) => {
+export const formatScheduleData = (
+    selection: {
+        [key: number]: SelectedSlot;
+    },
+    projectStartTime: number | undefined,
+    projectEndTime: number | undefined
+) => {
     const scheduleData: {
-        schedule: { startTime: string; endTime: string }[];
+        schedule: {
+            startTime: string;
+            endTime: string;
+        }[];
     }[] = [];
 
     const selectedSlots = Object.values(selection);
@@ -47,13 +54,23 @@ export const formatScheduleData = (selection: {
             .minute(slot.minute + 30)
             .format('YYYY-MM-DDTHH:mm:ss');
 
-        if (prevEndTime === startTime) {
-            currentSchedule[currentSchedule.length - 1].endTime = endTime;
-        } else {
-            currentSchedule.push({ startTime, endTime });
-        }
+        const isValidStartTime =
+            projectStartTime !== undefined && slot.hour >= projectStartTime;
+        const isValidEndTime =
+            projectEndTime !== undefined && slot.hour < projectEndTime;
 
-        prevEndTime = endTime;
+        if (
+            isValidStartTime &&
+            isValidEndTime &&
+            dayjs(endTime).isAfter(dayjs(startTime))
+        ) {
+            if (prevEndTime === startTime) {
+                currentSchedule[currentSchedule.length - 1].endTime = endTime;
+            } else {
+                currentSchedule.push({ startTime, endTime });
+            }
+            prevEndTime = endTime;
+        }
     });
 
     if (currentSchedule.length > 0) {
