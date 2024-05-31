@@ -1,4 +1,7 @@
 import dayjs from 'dayjs';
+import isBetween from 'dayjs/plugin/isBetween';
+
+dayjs.extend(isBetween);
 
 interface SelectedSlot {
     date: string;
@@ -11,7 +14,10 @@ export const formatScheduleData = (
         [key: number]: SelectedSlot;
     },
     projectStartTime: number | undefined,
-    projectEndTime: number | undefined
+    projectEndTime: number | undefined,
+    projectDaysOfWeek: string[] | undefined,
+    projectStartDate: string | undefined,
+    projectEndDate: string | undefined
 ) => {
     const scheduleData: {
         schedule: {
@@ -58,10 +64,26 @@ export const formatScheduleData = (
             projectStartTime !== undefined && slot.hour >= projectStartTime;
         const isValidEndTime =
             projectEndTime !== undefined && slot.hour < projectEndTime;
+        const isValidDate =
+            projectStartDate &&
+            projectEndDate &&
+            dayjs(slot.date).isBetween(
+                projectStartDate,
+                projectEndDate,
+                'day',
+                '[]'
+            );
+        const isValidDayOfWeek =
+            projectDaysOfWeek !== undefined &&
+            projectDaysOfWeek.includes(
+                dayjs(slot.date).format('dddd').toUpperCase()
+            );
 
         if (
             isValidStartTime &&
             isValidEndTime &&
+            isValidDate &&
+            isValidDayOfWeek &&
             dayjs(endTime).isAfter(dayjs(startTime))
         ) {
             if (prevEndTime === startTime) {

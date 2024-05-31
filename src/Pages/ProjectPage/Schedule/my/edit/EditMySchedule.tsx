@@ -129,6 +129,7 @@ const EditMySchedule: React.FC<EditMyScheduleProps> = ({
     const endDateString = projectData?.endDate;
     const startTimeString = projectData?.startTime;
     const endTimeString = projectData?.endTime;
+    const dayOfWeek = projectData?.daysOfWeek;
 
     const startDateTime =
         startDateString && startTimeString
@@ -219,7 +220,10 @@ const EditMySchedule: React.FC<EditMyScheduleProps> = ({
         const newScheduleData = formatScheduleData(
             selection,
             projectStartTime,
-            projectEndTime
+            projectEndTime,
+            dayOfWeek,
+            projectStartDateString,
+            projectEndDateString
         );
         console.log(`schedule 수정 : ${JSON.stringify(newScheduleData)}`);
 
