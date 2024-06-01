@@ -1,8 +1,10 @@
 import styled from 'styled-components';
 import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ChangeNickName from '../../Modal/ChangeNickname';
 import { useUserContext } from '#/Pages/MainPage/MainPage';
+import { Http } from '#/constants/backendURL';
+import { MemberEntity } from '#/Types/membertype';
 
 const MyProfileBox = styled.div`
     width: 100%;
@@ -99,9 +101,39 @@ const CommonText = styled.div`
 `;
 const defaultImg = 'src/pics/default.png';
 const MyProfile = () => {
-    const { userData, setUserData } = useUserContext();
     const [isEditModal, setIsEditModal] = useState(false);
-    const [nick, setNick] = useState(userData?.nickname);
+    const [me, setMe] = useState<MemberEntity>();
+    const memberId = localStorage.getItem('member_id');
+    const [nick, setNick] = useState(me?.nickname);
+
+    useEffect(() => {
+        const accessToken = localStorage.getItem('access_token');
+        const fetchMe = async () => {
+            const url = `${Http}/v1/members/${memberId}`;
+            const headers = {
+                Accept: '*/*',
+                Authorization: `Bearer ${accessToken}`,
+            };
+
+            try {
+                const response = await fetch(url, { headers });
+                if (!response.ok) {
+                    throw new Error('데이터 가져오기 실패');
+                }
+                const data = await response.json();
+                setMe(data.data);
+                console.log('본인 데이터:', data);
+            } catch (error) {
+                console.error('API 요청 중 에러 발생:', error);
+            }
+        };
+        fetchMe();
+    }, [memberId]);
+    useEffect(() => {
+        if (me) {
+            setNick(me.nickname);
+        }
+    }, [me]);
 
     const handleNickChange = (newNick: string) => {
         setNick(newNick);
@@ -123,10 +155,7 @@ const MyProfile = () => {
                     }}
                 >
                     <ImageDiv>
-                        <StyledImage
-                            src={userData?.profileImageUrl || defaultImg}
-                            alt="Profile Image"
-                        />
+                        <StyledImage src={me?.profileImageUrl || defaultImg} alt="Profile Image" />
                     </ImageDiv>
                     <div
                         style={{
@@ -161,10 +190,10 @@ const MyProfile = () => {
                                 </EditButton>
                             </div>
                         </MyProfileNick>
-                        <MyEmailText>{userData?.email}</MyEmailText>
+                        <MyEmailText>{me?.email}</MyEmailText>
                     </div>
                 </div>
-                <MyStatus>{userData?.state}</MyStatus>
+                <MyStatus>{me?.state}</MyStatus>
             </MyProfileBox>
             <ChangeNickName
                 onSetIsEditModal={onSetIsEditModal}

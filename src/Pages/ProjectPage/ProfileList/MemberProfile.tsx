@@ -61,17 +61,13 @@ const DeleteBtn = styled(RemoveCircleOutlineIcon)`
     }
 `;
 const defaultImg = 'src/pics/default.png';
-const MemberProfile = ({
-    showDeleteBtn,
-    member,
-}: {
-    showDeleteBtn: boolean;
-    member: MemberEntity;
-}) => {
+const MemberProfile = ({ showDeleteBtn, member }: { showDeleteBtn: boolean; member: MemberEntity }) => {
     const [deleteMemModal, SetDeleteMemModal] = useState(false);
+    const [selectedMember, setSelectedMember] = useState<MemberEntity | null>(null);
 
     const onSetDeleteMemModal = () => {
         SetDeleteMemModal((prev) => !prev);
+        setSelectedMember(member);
     };
 
     return (
@@ -79,10 +75,7 @@ const MemberProfile = ({
             <MemberProfileBox>
                 <MemberProfileDiv>
                     <MemberImg>
-                        <StyledImage
-                            src={member?.profileImageUrl || defaultImg}
-                            alt="Profile Image"
-                        />
+                        <StyledImage src={member?.profileImageUrl || defaultImg} alt="Profile Image" />
                     </MemberImg>
 
                     <div
@@ -111,10 +104,13 @@ const MemberProfile = ({
                     />
                 </MemberProfileDiv>
             </MemberProfileBox>
-            <DeleteMember
-                onSetDeleteMemModal={onSetDeleteMemModal}
-                deleteMemModal={deleteMemModal}
-            />
+            {selectedMember && (
+                <DeleteMember
+                    onSetDeleteMemModal={onSetDeleteMemModal}
+                    deleteMemModal={deleteMemModal}
+                    member={selectedMember}
+                />
+            )}
         </>
     );
 };

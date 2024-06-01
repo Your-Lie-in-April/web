@@ -82,8 +82,7 @@ const Pinned: React.FC = () => {
   const navigation = useNavigate();
   const [pinnedProjects, setPinnedProjects] =
     useState<PinProjectResponse | null>(null);
-  const [isPinned, setIsPinned] = useState<boolean>(false);
-
+  const [pinnedId, setPinnedId] = useState();
   useEffect(() => {
     const accessToken = localStorage.getItem('access_token');
     const memberId = localStorage.getItem('member_id');
@@ -108,6 +107,7 @@ const Pinned: React.FC = () => {
         const data = await response.json();
         console.log('설정된거', data);
         setPinnedProjects(data.data[0]);
+        setPinnedId(data.data[0].projectId);
       } catch (error) {
         console.error(error);
       }
@@ -115,14 +115,10 @@ const Pinned: React.FC = () => {
     fetchPinnedProjects();
   }, [userData]);
 
-  const handleNavigation = () => {
-    navigation(`/project/${pinnedProjects?.projectId}`);
-  };
-
   const handlePin = async () => {
     try {
       const accessToken = localStorage.getItem('access_token');
-      const url = `${Http}/v1/members/pin/${pinnedProjects?.projectId}`;
+      const url = `${Http}/v1/members/pin/${pinnedId}`;
       console.log('Request URL:', url);
       const response = await fetch(url, {
         method: 'PATCH',
@@ -135,21 +131,24 @@ const Pinned: React.FC = () => {
       console.log('Response:', response);
 
       if (!response.ok) throw new Error('뭔가 이상');
-      setIsPinned(true);
       const result = await response.json();
       console.log('상단 고정 결과:', result);
-      window.alert('핀 해제에 성공했습니다.');
+      window.alert('핀 설정 해제에 성공했습니다.');
       window.location.reload();
     } catch (error) {
       console.error('업데이트 실패:', error);
     }
   };
 
+  const handleNavigation = () => {
+    navigation(`/project/${pinnedProjects?.projectId}`);
+  };
+
   return pinnedProjects ? (
     <PinnedBox onClick={handleNavigation}>
       <div style={{ display: 'flex', flexDirection: 'column' }}>
-        <StyledButton onClick={handlePin}>
-          <PushPinOutlinedIcon sx={{ fontSize: 36 }} />
+        <StyledButton onClick={(e) => e.stopPropagation()}>
+          <PushPinOutlinedIcon sx={{ fontSize: 36 }} onClick={handlePin} />
         </StyledButton>
         <ProjectBox>
           <TextDiv>
@@ -169,7 +168,7 @@ const Pinned: React.FC = () => {
       </div>
     </PinnedBox>
   ) : (
-    <PinnedBox />
+    <PinnedBox style={{ cursor: 'default' }} />
   );
 };
 export default Pinned;

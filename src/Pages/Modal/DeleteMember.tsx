@@ -4,6 +4,9 @@ import React from 'react';
 import { ModalBlackOut, ModalContainer } from './ModalCommon';
 import ModalPortal from '#/utils/ModalPotal';
 import useScrollLock from '#/utils/useScrollLock';
+import { MemberEntity } from '#/Types/membertype';
+import { Http } from '#/constants/backendURL';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const Box = styled.div`
     width: 406px;
@@ -79,13 +82,35 @@ const ButtonsContainer = styled.div`
 interface DeleteMemberProps {
     deleteMemModal: boolean;
     onSetDeleteMemModal: () => void;
+    member: MemberEntity;
 }
 
-const DeleteMember: React.FC<DeleteMemberProps> = ({
-    deleteMemModal,
-    onSetDeleteMemModal,
-}) => {
+const DeleteMember: React.FC<DeleteMemberProps> = ({ deleteMemModal, onSetDeleteMemModal, member }) => {
     useScrollLock(deleteMemModal);
+    const { projectId } = useParams<{ projectId: string }>();
+    const accessToken = localStorage.getItem('access_token');
+    const deleteMember = async () => {
+        try {
+            const response = await fetch(`${Http}/v1/projects/${projectId}/members/${member?.memberId}`, {
+                method: 'DELETE',
+                headers: {
+                    Accept: '*/*',
+                    Authorization: `Bearer ${accessToken}`,
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error('내보내기 실패');
+            }
+
+            const data = await response.json();
+            console.log('삭제', data.data);
+            window.location.reload();
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
     return (
         <>
             {deleteMemModal && (
@@ -114,16 +139,12 @@ const DeleteMember: React.FC<DeleteMemberProps> = ({
                                     }}
                                 >
                                     <InfoCircleIcon sx={{ fontSize: '32px' }} />
-                                    <MemberNick>닉네임</MemberNick>
+                                    <MemberNick>{member?.nickname}</MemberNick>
                                     <Title>프로젝트에서 내보내겠습니까?</Title>
                                 </div>
-                                <ButtonsContainer
-                                    style={{ alignSelf: 'flex-end' }}
-                                >
-                                    <ConfirmBtn>확인</ConfirmBtn>
-                                    <CancelBtn onClick={onSetDeleteMemModal}>
-                                        취소
-                                    </CancelBtn>
+                                <ButtonsContainer style={{ alignSelf: 'flex-end' }}>
+                                    <ConfirmBtn onClick={deleteMember}>확인</ConfirmBtn>
+                                    <CancelBtn onClick={onSetDeleteMemModal}>취소</CancelBtn>
                                 </ButtonsContainer>
                             </div>
                         </Box>
