@@ -20,7 +20,7 @@ const NewProjectText = styled.div`
     font-family: 'Pretendard';
     letter-spacing: 0px;
     line-height: 1;
-    &: hover {
+    &:hover {
         color: #000000;
         cursor: pointer;
     }
