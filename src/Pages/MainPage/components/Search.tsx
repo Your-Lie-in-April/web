@@ -14,7 +14,7 @@ const SearchInput = styled.input`
     margin-left: 28px;
     font-weight: 800;
     font-size: 28px;
-    color: #a4a4a4;
+    color: #000000;
     font-family: 'Pretendard';
     border: none;
     outline: none;
