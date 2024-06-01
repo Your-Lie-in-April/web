@@ -57,7 +57,6 @@ const ProjectName = styled.div`
 `;
 
 const DetailText = styled.div`
-    max-height: 43px;
     font-size: 16px;
     font-weight: 400;
     overflow: hidden;
@@ -65,6 +64,8 @@ const DetailText = styled.div`
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
+    white-space: pre-wrap;
+    word-break: break-word;
 `;
 
 const MoreButton = styled.button`
