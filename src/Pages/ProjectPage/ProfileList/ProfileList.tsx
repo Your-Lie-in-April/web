@@ -59,14 +59,10 @@ interface ProfileListProps {
     projectData: ProjectEntity | null;
 }
 
-const ProfileList: React.FC<ProfileListProps> = ({
-    members,
-    projectId,
-    projectData,
-}) => {
+const ProfileList: React.FC<ProfileListProps> = ({ members, projectId, projectData }) => {
     const [showDeleteBtn, setShowDeleteBtn] = useState(false);
     const { userData, setUserData } = useUserContext();
-
+    const privilegedMembers = members.filter((member) => member.isPrivileged);
     const toggleDeleteBtn = () => {
         setShowDeleteBtn((prev) => !prev);
     };
@@ -85,27 +81,17 @@ const ProfileList: React.FC<ProfileListProps> = ({
                     }}
                 >
                     <CommonText style={{ color: '#ffffff' }}>멤버</CommonText>
-                    <InviteBtn
-                        projectId={projectId}
-                        projectData={projectData}
-                    />
+                    <InviteBtn projectId={projectId} projectData={projectData} />
                 </div>
                 <MemberList>
-                    {members.map((member) =>
-                        member.isPrivileged ? (
-                            <LeaderProfile
-                                key={member.memberId}
-                                member={member}
-                                toggleDeleteBtn={toggleDeleteBtn}
-                            />
-                        ) : (
-                            <MemberProfile
-                                key={member.memberId}
-                                member={member}
-                                showDeleteBtn={showDeleteBtn}
-                            />
-                        )
-                    )}
+                    {privilegedMembers.map((member) => (
+                        <LeaderProfile key={member.memberId} member={member} toggleDeleteBtn={toggleDeleteBtn} />
+                    ))}
+                    {members
+                        .filter((member) => !member.isPrivileged)
+                        .map((member) => (
+                            <MemberProfile key={member.memberId} member={member} showDeleteBtn={showDeleteBtn} />
+                        ))}
                 </MemberList>
             </MemberListBox>
         </Box>

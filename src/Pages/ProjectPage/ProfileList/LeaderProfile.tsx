@@ -43,22 +43,13 @@ const CommonText = styled.div`
     line-height: normal;
 `;
 const defaultImg = 'src/pics/default.png';
-const LeaderProfile = ({
-    toggleDeleteBtn,
-    member,
-}: {
-    toggleDeleteBtn: () => void;
-    member: MemberEntity;
-}) => {
-    const { userData, setUserData } = useUserContext();
+
+const LeaderProfile = ({ toggleDeleteBtn, member }: { toggleDeleteBtn: () => void; member: MemberEntity }) => {
     return (
         <LeaderProfileBox>
             <LeaderProfileDiv>
                 <LeaderImg>
-                    <StyledImage
-                        src={userData?.profileImageUrl || defaultImg}
-                        alt="Profile Image"
-                    />
+                    <StyledImage src={member?.profileImageUrl || defaultImg} alt="Profile Image" />
                 </LeaderImg>
                 <div
                     style={{
@@ -76,17 +67,17 @@ const LeaderProfile = ({
                             justifyContent: 'center',
                         }}
                     >
-                        <CommonText>{userData?.nickname}(본인)</CommonText>
+                        <CommonText>{member?.nickname}(본인)</CommonText>
                         <CommonText
                             style={{
                                 fontSize: '10px',
                                 fontWeight: '400',
                             }}
                         >
-                            {userData?.state}
+                            {member?.state}
                         </CommonText>
                     </div>
-                    <MoreBtn toggleDeleteBtn = {toggleDeleteBtn}/>
+                    <MoreBtn toggleDeleteBtn={toggleDeleteBtn} />
                 </div>
             </LeaderProfileDiv>
         </LeaderProfileBox>
