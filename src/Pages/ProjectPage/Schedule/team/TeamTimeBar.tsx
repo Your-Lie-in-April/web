@@ -7,19 +7,13 @@ interface TeamTimeBarProps {
   memberCount: number;
 }
 
-const TeamTimeBar: React.FC<TeamTimeBarProps> = ({
-  hours,
-  schedule,
-  memberCount,
-}) => {
+const TeamTimeBar: React.FC<TeamTimeBarProps> = ({ hours, schedule, memberCount }) => {
   const totalWidth = hours.length * 40;
 
   const getColor = (count: number) => {
     const baseColor = "#633AE2";
     const opacity = count / memberCount;
-    return `${baseColor}${Math.round(opacity * 255)
-      .toString(16)
-      .padStart(2, "0")}`;
+    return `${baseColor}${Math.round(opacity * 255).toString(16).padStart(2, "0")}`;
   };
 
   const getMemberCountAtTime = (hour: number, minute: number) => {
@@ -68,20 +62,23 @@ const TeamTimeBar: React.FC<TeamTimeBarProps> = ({
               transform: "translateX(-50%)",
             }}
           />
-          {Array.from({ length: 60 }, (_, minute) => (
-            <div
-              key={minute}
-              style={{
-                position: "absolute",
-                top: 0,
-                left: `${(minute / 60) * 100}%`,
-                width: `${(1 / 60) * 100}%`,
-                height: "100%",
-                backgroundColor: getColor(getMemberCountAtTime(hour, minute)),
-                boxSizing: "border-box",
-              }}
-            />
-          ))}
+          {Array.from({ length: 2 }, (_, index) => {
+            const minute = index * 30;
+            return (
+              <div
+                key={minute}
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  left: `${(minute / 60) * 100}%`,
+                  width: "50%",
+                  height: "100%",
+                  backgroundColor: getColor(getMemberCountAtTime(hour, minute)),
+                  boxSizing: "border-box",
+                }}
+              />
+            );
+          })}
         </div>
       ))}
     </div>
