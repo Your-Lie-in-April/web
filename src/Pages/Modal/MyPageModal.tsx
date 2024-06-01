@@ -1,10 +1,12 @@
 import styled from 'styled-components';
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
 import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ChangeStatus from './ChangeStatus';
 import { useNavigate } from 'react-router-dom';
 import { useUserContext } from '../MainPage/MainPage';
+import { Http } from '#/constants/backendURL';
+import { MemberEntity } from '#/Types/membertype';
 
 const Box = styled.div`
     width: 300px;
@@ -137,7 +139,31 @@ interface MyPageModalProps {
 
 const MyPageModal: React.FC<MyPageModalProps> = ({ onSetIsMyPageModal }) => {
     const [editStatusModal, setEditStatusModal] = useState(false);
-    const { userData, setUserData } = useUserContext();
+    const [me, setMe] = useState<MemberEntity>();
+    useEffect(() => {
+        const accessToken = localStorage.getItem('access_token');
+        const memberId = localStorage.getItem('member_id');
+        const fetchMe = async () => {
+            const url = `${Http}/v1/members/${memberId}`;
+            const headers = {
+                Accept: '*/*',
+                Authorization: `Bearer ${accessToken}`,
+            };
+
+            try {
+                const response = await fetch(url, { headers });
+                if (!response.ok) {
+                    throw new Error('데이터 가져오기 실패');
+                }
+                const data = await response.json();
+                setMe(data.data);
+                console.log('본인 데이터:', data);
+            } catch (error) {
+                console.error('API 요청 중 에러 발생:', error);
+            }
+        };
+        fetchMe();
+    });
 
     const onSetEditStatusModal = () => {
         setEditStatusModal((prev) => !prev);
@@ -162,9 +188,9 @@ const MyPageModal: React.FC<MyPageModalProps> = ({ onSetIsMyPageModal }) => {
                     }}
                 >
                     <MyImg>
-                        <StyledImage src={userData?.profileImageUrl} />
+                        <StyledImage src={me?.profileImageUrl} />
                     </MyImg>
-                    <MyEmailText>{userData?.email}</MyEmailText>
+                    <MyEmailText>{me?.email}</MyEmailText>
                 </div>
                 <StatusBox>
                     <div
@@ -173,19 +199,14 @@ const MyPageModal: React.FC<MyPageModalProps> = ({ onSetIsMyPageModal }) => {
                             flexBasis: '10%',
                         }}
                     />
-                    <StatusText>{userData?.state}</StatusText>
+                    <StatusText>{me?.state}</StatusText>
                     <EditButton onClick={onSetEditStatusModal}>
                         <EditIcon />
                     </EditButton>
                 </StatusBox>
-                <StorageBtn onClick={handlemyproject}>
-                    프로젝트 보관함
-                </StorageBtn>
+                <StorageBtn onClick={handlemyproject}>프로젝트 보관함</StorageBtn>
             </Box>
-            <ChangeStatus
-                onSetEditStatusModal={onSetEditStatusModal}
-                editStatusModal={editStatusModal}
-            />
+            <ChangeStatus onSetEditStatusModal={onSetEditStatusModal} editStatusModal={editStatusModal} />
         </>
     );
 };

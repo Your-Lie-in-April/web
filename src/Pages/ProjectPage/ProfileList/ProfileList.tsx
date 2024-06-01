@@ -61,7 +61,6 @@ interface ProfileListProps {
 
 const ProfileList: React.FC<ProfileListProps> = ({ members, projectId, projectData }) => {
     const [showDeleteBtn, setShowDeleteBtn] = useState(false);
-    const { userData, setUserData } = useUserContext();
     const privilegedMembers = members.filter((member) => member.isPrivileged);
     const toggleDeleteBtn = () => {
         setShowDeleteBtn((prev) => !prev);
