@@ -5,6 +5,8 @@ import { useEffect, useState } from 'react';
 import { PinProjectResponse } from '#/Types/projecttype';
 import { Http } from '#/constants/backendURL';
 import { useNavigate } from 'react-router-dom';
+import { ScheduleAllMembersResDto } from '#/Types/scheduletype';
+import PinnedSchedule from './PinSchedule/PinnedSchedule';
 const PinnedBox = styled.div`
   width: 950px;
   height: 400px;
@@ -22,14 +24,6 @@ const ProjectBox = styled.div`
   gap: 24px;
   align-self: flex-start;
   align-items: flex-start;
-`;
-
-//임시 스케줄 박스
-const ScheduleBox = styled.div`
-  width: 681px;
-  height: 300px;
-  border-radius: 20px;
-  background: #fff;
 `;
 
 const StyledButton = styled.button`
@@ -57,6 +51,7 @@ const TextDiv = styled.div`
 `;
 
 const ProjectText = styled.text`
+  width: 192px;
   color: #ffffff;
   font-family: 'Pretendard';
   font-size: 32px;
@@ -83,6 +78,10 @@ const Pinned: React.FC = () => {
   const [pinnedProjects, setPinnedProjects] =
     useState<PinProjectResponse | null>(null);
   const [pinnedId, setPinnedId] = useState();
+  const [pinSchedule, setPinSchedule] = useState<
+    ScheduleAllMembersResDto[] | null
+  >(pinnedProjects?.schedule ?? null);
+
   useEffect(() => {
     const accessToken = localStorage.getItem('access_token');
     const memberId = localStorage.getItem('member_id');
@@ -108,6 +107,7 @@ const Pinned: React.FC = () => {
         console.log('설정된거', data);
         setPinnedProjects(data.data[0]);
         setPinnedId(data.data[0].projectId);
+        setPinSchedule(data.data[0].schedule);
       } catch (error) {
         console.error(error);
       }
@@ -163,7 +163,7 @@ const Pinned: React.FC = () => {
               {pinnedProjects.startDate} ~ {pinnedProjects.endDate}
             </DetailText>
           </TextDiv>
-          <ScheduleBox />
+          <PinnedSchedule scheduleData={pinSchedule} />
         </ProjectBox>
       </div>
     </PinnedBox>
