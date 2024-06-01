@@ -248,6 +248,7 @@ const Project: React.FC<ProjectProps> = ({ project }) => {
             </div>
             <LeaveProject
                 projectId={project.projectId}
+                projectTitle = {project.title}
                 onClose={onClickCancelBtn}
                 isCancleBtn={isCancleBtn}
             />
