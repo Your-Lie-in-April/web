@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import StorageProject from './StorageProject';
 import { ProjectThumbnailResponse } from '#/Types/projecttype';
+import NoProject from '../Layouts/NoProject';
 
 const GridContainer = styled.div`
   display: grid;
@@ -8,22 +9,6 @@ const GridContainer = styled.div`
   grid-auto-rows: minmax(auto, auto);
   column-gap: 25px;
   row-gap: 16px;
-`;
-
-const NoProject = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-
-  color: #d9d9d9;
-  text-align: center;
-  font-family: Pretendard;
-  font-size: 28px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
-  text-transform: capitalize;
 `;
 
 interface StorageProjectListProps {
@@ -50,7 +35,7 @@ const StorageProjectList: React.FC<StorageProjectListProps> = ({
       })}
     </GridContainer>
   ) : (
-    <NoProject>No Project</NoProject>
+    <NoProject />
   );
 };
 
