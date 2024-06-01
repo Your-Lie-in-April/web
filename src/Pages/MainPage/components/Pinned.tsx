@@ -81,6 +81,7 @@ const Pinned: React.FC = () => {
     const { userData } = useUserContext();
     const navigation = useNavigate();
     const [pinnedProjects, setPinnedProjects] = useState<PinProjectResponse | null>(null);
+    const [pinnedId, setPinnedId] = useState();
     useEffect(() => {
         const accessToken = localStorage.getItem('access_token');
         const memberId = localStorage.getItem('member_id');
@@ -102,12 +103,38 @@ const Pinned: React.FC = () => {
                 const data = await response.json();
                 console.log('설정된거', data);
                 setPinnedProjects(data.data[0]);
+                setPinnedId(data.data[0].projectId);
             } catch (error) {
                 console.error(error);
             }
         };
         fetchPinnedProjects();
     }, [userData]);
+
+    const handlePin = async () => {
+        try {
+            const accessToken = localStorage.getItem('access_token');
+            const url = `${Http}/v1/members/pin/${pinnedId}`;
+            console.log('Request URL:', url);
+            const response = await fetch(url, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${accessToken}`,
+                    credentials: 'include',
+                },
+            });
+            console.log('Response:', response);
+
+            if (!response.ok) throw new Error('뭔가 이상');
+            const result = await response.json();
+            console.log('상단 고정 결과:', result);
+            window.alert('핀 설정 해제에 성공했습니다.');
+            window.location.reload();
+        } catch (error) {
+            console.error('업데이트 실패:', error);
+        }
+    };
 
     const handleNavigation = () => {
         navigation(`/project/${pinnedProjects?.projectId}`);
@@ -116,8 +143,8 @@ const Pinned: React.FC = () => {
     return pinnedProjects ? (
         <PinnedBox onClick={handleNavigation}>
             <div style={{ display: 'flex', flexDirection: 'column' }}>
-                <StyledButton>
-                    <PushPinOutlinedIcon sx={{ fontSize: 36 }} />
+                <StyledButton onClick={(e) => e.stopPropagation()}>
+                    <PushPinOutlinedIcon sx={{ fontSize: 36 }} onClick={handlePin} />
                 </StyledButton>
                 <ProjectBox>
                     <TextDiv>
