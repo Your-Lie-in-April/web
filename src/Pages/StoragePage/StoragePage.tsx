@@ -2,10 +2,10 @@ import styled, { createGlobalStyle } from 'styled-components';
 import AfterLogin from '../Layouts/AfterLogin';
 import StorageProjectList from './StorageProjectList';
 import GraphicIcons from './Icon/GraphicIcons';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Http } from '#/constants/backendURL';
 import { ProjectThumbnailResponse } from '#/Types/projecttype';
-import Search from '../MainPage/components/Search';
+import Search from '../Layouts/Search';
 
 const GlobalStyle = createGlobalStyle`
 body {
@@ -23,88 +23,125 @@ body {
 `;
 
 const Title = styled.div`
-    color: #ffffff;
-    text-align: center;
-    font-size: 42px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: normal;
+  color: #ffffff;
+  text-align: center;
+  font-size: 42px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
 `;
 
 const StoragePage = () => {
-    const [storelist, setStoreList] = useState<ProjectThumbnailResponse[]>([]);
-    const [searchResults, setSearchResults] = useState<ProjectThumbnailResponse[]>([]);
+  const [storelist, setStoreList] = useState<ProjectThumbnailResponse[]>([]);
+  const [searchResults, setSearchResults] = useState<
+    ProjectThumbnailResponse[]
+  >([]);
+  const [page, setPage] = useState<number>(0);
+  const [size] = useState<number>(9);
+  const [hasMore, setHasMore] = useState<boolean>(true);
 
-    useEffect(() => {
-        const storeList = async () => {
-            try {
-                const accessToken = localStorage.getItem('access_token');
-                const response = await fetch(`${Http}/v1/projects/stored`, {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: `Bearer ${accessToken}`,
-                        credentials: 'include',
-                    },
-                });
-                if (!response.ok) throw new Error('뭔가 이상');
-                const result = await response.json();
-                setStoreList(result.data);
-                setSearchResults(result.data);
-                console.log('보관함 결과:', result);
-            } catch (error) {
-                console.error('업데이트 실패:', error);
-            }
-        };
-        storeList();
-    }, []);
+  const observer = useRef<IntersectionObserver | null>(null);
 
-    const handleSearch = (query: string) => {
-        const searchProjects = storelist.filter((project) => project.title.toLowerCase().includes(query.toLowerCase()));
-        setSearchResults(searchProjects);
-    };
+  const lastProjectRef = useCallback(
+    (node: HTMLDivElement | null) => {
+      if (observer.current) observer.current.disconnect();
+      observer.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && hasMore) {
+          setPage((prevPage) => prevPage + 1);
+        }
+      });
+      if (node) observer.current.observe(node);
+    },
+    [hasMore]
+  );
 
-    return (
-        <>
-            <GlobalStyle />
+  const fetchStoredProjects = async () => {
+    try {
+      const accessToken = localStorage.getItem('access_token');
+      if (accessToken) {
+        const response = await fetch(
+          `${Http}/v1/projects/stored?page=${page}&size=${size}`,
+          {
+            method: 'GET',
+            headers: {
+              Accept: '*/*',
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
+        if (!response.ok) {
+          console.log('failed to fetch storage projects');
+        }
+        const data = await response.json();
+        console.log(data);
+        if (page === 0) {
+          setStoreList(data.data);
+          setSearchResults(data.data);
+        } else {
+          setStoreList((prevProjects) => [...prevProjects, ...data.data]);
+          setSearchResults((prevProjects) => [...prevProjects, ...data.data]);
+        }
+        setHasMore(data.data.length > 0);
+      }
+    } catch (error) {
+      console.error('업데이트 실패:', error);
+    }
+  };
 
-            <>
-                <GraphicIcons />
-                <div
-                    style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: '130px',
-                    }}
-                >
-                    <AfterLogin />
-                    <div
-                        style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            gap: '49px',
-                            alignItems: 'center',
+  useEffect(() => {
+    fetchStoredProjects();
+  }, [page, size]);
 
-                            zIndex: '1',
-                        }}
-                    >
-                        <div
-                            style={{
-                                display: 'flex',
-                                flexDirection: 'column',
-                                gap: '48px',
-                            }}
-                        >
-                            <Title>프로젝트 보관함</Title>
-                            <Search onSearch={handleSearch} />
-                        </div>
-                        <StorageProjectList projects={searchResults} />
-                    </div>
-                </div>
-                <div style={{ width: '100vw', height: '172px' }}></div>
-            </>
-        </>
+  const handleSearch = (query: string) => {
+    const searchProjects = storelist.filter((project) =>
+      project.title.toLowerCase().includes(query.toLowerCase())
     );
+    setSearchResults(searchProjects);
+  };
+
+  return (
+    <>
+      <GlobalStyle />
+      <>
+        <GraphicIcons />
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '130px',
+          }}
+        >
+          <AfterLogin />
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '49px',
+              alignItems: 'center',
+
+              zIndex: '1',
+            }}
+          >
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '48px',
+              }}
+            >
+              <Title>프로젝트 보관함</Title>
+              <Search onSearch={handleSearch} />
+            </div>
+            <StorageProjectList
+              projects={searchResults}
+              lastProjectRef={lastProjectRef}
+            />
+          </div>
+        </div>
+        <div style={{ width: '100vw', height: '172px' }}></div>
+      </>
+    </>
+  );
 };
 
 export default StoragePage;

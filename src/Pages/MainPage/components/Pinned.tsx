@@ -7,6 +7,8 @@ import { Http } from '#/constants/backendURL';
 import { useNavigate } from 'react-router-dom';
 import { ScheduleAllMembersResDto } from '#/Types/scheduletype';
 import PinnedSchedule from './PinSchedule/PinnedSchedule';
+import dayjs from 'dayjs';
+
 const PinnedBox = styled.div`
   width: 950px;
   height: 400px;
@@ -43,6 +45,7 @@ const StyledButton = styled.button`
 `;
 
 const TextDiv = styled.div`
+  width: 192px;
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -51,7 +54,6 @@ const TextDiv = styled.div`
 `;
 
 const ProjectText = styled.text`
-  width: 192px;
   color: #ffffff;
   font-family: 'Pretendard';
   font-size: 32px;
@@ -152,15 +154,13 @@ const Pinned: React.FC = () => {
         </StyledButton>
         <ProjectBox>
           <TextDiv>
-            <ProjectText>
-              <br />
-              {pinnedProjects.title}
-            </ProjectText>
+            <ProjectText>{pinnedProjects.title}</ProjectText>
             <DetailText>멤버 {pinnedProjects.memberCount}명</DetailText>
             <DetailText>
               프로젝트 기간
               <span />
-              {pinnedProjects.startDate} ~ {pinnedProjects.endDate}
+              {dayjs(pinnedProjects.startDate).format('YYYY.MM.DD')} ~{' '}
+              {dayjs(pinnedProjects.endDate).format('YYYY.MM.DD')}
             </DetailText>
           </TextDiv>
           <PinnedSchedule scheduleData={pinSchedule} />
