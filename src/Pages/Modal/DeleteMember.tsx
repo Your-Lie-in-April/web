@@ -4,6 +4,7 @@ import React from 'react';
 import { ModalBlackOut, ModalContainer } from './ModalCommon';
 import ModalPortal from '#/utils/ModalPotal';
 import useScrollLock from '#/utils/useScrollLock';
+import { MemberEntity } from '#/Types/membertype';
 
 const Box = styled.div`
     width: 406px;
@@ -79,12 +80,10 @@ const ButtonsContainer = styled.div`
 interface DeleteMemberProps {
     deleteMemModal: boolean;
     onSetDeleteMemModal: () => void;
+    member: MemberEntity;
 }
 
-const DeleteMember: React.FC<DeleteMemberProps> = ({
-    deleteMemModal,
-    onSetDeleteMemModal,
-}) => {
+const DeleteMember: React.FC<DeleteMemberProps> = ({ deleteMemModal, onSetDeleteMemModal, member }) => {
     useScrollLock(deleteMemModal);
     return (
         <>
@@ -114,16 +113,12 @@ const DeleteMember: React.FC<DeleteMemberProps> = ({
                                     }}
                                 >
                                     <InfoCircleIcon sx={{ fontSize: '32px' }} />
-                                    <MemberNick>닉네임</MemberNick>
+                                    <MemberNick>{member?.nickname}</MemberNick>
                                     <Title>프로젝트에서 내보내겠습니까?</Title>
                                 </div>
-                                <ButtonsContainer
-                                    style={{ alignSelf: 'flex-end' }}
-                                >
+                                <ButtonsContainer style={{ alignSelf: 'flex-end' }}>
                                     <ConfirmBtn>확인</ConfirmBtn>
-                                    <CancelBtn onClick={onSetDeleteMemModal}>
-                                        취소
-                                    </CancelBtn>
+                                    <CancelBtn onClick={onSetDeleteMemModal}>취소</CancelBtn>
                                 </ButtonsContainer>
                             </div>
                         </Box>
