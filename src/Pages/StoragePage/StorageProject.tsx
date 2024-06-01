@@ -2,11 +2,10 @@ import styled from 'styled-components';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import DeleteIcon from '@mui/icons-material/Delete';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
-import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { useState } from 'react';
 import DeleteProject from '../Modal/DeleteProject';
 import { ProjectThumbnailResponse } from '#/Types/projecttype';
-import { useNavigate, useNavigation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Http } from '#/constants/backendURL';
 
 interface ProjectBoxProps {
@@ -75,7 +74,7 @@ const MoreButton = styled.button`
     cursor: pointer;
     z-index: 20;
 
-    &: focus {
+    &:focus {
         border: none;
         outline: none;
     }
@@ -118,7 +117,7 @@ const MoreItem = styled.button`
     border: none;
     padding: 0;
     cursor: pointer;
-    &: focus {
+    &:focus {
         border: none;
         outline: none;
     }
