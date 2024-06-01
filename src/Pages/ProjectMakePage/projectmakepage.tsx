@@ -68,7 +68,7 @@ const ProjectMakePage: FC = () => {
     const [color, setColor] = useState<string>('#D6CBEF');
     const [img, setImg] = useState<string>('');
     const [starttime, setStartTime] = useState('AM 09:00');
-    const [endtime, setEndTime] = useState('AM 00:00');
+    const [endtime, setEndTime] = useState('AM 09:00');
     const [selectedDays, setSelectedDays] = useState<string[]>([]);
     const navigate = useNavigate();
     const formatTime = (time: string) => {
@@ -90,14 +90,14 @@ const ProjectMakePage: FC = () => {
             description: content,
             startDate: startDate?.toISOString().substring(0, 10),
             endDate: endDate?.toISOString().substring(0, 10),
-            starttime: formatTime(starttime),
-            endtime: formatTime(endtime),
+            startTime: formatTime(starttime),
+            endTime: formatTime(endtime),
             daysOfWeek: selectedDays,
             isStored: false,
             color: color,
             coverImageUrl: img,
         };
-        console.log(payload);
+        console.log('payload', payload);
         try {
             const response = await fetch(Http + `/v1/projects`, {
                 method: 'POST',
