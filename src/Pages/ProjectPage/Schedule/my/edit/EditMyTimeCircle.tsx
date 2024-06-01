@@ -13,7 +13,33 @@ interface TimeSlotProps {
     date: string;
     hour: number;
     minute: number;
+    projectStartTime: number | undefined;
+    projectEndTime: number | undefined;
 }
+
+const isProjectHour = (
+    date: string,
+    hour: number,
+    projectStartTime: number | undefined,
+    projectEndTime: number | undefined
+) => {
+    if (projectStartTime !== undefined && projectEndTime !== undefined) {
+        const slotDateTime = new Date(date);
+        slotDateTime.setHours(hour);
+
+        const projectStartDateTime = new Date(date);
+        projectStartDateTime.setHours(projectStartTime);
+
+        const projectEndDateTime = new Date(date);
+        projectEndDateTime.setHours(projectEndTime);
+
+        return (
+            slotDateTime >= projectStartDateTime &&
+            slotDateTime < projectEndDateTime
+        );
+    }
+    return false;
+};
 
 export const TimeSlotLeft: React.FC<TimeSlotProps> = ({
     id,
@@ -23,6 +49,8 @@ export const TimeSlotLeft: React.FC<TimeSlotProps> = ({
     date,
     hour,
     minute,
+    projectStartTime,
+    projectEndTime,
 }) => {
     const handleMouseDown = () => {
         onSelectSlot(id, date, hour, minute);
@@ -31,6 +59,9 @@ export const TimeSlotLeft: React.FC<TimeSlotProps> = ({
     const handleMouseEnter = () => {
         onMouseEnter();
     };
+
+    const isProjectTime = isProjectHour(date, hour, projectStartTime, projectEndTime);
+
     return (
         <div
             id={`Time${id}`}
@@ -44,7 +75,11 @@ export const TimeSlotLeft: React.FC<TimeSlotProps> = ({
                 borderTop: '0.5px solid #a4a4a4',
                 borderLeft: '0.5px solid #a4a4a4',
                 borderBottom: '0.5px solid #a4a4a4',
-                background: isSelected ? '#633AE2' : '#D9D9D9',
+                background: isProjectTime
+                    ? isSelected
+                        ? '#633AE2'
+                        : '#D9D9D9'
+                    : '#ffffff',
                 boxSizing: 'border-box',
             }}
             onMouseDown={handleMouseDown}
@@ -61,6 +96,8 @@ export const TimeSlotRight: React.FC<TimeSlotProps> = ({
     date,
     hour,
     minute,
+    projectStartTime,
+    projectEndTime,
 }) => {
     const handleMouseDown = () => {
         onSelectSlot(id, date, hour, minute);
@@ -69,6 +106,9 @@ export const TimeSlotRight: React.FC<TimeSlotProps> = ({
     const handleMouseEnter = () => {
         onMouseEnter();
     };
+
+    const isProjectTime = isProjectHour(date, hour, projectStartTime, projectEndTime);
+
     return (
         <div
             id={`Time${id}`}
@@ -81,7 +121,11 @@ export const TimeSlotRight: React.FC<TimeSlotProps> = ({
                 borderTop: '0.5px solid #a4a4a4',
                 borderRight: '0.5px solid #a4a4a4',
                 borderBottom: '0.5px solid #a4a4a4',
-                background: isSelected ? '#633AE2' : '#D9D9D9',
+                background: isProjectTime
+                    ? isSelected
+                        ? '#633AE2'
+                        : '#D9D9D9'
+                    : '#ffffff',
                 boxSizing: 'border-box',
             }}
             onMouseDown={handleMouseDown}
