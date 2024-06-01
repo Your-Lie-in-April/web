@@ -25,6 +25,8 @@ const CommonText = styled.div`
   font-style: normal;
   font-weight: 400;
   line-height: normal;
+  width: 32px;
+  height: 20px;
 `;
 
 const TimeTableDiv = styled.div`
@@ -33,14 +35,12 @@ const TimeTableDiv = styled.div`
 `;
 
 const HourTextList = styled.div`
-  width: 576px;
+  width: 632px;
+  height: 32px;
   display: flex;
-  flex-direction: row;
-  gap: 11px;
+  gap: 8px;
   align-items: center;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-left: 45px;
+  margin-left: 33px;
 `;
 
 const HoursOfDay = [...Array(16).keys()].map((_, index) => index + 9);
@@ -53,7 +53,7 @@ const PinnedSchedule: React.FC<PinScheduleProps> = ({ scheduleData }) => {
   return (
     <Box>
       <TimeTableDiv>
-        <div style={{ display: 'flex', flexDirection: 'column' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
           <HourTextList>
             {HoursOfDay.slice(0, 15).map((hour, idx) => (
               <CommonText key={idx}>{hour}</CommonText>

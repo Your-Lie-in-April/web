@@ -1,5 +1,5 @@
-import React from "react";
-import { ScheduleAllMembersResDto, ScheduleItem } from "#/Types/scheduletype";
+import React from 'react';
+import { ScheduleAllMembersResDto, ScheduleItem } from '#/Types/scheduletype';
 import PinnedTimeBar from './PinnedTimeBar';
 
 interface PinnedTimeScheduleProps {
@@ -10,23 +10,23 @@ const PinnedTimeSchedule: React.FC<PinnedTimeScheduleProps> = ({
   scheduleData,
 }) => {
   const daysOfWeek = [
-    "SUNDAY",
-    "MONDAY",
-    "TUESDAY",
-    "WEDNESDAY",
-    "THURSDAY",
-    "FRIDAY",
-    "SATURDAY",
+    'SUNDAY',
+    'MONDAY',
+    'TUESDAY',
+    'WEDNESDAY',
+    'THURSDAY',
+    'FRIDAY',
+    'SATURDAY',
   ];
 
   const daysOfWeekMap: { [key: string]: string } = {
-    SUNDAY: "SUN",
-    MONDAY: "MON",
-    TUESDAY: "TUE",
-    WEDNESDAY: "WED",
-    THURSDAY: "THU",
-    FRIDAY: "FRI",
-    SATURDAY: "SAT",
+    SUNDAY: 'SUN',
+    MONDAY: 'MON',
+    TUESDAY: 'TUE',
+    WEDNESDAY: 'WED',
+    THURSDAY: 'THU',
+    FRIDAY: 'FRI',
+    SATURDAY: 'SAT',
   };
   const hours = Array.from({ length: 15 }, (_, i) => i + 9);
 
@@ -44,31 +44,33 @@ const PinnedTimeSchedule: React.FC<PinnedTimeScheduleProps> = ({
   };
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
       {daysOfWeek.map((day) => (
-        <div key={day} style={{ display: "flex" }}>
+        <div key={day} style={{ display: 'flex', gap: '4px' }}>
           <div
             style={{
-              width: "42px",
-              textAlign: "center",
-              lineHeight: "29.804px",
-              color: "#000000",
-              fontSize: "18px",
-              fontWeight: "400",
-              fontStyle: "normal",
-              fontFamily: "Pretendard",
+              textAlign: 'center',
+              lineHeight: '29.804px',
+              color: '#000000',
+              fontSize: '18px',
+              fontWeight: '400',
+              fontStyle: 'normal',
+              fontFamily: 'Pretendard',
+              display: 'flex',
+              flexDirection: 'column',
+              width: '45px',
+              justifyContent: 'center',
+              alignContent: 'center',
+              alignItems: 'center',
             }}
           >
             {daysOfWeekMap[day]}
           </div>
-          <div style={{ width: "2px" }} />
-          <div style={{ flex: 1 }}>
-            <PinnedTimeBar
-              hours={hours}
-              schedule={getScheduleForDay(day)}
-              memberCount={getMemberCount()}
-            />
-          </div>
+          <PinnedTimeBar
+            hours={hours}
+            schedule={getScheduleForDay(day)}
+            memberCount={getMemberCount()}
+          />
         </div>
       ))}
     </div>
