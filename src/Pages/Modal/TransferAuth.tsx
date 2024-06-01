@@ -2,10 +2,13 @@ import styled from 'styled-components';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ModalBlackOut, ModalContainer } from './ModalCommon';
 import ModalPortal from '#/utils/ModalPotal';
 import useScrollLock from '#/utils/useScrollLock';
+import { useParams } from 'react-router-dom';
+import { MemberEntity } from '#/Types/membertype';
+import { Http } from '#/constants/backendURL';
 
 const Box = styled.div`
     width: 406px;
@@ -124,27 +127,42 @@ interface TransferAuthModalProps {
     isAuthClick: boolean;
     onIsAuthClick: () => void;
 }
-const TransferAuthModal: React.FC<TransferAuthModalProps> = ({
-    isAuthClick,
-    onIsAuthClick,
-}) => {
-    const testMemList: string[] = [
-        'mem1234',
-        'mem5678',
-        'mem91011',
-        'mem1213',
-        'mem1415',
-        'mem1617',
-        'mem1819',
-        'mem2021',
-        'mem2223',
-        'mem2425',
-    ];
-
-    const [selectMem, setSelectMem] = useState<string>(testMemList[0]);
+const TransferAuthModal: React.FC<TransferAuthModalProps> = ({ isAuthClick, onIsAuthClick }) => {
+    const { projectId } = useParams<{ projectId: string }>();
+    const [members, setMembers] = useState<MemberEntity[] | undefined>();
+    const [selectMem, setSelectMem] = useState('');
     const [isOpen, setIsOpen] = useState<boolean>(false);
 
-    const handleSetSelectMem = (mem: string) => {
+    useEffect(() => {
+        const accessToken = localStorage.getItem('access_token');
+        const fetchMember = async () => {
+            try {
+                const response = await fetch(`${Http}/v1/projects/${projectId}/members`, {
+                    method: 'GET',
+                    headers: {
+                        Accept: '*/*',
+                        Authorization: `Bearer ${accessToken}`,
+                    },
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to fetch pinned projects');
+                }
+
+                const data = await response.json();
+                console.log('멤버', data.data);
+                if (data.data.length > 0) {
+                    setSelectMem(data.data[0].nickname);
+                }
+                setMembers(data.data);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+        fetchMember();
+    }, [projectId]);
+
+    const handleSetSelectMem = (mem: any) => {
         setSelectMem(mem);
         setIsOpen(false);
     };
@@ -223,18 +241,11 @@ const TransferAuthModal: React.FC<TransferAuthModalProps> = ({
                                             )}
                                         </div>
 
-                                        {isOpen && (
+                                        {isOpen && members && (
                                             <MemDropdown>
-                                                {testMemList.map((mem) => (
-                                                    <li
-                                                        key={mem}
-                                                        onClick={() =>
-                                                            handleSetSelectMem(
-                                                                mem
-                                                            )
-                                                        }
-                                                    >
-                                                        {mem}
+                                                {members.map((mem) => (
+                                                    <li key={mem.memberId} onClick={() => handleSetSelectMem(mem)}>
+                                                        {mem.nickname}
                                                     </li>
                                                 ))}
                                             </MemDropdown>
@@ -242,8 +253,7 @@ const TransferAuthModal: React.FC<TransferAuthModalProps> = ({
                                     </MemPickDiv>
 
                                     <CommonText>
-                                        <MemberNick>{selectMem}</MemberNick>{' '}
-                                        에게 권한을 양도하겠습니까?
+                                        <MemberNick>{selectMem}</MemberNick> 에게 권한을 양도하겠습니까?
                                     </CommonText>
                                 </div>
                                 <ButtonsContainer
@@ -252,12 +262,8 @@ const TransferAuthModal: React.FC<TransferAuthModalProps> = ({
                                         padding: '0 20px 0 20px',
                                     }}
                                 >
-                                    <ConfirmBtn onClick={handleConfirm}>
-                                        확인
-                                    </ConfirmBtn>
-                                    <CancelBtn onClick={onIsAuthClick}>
-                                        취소
-                                    </CancelBtn>
+                                    <ConfirmBtn onClick={handleConfirm}>확인</ConfirmBtn>
+                                    <CancelBtn onClick={onIsAuthClick}>취소</CancelBtn>
                                 </ButtonsContainer>
                             </div>
                         </Box>
