@@ -164,7 +164,7 @@ const Pinned: React.FC = () => {
             </div>
         </PinnedBox>
     ) : (
-        <PinnedBox />
+        <PinnedBox style={{ cursor: 'default' }} />
     );
 };
 export default Pinned;
