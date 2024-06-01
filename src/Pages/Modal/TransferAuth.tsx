@@ -146,15 +146,18 @@ const TransferAuthModal: React.FC<TransferAuthModalProps> = ({ isAuthClick, onIs
                 });
 
                 if (!response.ok) {
-                    throw new Error('Failed to fetch pinned projects');
+                    throw new Error('Failed to fetch members');
                 }
 
                 const data = await response.json();
                 console.log('멤버', data.data);
-                if (data.data.length > 0) {
-                    setSelectMem(data.data[0].nickname);
+
+                const nonPrivilegedMembers = data.data.filter((member: MemberEntity) => !member.isPrivileged);
+
+                if (nonPrivilegedMembers.length > 0) {
+                    setSelectMem(nonPrivilegedMembers[0].nickname);
                 }
-                setMembers(data.data);
+                setMembers(nonPrivilegedMembers);
             } catch (error) {
                 console.error(error);
             }
