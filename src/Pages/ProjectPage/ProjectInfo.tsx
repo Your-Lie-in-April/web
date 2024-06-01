@@ -80,6 +80,30 @@ interface ProjectInfoDetailProps {
     projectData: ProjectEntity | null;
 }
 export const ProjectInfoDetail: React.FC<ProjectInfoDetailProps> = ({ onClick, projectData }) => {
+    const { projectId } = useParams<{ projectId: string }>();
+    const [isStored, setIsStored] = useState<boolean>(false);
+    const handleStore = async () => {
+        try {
+            const accessToken = localStorage.getItem('access_token');
+            const response = await fetch(`${Http}/v1/members/storage/${projectId}`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${accessToken}`,
+                    credentials: 'include',
+                },
+                body: JSON.stringify({ projectId: projectId }),
+            });
+            if (!response.ok) throw new Error('뭔가 이상');
+            setIsStored(true);
+            window.alert('보관하였습니다.');
+            const result = await response.json();
+            console.log('보관함 결과:', result);
+            window.location.reload();
+        } catch (error) {
+            console.error('업데이트 실패:', error);
+        }
+    };
     return (
         <Container color={projectData?.color}>
             <ProjectInfoDiv>
@@ -103,7 +127,7 @@ export const ProjectInfoDetail: React.FC<ProjectInfoDetailProps> = ({ onClick, p
                                 <BorderColorOutlinedIcon style={{ fontSize: '18px' }} />
                                 커버 수정
                             </SettingBtn>
-                            <SettingBtn>
+                            <SettingBtn onClick={handleStore}>
                                 <InboxOutlinedIcon style={{ fontSize: '18px' }} />
                                 프로젝트 보관
                             </SettingBtn>
