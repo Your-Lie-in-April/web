@@ -232,6 +232,7 @@ const EditMySchedule: React.FC<EditMyScheduleProps> = ({
             console.log('Post/Update Schedule data empty');
             setSelection({});
             onSetIsEditModal();
+            alert('프로젝트 기간에 맞춰 시간표를 작성해주세요!');
             return;
         }
 
