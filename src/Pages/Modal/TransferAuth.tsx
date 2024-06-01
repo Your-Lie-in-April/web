@@ -9,6 +9,7 @@ import useScrollLock from '#/utils/useScrollLock';
 import { useParams } from 'react-router-dom';
 import { MemberEntity } from '#/Types/membertype';
 import { Http } from '#/constants/backendURL';
+import { stringify } from 'querystring';
 
 const Box = styled.div`
     width: 406px;
@@ -130,7 +131,9 @@ interface TransferAuthModalProps {
 const TransferAuthModal: React.FC<TransferAuthModalProps> = ({ isAuthClick, onIsAuthClick }) => {
     const { projectId } = useParams<{ projectId: string }>();
     const [members, setMembers] = useState<MemberEntity[] | undefined>();
-    const [selectMem, setSelectMem] = useState('');
+    const [selectMem, setSelectMem] = useState<string>('');
+    const [selectId, setSelectId] = useState<number>();
+
     const [isOpen, setIsOpen] = useState<boolean>(false);
 
     useEffect(() => {
@@ -156,6 +159,7 @@ const TransferAuthModal: React.FC<TransferAuthModalProps> = ({ isAuthClick, onIs
 
                 if (nonPrivilegedMembers.length > 0) {
                     setSelectMem(nonPrivilegedMembers[0].nickname);
+                    setSelectId(nonPrivilegedMembers[0].memberId);
                 }
                 setMembers(nonPrivilegedMembers);
             } catch (error) {
@@ -166,7 +170,8 @@ const TransferAuthModal: React.FC<TransferAuthModalProps> = ({ isAuthClick, onIs
     }, [projectId]);
 
     const handleSetSelectMem = (mem: any) => {
-        setSelectMem(mem);
+        setSelectMem(mem.nickname);
+        setSelectId(mem.memberId);
         setIsOpen(false);
     };
 
@@ -174,8 +179,32 @@ const TransferAuthModal: React.FC<TransferAuthModalProps> = ({ isAuthClick, onIs
         setIsOpen(!isOpen);
     };
 
-    const handleConfirm = () => {
-        onIsAuthClick();
+    const handleConfirm = async () => {
+        try {
+            const accessToken = localStorage.getItem('access_token');
+            const url = `${Http}/v1/projects/${projectId}/transfer-privilege`;
+
+            const body = JSON.stringify({
+                toMemberId: selectId,
+            });
+
+            console.log('Request Body:', body);
+
+            const response = await fetch(url, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${accessToken}`,
+                },
+                body: body,
+            });
+            if (!response.ok) throw new Error('뭔가 이상');
+
+            window.alert('권한양도에 성공했습니다.');
+            window.location.reload();
+        } catch (error) {
+            console.error('업데이트 실패:', error);
+        }
     };
 
     useScrollLock(isAuthClick);
