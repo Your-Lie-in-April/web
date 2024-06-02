@@ -1,22 +1,27 @@
 import React from 'react';
 import styled from 'styled-components';
-import useDocumentSize from '../../../hooks/useDocumentSize';
 
-const IconWrapper = styled.div<{ offset: number }>`
-  position: absolute;
-  bottom: calc(100vh - ${(props) => props.offset}px);
-  right: 0px;
+const IconWrapper = styled.div`
+  position: fixed;
+  bottom: 0;
+  right: 0;
   flex-shrink: 0;
   overflow: hidden;
   width: 319px;
   height: 281px;
+
+  @media (max-width: 1200px) {
+    right: 1vw;
+  }
+
+  @media (max-width: 768px) {
+    right: 0.5vw;
+  }
 `;
 
 const SummertimeSadnessIcon: React.FC = () => {
-  const { height } = useDocumentSize();
-  const offset = height ? height : 0;
   return (
-    <IconWrapper offset={offset}>
+    <IconWrapper>
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="319"
