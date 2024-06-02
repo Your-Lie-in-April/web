@@ -11,7 +11,7 @@ const GlobalStyle = createGlobalStyle`
 body {
   width : 100%;
   min-width : 1366px;
-  min-height : 1200px;
+  min-height : 1573px;
   margin: 0 auto;
   background-color: #212121;
   -ms-overflow-style: none;
