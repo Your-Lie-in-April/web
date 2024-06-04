@@ -7,6 +7,7 @@ import Calendar from 'react-calendar';
 import styled from 'styled-components';
 
 const StyledCalendarDiv = styled.div`
+  
   // 오늘 날짜 스타일
   .react-calendar__tile--now {
     background: transparent;
@@ -15,11 +16,12 @@ const StyledCalendarDiv = styled.div`
 
   // 선택한 날짜 스타일
   .react-calendar__tile--active {
-    background: transparent;
+    background: #633ae2;
     color: #ffffff;
-    border-radius: 50px;
     border: none;
     outline: none;
+    cursor: pointer;
+    border-radius: 0;
   }
 
   // 날짜칸 스타일
@@ -31,6 +33,8 @@ const StyledCalendarDiv = styled.div`
     align-items: center;
     box-sizing: border-box;
     padding: 3px;
+    outline: none;
+    max-width: 100%;
   }
 
   // 전체적 캘린더 틀
@@ -93,16 +97,23 @@ const StyledCalendarDiv = styled.div`
 
   // 월 선택 부분 스타일
   .react-calendar__year-view__months__month {
-    background: transparent;
     border-radius: 10px;
     padding: 0px;
     height: 60px;
     font-size: 22px;
+    background-color: transparent;
+    color: #000000;
+  }
+
+  .react-calendar__year-view__months__month:hover {
+    background-color: transparent;
+    color: #000000;
   }
 
   .react-calendar__year-view__months__month--active {
     border: none;
     outline: none;
+    color: #000000;
   }
 
   // 선택한 주차의 색 입히기
@@ -115,31 +126,31 @@ const StyledCalendarDiv = styled.div`
   }
 
   .highlight.start-of-week {
-    border-left: 2px solid #ffffff;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
   }
 
   .highlight.end-of-week {
-    border-right: 2px solid #ffffff;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
   }
 
   .react-calendar__month-view__days {
+    height: 204px;
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     grid-auto-rows: 1fr;
   }
 
-  .react-calendar__tile {
-    width: 100%;
-
-  }
-`;
-
-const StyledCalendar = styled(Calendar)`
-  .react-calendar__tile--active {
-    background-color: inherit;
-    border-radius: 0;
-    border: none;
+  .react-calendar__tile:focus {
     outline: none;
+  }
+
+  .react-calendar__tile:hover {
+    background-color: #633ae2;
+    color: #ffffff;
+    cursor: pointer;
+    border-radius: 0;
   }
 
   .react-calendar__navigation__prev2-button,
@@ -168,10 +179,6 @@ const StyledCalendar = styled(Calendar)`
     font-weight: 700;
     color: #000000;
   }
-
-  .react-calendar__tile {
-    max-width: 100%;
-  }
 `;
 
 const ScheduleCalendar: FC = () => {
@@ -190,10 +197,10 @@ const ScheduleCalendar: FC = () => {
   const tileClassName = ({ date }: { date: Date }) => {
     if (startDate && endDate) {
       if (date >= startDate && date <= endDate) {
-        if (date.getTime() === startDate.getTime()) {
+        if (date.toDateString() === startDate.toDateString()) {
           return 'highlight start-of-week';
         }
-        if (date.getTime() === endDate.getTime()) {
+        if (date.toDateString() === endDate.toDateString()) {
           return 'highlight end-of-week';
         }
         return 'highlight';
@@ -210,7 +217,7 @@ const ScheduleCalendar: FC = () => {
 
   return (
     <StyledCalendarDiv>
-      <StyledCalendar
+      <Calendar
         value={selectedDate}
         onChange={handleDateChange}
         formatDay={(locale, date) => dayjs(date).format('D')}
