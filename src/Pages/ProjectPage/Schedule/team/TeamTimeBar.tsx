@@ -1,5 +1,5 @@
-import React from "react";
-import { ScheduleItem } from "#/Types/scheduletype";
+import React from 'react';
+import { ScheduleItem } from '#/Types/scheduletype';
 
 interface TeamTimeBarProps {
   hours: number[];
@@ -7,13 +7,19 @@ interface TeamTimeBarProps {
   memberCount: number;
 }
 
-const TeamTimeBar: React.FC<TeamTimeBarProps> = ({ hours, schedule, memberCount }) => {
+const TeamTimeBar: React.FC<TeamTimeBarProps> = ({
+  hours,
+  schedule,
+  memberCount,
+}) => {
   const totalWidth = hours.length * 40;
 
   const getColor = (count: number) => {
-    const baseColor = "#633AE2";
+    const baseColor = '#633AE2';
     const opacity = count / memberCount;
-    return `${baseColor}${Math.round(opacity * 255).toString(16).padStart(2, "0")}`;
+    return `${baseColor}${Math.round(opacity * 255)
+      .toString(16)
+      .padStart(2, '0')}`;
   };
 
   const getMemberCountAtTime = (hour: number, minute: number) => {
@@ -30,57 +36,109 @@ const TeamTimeBar: React.FC<TeamTimeBarProps> = ({ hours, schedule, memberCount 
     <div
       style={{
         width: `${totalWidth}px`,
-        height: "29.804px",
-        backgroundColor: "transparent",
-        overflow: "hidden",
-        position: "relative",
-        display: "flex",
+        height: '29.804px',
+        backgroundColor: 'transparent',
+        overflow: 'hidden',
+        position: 'relative',
+        display: 'flex',
       }}
     >
-      {hours.map((hour) => (
-        <div
-          key={hour}
-          style={{
-            width: "40px",
-            height: "100%",
-            backgroundColor: "#D9D9D9",
-            position: "relative",
-            borderRadius: "20px",
-            overflow: "hidden",
-            border: "1px solid #7D7D7D",
-            boxSizing: "border-box",
-          }}
-        >
+      {hours.map((hour) => {
+        const isColoredFirstHalf = getMemberCountAtTime(hour, 0) > 0;
+        const isColoredSecondHalf = getMemberCountAtTime(hour, 30) > 0;
+
+        return (
           <div
+            key={hour}
             style={{
-              position: "absolute",
-              top: 0,
-              left: "50%",
-              width: "0.5px",
-              height: "100%",
-              borderLeft: "1px dashed #a4a4a4",
-              transform: "translateX(-50%)",
+              width: '40px',
+              height: '100%',
+              backgroundColor: '#D9D9D9',
+              position: 'relative',
+              borderRadius: '20px',
+              border:
+                getMemberCountAtTime(hour, 0) === memberCount &&
+                getMemberCountAtTime(hour, 30) === memberCount
+                  ? '1px solid #000000'
+                  : '1px solid #7D7D7D',
+              overflow: 'hidden',
+              boxSizing: 'border-box',
             }}
-          />
-          {Array.from({ length: 2 }, (_, index) => {
-            const minute = index * 30;
-            return (
-              <div
-                key={minute}
-                style={{
-                  position: "absolute",
-                  top: 0,
-                  left: `${(minute / 60) * 100}%`,
-                  width: "50%",
-                  height: "100%",
-                  backgroundColor: getColor(getMemberCountAtTime(hour, minute)),
-                  boxSizing: "border-box",
-                }}
-              />
-            );
-          })}
-        </div>
-      ))}
+          >
+            <div
+              style={{
+                position: 'absolute',
+                top: 0,
+                left: '50%',
+                width: '0.5px',
+                height: '100%',
+                borderLeft: '1px dashed #a4a4a4',
+                transform: 'translateX(-50%)',
+              }}
+            />
+            <div
+              style={{
+                position: 'absolute',
+                top: 0,
+                left: '0%',
+                width: '50%',
+                height: '100%',
+                backgroundColor: isColoredFirstHalf
+                  ? getColor(getMemberCountAtTime(hour, 0))
+                  : 'transparent',
+                boxSizing: 'border-box',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              {isColoredFirstHalf && (
+                <div
+                  style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: '100%',
+                    width: '0.5px',
+                    height: '100%',
+                    borderLeft: '1px dashed #ffffff',
+                    transform: 'translateX(-50%)',
+                  }}
+                />
+              )}
+            </div>
+            <div
+              style={{
+                position: 'absolute',
+                top: 0,
+                left: '50%',
+                width: '50%',
+                height: '100%',
+                backgroundColor: isColoredSecondHalf
+                  ? getColor(getMemberCountAtTime(hour, 30))
+                  : 'transparent',
+                boxSizing: 'border-box',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              {isColoredSecondHalf && (
+                <div
+                  style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: '0%',
+                    width: '0.5px',
+                    height: '100%',
+                    borderLeft: '1px dashed #ffffff',
+                    transform: 'translateX(-50%)',
+                  }}
+                />
+              )}
+            </div>
+          </div>
+        );
+      })}
     </div>
   );
 };
