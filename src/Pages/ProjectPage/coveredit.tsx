@@ -72,7 +72,7 @@ const Color = styled.button`
     border-radius: 50%;
     margin: 0;
     padding: 0;
-    &: hover {
+    &:hover {
         cursor: pointer;
     }
 `;
