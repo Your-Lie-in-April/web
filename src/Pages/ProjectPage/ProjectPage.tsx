@@ -1,19 +1,22 @@
-import AfterLogin from '../Layouts/AfterLogin';
-import styled from 'styled-components';
-import { createGlobalStyle } from 'styled-components';
-import ProjectInfo from './ProjectInfo';
-import ProfileList from './ProfileList/ProfileList';
-import MySchedule from './Schedule/my/MySchedule';
-import TeamSchedule from './Schedule/team/TeamSchedule';
-import Alarm from './Alarm';
-import MemberSchedule from './Schedule/member/MemberSchedule';
-import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
+import { Http } from '#/constants/backendURL';
+import { DateProvider } from '#/hooks/context/dateContext';
+import { ProjectProvider } from '#/hooks/context/projectContext';
+import { MemberEntity } from '#/Types/membertype';
+import { ProjectEntity } from '#/Types/projecttype';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import { useState } from 'react';
+import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import styled, { createGlobalStyle } from 'styled-components';
+import AfterLogin from '../Layouts/AfterLogin';
+import Alarm from './Alarm';
+import ProfileList from './ProfileList/ProfileList';
+import ProjectInfo from './ProjectInfo';
 import MemberScheduleGrid from './Schedule/member/MemberScheduleGrid';
-import Info from '../ProjectMakePage/Info';
-import Project from '../MainPage/components/Project';
+import MySchedule from './Schedule/my/MySchedule';
 import ScheduleCalendar from './Schedule/schedulecalendar';
+import TeamSchedule from './Schedule/team/TeamSchedule';
+
 const GlobalStyle = createGlobalStyle`
   body {
     margin: 0;
@@ -27,151 +30,189 @@ const GlobalStyle = createGlobalStyle`
 `;
 
 const Divider = styled.div`
-    width: 100vw;
-    height: 20px;
-    background-color: #212121;
+  width: 100%;
+  height: 20px;
+  background-color: #212121;
 `;
 
 const Box = styled.div`
-    display: flex;
-    flex-direction: column;
-    margin: 0 auto;
-    box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  box-sizing: border-box;
 `;
 
 const MainBox = styled.div`
-    display: flex;
-    gap: 22px;
+  display: flex;
+  gap: 22px;
 `;
 
 const MemTimeBtn = styled.button`
-    width: 176px;
-    height: 40px;
-    display: flex;
-    padding: 0;
-    align-items: center;
-    justify-content: center;
-    gap: 2px;
+  width: 176px;
+  height: 40px;
+  display: flex;
+  padding: 0;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
 
-    border-radius: 30px;
-    background: #212121;
-    color: #ffffff;
-    font-family: Pretendard;
-    font-size: 20px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: normal;
+  border-radius: 30px;
+  background: #212121;
+  color: #ffffff;
+  font-family: Pretendard;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
 
-    .icon {
-        width: 22px;
-        height: 22px;
-    }
+  .icon {
+    width: 22px;
+    height: 22px;
+  }
 `;
-const StyledCalendarWrapper = styled.div`
-    .react-calendar__tile {
-        padding: 3px;
-        font-size: 24px;
-    }
-    &--active {
-        background-color: inherit;
-        border-radius: 0;
-    }
-    .react-calendar {
-        width: 290px;
-        height: 294px;
-        border-radius: 10px;
-        background: #fbfbfb;
-        box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.25);
-        font-family: Arial, Helvetica, sans-serif;
-        line-height: normal;
-    }
-    .react-calendar__month-view__weekdays {
-        text-align: center;
-        text-transform: uppercase;
-        font: inherit;
-        font-size: 0.75em;
-        font-weight: bold;
-        gap: 2px;
-        width: 279px;
-    }
-    .react-calendar__navigation {
-        display: flex;
-        height: 22px;
-        margin-bottom: 1em;
-    }
-`;
-const ProjectPage = () => {
-    const [seeMemTime, setSeeMemTime] = useState(true);
-    const [startDate, setStartDate] = useState<Date | null>(null);
-    const [endDate, setEndDate] = useState<Date | null>(null);
 
-    const toggleMemTime = () => {
-        setSeeMemTime(!seeMemTime);
+const ProjectPage: React.FC = () => {
+  const [seeMemTime, setSeeMemTime] = useState(true);
+  const [members, setMembers] = useState<MemberEntity[]>([]);
+  const [projectData, setProjectData] = useState<ProjectEntity | null>(null);
+  const { projectId } = useParams<{ projectId: string }>();
+  const [isEditModal, setIsEditModal] = useState(false);
+  const navigate = useNavigate();
+
+  const toggleMemTime = () => {
+    setSeeMemTime(!seeMemTime);
+  };
+
+  useEffect(() => {
+    const accessToken = localStorage.getItem('access_token');
+    if (!accessToken) {
+      navigate('/login');
+      return;
+    }
+    const fetchMember = async () => {
+      try {
+        const response = await fetch(
+          `${Http}/v1/projects/${projectId}/members`,
+          {
+            method: 'GET',
+            headers: {
+              Accept: '*/*',
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch pinned projects');
+        }
+
+        const data = await response.json();
+        console.log('멤버', data.data);
+        setMembers(data.data);
+      } catch (error) {
+        console.error(error);
+      }
     };
+    fetchMember();
+  }, [projectId]);
 
-    return (
-        <>
-            <GlobalStyle />
+  useEffect(() => {
+    const accessToken = localStorage.getItem('access_token');
+    const fetchProjectData = async () => {
+      const url = `${Http}/v1/projects/${projectId}`;
+      const headers = {
+        Accept: '*/*',
+        Authorization: `Bearer ${accessToken}`,
+      };
+
+      try {
+        const response = await fetch(url, { headers });
+        if (!response.ok) {
+          throw new Error('데이터 가져오기 실패');
+        }
+        const data = await response.json();
+        setProjectData(data.data);
+        console.log('프로젝트 데이터:', data);
+      } catch (error) {
+        console.error('API 요청 중 에러 발생:', error);
+      }
+    };
+    fetchProjectData();
+  }, [projectId]);
+
+  return (
+    <ProjectProvider>
+      <DateProvider>
+        <GlobalStyle />
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '32px',
+            width: '100%',
+          }}
+        >
+          <div>
+            <AfterLogin />
+            <Divider />
+            <ProjectInfo projectData={projectData} />
+          </div>
+          <Box>
             <div
-                style={{
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '24px',
+                alignItems: 'center',
+              }}
+            >
+              <MainBox>
+                <ProfileList
+                  projectId={projectId}
+                  members={members}
+                  projectData={projectData}
+                />
+                <div
+                  style={{
                     display: 'flex',
                     flexDirection: 'column',
-                    gap: '32px',
-                    width: '100vw',
-                    margin: '0 auto',
-                }}
-            >
-                <div>
-                    <AfterLogin />
-                    <Divider />
-                    <ProjectInfo />
+                    gap: '12px',
+                  }}
+                >
+                  <TeamSchedule isEditModal={isEditModal} />
+                  <MySchedule
+                    isEditModal={isEditModal}
+                    setIsEditModal={setIsEditModal}
+                  />
                 </div>
-                <Box>
-                    <div
-                        style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            gap: '24px',
-                            alignItems: 'center',
-                        }}
-                    >
-                        <MainBox>
-                            <ProfileList />
-                            <div
-                                style={{
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    gap: '12px',
-                                }}
-                            >
-                                <TeamSchedule />
-                                <MySchedule />
-                            </div>
-                            <div
-                                style={{
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    gap: '12px',
-                                }}
-                            >
-                                <div style={{ position: 'relative', left: '-50px' }}>
-                                    <StyledCalendarWrapper style={{ width: '20px' }}>
-                                        <ScheduleCalendar startDate={startDate} endDate={endDate} selectRange={false} />
-                                    </StyledCalendarWrapper>
-                                </div>
-                                <Alarm />
-                            </div>
-                        </MainBox>
-                        <MemTimeBtn onClick={toggleMemTime}>
-                            {seeMemTime ? '멤버 시간표 닫기' : '멤버 시간표 열기'}
-                            {seeMemTime ? <ArrowDropUpIcon className="icon" /> : <ArrowDropDownIcon className="icon" />}
-                        </MemTimeBtn>
-                        {seeMemTime && <MemberScheduleGrid />}
-                    </div>
-                </Box>
+                <div
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '12px',
+                  }}
+                >
+                  <ScheduleCalendar />
+                  <Alarm />
+                </div>
+              </MainBox>
+              <MemTimeBtn onClick={toggleMemTime}>
+                {seeMemTime ? '멤버 시간표 닫기' : '멤버 시간표 열기'}
+                {seeMemTime ? (
+                  <ArrowDropUpIcon className='icon' />
+                ) : (
+                  <ArrowDropDownIcon className='icon' />
+                )}
+              </MemTimeBtn>
+              {seeMemTime && (
+                <MemberScheduleGrid projectId={projectId} members={members} />
+              )}
             </div>
-            <div style={{ height: '400px' }}></div>
-        </>
-    );
+          </Box>
+        </div>
+        <div style={{ height: '400px' }}></div>
+      </DateProvider>
+    </ProjectProvider>
+  );
 };
 export default ProjectPage;

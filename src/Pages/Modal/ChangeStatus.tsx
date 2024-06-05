@@ -1,9 +1,10 @@
-import styled from 'styled-components';
-import { ModalBlackOut, ModalContainer } from './ModalCommon';
-import ModalPortal from '../../utils/ModalPotal';
-import { useUserContext } from '../MainPage/MainPage';
-import { useState } from 'react';
 import { Http } from '#/constants/backendURL';
+import ModalPortal from '#/utils/ModalPotal';
+import useScrollLock from '#/utils/useScrollLock';
+import { useState } from 'react';
+import styled from 'styled-components';
+import { useUserContext } from '../MainPage/MainPage';
+import { ModalBlackOut, ModalContainer } from './ModalCommon';
 
 const Box = styled.div`
     width: 500px;
@@ -42,6 +43,7 @@ const StatusField = styled.input`
     box-sizing: border-box;
     border: none;
     outline: none;
+    text-align: center;
 `;
 
 const ButtonsContainer = styled.div`
@@ -65,7 +67,8 @@ const CommonButton = styled.button`
     line-height: normal;
     color: #ffffff;
 
-    &: focus {
+    &:focus {
+        border: none;
         outline: none;
     }
 `;
@@ -79,10 +82,14 @@ const CancelBtn = styled(CommonButton)`
 `;
 
 interface ChangeStatusProps {
+    editStatusModal: boolean;
     onSetEditStatusModal: () => void;
 }
 
-const ChangeStatus: React.FC<ChangeStatusProps> = ({ onSetEditStatusModal }) => {
+const ChangeStatus: React.FC<ChangeStatusProps> = ({
+    editStatusModal,
+    onSetEditStatusModal,
+}) => {
     const { userData, setUserData } = useUserContext();
     const [newState, setNewState] = useState(userData?.state || '');
     const accessToken = localStorage.getItem('access_token');
@@ -112,42 +119,58 @@ const ChangeStatus: React.FC<ChangeStatusProps> = ({ onSetEditStatusModal }) => 
         }
     };
 
+    useScrollLock(editStatusModal);
+
     return (
-        <ModalPortal>
-            <ModalBlackOut />
-            <ModalContainer>
-                <Box>
-                    <div
-                        style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'center',
-                            gap: '19px',
-                            width: '100%',
-                            height: '100%',
-                        }}
-                    >
-                        <div
-                            style={{
-                                display: 'flex',
-                                flexDirection: 'column',
-                                alignItems: 'center',
-                                gap: '31px',
-                                width: '100%',
-                                height: '100%',
-                            }}
-                        >
-                            <Title>상태메시지를 작성해주세요</Title>
-                            <StatusField type="text" placeholder={userData?.state} onChange={handleStatusChange} />
-                        </div>
-                        <ButtonsContainer style={{ alignSelf: 'flex-end' }}>
-                            <ConfirmBtn onClick={updateStatus}>확인</ConfirmBtn>
-                            <CancelBtn onClick={onSetEditStatusModal}>취소</CancelBtn>
-                        </ButtonsContainer>
-                    </div>
-                </Box>
-            </ModalContainer>
-        </ModalPortal>
+        <>
+            {editStatusModal && (
+                <ModalPortal>
+                    <ModalBlackOut onClick={onSetEditStatusModal} />
+                    <ModalContainer>
+                        <Box>
+                            <div
+                                style={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'center',
+                                    gap: '19px',
+                                    width: '100%',
+                                    height: '100%',
+                                }}
+                            >
+                                <div
+                                    style={{
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        alignItems: 'center',
+                                        gap: '31px',
+                                        width: '100%',
+                                        height: '100%',
+                                    }}
+                                >
+                                    <Title>상태메시지를 작성해주세요</Title>
+                                    <StatusField
+                                        type="text"
+                                        placeholder={userData?.state}
+                                        onChange={handleStatusChange}
+                                    />
+                                </div>
+                                <ButtonsContainer
+                                    style={{ alignSelf: 'flex-end' }}
+                                >
+                                    <ConfirmBtn onClick={updateStatus}>
+                                        확인
+                                    </ConfirmBtn>
+                                    <CancelBtn onClick={onSetEditStatusModal}>
+                                        취소
+                                    </CancelBtn>
+                                </ButtonsContainer>
+                            </div>
+                        </Box>
+                    </ModalContainer>
+                </ModalPortal>
+            )}
+        </>
     );
 };
 export default ChangeStatus;

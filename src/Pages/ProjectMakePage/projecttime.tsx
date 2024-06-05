@@ -1,9 +1,17 @@
-import React, { FC, useState, useRef, useEffect } from 'react';
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { ko } from 'date-fns/locale/ko';
+import {
+    Dispatch,
+    FC,
+    SetStateAction,
+    useEffect,
+    useRef,
+    useState,
+} from 'react';
 import ReactDatePicker from 'react-datepicker';
 import styled from 'styled-components';
-import { ko } from 'date-fns/locale/ko';
 import '/src/styles/projecttime.css';
-import { time } from 'console';
 
 const ProjectTimeContainer = styled.div`
     display: flex;
@@ -15,11 +23,13 @@ const DateContainer = styled.div`
     flex-direction: column;
     align-items: center;
     margin: 0 20px;
-   
+    justify-content: center;
+    gap: 8px;
 `;
 
 const SDatePicker = styled(ReactDatePicker)`
-    width: 166px;
+    width: 208px;
+    height: 41px;
     padding: 4px;
     font-size: 28px;
     font-weight: 400;
@@ -27,15 +37,25 @@ const SDatePicker = styled(ReactDatePicker)`
     background: #f5f5f5;
     text-align: center;
     display: flex;
-    margin-left: 14px;
+
+    box-sizing: border-box;
 
     &:hover {
         cursor: pointer;
     }
+
+    color: #000000;
+    text-align: center;
+    font-family: Pretendard;
+    font-size: 28px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
 `;
 
 const TimePicker = styled.div`
-    width: 178px;
+    width: 200px;
+    height: 33px;
     font-size: 28px;
     height: 40px;
     border-radius: 20px;
@@ -47,10 +67,18 @@ const TimePicker = styled.div`
     margin: auto;
     cursor: pointer;
     border: none;
+
+    color: #000000;
+    text-align: center;
+    font-family: Pretendard;
+    font-size: 28px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
 `;
 
 const TimePickerContainer = styled.ul`
-    width: 178px;
+    width: 208px;
     height: 124px;
     font-size: 28px;
     border-radius: 5px;
@@ -67,7 +95,7 @@ const TimePickerContainer = styled.ul`
 
 const TimeOption = styled.li`
     width: 100%;
-    height: 40px;
+    height: 28px;
     cursor: pointer;
     font-size: 24px;
     line-height: 28px;
@@ -76,6 +104,11 @@ const TimeOption = styled.li`
         background-color: #633ae2;
         color: #fff;
     }
+    font-family: Pretendard;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 300;
+    line-height: 28px;
 `;
 
 const Text = styled.div`
@@ -86,6 +119,7 @@ const Text = styled.div`
     line-height: normal;
     margin-top: 42px;
     margin: auto;
+    text-align: center;
 `;
 
 const Separator = styled.span`
@@ -131,27 +165,45 @@ const Weekend = styled.div<{ selected: boolean }>`
     }
 `;
 
-type ProjectTimeProps = {
+interface ProjectTimeProps {
     startDate: Date | null;
     endDate: Date | null;
-    onDateChange?: (startDate: Date | null, endDate: Date | null) => void;
-};
+    onDateChange: (start: Date | null, end: Date | null) => void;
+    starttime: string;
+    setStartTime: Dispatch<SetStateAction<string>>;
+    endtime: string;
+    setEndTime: Dispatch<SetStateAction<string>>;
+    selectedDays: string[];
+    setSelectedDays: Dispatch<SetStateAction<string[]>>;
+}
 
 const ProjectTime: FC<ProjectTimeProps> = ({
     startDate,
     endDate,
     onDateChange,
+    starttime,
+    setStartTime,
+    endtime,
+    setEndTime,
+    selectedDays,
+    setSelectedDays,
 }) => {
-    const [selectedDays, setSelectedDays] = useState<number[]>([]);
     const [isStartOpen, setIsStartOpen] = useState<boolean>(false);
     const [isEndOpen, setIsEndOpen] = useState<boolean>(false);
-    const [starttime, setStartTime] = useState('AM 00:00');
-    const [endtime, setEndTime] = useState('AM 00:00');
     const startDropdownRef = useRef<HTMLDivElement>(null);
     const endDropdownRef = useRef<HTMLDivElement>(null);
+    const dayNames = [
+        'SUNDAY',
+        'MONDAY',
+        'TUESDAY',
+        'WEDNESDAY',
+        'THURSDAY',
+        'FRIDAY',
+        'SATURDAY',
+    ];
 
     const Times = [];
-    for (let hour = 0; hour < 24; hour++) {
+    for (let hour = 9; hour < 24; hour++) {
         const ampm = hour < 12 ? 'AM' : 'PM';
         const displayHour = hour === 0 ? 0 : hour > 12 ? hour - 12 : hour;
         for (let minute = 0; minute < 60; minute += 30) {
@@ -168,13 +220,18 @@ const ProjectTime: FC<ProjectTimeProps> = ({
         }
     }
 
-    const toggleWeekend = (dayIndex: number) => {
-        if (selectedDays.includes(dayIndex)) {
-            setSelectedDays(selectedDays.filter((day) => day !== dayIndex));
-        } else {
-            setSelectedDays([...selectedDays, dayIndex]);
-        }
-        onDateChange?.(startDate, endDate);
+    const toggleWeekend = (day: string) => {
+        console.log(`Toggling day: ${day}`);
+
+        setSelectedDays((currentDays) => {
+            if (currentDays.includes(day)) {
+                const newSelectedDays = currentDays.filter((d) => d !== day);
+                return newSelectedDays;
+            } else {
+                const newSelectedDays = [...currentDays, day];
+                return newSelectedDays;
+            }
+        });
     };
 
     useEffect(() => {
@@ -257,13 +314,13 @@ const ProjectTime: FC<ProjectTimeProps> = ({
             <MakeWeekend>
                 <Text>생성할 요일</Text>
                 <WeekendContainer>
-                    {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((day, index) => (
+                    {dayNames.map((day, index) => (
                         <Weekend
                             key={index}
-                            selected={selectedDays.includes(index)}
-                            onClick={() => toggleWeekend(index)}
+                            selected={selectedDays.includes(day)}
+                            onClick={() => toggleWeekend(day)}
                         >
-                            {day}
+                            {day.substring(0, 1)}
                         </Weekend>
                     ))}
                 </WeekendContainer>
@@ -281,13 +338,29 @@ const ProjectTime: FC<ProjectTimeProps> = ({
                 <DateContainer style={{ gap: '4px' }}>
                     <Text>시간표 시작시간</Text>
                     <TimePicker
-                        style={{ marginTop: '4px' }}
+                        style={{
+                            marginTop: '4px',
+                            marginLeft: '4px',
+                            display: 'flex',
+                            gap: '12px',
+                            padding: '4px',
+                            boxSizing: 'border-box',
+                        }}
                         onClick={startSelect}
                     >
-                        {starttime}
+                        <div style={{ width: '146px' }}>{starttime}</div>
+                        {!isStartOpen && (
+                            <ExpandMoreIcon sx={{ fontSize: '22px' }} />
+                        )}
+                        {isStartOpen && (
+                            <ExpandLessIcon sx={{ fontSize: '22px' }} />
+                        )}
                     </TimePicker>
+
                     {isStartOpen && (
-                        <TimePickerContainer>
+                        <TimePickerContainer
+                            style={{ position: 'absolute', marginTop: '4px' }}
+                        >
                             {Times.map((time, index) => (
                                 <TimeOption
                                     key={index}
@@ -309,13 +382,28 @@ const ProjectTime: FC<ProjectTimeProps> = ({
                 <DateContainer style={{ gap: '4px' }}>
                     <Text>시간표 종료시간</Text>
                     <TimePicker
-                        style={{ marginTop: '4px' }}
+                        style={{
+                            marginTop: '4px',
+                            marginLeft: '4px',
+                            display: 'flex',
+                            gap: '12px',
+                            padding: '4px',
+                            boxSizing: 'border-box',
+                        }}
                         onClick={endSelect}
                     >
-                        {endtime}
+                        <div style={{ width: '146px' }}>{endtime}</div>
+                        {!isEndOpen && (
+                            <ExpandMoreIcon sx={{ fontSize: '22px' }} />
+                        )}
+                        {isEndOpen && (
+                            <ExpandLessIcon sx={{ fontSize: '22px' }} />
+                        )}
                     </TimePicker>
                     {isEndOpen && (
-                        <TimePickerContainer>
+                        <TimePickerContainer
+                            style={{ position: 'absolute', marginTop: '4px' }}
+                        >
                             {Times.map((time, index) => (
                                 <TimeOption
                                     key={index}

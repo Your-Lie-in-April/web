@@ -1,7 +1,10 @@
+import { Http } from '#/constants/backendURL';
+import { ProjectEntity } from '#/Types/projecttype';
+import ModalPortal from '#/utils/ModalPotal';
+import useScrollLock from '#/utils/useScrollLock';
 import { useState } from 'react';
 import styled from 'styled-components';
 import ConfirmCopyLink from './ConfirmCopyLink';
-import ModalPortal from '../../utils/ModalPotal';
 
 interface CommonButtonProps {
     primary?: boolean;
@@ -15,7 +18,7 @@ const ModalBlackOut = styled.div<{ isVisible: boolean }>`
     left: 0;
     top: 0;
     background: rgba(0, 0, 0, ${({ isVisible }) => (isVisible ? '0.5' : '0')});
-    z-index: 1;
+    z-index: 100;
     transition: background 1s ease;
 `;
 
@@ -64,7 +67,7 @@ const InviteField = styled.input`
     padding: 9px 16px;
     box-sizing: border-box;
     text-align: center;
-    padding: 9px 0px;
+    padding: 9px;
     justify-content: center;
     align-items: center;
     border: none;
@@ -92,31 +95,61 @@ const CommonButton = styled.button<CommonButtonProps>`
     color: #ffffff;
     background-color: ${(props) => (props.primary ? '#633AE2' : '#d9d9d9')};
 
-    &: focus {
+    &:focus {
         border: none;
         outline: none;
     }
 `;
+interface InvitationModalProps {
+    projectId: string | undefined;
+    projectData: ProjectEntity | null;
+    toggleBtn: () => void;
+}
 
-const InvitationModal = () => {
+const InvitationModal: React.FC<InvitationModalProps> = ({
+    projectData,
+    projectId,
+    toggleBtn,
+}) => {
     const [link, setLink] = useState<string>('');
+    const [isModalOpen, setIsModalOpen] = useState<boolean>(true);
     const [isBtnClick, setIsBtnClick] = useState<boolean>(false);
     const [isVisible, setIsVisible] = useState<boolean>(true);
     const [showConfirmCopyLink, setShowConfirmCopyLink] =
         useState<boolean>(false);
     const [isModalCompleteHidden, setIsModalCompleteHidden] =
         useState<boolean>(false);
+    const accessToken = localStorage.getItem('access_token');
 
-    // 링크 생성 로직
-    // 수정필요**
-    const generateLink = () => {
-        setIsBtnClick(false);
-        const generatedLink = '프로젝트 페이지 url https://www.example.com';
-        setLink(generatedLink);
+    const makeInvitation = async () => {
+        try {
+            const response = await fetch(
+                `${Http}/v1/projects/${projectId}/invitation`,
+                {
+                    method: 'POST',
+                    headers: {
+                        Accept: '*/*',
+                        Authorization: `Bearer ${accessToken}`,
+                    },
+                }
+            );
+
+            if (!response.ok) {
+                throw new Error('회원 초대 링크 생성 실패');
+            }
+
+            const data = await response.json();
+            console.log('링크', data.data);
+            setLink(`${Http}/v1/invitation/` + data.data);
+        } catch (error) {
+            console.error(error);
+        }
     };
 
-    const clickBack = () => {
-        setIsVisible(false);
+    // 링크 생성 로직
+    const generateLink = () => {
+        setIsBtnClick(false);
+        makeInvitation();
     };
 
     // 복사 버튼 클릭시 모달 닫기
@@ -126,6 +159,7 @@ const InvitationModal = () => {
         setTimeout(() => {
             setIsModalCompleteHidden(true);
             setShowConfirmCopyLink(true);
+            setIsModalOpen(false);
             setTimeout(() => {}, 100);
         }, 1000);
     };
@@ -140,12 +174,15 @@ const InvitationModal = () => {
             alert('초대코드 복사에 실패했습니다😭');
         }
     };
+    console.log('인바이트모달', projectData);
+
+    useScrollLock(isModalOpen);
 
     return (
         <>
             {!isModalCompleteHidden && (
                 <ModalPortal>
-                    <ModalBlackOut isVisible={isVisible} onClick={clickBack} />
+                    <ModalBlackOut isVisible={isVisible} onClick={toggleBtn} />
                     <ModalContainer isVisible={isVisible}>
                         <Box>
                             <div
@@ -168,7 +205,7 @@ const InvitationModal = () => {
                                         height: '100%',
                                     }}
                                 >
-                                    <Title>프로젝트명</Title>
+                                    <Title>{projectData?.title}</Title>
                                     <InviteField value={link} readOnly />
                                 </div>
                                 <ButtonsContainer

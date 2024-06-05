@@ -1,6 +1,7 @@
-import styled from 'styled-components';
+import { MemberEntity } from '#/Types/membertype';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import { useState } from 'react';
+import styled from 'styled-components';
 import DeleteMember from '../../Modal/DeleteMember';
 
 const MemberProfileBox = styled.div`
@@ -17,13 +18,24 @@ const MemberProfileDiv = styled.div`
   display: flex;
   flex-direction: row;
   gap: 8px;
+
+  position: relative;
 `;
 
-const MemberImg = styled.image`
+const MemberImg = styled.div<{ hasBorder: boolean }>`
   width: 46px;
   height: 46px;
   border-radius: 50%;
   background: #d9d9d9;
+  box-sizing: border-box;
+  overflow: hidden;
+  border: ${(props) => (props.hasBorder ? '2px solid #633ae2' : 'none')};
+`;
+
+const StyledImage = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 `;
 
 const CommonText = styled.div`
@@ -41,59 +53,77 @@ const DeleteBtn = styled(RemoveCircleOutlineIcon)`
   color: #d9d9d9;
   align-self: center;
 
+  position: absolute;
+  right: 5px;
+
   &:hover {
     color: #eb5757;
     cursor: pointer;
   }
 `;
-
-const MemberProfile = ({ showDeleteBtn }: { showDeleteBtn: boolean }) => {
+const defaultImg = 'src/pics/default.png';
+const MemberProfile = ({
+  showDeleteBtn,
+  member,
+  isCurrentUser,
+}: {
+  showDeleteBtn: boolean;
+  member: MemberEntity;
+  isCurrentUser: boolean;
+}) => {
   const [deleteMemModal, SetDeleteMemModal] = useState(false);
+  const [selectedMember, setSelectedMember] = useState<MemberEntity | null>(
+    null
+  );
 
   const onSetDeleteMemModal = () => {
     SetDeleteMemModal((prev) => !prev);
+    setSelectedMember(member);
   };
 
   return (
     <>
       <MemberProfileBox>
         <MemberProfileDiv>
-          <MemberImg />
+          <MemberImg hasBorder={isCurrentUser}>
+            <StyledImage
+              src={member?.profileImageUrl || defaultImg}
+              alt='Profile Image'
+            />
+          </MemberImg>
+
           <div
             style={{
               display: 'flex',
-              flex: '1',
-              alignContent: 'center',
-              justifyContent: 'space-between',
+              flexDirection: 'column',
+              gap: '7px',
+              justifyContent: 'center',
             }}
           >
-            <div
+            <CommonText>{member?.nickname}</CommonText>
+            <CommonText
               style={{
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '7px',
-                justifyContent: 'center',
+                fontSize: '10px',
+                fontWeight: '400',
               }}
             >
-              <CommonText>닉네임(본인)</CommonText>
-              <CommonText
-                style={{
-                  fontSize: '10px',
-                  fontWeight: '400',
-                }}
-              >
-                상태메세지
-              </CommonText>
-            </div>
-            <DeleteBtn
-              style={{ display: showDeleteBtn ? 'block' : 'none' }}
-              onClick={onSetDeleteMemModal}
-            />
+              {member?.state}
+            </CommonText>
           </div>
+          <DeleteBtn
+            style={{
+              display: showDeleteBtn ? 'block' : 'none',
+            }}
+            onClick={onSetDeleteMemModal}
+          />
         </MemberProfileDiv>
       </MemberProfileBox>
-      {deleteMemModal && (
-        <DeleteMember onSetDeleteMemModal={onSetDeleteMemModal} />
+      {selectedMember && (
+        <DeleteMember
+          onSetDeleteMemModal={onSetDeleteMemModal}
+          deleteMemModal={deleteMemModal}
+          member={selectedMember}
+        />
       )}
     </>
   );

@@ -1,23 +1,23 @@
-type ScheduleItem = {
-    startAt: string;
-    endAt: string;
+export type ScheduleItem = {
+  startTime: string;
+  endTime: string;
 };
 
 export type DaySchedule = {
-    dayOfWeek: string;
-    schedule: ScheduleItem[];
+  daysOfWeek: string;
+  schedule: ScheduleItem[];
 };
 
-type UserSchedule = {
-    nickname: string;
-    schedule: DaySchedule[];
+export type UserSchedule = {
+  nickname: string;
+  schedule: DaySchedule[];
 };
 
 export type ScheduleWeekResponse = UserSchedule;
 
 export type ScheduleCreateUpsateRequest = {
-    projectId: number;
-    schedule: DaySchedule[];
+  projectId: number;
+  schedule: DaySchedule[];
 };
 
 // GET /v1/schedules/all
@@ -26,11 +26,14 @@ export type ScheduleAllResDto = ScheduleWeekResponse[];
 
 // GET /v1/projects/{projectId}/schedules
 // 프로젝트 내 모든 사용자 시간표 조회시 응답객체
-export type ScheduleAllMembersResDto = ScheduleWeekResponse[];
+export type ScheduleAllMembersResDto = {
+  nickname: string;
+  schedule: DaySchedule[];
+};
 
 // GET /v1/projects/{projectId}/members/{memberId}/schedules
 // 프로젝트 내 특정 유저가 작성한 시간표 조회시 응답객체
-export type ScheduleMemberResDto = ScheduleWeekResponse;
+export type ScheduleMemberResDto = DaySchedule[];
 
 // POST /v1/projects/{projectId}/schedules
 // 프로젝트 생성시 응답객체
@@ -43,7 +46,7 @@ export type SchedulePutReqDto = ScheduleCreateUpsateRequest;
 // DELETE /v1/projects/{projectId}/schedules
 // 프로젝트 삭제시 응답객체
 export type SchdeuleDeleteReqDto = {
-    projectId: number;
-    startDate: Date;
-    endDate: Date;
+  projectId: number;
+  startDate: Date;
+  endDate: Date;
 };

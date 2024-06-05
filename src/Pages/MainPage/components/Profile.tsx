@@ -1,7 +1,3 @@
-import { Http } from '#/constants/backendURL';
-import { access } from 'fs';
-import { MemberEntity } from '../../../Types/membertype';
-import { FC, useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useUserContext } from '../MainPage';
 

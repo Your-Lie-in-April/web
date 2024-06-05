@@ -1,10 +1,12 @@
+import { useUserContext } from '#/Pages/MainPage/MainPage';
+import { MemberEntity } from '#/Types/membertype';
+import { ProjectEntity } from '#/Types/projecttype';
 import { useState } from 'react';
 import styled from 'styled-components';
-import MyProfile from './MyProfile';
-import MemberProfile from './MemberProfile';
-import LeaderProfile from './LeaderProfile';
-import InvitationModal from '../../Modal/InvitationModal';
 import InviteBtn from '../Buttons/InviteBtn';
+import LeaderProfile from './LeaderProfile';
+import MemberProfile from './MemberProfile';
+import MyProfile from './MyProfile';
 
 const Box = styled.div`
   width: 286px;
@@ -51,14 +53,25 @@ const MemberList = styled.div`
     background-color: transparent;
   }
 `;
+interface ProfileListProps {
+  projectId: string | undefined;
+  members: MemberEntity[];
+  projectData: ProjectEntity | null;
+}
 
-const ProfileList = () => {
+const ProfileList: React.FC<ProfileListProps> = ({
+  members,
+  projectId,
+  projectData,
+}) => {
   const [showDeleteBtn, setShowDeleteBtn] = useState(false);
-  const [showInviteModal, setShowInviteModal] = useState(false);
-
+  const privilegedMembers = members.filter((member) => member.isPrivileged);
   const toggleDeleteBtn = () => {
     setShowDeleteBtn((prev) => !prev);
   };
+
+  const { userData } = useUserContext();
+  const myId = userData?.memberId;
 
   return (
     <Box>
@@ -74,17 +87,27 @@ const ProfileList = () => {
           }}
         >
           <CommonText style={{ color: '#ffffff' }}>멤버</CommonText>
-          <InviteBtn />
+          <InviteBtn projectId={projectId} projectData={projectData} />
         </div>
         <MemberList>
-          <LeaderProfile toggleDeleteBtn={toggleDeleteBtn} />
-          <MemberProfile showDeleteBtn={showDeleteBtn} />
-          <MemberProfile showDeleteBtn={showDeleteBtn} />
-          <MemberProfile showDeleteBtn={showDeleteBtn} />
-          <MemberProfile showDeleteBtn={showDeleteBtn} />
-          <MemberProfile showDeleteBtn={showDeleteBtn} />
-          <MemberProfile showDeleteBtn={showDeleteBtn} />
-          <MemberProfile showDeleteBtn={showDeleteBtn} />
+          {privilegedMembers.map((member) => (
+            <LeaderProfile
+              key={member.memberId}
+              member={member}
+              toggleDeleteBtn={toggleDeleteBtn}
+              isCurrentUser={member.memberId === myId}
+            />
+          ))}
+          {members
+            .filter((member) => !member.isPrivileged)
+            .map((member) => (
+              <MemberProfile
+                key={member.memberId}
+                member={member}
+                showDeleteBtn={showDeleteBtn}
+                isCurrentUser={member.memberId === myId}
+              />
+            ))}
         </MemberList>
       </MemberListBox>
     </Box>

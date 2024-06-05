@@ -1,12 +1,13 @@
-import styled from 'styled-components';
+import { Http } from '#/constants/backendURL';
+import CancelIcon from '@mui/icons-material/Cancel';
+import InboxOutlinedIcon from '@mui/icons-material/InboxOutlined';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import PushPinOutlinedIcon from '@mui/icons-material/PushPinOutlined';
-import InboxOutlinedIcon from '@mui/icons-material/InboxOutlined';
-import CancelIcon from '@mui/icons-material/Cancel';
-import { useEffect, useState } from 'react';
-import LeaveProject from '../../Modal/LeaveProject';
-import { Http } from '#/constants/backendURL';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
 import { ProjectEntity } from '../../../Types/projecttype';
+import LeaveProject from '../../Modal/LeaveProject';
 
 interface MoreTextProps extends React.HTMLAttributes<HTMLDivElement> {
     isMove?: boolean;
@@ -18,7 +19,8 @@ const ProjectBox = styled.div`
     justify-content: flex-end;
     width: 300px;
     height: 300px;
-    background-color: #b79fff;
+    background-color: ${(props) =>
+        props.color ? `#${props.color}` : '#b79fff'};
     border-radius: 16px;
     display: flex;
     color: #ffffff;
@@ -43,6 +45,7 @@ const TextBox = styled.div`
     font-style: normal;
     line-height: normal;
     text-transform: uppercase;
+    cursor: pointer;
 `;
 
 const ProjectName = styled.div`
@@ -62,6 +65,8 @@ const DetailText = styled.div`
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
+    white-space: pre-wrap;
+    word-break: break-word;
 `;
 
 const StyledButton = styled.button`
@@ -69,8 +74,7 @@ const StyledButton = styled.button`
     border: none;
     padding: 0;
     cursor: pointer;
-
-    &: focus {
+    &:focus {
         border: none;
         outline: none;
     }
@@ -107,12 +111,11 @@ const MoreItem = styled.button`
     display: flex;
     flex-direction: column;
     align-items: center;
-    cursor: pointer;
     color: #7d7d7d;
     border: none;
     padding: 0;
     cursor: pointer;
-    &: focus {
+    &:focus {
         border: none;
         outline: none;
     }
@@ -145,7 +148,8 @@ const Project: React.FC<ProjectProps> = ({ project }) => {
     const [showMore, setShowMore] = useState<boolean>(false);
     const [isCancleBtn, setIsCancelBtn] = useState<boolean>(false);
     const [isPinned, setIsPinned] = useState<boolean>(false);
-    const accessToken = localStorage.getItem('access_token');
+    const [isStored, setIsStored] = useState<boolean>(false);
+    const navigate = useNavigate();
 
     const toggleMoreBtn = () => {
         setShowMore(!showMore);
@@ -157,27 +161,60 @@ const Project: React.FC<ProjectProps> = ({ project }) => {
 
     const handlePin = async () => {
         try {
-            const response = await fetch(`${Http}/v1/members/pin/${project.projectId}`, {
+            const accessToken = localStorage.getItem('access_token');
+            const url = `${Http}/v1/members/pin/${project.projectId}`;
+            console.log('Request URL:', url);
+            const response = await fetch(url, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
                     Authorization: `Bearer ${accessToken}`,
                     credentials: 'include',
                 },
-                body: JSON.stringify({ projectId: project.projectId }),
             });
+            console.log('Response:', response);
+
             if (!response.ok) throw new Error('뭔가 이상');
             setIsPinned(true);
             const result = await response.json();
             console.log('상단 고정 결과:', result);
+            window.alert('핀 설정에 성공했습니다.');
+            window.location.reload();
+        } catch (error) {
+            console.error('업데이트 실패:', error);
+        }
+    };
+  
+    const handleStore = async () => {
+        try {
+            const accessToken = localStorage.getItem('access_token');
+            const response = await fetch(
+                `${Http}/v1/members/storage/${project.projectId}`,
+                {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${accessToken}`,
+                        credentials: 'include',
+                    },
+                    body: JSON.stringify({ projectId: project.projectId }),
+                }
+            );
+            if (!response.ok) throw new Error('뭔가 이상');
+            setIsStored(true);
+            const result = await response.json();
+            console.log('보관함 결과:', result);
+            window.location.reload();
         } catch (error) {
             console.error('업데이트 실패:', error);
         }
     };
 
     return (
-        <ProjectBox>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+        <ProjectBox style={{ backgroundColor: project.color }}>
+            <div
+                style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}
+            >
                 <MoreDiv>
                     {showMore && (
                         <>
@@ -186,12 +223,14 @@ const Project: React.FC<ProjectProps> = ({ project }) => {
                             </StyledButton>
                             <MoreBox>
                                 <MoreItem onClick={handlePin}>
-                                    <PushPinOutlinedIcon sx={{ fontSize: 18 }} />
+                                    <PushPinOutlinedIcon
+                                        sx={{ fontSize: 18 }}
+                                    />
                                     <MoreText>상단고정</MoreText>
                                 </MoreItem>
-                                <MoreItem>
+                                <MoreItem onClick={handleStore}>
                                     <InboxOutlinedIcon sx={{ fontSize: 18 }} />
-                                    <MoreText isMove>보관함이동</MoreText>
+                                    <MoreText>보관함이동</MoreText>
                                 </MoreItem>
                             </MoreBox>
                         </>
@@ -200,14 +239,20 @@ const Project: React.FC<ProjectProps> = ({ project }) => {
                         <StyledMoreBtn sx={{ fontSize: 32 }} />
                     </StyledButton>
                 </MoreDiv>
-                <TextBox>
+                <TextBox
+                    onClick={() => navigate(`/project/${project.projectId}`)}
+                >
                     <ProjectName>{project.title}</ProjectName>
                     <DetailText>{project.description}</DetailText>
                 </TextBox>
             </div>
-            {isCancleBtn && <LeaveProject onClose={onClickCancelBtn} />}
+            <LeaveProject
+                projectId={project.projectId}
+                projectTitle = {project.title}
+                onClose={onClickCancelBtn}
+                isCancleBtn={isCancleBtn}
+            />
         </ProjectBox>
     );
 };
-
 export default Project;

@@ -1,4 +1,4 @@
-import { FC, useState, ChangeEvent } from 'react';
+import { ChangeEvent, Dispatch, FC, SetStateAction, useState } from 'react';
 import styled from 'styled-components';
 import Cover from './cover';
 
@@ -111,8 +111,9 @@ const Make = styled.button`
     align-items: center;
     justify-content: center;
     margin-top: 130px;
+    color : #000000;
 
-    &: hover {
+    &:hover {
         border-color: black;
     }
 
@@ -120,16 +121,19 @@ const Make = styled.button`
         outline: none;
     }
 `;
+interface InfoProps {
+    setContent: Dispatch<SetStateAction<string>>;
+    setTitle: Dispatch<SetStateAction<string>>;
+    setColor: Dispatch<SetStateAction<string>>;
+    setImg: Dispatch<SetStateAction<string>>;
+}
 
-const Info: FC = () => {
-    const [content, setContent] = useState<string>('');
+const Info: FC<InfoProps> = ({ setContent, setTitle, setColor, setImg }) => {
     const [isTitleClicked, setIsTitleClicked] = useState<boolean>(false);
     const [isContentClicked, setIsContentClicked] = useState<boolean>(false);
     const [isCoverClicked, setIsCoverClicked] = useState<boolean>(false);
     const [selectedColor, setSelectedColor] = useState<string | null>(null);
-    const [selectedImageUrl, setSelectedImageUrl] = useState<string | null>(
-        null
-    );
+    const [selectedImageUrl, setSelectedImageUrl] = useState<string | null>(null);
     const [selectedHex, setSelectedHex] = useState<string | null>(null);
 
     const handleTextareaChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
@@ -141,6 +145,10 @@ const Info: FC = () => {
         }
     };
 
+    const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setTitle(e.target.value);
+    };
+
     const toggleCover = () => {
         setIsCoverClicked((prevIsCoverClicked) => !prevIsCoverClicked);
     };
@@ -149,12 +157,14 @@ const Info: FC = () => {
         setSelectedColor(color);
         setSelectedImageUrl(null);
         setSelectedHex(null);
+        setColor(color);
     };
 
     const handleImageSelect = (url: string) => {
         setSelectedImageUrl(url);
         setSelectedColor(null);
         setSelectedHex(null);
+        setImg(url);
     };
 
     const handleHexSelect = (color: string) => {
@@ -183,25 +193,17 @@ const Info: FC = () => {
                             onBlur={() => {
                                 setIsTitleClicked(false);
                             }}
-                            placeholder={
-                                isTitleClicked === true
-                                    ? ''
-                                    : '프로젝트 제목을 작성해주세요'
-                            }
+                            onChange={handleTitleChange}
+                            placeholder={isTitleClicked === true ? '' : '프로젝트 제목을 작성해주세요'}
                         ></TitleText>
                     </Title>
                     <Content>
                         <ContentText
-                            value={content}
                             focused
                             onChange={handleTextareaChange}
                             onFocus={() => setIsContentClicked(true)}
                             onBlur={() => setIsContentClicked(false)}
-                            placeholder={
-                                isContentClicked === true
-                                    ? ''
-                                    : '프로젝트 내용을 작성해주세요'
-                            }
+                            placeholder={isContentClicked === true ? '' : '프로젝트 내용을 작성해주세요'}
                         />
                     </Content>
                 </TitleContainer>
@@ -219,6 +221,7 @@ const Info: FC = () => {
                                 onColorSelect={handleColorSelect}
                                 onImageSelect={handleImageSelect}
                                 onHexSelect={handleHexSelect}
+                                toggleCover={toggleCover}
                             />
                         </div>
                     )}

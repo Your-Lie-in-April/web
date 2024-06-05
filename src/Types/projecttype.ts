@@ -1,22 +1,16 @@
-import { MemberResDto } from '../apis/member';
-import { ScheduleWeekResponse } from '../apis/schedule';
+import { MemberResDto } from './membertype';
+import { ScheduleWeekResponse } from './scheduletype';
 
 export type ProjectEntity = {
     projectId: string;
     title: string;
     description: string;
-    startDate: Date;
-    endDate: Date;
-    startTime: Date;
-    endTime: Date;
-    mon: boolean;
-    tue: boolean;
-    wed: boolean;
-    thu: boolean;
-    fri: boolean;
-    sat: boolean;
-    sun: boolean;
-    isStored: boolean;
+    startDate?: Date | undefined;
+    endDate?: Date | undefined;
+    startTime?: Date | undefined;
+    endTime?: Date | undefined;
+    daysOfWeek?: string[];
+    isStored?: boolean;
     coverImageUrl: string | null;
     color: string;
 };
@@ -33,8 +27,8 @@ export type PinProjectResponse = {
     projectId: number;
     title: string;
     description: string;
-    startDate: Date;
-    endDate: Date;
+    startDate: number;
+    endDate: number;
     startTime: Date;
     endTime: Date;
     mon: boolean;
@@ -65,7 +59,6 @@ export type ProjectCreateUpdateRequest = {
     fri: boolean;
     sat: boolean;
     sun: boolean;
-    isStored: boolean;
     coverImageUrl: string | null;
     color: string;
 };
@@ -73,6 +66,10 @@ export type ProjectCreateUpdateRequest = {
 // GET /v1/projects/all
 // 프로젝트 전체 리스트를 조회했을 때 응답 객체 타입
 export type ProjectResDto = ProjectEntity[];
+
+// GET /v1/projects/{projectId}
+// 특정 프로젝트의 정보 조회시 응답객체
+export type ProjectInfoResDto = ProjectEntity;
 
 // GET /v1/projects/members/{memberId}
 // 유저가 소속된 프로젝트를 조회했을 때 응답객체
