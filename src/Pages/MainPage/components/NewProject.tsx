@@ -1,6 +1,6 @@
 import { FC } from 'react';
-import styled from 'styled-components';
 import { useNavigate } from 'react-router';
+import styled from 'styled-components';
 
 const NewProjectDiv = styled.div`
   width: 149px;

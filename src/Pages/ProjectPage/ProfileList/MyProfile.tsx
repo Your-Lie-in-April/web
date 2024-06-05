@@ -1,10 +1,9 @@
-import styled from 'styled-components';
-import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined';
-import { useEffect, useState } from 'react';
-import ChangeNickName from '../../Modal/ChangeNickname';
-import { useUserContext } from '#/Pages/MainPage/MainPage';
 import { Http } from '#/constants/backendURL';
 import { MemberEntity } from '#/Types/membertype';
+import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined';
+import { useEffect, useState } from 'react';
+import styled from 'styled-components';
+import ChangeNickName from '../../Modal/ChangeNickname';
 
 const MyProfileBox = styled.div`
     width: 100%;
@@ -51,7 +50,7 @@ const EditButton = styled.button`
     padding: 0;
     cursor: pointer;
 
-    &: focus {
+    &:focus {
         border: none;
         outline: none;
     }

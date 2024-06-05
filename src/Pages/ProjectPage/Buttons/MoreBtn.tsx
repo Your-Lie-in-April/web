@@ -1,10 +1,10 @@
-import styled from 'styled-components';
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-import SyncAltIcon from '@mui/icons-material/SyncAlt';
-import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
-import { useRef, useState, useLayoutEffect } from 'react';
 import TransferAuthModal from '#/Pages/Modal/TransferAuth';
 import ModalPortal from '#/utils/ModalPotal';
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
+import SyncAltIcon from '@mui/icons-material/SyncAlt';
+import { useLayoutEffect, useRef, useState } from 'react';
+import styled from 'styled-components';
 
 const EditMemberBtn = styled.button`
     background: none;

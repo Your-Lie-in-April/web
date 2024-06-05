@@ -1,9 +1,9 @@
-import styled from 'styled-components';
-import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
-import { ModalBlackOut, ModalContainer } from './ModalCommon';
 import { Http } from '#/constants/backendURL';
 import ModalPortal from '#/utils/ModalPotal';
 import useScrollLock from '#/utils/useScrollLock';
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+import styled from 'styled-components';
+import { ModalBlackOut, ModalContainer } from './ModalCommon';
 
 const Box = styled.div`
   width: 406px;

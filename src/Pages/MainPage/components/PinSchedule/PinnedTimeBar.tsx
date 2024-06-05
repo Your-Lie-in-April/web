@@ -1,5 +1,5 @@
-import React from 'react';
 import { ScheduleItem } from '#/Types/scheduletype';
+import React from 'react';
 
 interface PinnedTimeBarProps {
   hours: number[];

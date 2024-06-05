@@ -1,10 +1,10 @@
+import { Http } from '#/constants/backendURL';
+import { ProjectEntity } from '#/Types/projecttype';
+import ModalPortal from '#/utils/ModalPotal';
+import useScrollLock from '#/utils/useScrollLock';
 import { useState } from 'react';
 import styled from 'styled-components';
 import ConfirmCopyLink from './ConfirmCopyLink';
-import ModalPortal from '#/utils/ModalPotal';
-import { Http } from '#/constants/backendURL';
-import { ProjectEntity } from '#/Types/projecttype';
-import useScrollLock from '#/utils/useScrollLock';
 
 interface CommonButtonProps {
     primary?: boolean;

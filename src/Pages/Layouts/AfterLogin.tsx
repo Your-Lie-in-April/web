@@ -1,8 +1,8 @@
 import { FC, useState } from 'react';
-import styled from 'styled-components';
-import MyPageModal from '../Modal/MyPageModal';
 import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
 import ConfirmLogout from '../Modal/ConfirmLogout';
+import MyPageModal from '../Modal/MyPageModal';
 
 const AfterLoginDiv = styled.div`
   width: 100%;

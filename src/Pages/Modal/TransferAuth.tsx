@@ -1,3 +1,4 @@
+import { Http } from '#/constants/backendURL';
 import { MemberEntity } from '#/Types/membertype';
 import ModalPortal from '#/utils/ModalPotal';
 import useScrollLock from '#/utils/useScrollLock';
@@ -8,7 +9,6 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { ModalBlackOut, ModalContainer } from './ModalCommon';
-import { Http } from '#/constants/backendURL';
 
 const Box = styled.div`
     width: 406px;
