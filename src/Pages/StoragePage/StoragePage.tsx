@@ -6,6 +6,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { Http } from '#/constants/backendURL';
 import { ProjectThumbnailResponse } from '#/Types/projecttype';
 import Search from '../Layouts/Search';
+import { useNavigate } from 'react-router-dom';
 
 const GlobalStyle = createGlobalStyle`
 body {
@@ -41,6 +42,7 @@ const StoragePage = () => {
   const [hasMore, setHasMore] = useState<boolean>(true);
 
   const observer = useRef<IntersectionObserver | null>(null);
+  const navigate = useNavigate();
 
   const lastProjectRef = useCallback(
     (node: HTMLDivElement | null) => {
@@ -82,6 +84,9 @@ const StoragePage = () => {
           setSearchResults((prevProjects) => [...prevProjects, ...data.data]);
         }
         setHasMore(data.data.length > 0);
+      } else {
+        navigate('/login');
+        return;
       }
     } catch (error) {
       console.error('업데이트 실패:', error);
