@@ -22,14 +22,13 @@ const MemberProfileDiv = styled.div`
   position: relative;
 `;
 
-const MemberImg = styled.div<{ hasBorder: boolean }>`
+const MemberImg = styled.div`
   width: 46px;
   height: 46px;
   border-radius: 50%;
   background: #d9d9d9;
   box-sizing: border-box;
   overflow: hidden;
-  border: ${(props) => (props.hasBorder ? '2px solid #633ae2' : 'none')};
 `;
 
 const StyledImage = styled.img`
@@ -85,7 +84,7 @@ const MemberProfile = ({
     <>
       <MemberProfileBox>
         <MemberProfileDiv>
-          <MemberImg hasBorder={isCurrentUser}>
+          <MemberImg>
             <StyledImage
               src={member?.profileImageUrl || defaultImg}
               alt='Profile Image'
