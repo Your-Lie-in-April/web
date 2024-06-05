@@ -156,7 +156,7 @@ const DeleteProject: React.FC<DeleteProjectProps> = ({
                 >
                   <InfoCircleIcon sx={{ fontSize: '32px' }} />
                   <PeojectName>{title}</PeojectName>
-                  <Title>{title}을 삭제하겠습니까?</Title>
+                  <Title>해당 프로젝트를 삭제하겠습니까?</Title>
                 </div>
                 <ButtonsContainer style={{ alignSelf: 'flex-end' }}>
                   <ConfirmBtn onClick={onConfirmDelete}>확인</ConfirmBtn>
