@@ -18,7 +18,7 @@ const Logo = styled.div`
     position: relative;
     bottom: 14px;
     justify-content: center;
-    align-item: center;
+    align-items: center;
     white-space: nowrap;
     font-weight: 700;
     font-size: 32px;
@@ -35,7 +35,7 @@ const LogInDiv = styled.div`
 
 const LogInBtn = styled.button`
     box-sizing: border-box;
-
+    color: #000000;
     font-weight: 500;
     font-size: 22px;
 

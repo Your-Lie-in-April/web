@@ -8,6 +8,7 @@ import ModalPortal from '#/utils/ModalPotal';
 
 const EditMemberBtn = styled.button`
     background: none;
+    color : #000000;
     border: none;
     padding: 0;
     cursor: pointer;
