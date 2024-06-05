@@ -138,6 +138,7 @@ const EditMyTime: React.FC<EditMyTimeProps> = ({
                 const newSelection = { ...prevSelection };
                 if (newSelection[id]) {
                     delete newSelection[id];
+                    setFirstClickSlotState(false); 
                 } else {
                     newSelection[id] = { date, hour, minute };
                     setFirstClickSlotState(true);
@@ -169,6 +170,7 @@ const EditMyTime: React.FC<EditMyTimeProps> = ({
                     const newSelection = { ...prevSelection };
                     if (firstClickSlotState) {
                         newSelection[id] = { date, hour, minute };
+                        
                     } else {
                         delete newSelection[id];
                     }
