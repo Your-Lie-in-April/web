@@ -7,15 +7,37 @@ import Calendar from 'react-calendar';
 import styled from 'styled-components';
 
 const StyledCalendarDiv = styled.div`
-  
+  .react-calendar__tile--rangeStart {
+    border-top-right-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+    border-top-left-radius: 0px !important;
+    border-bottom-left-radius: 0px !important;
+  }
+
   // 오늘 날짜 스타일
   .react-calendar__tile--now {
     background: transparent;
     border-radius: 0;
   }
 
+  .selected-date {
+    background-color: #b79fff !important;
+    color: #ffffff !important;
+    border-radius: 0 !important;
+  }
+
+  .selected-date.highlight.start-of-week {
+    border-top-left-radius: 5px !important;
+    border-bottom-left-radius: 5px !important;
+  }
+
+  .selected-date.highlight.end-of-week {
+    border-top-right-radius: 5px !important;
+    border-bottom-right-radius: 5px !important;
+  }
+
   // 선택한 날짜 스타일
-  .react-calendar__tile--active {
+  .react-calendar__tile--active:not(.selected-date) {
     background: #633ae2;
     color: #ffffff;
     border: none;
@@ -146,9 +168,26 @@ const StyledCalendarDiv = styled.div`
     outline: none;
   }
 
+  // 월에서 날짜 선택 호버시
   .react-calendar__tile:hover {
     background-color: #633ae2;
     color: #ffffff;
+    cursor: pointer;
+    border-radius: 0;
+  }
+
+  // 달력에서 월 선택 호버시
+  .react-calendar__year-view__months__month:hover {
+    background-color: transparent;
+    color: #000000;
+  }
+
+  // 선택한 날짜 스타일
+  .react-calendar__tile.react-calendar__tile--active {
+    background: #fbfbfb;
+    color: #ffffff;
+    border: none;
+    outline: none;
     cursor: pointer;
     border-radius: 0;
   }
@@ -194,18 +233,32 @@ const ScheduleCalendar: FC = () => {
     return [startOfWeek.toDate(), endOfWeek.toDate()];
   }, [selectedDate]);
 
-  const tileClassName = ({ date }: { date: Date }) => {
+  const tileClassName = ({ date, view }: { date: Date; view: string }) => {
+    if (view === 'month' && selectedDate) {
+      const selected = dayjs(selectedDate);
+      const currentDate = dayjs(date);
+
+      if (currentDate.isSame(selected, 'day')) {
+        if (currentDate.isSame(selected.startOf('week'), 'day')) {
+          return 'selected-date highlight start-of-week';
+        } else if (currentDate.isSame(selected.endOf('week'), 'day')) {
+          return 'selected-date highlight end-of-week';
+        } else {
+          return 'selected-date highlight';
+        }
+      }
+    }
+
     if (startDate && endDate) {
       if (date >= startDate && date <= endDate) {
         if (date.toDateString() === startDate.toDateString()) {
           return 'highlight start-of-week';
-        }
-        if (date.toDateString() === endDate.toDateString()) {
+        } else if (date.toDateString() === endDate.toDateString()) {
           return 'highlight end-of-week';
-        }
-        return 'highlight';
+        } else return 'highlight';
       }
     }
+
     return null;
   };
 
@@ -230,17 +283,16 @@ const ScheduleCalendar: FC = () => {
         next2Label={null}
         prev2Label={null}
         minDetail='year'
-        selectRange={false}
         tileClassName={tileClassName}
         calendarType='gregory'
         prevLabel={
           <ArrowLeftIcon
-            style={{ fill: '#D9D9D9', width: '22px', height: '22px' }}
+            sx={{ fill: '#D9D9D9', width: '22px', height: '22px' }}
           />
         }
         nextLabel={
           <ArrowRightIcon
-            style={{ fill: '#D9D9D9', width: '22px', height: '22px' }}
+            sx={{ fill: '#D9D9D9', width: '22px', height: '22px' }}
           />
         }
       />
