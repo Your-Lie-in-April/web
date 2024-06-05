@@ -1,7 +1,6 @@
+import { MemberEntity } from '#/Types/membertype';
 import styled from 'styled-components';
 import MoreBtn from '../Buttons/MoreBtn';
-import { useUserContext } from '#/Pages/MainPage/MainPage';
-import { MemberEntity } from '#/Types/membertype';
 
 const LeaderProfileBox = styled.div`
     width: 100%;

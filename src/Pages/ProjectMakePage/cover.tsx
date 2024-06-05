@@ -1,9 +1,6 @@
-import { FC, useState, useCallback, Dispatch, SetStateAction } from 'react';
-import styled from 'styled-components';
+import { FC, useCallback, useState } from 'react';
 import { ChromePicker, ColorResult } from 'react-color';
-import { ProjectEntity } from '#/Types/projecttype';
-import { Http } from '#/constants/backendURL';
-import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
 
 const plus = (
     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
@@ -73,7 +70,7 @@ const Color = styled.button`
     border-radius: 50%;
     margin: 0;
     padding: 0;
-    &: hover {
+    &:hover {
         cursor: pointer;
     }
 `;
