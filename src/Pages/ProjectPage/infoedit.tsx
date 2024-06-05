@@ -1,7 +1,7 @@
-import { FC, useState, ChangeEvent, SetStateAction, Dispatch } from 'react';
+import { ProjectEntity } from '#/Types/projecttype';
+import { ChangeEvent, Dispatch, FC, SetStateAction, useState } from 'react';
 import styled from 'styled-components';
 import CoverEdit from './coveredit';
-import { ProjectEntity } from '#/Types/projecttype';
 
 interface ContentTextProps {
     focused: boolean;
@@ -113,7 +113,7 @@ const Make = styled.button`
     justify-content: center;
     margin-top: 130px;
 
-    &: hover {
+    &:hover {
         border-color: black;
     }
 

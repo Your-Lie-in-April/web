@@ -1,13 +1,13 @@
-import styled from 'styled-components';
-import PushPinOutlinedIcon from '@mui/icons-material/PushPinOutlined';
-import { useUserContext } from '../MainPage';
-import { useEffect, useState } from 'react';
 import { PinProjectResponse } from '#/Types/projecttype';
-import { Http } from '#/constants/backendURL';
-import { useNavigate } from 'react-router-dom';
 import { ScheduleAllMembersResDto } from '#/Types/scheduletype';
-import PinnedSchedule from './PinSchedule/PinnedSchedule';
+import { Http } from '#/constants/backendURL';
+import PushPinOutlinedIcon from '@mui/icons-material/PushPinOutlined';
 import dayjs from 'dayjs';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
+import { useUserContext } from '../MainPage';
+import PinnedSchedule from './PinSchedule/PinnedSchedule';
 
 const PinnedBox = styled.div`
   width: 950px;

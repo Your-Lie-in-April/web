@@ -1,5 +1,5 @@
-import styled from 'styled-components';
 import { ScheduleAllMembersResDto } from '#/Types/scheduletype';
+import styled from 'styled-components';
 import PinnedTimeSchedule from './PinnedTimeSchedule';
 
 const Box = styled.div`

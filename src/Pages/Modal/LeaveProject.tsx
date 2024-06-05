@@ -1,14 +1,14 @@
-import styled from 'styled-components';
+import { Http } from '#/constants/backendURL';
+import ModalPortal from '#/utils/ModalPotal';
+import useScrollLock from '#/utils/useScrollLock';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import { useState } from 'react';
+import styled from 'styled-components';
 import { ModalBlackOut, ModalContainer } from './ModalCommon';
-import ModalPortal from '#/utils/ModalPotal';
-import { Http } from '#/constants/backendURL';
-import useScrollLock from '#/utils/useScrollLock';
 
 const Box = styled.div`
   width: 406px;
-  height: 182px;
+  min-height: 182px;
   border-radius: 20px;
   background: #f5f5f5;
   box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.25);

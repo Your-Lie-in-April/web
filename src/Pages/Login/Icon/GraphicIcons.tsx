@@ -5,15 +5,9 @@ import LightningIcon from './LightningIcon';
 import SpringIcon from './SpringIcon';
 import SummertimeSadnessIcon from './Summertime_sadness ';
 
-
 const GraphicIconsWrapper = styled.div`
-  height: 100%;
-  z-index: 0;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background-color: #000000;
+  position: relative;
+  z-index: 1; 
 `;
 
 const GraphicIcons: React.FC = () => {

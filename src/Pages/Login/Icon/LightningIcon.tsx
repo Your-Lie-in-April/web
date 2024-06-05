@@ -2,21 +2,11 @@ import React from 'react';
 import styled from 'styled-components';
 
 const IconWrapper = styled.div`
-  position: fixed;
-  top: 20.6vh;
+  position: absolute;
+  top: 0px;
   left: 27.3vw;
   width: 253px;
-  height: 448px;
-
-  @media (max-width: 768px) {
-    top: 18.6vh;
-    left: 2.6vw;
-  }
-
-  @media (max-width: 480px) {
-    width: 150px;
-    height: 266px;
-  }
+  height: 382px;
 `;
 
 const LightningIcon: React.FC = () => {
@@ -24,13 +14,13 @@ const LightningIcon: React.FC = () => {
     <IconWrapper>
       <svg
         xmlns='http://www.w3.org/2000/svg'
-        width='100%'
-        height='100%'
-        viewBox='0 0 253 448'
+        width='253'
+        height='382'
+        viewBox='0 0 253 382'
         fill='none'
       >
         <path
-          d='M197.269 0L0 251.447H90.9968L55.7308 448L253 196.553H162.003L197.269 0Z'
+          d='M197.269 -66L0 185.447H90.9968L55.7308 382L253 130.553H162.003L197.269 -66Z'
           fill='#633AE2'
         />
       </svg>

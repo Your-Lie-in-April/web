@@ -1,7 +1,7 @@
-import styled from 'styled-components';
-import StorageProject from './StorageProject';
 import { ProjectThumbnailResponse } from '#/Types/projecttype';
+import styled from 'styled-components';
 import NoProject from '../Layouts/NoProject';
+import StorageProject from './StorageProject';
 
 const GridContainer = styled.div`
   display: grid;

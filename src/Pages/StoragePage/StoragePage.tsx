@@ -1,17 +1,18 @@
-import styled, { createGlobalStyle } from 'styled-components';
-import AfterLogin from '../Layouts/AfterLogin';
-import StorageProjectList from './StorageProjectList';
-import GraphicIcons from './Icon/GraphicIcons';
-import { useCallback, useEffect, useRef, useState } from 'react';
 import { Http } from '#/constants/backendURL';
 import { ProjectThumbnailResponse } from '#/Types/projecttype';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import styled, { createGlobalStyle } from 'styled-components';
+import AfterLogin from '../Layouts/AfterLogin';
 import Search from '../Layouts/Search';
+import GraphicIcons from './Icon/GraphicIcons';
+import StorageProjectList from './StorageProjectList';
 
 const GlobalStyle = createGlobalStyle`
 body {
   width : 100%;
   min-width : 1366px;
-  min-height : 1200px;
+  min-height : 1573px;
   margin: 0 auto;
   background-color: #212121;
   -ms-overflow-style: none;
@@ -41,6 +42,7 @@ const StoragePage = () => {
   const [hasMore, setHasMore] = useState<boolean>(true);
 
   const observer = useRef<IntersectionObserver | null>(null);
+  const navigate = useNavigate();
 
   const lastProjectRef = useCallback(
     (node: HTMLDivElement | null) => {
@@ -82,6 +84,9 @@ const StoragePage = () => {
           setSearchResults((prevProjects) => [...prevProjects, ...data.data]);
         }
         setHasMore(data.data.length > 0);
+      } else {
+        navigate('/login');
+        return;
       }
     } catch (error) {
       console.error('업데이트 실패:', error);

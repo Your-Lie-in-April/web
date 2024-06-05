@@ -1,18 +1,17 @@
-import React, {
-    FC,
-    useState,
-    useRef,
-    useEffect,
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { ko } from 'date-fns/locale/ko';
+import {
     Dispatch,
+    FC,
     SetStateAction,
+    useEffect,
+    useRef,
+    useState,
 } from 'react';
 import ReactDatePicker from 'react-datepicker';
 import styled from 'styled-components';
-import { ko } from 'date-fns/locale/ko';
 import '/src/styles/projecttime.css';
-import { time } from 'console';
-import ExpandLessIcon from '@mui/icons-material/ExpandLess';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 const ProjectTimeContainer = styled.div`
     display: flex;
@@ -25,6 +24,7 @@ const DateContainer = styled.div`
     align-items: center;
     margin: 0 20px;
     justify-content: center;
+    gap: 8px;
 `;
 
 const SDatePicker = styled(ReactDatePicker)`
@@ -104,8 +104,6 @@ const TimeOption = styled.li`
         background-color: #633ae2;
         color: #fff;
     }
-
-    color: #7d7d7d;
     font-family: Pretendard;
     font-size: 24px;
     font-style: normal;
@@ -315,7 +313,6 @@ const ProjectTime: FC<ProjectTimeProps> = ({
 
             <MakeWeekend>
                 <Text>생성할 요일</Text>
-
                 <WeekendContainer>
                     {dayNames.map((day, index) => (
                         <Weekend
@@ -362,7 +359,7 @@ const ProjectTime: FC<ProjectTimeProps> = ({
 
                     {isStartOpen && (
                         <TimePickerContainer
-                            style={{ position: 'absolute', marginTop: '8px' }}
+                            style={{ position: 'absolute', marginTop: '4px' }}
                         >
                             {Times.map((time, index) => (
                                 <TimeOption
@@ -405,7 +402,7 @@ const ProjectTime: FC<ProjectTimeProps> = ({
                     </TimePicker>
                     {isEndOpen && (
                         <TimePickerContainer
-                            style={{ position: 'absolute', marginTop: '8px' }}
+                            style={{ position: 'absolute', marginTop: '4px' }}
                         >
                             {Times.map((time, index) => (
                                 <TimeOption

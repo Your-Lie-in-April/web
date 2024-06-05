@@ -1,5 +1,5 @@
-import React from 'react';
 import { ScheduleAllMembersResDto, ScheduleItem } from '#/Types/scheduletype';
+import React from 'react';
 import PinnedTimeBar from './PinnedTimeBar';
 
 interface PinnedTimeScheduleProps {

@@ -1,8 +1,6 @@
-import { FC, useState, ChangeEvent, Dispatch, SetStateAction } from 'react';
+import { ChangeEvent, Dispatch, FC, SetStateAction, useState } from 'react';
 import styled from 'styled-components';
 import Cover from './cover';
-import { ProjectEntity } from '#/Types/projecttype';
-import { describe } from 'node:test';
 
 interface ContentTextProps {
     focused: boolean;
@@ -113,8 +111,9 @@ const Make = styled.button`
     align-items: center;
     justify-content: center;
     margin-top: 130px;
+    color : #000000;
 
-    &: hover {
+    &:hover {
         border-color: black;
     }
 

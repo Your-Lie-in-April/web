@@ -1,13 +1,15 @@
-import { FC, useEffect } from 'react';
-import styled, { keyframes, createGlobalStyle } from 'styled-components';
-import BeforeLogin from '../Layouts/BeforeLogin';
-import { useLocation } from 'react-router-dom';
 import { Http } from '#/constants/backendURL';
+import { FC, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
+import styled, { createGlobalStyle, keyframes } from 'styled-components';
+import BeforeLogin from '../Layouts/BeforeLogin';
+import GraphicIcons from './Icon/GraphicIcons';
 
 const GlobalStyle = createGlobalStyle`
   body {
     width : 100%;
     min-width : 1366px;
+    min-height: 1366px;
     margin: 0 auto;
     background-color: #212121;
     -ms-overflow-style: none;
@@ -157,51 +159,61 @@ const Login: FC = () => {
   return (
     <>
       <GlobalStyle />
-      <>
-        <BeforeLogin />
-        <Container>
-          <BannerWrapper>
-            <BannerDiv>
-              <BannerText style={{ marginLeft: '249px', zIndex: '2' }}>
-                make our{stairs} cORE time table Let's start
-                {summertime_sadness} the project make our cORE time table
-                {lightning} Let's start the project
-              </BannerText>
-            </BannerDiv>
-          </BannerWrapper>
-        </Container>
-        <div style={{ height: '104px', width: '100%' }} />
-        <LoginBanner>
-          <text
-            style={{
-              color: '#fff',
-              textAlign: 'center',
-              fontSize: '32px',
-              fontWeight: '700',
-            }}
-          >
-            Sign up
-          </text>
-          <Google onClick={oAuth}>
-            <GoogleLogin>
-              <img src={googleLogo} alt='Google Logo' />
-              구글로그인
-            </GoogleLogin>
-          </Google>
-        </LoginBanner>
-        <div style={{ height: '391px', width: '100%' }} />
-        <Container>
-          <BannerWrapper>
-            <BannerDiv>
-              <BannerText style={{ marginLeft: '1307px', zIndex: '1' }}>
-                make our{stairs} cORE time table Let's start
-                {summertime_sadness} the project make our cORE time table
-                {lightning} Let's start the project
-              </BannerText>
-            </BannerDiv>
-          </BannerWrapper>
-        </Container>
-      </>
+      <div
+        style={{
+          position: 'relative',
+          overflowX: 'clip',
+          backgroundColor: '#212121',
+          minHeight: '100vh',
+        }}
+      >
+        <GraphicIcons />
+        <div style={{ position: 'relative', zIndex: 2 }}>
+          <BeforeLogin />
+          <Container>
+            <BannerWrapper>
+              <BannerDiv>
+                <BannerText style={{ marginLeft: '249px', zIndex: '2' }}>
+                  make our{stairs} cORE time table Let's start
+                  {summertime_sadness} the project make our cORE time table
+                  {lightning} Let's start the project
+                </BannerText>
+              </BannerDiv>
+            </BannerWrapper>
+          </Container>
+          <div style={{ height: '104px', width: '100%' }} />
+          <LoginBanner>
+            <text
+              style={{
+                color: '#fff',
+                textAlign: 'center',
+                fontSize: '32px',
+                fontWeight: '700',
+              }}
+            >
+              Sign up
+            </text>
+            <Google onClick={oAuth}>
+              <GoogleLogin>
+                <img src={googleLogo} alt='Google Logo' />
+                구글로그인
+              </GoogleLogin>
+            </Google>
+          </LoginBanner>
+          <div style={{ height: '391px', width: '100%' }} />
+          <Container>
+            <BannerWrapper>
+              <BannerDiv>
+                <BannerText style={{ marginLeft: '1307px', zIndex: '1' }}>
+                  make our{stairs} cORE time table Let's start
+                  {summertime_sadness} the project make our cORE time table
+                  {lightning} Let's start the project
+                </BannerText>
+              </BannerDiv>
+            </BannerWrapper>
+          </Container>
+        </div>
+      </div>
     </>
   );
 };

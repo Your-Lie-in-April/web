@@ -1,12 +1,12 @@
-import styled from 'styled-components';
-import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
-import React from 'react';
-import { ModalBlackOut, ModalContainer } from './ModalCommon';
-import ModalPortal from '#/utils/ModalPotal';
-import useScrollLock from '#/utils/useScrollLock';
 import { MemberEntity } from '#/Types/membertype';
 import { Http } from '#/constants/backendURL';
-import { useNavigate, useParams } from 'react-router-dom';
+import ModalPortal from '#/utils/ModalPotal';
+import useScrollLock from '#/utils/useScrollLock';
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+import React from 'react';
+import { useParams } from 'react-router-dom';
+import styled from 'styled-components';
+import { ModalBlackOut, ModalContainer } from './ModalCommon';
 
 const Box = styled.div`
     width: 406px;

@@ -1,11 +1,11 @@
-import { FC, useEffect, useState } from 'react';
-import styled, { createGlobalStyle } from 'styled-components';
-import Info from './Info';
-import ProjectTime from './projecttime';
-import AfterLogin from '../Layouts/AfterLogin';
-import ProjectCalendar from './projectcalendar';
-import { useNavigate } from 'react-router';
 import { Http } from '#/constants/backendURL';
+import { FC, useState } from 'react';
+import { useNavigate } from 'react-router';
+import styled, { createGlobalStyle } from 'styled-components';
+import AfterLogin from '../Layouts/AfterLogin';
+import Info from './Info';
+import ProjectCalendar from './projectcalendar';
+import ProjectTime from './projecttime';
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -48,6 +48,11 @@ const SButton = styled.button`
     border-radius: 60px;
     background: #633ae2;
     white-space: nowrap;
+
+    &:focus {
+        outline: none;
+        border: none;
+    }
 `;
 
 const SButtonText = styled.text`
@@ -98,6 +103,10 @@ const ProjectMakePage: FC = () => {
             coverImageUrl: img,
         };
         console.log('payload', payload);
+        if(!accessToken){
+            navigate('/login');
+            return;
+        }
         try {
             const response = await fetch(Http + `/v1/projects`, {
                 method: 'POST',

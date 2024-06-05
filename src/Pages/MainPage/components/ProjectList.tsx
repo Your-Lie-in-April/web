@@ -1,7 +1,7 @@
-import Project from './Project';
-import styled from 'styled-components';
-import { ProjectEntity } from '#/Types/projecttype';
 import NoProject from '#/Pages/Layouts/NoProject';
+import { ProjectEntity } from '#/Types/projecttype';
+import styled from 'styled-components';
+import Project from './Project';
 
 const GridContainer = styled.div`
   display: grid;

@@ -2,22 +2,12 @@ import React from 'react';
 import styled from 'styled-components';
 
 const IconWrapper = styled.div`
-  position: fixed;
-  top: 52.8vh;
+  position: absolute;
+  top: 467px;
   left: 0;
   width: 473px;
   height: 348px;
   flex-shrink: 0;
-
-  @media (max-width: 1200px) {
-    top: 41.7vh;
-    left: 1vw;
-  }
-
-  @media (max-width: 768px) {
-    top: 31.3vh;
-    left: 0.5vw;
-  }
 `;
 
 const ArrowIcon: React.FC = () => {
