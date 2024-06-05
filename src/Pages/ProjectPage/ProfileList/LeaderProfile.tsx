@@ -78,7 +78,10 @@ const LeaderProfile = ({
               justifyContent: 'center',
             }}
           >
-            <CommonText>{member?.nickname}(본인)</CommonText>
+            <CommonText>
+              {member?.nickname}
+              {isCurrentUser ? '(본인)' : ''}
+            </CommonText>
             <CommonText
               style={{
                 fontSize: '10px',
