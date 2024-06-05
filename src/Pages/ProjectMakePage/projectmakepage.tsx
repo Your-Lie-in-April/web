@@ -103,6 +103,10 @@ const ProjectMakePage: FC = () => {
             coverImageUrl: img,
         };
         console.log('payload', payload);
+        if(!accessToken){
+            navigate('/login');
+            return;
+        }
         try {
             const response = await fetch(Http + `/v1/projects`, {
                 method: 'POST',
