@@ -70,12 +70,14 @@ const MyTimeBar: React.FC<MyTimeBarProps> = ({ hours, schedule }) => {
                                 itemEndHour === hour
                                     ? new Date(item.endTime).getMinutes()
                                     : 59;
-                            const startPosition = Math.round(
+                            const startPosition = 
                                 (startMinute / 60) * 40
-                            );
-                            const endPosition = Math.round(
+                            ;
+                            const endPosition = 
                                 (endMinute / 60) * 40
-                            );
+                            ;
+
+                           
                             return (
                                 <>
                                     <div

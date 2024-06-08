@@ -67,13 +67,9 @@ const MemberTimeBar: React.FC<MemberTimeBarProps> = ({ hours, schedule }) => {
                             const endMinute =
                                 itemEndHour === hour
                                     ? new Date(item.endTime).getMinutes()
-                                    : 59;
-                            const startPosition = Math.round(
-                                (startMinute / 60) * 40
-                            );
-                            const endPosition = Math.round(
-                                (endMinute / 60) * 40
-                            );
+                                    : 60;
+                                    const startPosition = (startMinute / 60) * 37.282;
+                                    const endPosition = (endMinute / 60) * 37.282;
                             return (
                                 <>
                                     <div

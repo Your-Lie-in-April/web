@@ -1,13 +1,12 @@
-import styled from 'styled-components';
-import MemberSchedule from './MemberSchedule';
 import { MemberEntity } from '#/Types/membertype';
-import { useContext, useEffect, useState } from 'react';
-import { ProjectContext } from '#/hooks/context/projectContext';
-import { DateContext } from '#/hooks/context/dateContext';
-import dayjs from 'dayjs';
 import { ScheduleWeekResponse } from '#/Types/scheduletype';
 import { Http } from '#/constants/backendURL';
+import { DateContext } from '#/hooks/context/dateContext';
+import dayjs from 'dayjs';
+import { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import styled from 'styled-components';
+import MemberSchedule from './MemberSchedule';
 
 const GridContainer = styled.div`
     display: grid;
