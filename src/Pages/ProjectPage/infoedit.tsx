@@ -112,6 +112,7 @@ const Make = styled.button`
     align-items: center;
     justify-content: center;
     margin-top: 130px;
+    color : #000000;
 
     &:hover {
         border-color: black;
