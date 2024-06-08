@@ -2,6 +2,7 @@ import { DateContext } from '#/hooks/context/dateContext';
 import ArrowLeftIcon from '@mui/icons-material/ArrowLeft';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import dayjs from 'dayjs';
+import { Value } from 'node_modules/react-calendar/dist/esm/shared/types';
 import { FC, useContext, useMemo } from 'react';
 import Calendar from 'react-calendar';
 import styled from 'styled-components';
@@ -262,9 +263,9 @@ const ScheduleCalendar: FC = () => {
     return null;
   };
 
-  const handleDateChange = (date: Date | Date[] | null) => {
-    if (date instanceof Date && setSelectedDate) {
-      setSelectedDate(date.toISOString());
+  const handleDateChange = (value: Value) => {
+    if (value instanceof Date && setSelectedDate) {
+      setSelectedDate(value.toISOString());
     }
   };
 
