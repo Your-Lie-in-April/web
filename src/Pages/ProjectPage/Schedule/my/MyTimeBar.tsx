@@ -18,6 +18,7 @@ const MyTimeBar: React.FC<MyTimeBarProps> = ({ hours, schedule }) => {
                 overflow: 'hidden',
                 position: 'relative',
                 display: 'flex',
+                boxSizing: 'border-box',
             }}
         >
             {hours.map((hour) => (
@@ -69,13 +70,9 @@ const MyTimeBar: React.FC<MyTimeBarProps> = ({ hours, schedule }) => {
                             const endMinute =
                                 itemEndHour === hour
                                     ? new Date(item.endTime).getMinutes()
-                                    : 59;
-                            const startPosition = 
-                                (startMinute / 60) * 40
-                            ;
-                            const endPosition = 
-                                (endMinute / 60) * 40
-                            ;
+                                    : 60;
+                                    const startPosition = (startMinute / 60) * 40 -1;
+                                    const endPosition = (endMinute / 60) * 40 -1;
 
                            
                             return (
@@ -86,13 +83,13 @@ const MyTimeBar: React.FC<MyTimeBarProps> = ({ hours, schedule }) => {
                                             position: 'absolute',
                                             top: 0,
                                             left: `${startPosition}px`,
-                                            width: `${Math.max(
-                                                0,
+                                            width: `${
                                                 endPosition - startPosition
-                                            )}px`,
+                                            }px`,
                                             height: '100%',
                                             backgroundColor: '#633AE2',
                                             boxSizing: 'border-box',
+                                            
                                         }}
                                     />
                                     {endPosition - startPosition > 0 && (
