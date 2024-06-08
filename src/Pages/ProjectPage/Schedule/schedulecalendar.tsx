@@ -6,6 +6,10 @@ import { FC, useContext, useMemo } from 'react';
 import Calendar from 'react-calendar';
 import styled from 'styled-components';
 
+type ValuePiece = Date | null;
+
+type Value = ValuePiece | [ValuePiece, ValuePiece];
+
 const StyledCalendarDiv = styled.div`
   .react-calendar__tile--rangeStart {
     border-top-right-radius: 0 !important;
@@ -262,7 +266,7 @@ const ScheduleCalendar: FC = () => {
     return null;
   };
 
-  const handleDateChange = (date: Date | Date[] | null) => {
+  const handleDateChange = (date: Value) => {
     if (date instanceof Date && setSelectedDate) {
       setSelectedDate(date.toISOString());
     }
