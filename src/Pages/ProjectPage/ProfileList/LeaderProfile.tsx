@@ -18,14 +18,14 @@ const LeaderProfileDiv = styled.div`
   gap: 8px;
 `;
 
-const LeaderImg = styled.div<{ hasBorder: boolean }>`
+const LeaderImg = styled.div`
   width: 46px;
   height: 46px;
   border-radius: 50%;
   background: #d9d9d9;
+  border: 2px solid #633ae2;
   box-sizing: border-box;
   overflow: hidden;
-  border: ${(props) => (props.hasBorder ? '2px solid #633ae2' : 'none')};
 `;
 
 const StyledImage = styled.img`
@@ -56,7 +56,7 @@ const LeaderProfile = ({
   return (
     <LeaderProfileBox>
       <LeaderProfileDiv>
-        <LeaderImg hasBorder={isCurrentUser}>
+        <LeaderImg>
           <StyledImage
             src={member?.profileImageUrl || defaultImg}
             alt='Profile Image'
@@ -78,7 +78,10 @@ const LeaderProfile = ({
               justifyContent: 'center',
             }}
           >
-            <CommonText>{member?.nickname}(본인)</CommonText>
+            <CommonText>
+              {member?.nickname}
+              {isCurrentUser ? '(본인)' : ''}
+            </CommonText>
             <CommonText
               style={{
                 fontSize: '10px',
