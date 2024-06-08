@@ -76,7 +76,7 @@ const MyTimeBar: React.FC<MyTimeBarProps> = ({ hours, schedule }) => {
 
                            
                             return (
-                                <>
+                                <React.Fragment key={index}>
                                     <div
                                         key={index}
                                         style={{
@@ -106,7 +106,7 @@ const MyTimeBar: React.FC<MyTimeBarProps> = ({ hours, schedule }) => {
                                             }}
                                         />
                                     )}
-                                </>
+                                 </React.Fragment>
                             );
                         })}
                 </div>

@@ -71,7 +71,7 @@ const MemberTimeBar: React.FC<MemberTimeBarProps> = ({ hours, schedule }) => {
                                     const startPosition = (startMinute / 60) * 37.282;
                                     const endPosition = (endMinute / 60) * 37.282;
                             return (
-                                <>
+                                <React.Fragment key={index}>
                                     <div
                                         key={index}
                                         style={{
@@ -99,7 +99,7 @@ const MemberTimeBar: React.FC<MemberTimeBarProps> = ({ hours, schedule }) => {
                                             }}
                                         />
                                     )}
-                                </>
+                                 </React.Fragment>
                             );
                         })}
                 </div>
