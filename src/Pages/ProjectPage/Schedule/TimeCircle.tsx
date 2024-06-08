@@ -70,8 +70,8 @@ const TimeCircle: React.FC<TimeProps> = ({ style, scheduleItems, hour }) => {
     const isScheduled =
         scheduleItems &&
         scheduleItems.some((item) => {
-            const startHour = new Date(item.startAt).getHours();
-            const endHour = new Date(item.endAt).getHours();
+            const startHour = new Date(item.startTime).getHours();
+            const endHour = new Date(item.endTime).getHours();
             return startHour <= hour && endHour > hour;
         });
 
