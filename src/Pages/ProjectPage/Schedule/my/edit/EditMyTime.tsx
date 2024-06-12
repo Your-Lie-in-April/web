@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { TimeSlotLeft, TimeSlotRight } from './EditMyTimeCircle';
 import dayjs from 'dayjs';
+import { ProjectContext } from '#/hooks/context/projectContext';
 
 const CommonText = styled.div`
     color: #000000;
@@ -60,11 +61,57 @@ interface EditMyTimeProps {
     >;
 }
 
+const isProjectHour = (
+    date: string,
+    hour: number,
+    projectStartTime: number | undefined,
+    projectEndTime: number | undefined
+) => {
+    if (projectStartTime !== undefined && projectEndTime !== undefined) {
+        const slotDateTime = new Date(date);
+        slotDateTime.setHours(hour);
+
+        const projectStartDateTime = new Date(date);
+        projectStartDateTime.setHours(projectStartTime);
+
+        const projectEndDateTime = new Date(date);
+        projectEndDateTime.setHours(projectEndTime);
+
+        return (
+            slotDateTime >= projectStartDateTime &&
+            slotDateTime < projectEndDateTime
+        );
+    }
+    return false;
+};
+
 const EditMyTime: React.FC<EditMyTimeProps> = ({
     weekDates,
     selection,
     setSelection,
 }) => {
+    const { projectData } = useContext(ProjectContext);
+
+    const startDateString = projectData?.startDate;
+    const endDateString = projectData?.endDate;
+    const startTimeString = projectData?.startTime;
+    const endTimeString = projectData?.endTime;
+
+    const startDateTime =
+        startDateString && startTimeString
+            ? new Date(`${startDateString}T${startTimeString}`)
+            : undefined;
+
+    const endDateTime =
+        endDateString && endTimeString
+            ? new Date(`${endDateString}T${endTimeString}`)
+            : undefined;
+
+    const projectStartTime = startDateTime
+        ? startDateTime.getHours()
+        : undefined;
+    const projectEndTime = endDateTime ? endDateTime.getHours() : undefined;
+
     const [firstClickSlot, setFirstClickSlot] = useState<number>(0);
     const [firstClickSlotState, setFirstClickSlotState] =
         useState<boolean>(false);
@@ -77,20 +124,30 @@ const EditMyTime: React.FC<EditMyTimeProps> = ({
         hour: number,
         minute: number
     ) => {
-        setFirstClickSlot(id);
+        const isWithinProjectTime = isProjectHour(
+            date,
+            hour,
+            projectStartTime,
+            projectEndTime
+        );
 
-        setSelection((prevSelection) => {
-            const newSelection = { ...prevSelection };
-            if (newSelection[id]) {
-                delete newSelection[id];
-            } else {
-                newSelection[id] = { date, hour, minute };
-                setFirstClickSlotState(true);
-            }
-            return newSelection;
-        });
+        if (isWithinProjectTime) {
+            setFirstClickSlot(id);
 
-        setIsMouseDown(true);
+            setSelection((prevSelection) => {
+                const newSelection = { ...prevSelection };
+                if (newSelection[id]) {
+                    delete newSelection[id];
+                    setFirstClickSlotState(false); 
+                } else {
+                    newSelection[id] = { date, hour, minute };
+                    setFirstClickSlotState(true);
+                }
+                return newSelection;
+            });
+
+            setIsMouseDown(true);
+        }
     };
 
     // 마우스가 셀 안에 들어올 경우 (드래그시)
@@ -101,15 +158,25 @@ const EditMyTime: React.FC<EditMyTimeProps> = ({
         minute: number
     ) => {
         if (isMouseDown) {
-            setSelection((prevSelection) => {
-                const newSelection = { ...prevSelection };
-                if (firstClickSlotState) {
-                    newSelection[id] = { date, hour, minute };
-                } else {
-                    delete newSelection[id];
-                }
-                return newSelection;
-            });
+            const isWithinProjectTime = isProjectHour(
+                date,
+                hour,
+                projectStartTime,
+                projectEndTime
+            );
+
+            if (isWithinProjectTime) {
+                setSelection((prevSelection) => {
+                    const newSelection = { ...prevSelection };
+                    if (firstClickSlotState) {
+                        newSelection[id] = { date, hour, minute };
+                        
+                    } else {
+                        delete newSelection[id];
+                    }
+                    return newSelection;
+                });
+            }
         }
     };
 
@@ -175,6 +242,10 @@ const EditMyTime: React.FC<EditMyTimeProps> = ({
                                         <React.Fragment key={hourIdx}>
                                             <TimeSlotLeft
                                                 id={slotIdLeft}
+                                                projectStartTime={
+                                                    projectStartTime
+                                                }
+                                                projectEndTime={projectEndTime}
                                                 onSelectSlot={handleMouseClick}
                                                 onMouseEnter={() =>
                                                     handleMouseEnter(
@@ -196,6 +267,10 @@ const EditMyTime: React.FC<EditMyTimeProps> = ({
                                             />
                                             <TimeSlotRight
                                                 id={slotIdRight}
+                                                projectStartTime={
+                                                    projectStartTime
+                                                }
+                                                projectEndTime={projectEndTime}
                                                 onSelectSlot={handleMouseClick}
                                                 onMouseEnter={() =>
                                                     handleMouseEnter(

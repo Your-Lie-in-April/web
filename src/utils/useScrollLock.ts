@@ -1,4 +1,3 @@
-// useScrollLock.ts
 import { useEffect } from 'react';
 
 const useScrollLock = (isLocked: boolean): void => {

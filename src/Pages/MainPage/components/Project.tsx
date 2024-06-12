@@ -1,13 +1,13 @@
-import styled from 'styled-components';
+import { Http } from '#/constants/backendURL';
+import CancelIcon from '@mui/icons-material/Cancel';
+import InboxOutlinedIcon from '@mui/icons-material/InboxOutlined';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import PushPinOutlinedIcon from '@mui/icons-material/PushPinOutlined';
-import InboxOutlinedIcon from '@mui/icons-material/InboxOutlined';
-import CancelIcon from '@mui/icons-material/Cancel';
-import { useEffect, useState } from 'react';
-import LeaveProject from '../../Modal/LeaveProject';
-import { Http } from '#/constants/backendURL';
-import { ProjectEntity } from '../../../Types/projecttype';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
+import { ProjectEntity } from '../../../Types/projecttype';
+import LeaveProject from '../../Modal/LeaveProject';
 
 interface MoreTextProps extends React.HTMLAttributes<HTMLDivElement> {
     isMove?: boolean;
@@ -65,6 +65,8 @@ const DetailText = styled.div`
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
+    white-space: pre-wrap;
+    word-break: break-word;
 `;
 
 const StyledButton = styled.button`
@@ -72,7 +74,7 @@ const StyledButton = styled.button`
     border: none;
     padding: 0;
     cursor: pointer;
-    &: focus {
+    &:focus {
         border: none;
         outline: none;
     }
@@ -113,7 +115,7 @@ const MoreItem = styled.button`
     border: none;
     padding: 0;
     cursor: pointer;
-    &: focus {
+    &:focus {
         border: none;
         outline: none;
     }
@@ -246,6 +248,7 @@ const Project: React.FC<ProjectProps> = ({ project }) => {
             </div>
             <LeaveProject
                 projectId={project.projectId}
+                projectTitle = {project.title}
                 onClose={onClickCancelBtn}
                 isCancleBtn={isCancleBtn}
             />

@@ -1,10 +1,10 @@
-import styled from 'styled-components';
-import { ModalBlackOut, ModalContainer } from './ModalCommon';
-import ModalPortal from '#/utils/ModalPotal';
-import { useUserContext } from '../MainPage/MainPage';
-import { useState } from 'react';
 import { Http } from '#/constants/backendURL';
+import ModalPortal from '#/utils/ModalPotal';
 import useScrollLock from '#/utils/useScrollLock';
+import { useState } from 'react';
+import styled from 'styled-components';
+import { useUserContext } from '../MainPage/MainPage';
+import { ModalBlackOut, ModalContainer } from './ModalCommon';
 
 const Box = styled.div`
     width: 500px;

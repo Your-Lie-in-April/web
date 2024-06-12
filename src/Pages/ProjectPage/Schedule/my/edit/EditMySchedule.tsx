@@ -8,6 +8,7 @@ import { ScheduleWeekResponse } from '#/Types/scheduletype';
 import ModalPortal from '#/utils/ModalPotal';
 import useScrollLock from '#/utils/useScrollLock';
 import EditMyTime from './EditMyTime';
+import { ProjectContext } from '#/hooks/context/projectContext';
 
 const ModalBlackOut = styled.div`
     width: 100%;
@@ -92,7 +93,7 @@ const ConfirmBtn = styled.button`
     justify-content: center;
     align-items: center;
 
-    &: focus {
+    &:focus {
         outline: none;
     }
 `;
@@ -123,12 +124,35 @@ const EditMySchedule: React.FC<EditMyScheduleProps> = ({
     onSetIsEditModal,
     scheduleData,
 }) => {
+    const { projectData } = useContext(ProjectContext);
+    const startDateString = projectData?.startDate;
+    const endDateString = projectData?.endDate;
+    const startTimeString = projectData?.startTime;
+    const endTimeString = projectData?.endTime;
+    const dayOfWeek = projectData?.daysOfWeek;
+
+    const startDateTime =
+        startDateString && startTimeString
+            ? new Date(`${startDateString}T${startTimeString}`)
+            : undefined;
+
+    const endDateTime =
+        endDateString && endTimeString
+            ? new Date(`${endDateString}T${endTimeString}`)
+            : undefined;
+
+    const projectStartTime = startDateTime
+        ? startDateTime.getHours()
+        : undefined;
+    const projectEndTime = endDateTime ? endDateTime.getHours() : undefined;
+
     const { projectId } = useParams<{ projectId: string }>();
     const { weekDates } = useContext(DateContext) || {};
     const [selection, setSelection] = useState<{ [key: number]: SelectedSlot }>(
         {}
     );
 
+    console.log(selection);
     const postSchedule = async (scheduleData: ScheduleData) => {
         const accessToken = localStorage.getItem('access_token');
         try {
@@ -183,25 +207,60 @@ const EditMySchedule: React.FC<EditMyScheduleProps> = ({
     };
 
     const handleConfirm = () => {
-        const newScheduleData = formatScheduleData(selection);
+        const projectStartDate = projectData?.startDate;
+        const projectEndDate = projectData?.endDate;
+
+        const projectStartDateString = projectStartDate
+            ? new Date(projectStartDate).toISOString().slice(0, 10)
+            : undefined;
+        const projectEndDateString = projectEndDate
+            ? new Date(projectEndDate).toISOString().slice(0, 10)
+            : undefined;
+
+        const newScheduleData = formatScheduleData(
+            selection,
+            projectStartTime,
+            projectEndTime,
+            dayOfWeek,
+            projectStartDateString,
+            projectEndDateString
+        );
         console.log(`schedule 수정 : ${JSON.stringify(newScheduleData)}`);
 
-        if (scheduleData && scheduleData.schedule.length > 0) {
-            putSchedule(newScheduleData);
-        } else {
-            postSchedule(newScheduleData);
+        // 선택한 스케줄이 없거나 모두 프로젝트 기간/날짜에 포함되지 않는 경우
+        if (newScheduleData.schedule.length === 0) {
+            console.log('Post/Update Schedule data empty');
+            setSelection({});
+            onSetIsEditModal();
+            alert('프로젝트 기간에 맞춰 시간표를 작성해주세요!');
+            return;
         }
 
-        onSetIsEditModal();
+        try {
+            if (scheduleData && scheduleData.schedule.length > 0) {
+                putSchedule(newScheduleData);
+            } else {
+                postSchedule(newScheduleData);
+            }
+            setSelection({});
+            onSetIsEditModal();
+        } catch (error) {
+            console.error('Error post/update schedule:', error);
+        }
     };
 
     useScrollLock(isEditModal);
+
+    const handleCloseModal = () => {
+        setSelection({});
+        onSetIsEditModal();
+    };
 
     return (
         <>
             {isEditModal && (
                 <ModalPortal>
-                    <ModalBlackOut onClick={onSetIsEditModal} />
+                    <ModalBlackOut onClick={handleCloseModal} />
                     <ModalContainer>
                         <Box>
                             <Title>나의 시간표</Title>

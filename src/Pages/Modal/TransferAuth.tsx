@@ -1,19 +1,18 @@
-import styled from 'styled-components';
-import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import ExpandLessIcon from '@mui/icons-material/ExpandLess';
-import React, { useEffect, useState } from 'react';
-import { ModalBlackOut, ModalContainer } from './ModalCommon';
+import { Http } from '#/constants/backendURL';
+import { MemberEntity } from '#/Types/membertype';
 import ModalPortal from '#/utils/ModalPotal';
 import useScrollLock from '#/utils/useScrollLock';
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { MemberEntity } from '#/Types/membertype';
-import { Http } from '#/constants/backendURL';
-import { stringify } from 'querystring';
+import styled from 'styled-components';
+import { ModalBlackOut, ModalContainer } from './ModalCommon';
 
 const Box = styled.div`
     width: 406px;
-    height: 181px;
+    min-height: 181px;
     border-radius: 20px;
     background: #f5f5f5;
     box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.25);
@@ -40,13 +39,12 @@ const MemPickDiv = styled.div`
     color: #000000;
     font-size: 20px;
     text-align: center;
-
     position: relative;
 `;
 
 export const MemDropdown = styled.div`
-    width: 208px;
-    height: 124px;
+    width: 194px;
+    max-height: 124px;
     border-radius: 5px;
     background: #f5f5f5;
     z-index: 3;
@@ -54,8 +52,9 @@ export const MemDropdown = styled.div`
     flex-direction: column;
     overflow-y: auto;
     position: absolute;
-    top: 45px;
+    top: 30px;
     right: 0;
+    box-sizing: border-box;
 
     ::-webkit-scrollbar {
         display: none;
@@ -175,6 +174,11 @@ const TransferAuthModal: React.FC<TransferAuthModalProps> = ({ isAuthClick, onIs
         setIsOpen(false);
     };
 
+    const handleClose = () => {
+        onIsAuthClick();
+        setIsOpen(false);
+    }
+
     const handleSetIsOpen = () => {
         setIsOpen(!isOpen);
     };
@@ -213,7 +217,7 @@ const TransferAuthModal: React.FC<TransferAuthModalProps> = ({ isAuthClick, onIs
         <>
             {isAuthClick && (
                 <ModalPortal>
-                    <ModalBlackOut onClick={onIsAuthClick} />
+                    <ModalBlackOut onClick={handleClose} />
                     <ModalContainer>
                         <Box>
                             <div
@@ -295,7 +299,7 @@ const TransferAuthModal: React.FC<TransferAuthModalProps> = ({ isAuthClick, onIs
                                     }}
                                 >
                                     <ConfirmBtn onClick={handleConfirm}>확인</ConfirmBtn>
-                                    <CancelBtn onClick={onIsAuthClick}>취소</CancelBtn>
+                                    <CancelBtn onClick={handleClose}>취소</CancelBtn>
                                 </ButtonsContainer>
                             </div>
                         </Box>

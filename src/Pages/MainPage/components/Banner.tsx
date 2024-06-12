@@ -1,5 +1,5 @@
-import styled, { keyframes } from 'styled-components';
 import { FC } from 'react';
+import styled, { keyframes } from 'styled-components';
 
 const summertime_sadness = (
     <svg
