@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import defaultImg from '../../../pics/default.png';
 import { useUserContext } from '../MainPage';
 
 const LoginDiv = styled.div`
@@ -34,16 +33,35 @@ const Text = styled.div`
   margin-top: 12px;
 `;
 
+const DefaultImg = () => (
+  <svg
+    xmlns='http://www.w3.org/2000/svg'
+    width='112'
+    height='112'
+    viewBox='0 0 112 112'
+    fill='none'
+  >
+    <circle cx='56' cy='56' r='56' fill='#A4A4A4' />
+    <path
+      fillRule='evenodd'
+      clipRule='evenodd'
+      d='M18.541 97.6281C23.7737 87.0211 33.3788 78.9576 45.0029 75.7913C37.0311 71.7668 31.5642 63.5037 31.5642 53.9636C31.5642 40.4678 42.5048 29.5273 56.0006 29.5273C69.4964 29.5273 80.4369 40.4678 80.4369 53.9636C80.4369 63.5035 74.9703 71.7666 66.9986 75.7911C78.6224 78.9572 88.2274 87.02 93.4603 97.6265C83.5378 106.562 70.4039 112 55.9998 112C41.5965 112 28.4633 106.562 18.541 97.6281Z'
+      fill='#F2F2F2'
+    />
+  </svg>
+);
+
 const Profile: React.FC = () => {
   const { userData } = useUserContext();
 
   return (
     <LoginDiv>
       <ImageDiv>
-        <StyledImage
-          src={userData?.profileImageUrl || defaultImg}
-          alt='Profile Image'
-        />
+        {userData?.profileImageUrl ? (
+          <StyledImage src={userData.profileImageUrl} alt='Profile Image' />
+        ) : (
+          <DefaultImg />
+        )}
       </ImageDiv>
       <Text>{userData?.email}</Text>
       <Text>{userData ? userData.state : '로그인 되어 있지 않음'}</Text>
