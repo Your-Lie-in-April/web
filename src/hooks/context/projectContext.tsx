@@ -1,13 +1,13 @@
+import { Http } from '#/constants/backendURL';
 import { ProjectEntity } from '#/Types/projecttype';
 import {
     createContext,
     ReactNode,
-    useState,
-    useEffect,
     useContext,
+    useEffect,
+    useState,
 } from 'react';
 import { useParams } from 'react-router-dom';
-import { Http } from '#/constants/backendURL';
 
 type ProjectContextType = {
     projectData: ProjectEntity | null;
@@ -42,7 +42,6 @@ export const ProjectProvider: React.FC<{ children: ReactNode }> = ({
                         }
                     );
                     const data = await response.json();
-                    console.log(data);
                     setProjectData(data.data);
                     setErrorMessage(null);
                 } catch (error) {
