@@ -60,7 +60,12 @@ export const TimeSlotLeft: React.FC<TimeSlotProps> = ({
         onMouseEnter();
     };
 
-    const isProjectTime = isProjectHour(date, hour, projectStartTime, projectEndTime);
+    const isProjectTime = isProjectHour(
+        date,
+        hour,
+        projectStartTime,
+        projectEndTime
+    );
 
     return (
         <div
@@ -107,7 +112,12 @@ export const TimeSlotRight: React.FC<TimeSlotProps> = ({
         onMouseEnter();
     };
 
-    const isProjectTime = isProjectHour(date, hour, projectStartTime, projectEndTime);
+    const isProjectTime = isProjectHour(
+        date,
+        hour,
+        projectStartTime,
+        projectEndTime
+    );
 
     return (
         <div

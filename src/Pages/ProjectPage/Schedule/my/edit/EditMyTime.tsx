@@ -1,8 +1,8 @@
+import { ProjectContext } from '#/hooks/context/projectContext';
+import dayjs from 'dayjs';
 import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { TimeSlotLeft, TimeSlotRight } from './EditMyTimeCircle';
-import dayjs from 'dayjs';
-import { ProjectContext } from '#/hooks/context/projectContext';
 
 const CommonText = styled.div`
     color: #000000;
@@ -53,14 +53,6 @@ interface SelectedSlot {
     minute: number;
 }
 
-interface EditMyTimeProps {
-    weekDates: string[];
-    selection: { [key: number]: SelectedSlot };
-    setSelection: React.Dispatch<
-        React.SetStateAction<{ [key: number]: SelectedSlot }>
-    >;
-}
-
 const isProjectHour = (
     date: string,
     hour: number,
@@ -85,10 +77,16 @@ const isProjectHour = (
     return false;
 };
 
+interface EditMyTimeProps {
+    weekDates: string[];
+    selection: { [key: number]: SelectedSlot };
+    onSelectionChange: (newSelection: { [key: number]: SelectedSlot }) => void;
+}
+
 const EditMyTime: React.FC<EditMyTimeProps> = ({
     weekDates,
     selection,
-    setSelection,
+    onSelectionChange,
 }) => {
     const { projectData } = useContext(ProjectContext);
 
@@ -134,17 +132,15 @@ const EditMyTime: React.FC<EditMyTimeProps> = ({
         if (isWithinProjectTime) {
             setFirstClickSlot(id);
 
-            setSelection((prevSelection) => {
-                const newSelection = { ...prevSelection };
-                if (newSelection[id]) {
-                    delete newSelection[id];
-                    setFirstClickSlotState(false); 
-                } else {
-                    newSelection[id] = { date, hour, minute };
-                    setFirstClickSlotState(true);
-                }
-                return newSelection;
-            });
+            const newSelection = { ...selection };
+            if (newSelection[id]) {
+                delete newSelection[id];
+                setFirstClickSlotState(false);
+            } else {
+                newSelection[id] = { date, hour, minute };
+                setFirstClickSlotState(true);
+            }
+            onSelectionChange(newSelection);
 
             setIsMouseDown(true);
         }
@@ -166,16 +162,13 @@ const EditMyTime: React.FC<EditMyTimeProps> = ({
             );
 
             if (isWithinProjectTime) {
-                setSelection((prevSelection) => {
-                    const newSelection = { ...prevSelection };
-                    if (firstClickSlotState) {
-                        newSelection[id] = { date, hour, minute };
-                        
-                    } else {
-                        delete newSelection[id];
-                    }
-                    return newSelection;
-                });
+                const newSelection = { ...selection };
+                if (firstClickSlotState) {
+                    newSelection[id] = { date, hour, minute };
+                } else {
+                    delete newSelection[id];
+                }
+                onSelectionChange(newSelection);
             }
         }
     };
