@@ -2,7 +2,7 @@ import { Http } from '#/constants/backendURL';
 import { FC, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import styled, { createGlobalStyle, keyframes } from 'styled-components';
-import googleLogo from '../../pics/google-logo-9808 1.png';
+import googleLogo from '../../pics/google-logo-9808 1.svg';
 import BeforeLogin from '../Layouts/BeforeLogin';
 import GraphicIcons from './Icon/GraphicIcons';
 
