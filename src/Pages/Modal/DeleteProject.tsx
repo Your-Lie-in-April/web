@@ -123,6 +123,8 @@ const DeleteProject: React.FC<DeleteProjectProps> = ({
     onClose();
   };
 
+  console.log(projectId);
+
   useScrollLock(isClick);
 
   return (

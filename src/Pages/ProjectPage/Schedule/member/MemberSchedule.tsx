@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { UserSchedule } from '#/Types/scheduletype';
 import MemberTime from './MemberTime';
 
+
 const Box = styled.div`
     width: 631px;
     height: 298px;
@@ -11,6 +12,7 @@ const Box = styled.div`
     background-color: #f1f1f1;
 
     display: flex;
+    flex: 1;
     flex-direction: column;
     gap: 7.46px;
     padding: 7.46px 5px 8px 9.32px;

@@ -2,13 +2,10 @@ import { DateContext } from '#/hooks/context/dateContext';
 import ArrowLeftIcon from '@mui/icons-material/ArrowLeft';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import dayjs from 'dayjs';
+import { Value } from 'node_modules/react-calendar/dist/esm/shared/types';
 import { FC, useContext, useMemo } from 'react';
 import Calendar from 'react-calendar';
 import styled from 'styled-components';
-
-type ValuePiece = Date | null;
-
-type Value = ValuePiece | [ValuePiece, ValuePiece];
 
 const StyledCalendarDiv = styled.div`
   .react-calendar__tile--rangeStart {
@@ -266,9 +263,9 @@ const ScheduleCalendar: FC = () => {
     return null;
   };
 
-  const handleDateChange = (date: Value) => {
-    if (date instanceof Date && setSelectedDate) {
-      setSelectedDate(date.toISOString());
+  const handleDateChange = (value: Value) => {
+    if (value instanceof Date && setSelectedDate) {
+      setSelectedDate(value.toISOString());
     }
   };
 

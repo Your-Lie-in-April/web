@@ -1,5 +1,5 @@
-import { DaySchedule } from '#/Types/scheduletype';
 import styled from 'styled-components';
+import { DaySchedule } from '#/Types/scheduletype';
 import MemberTimeBar from './MemberTimeBar';
 
 
@@ -19,14 +19,14 @@ const TimeTableDiv = styled.div`
 `;
 
 const HourTextList = styled.div`
-    height: 18.641px;
+    width: 532px;
     display: flex;
     flex-direction: row;
-    gap: 7.46px;
+    gap: 7px;
+    align-items: center;
+    justify-content: space-between;
     align-items: flex-start;
-  
-    margin-left: 33.5px;
-    margin-bottom: 7.36px;
+    margin-left: 46px;
 `;
 
 const HoursOfDay = [...Array(16).keys()].map((_, index) => index + 9);
@@ -69,7 +69,7 @@ const MemberTime: React.FC<MemberTimeProps> = ({ scheduleData }) => {
             <div style={{ display: 'flex', flexDirection: 'column' }}>
                 <HourTextList>
                     {HoursOfDay.slice(0, 15).map((hour, idx) => (
-                        <CommonText key={idx} style={{width : "29.8257px"}}>{hour}</CommonText>
+                        <CommonText key={idx}>{hour}</CommonText>
                     ))}
                 </HourTextList>
                 <div
@@ -80,15 +80,9 @@ const MemberTime: React.FC<MemberTimeProps> = ({ scheduleData }) => {
                     }}
                 >
                     {daysOfWeek.map((day) => (
-                        <div key={day} style={{ display: 'flex', alignItems : "center" }}>
+                        <div key={day} style={{ display: 'flex' }}>
                             <div
                                 style={{
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    justifyContent: 'center',
-                                    justifyItems: 'center',
-                                    alignContent: 'center',
-                                    alignItems: 'center',
                                     width: '42px',
                                     textAlign: 'center',
                                     lineHeight: '29.804px',
@@ -97,15 +91,17 @@ const MemberTime: React.FC<MemberTimeProps> = ({ scheduleData }) => {
                                     fontWeight: '400',
                                     fontStyle: 'normal',
                                     fontFamily: 'Pretendard',
-                                    marginRight : "3.73px"
                                 }}
                             >
                                 {daysOfWeekMap[day]}
                             </div>
+                            <div style={{ width: '2px' }} />
+                            <div style={{ flex: 1 }}>
                                 <MemberTimeBar
                                     hours={hours}
                                     schedule={getScheduleForDay(day)}
                                 />
+                            </div>
                         </div>
                     ))}
                 </div>

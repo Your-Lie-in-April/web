@@ -29,7 +29,7 @@ const MakeContainer = styled.div`
 `;
 const TitleContainer = styled.div`
     width: 820px;
-    height: 136px;
+    heigth: 136px;
 `;
 const Title = styled.div`
     width: 820px;
@@ -112,7 +112,6 @@ const Make = styled.button`
     align-items: center;
     justify-content: center;
     margin-top: 130px;
-    color : #000000;
 
     &:hover {
         border-color: black;

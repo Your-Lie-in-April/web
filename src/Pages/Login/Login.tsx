@@ -2,7 +2,6 @@ import { Http } from '#/constants/backendURL';
 import { FC, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import styled, { createGlobalStyle, keyframes } from 'styled-components';
-import googleLogo from '../../pics/google-logo-9808 1.svg';
 import BeforeLogin from '../Layouts/BeforeLogin';
 import GraphicIcons from './Icon/GraphicIcons';
 
@@ -121,7 +120,6 @@ const Google = styled.button`
   font-size: 32px;
   font-style: normal;
   font-weight: 700;
-  color: #000000;
   line-height: normal;
 
   &:focus {
@@ -135,6 +133,8 @@ const GoogleLogin = styled.div`
   gap: 86px;
   position: relative;
 `;
+
+const googleLogo = 'src/pics/google-logo-9808 1.png';
 
 function useQuery() {
   return new URLSearchParams(useLocation().search);
