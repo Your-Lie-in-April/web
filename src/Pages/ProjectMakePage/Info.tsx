@@ -28,7 +28,7 @@ const MakeContainer = styled.div`
 `;
 const TitleContainer = styled.div`
     width: 820px;
-    heigth: 136px;
+    height: 136px;
 `;
 const Title = styled.div`
     width: 820px;
