@@ -1,15 +1,15 @@
+    import { Http } from '#/constants/backendURL';
+import { DateContext } from '#/hooks/context/dateContext';
+import { useUserContext } from '#/Pages/MainPage/MainPage';
+import { ScheduleWeekResponse } from '#/Types/scheduletype';
+import dayjs from 'dayjs';
+import { useContext, useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import EditMySchedule from './edit/EditMySchedule';
 import MyTime from './MyTime';
-import { useContext, useEffect, useState } from 'react';
-import { useUserContext } from '#/Pages/MainPage/MainPage';
-import { DateContext } from '#/hooks/context/dateContext';
-import dayjs from 'dayjs';
-import { Http } from '#/constants/backendURL';
-import { ScheduleWeekResponse } from '#/Types/scheduletype';
-import { useParams } from 'react-router-dom';
 
-const Box = styled.div`
+    const Box = styled.div`
     width: 661px;
     height: 294px;
     border-radius: 20px;
@@ -22,9 +22,9 @@ const Box = styled.div`
     gap: 12px;
     padding: 5px 5px 8px 3px;
     justify-content: space-between;
-`;
+    `;
 
-const CommonText = styled.div`
+    const CommonText = styled.div`
     color: #000000;
     text-align: center;
     font-family: Pretendard;
@@ -32,9 +32,9 @@ const CommonText = styled.div`
     font-style: normal;
     font-weight: 400;
     line-height: normal;
-`;
+    `;
 
-const Title = styled(CommonText)`
+    const Title = styled(CommonText)`
     width: 430px;
     height: 20px;
     justify-content: center;
@@ -43,9 +43,9 @@ const Title = styled(CommonText)`
     font-weight: 700;
 
     flex-basis: 80%;
-`;
+    `;
 
-const EditBtn = styled.button`
+    const EditBtn = styled.button`
     width: 51px;
     padding: 4px 8px;
     box-sizing: border-box;
@@ -65,17 +65,17 @@ const EditBtn = styled.button`
     &:focus {
         outline: none;
     }
-`;
+    `;
 
-interface MyScheduleProps {
+    interface MyScheduleProps {
     isEditModal: boolean;
     setIsEditModal: React.Dispatch<React.SetStateAction<boolean>>;
-}
+    }
 
-const MySchedule: React.FC<MyScheduleProps> = ({
+    const MySchedule: React.FC<MyScheduleProps> = ({
     isEditModal,
     setIsEditModal,
-}) => {
+    }) => {
     const onSetIsEditModal = () => {
         setIsEditModal((prevState) => !prevState);
     };
@@ -93,71 +93,72 @@ const MySchedule: React.FC<MyScheduleProps> = ({
     const condition = dayjs(date?.selectedDate).format('YYYY-MM-DD') ?? '';
     console.log(`condition : ${condition}`);
 
-    const [scheduleData, setSchdeuleData] =
-        useState<ScheduleWeekResponse | null>(null);
+    const [scheduleData, setSchdeuleData] = useState<ScheduleWeekResponse | null>(
+        null
+    );
     // 스케줄 데이터 가져옴
     useEffect(() => {
         const accessToken = localStorage.getItem('access_token');
         const memberId = localStorage.getItem('member_id');
         const fetchSchedule = async () => {
-            try {
-                const response = await fetch(
-                    `${Http}/v1/projects/${projectId}/members/${memberId}/schedules?condition=${condition}`,
-                    {
-                        method: 'GET',
-                        headers: {
-                            Accept: '*/*',
-                            Authorization: `Bearer ${accessToken}`,
-                        },
-                    }
-                );
-
-                if (!response.ok) {
-                    throw new Error('Failed to fetch projects');
-                }
-
-                const data = await response.json();
-                console.log('내 스케줄', data.data);
-                setSchdeuleData(data.data);
-            } catch (error) {
-                console.error(error);
+        try {
+            const response = await fetch(
+            `${Http}/v1/projects/${projectId}/members/${memberId}/schedules?condition=${condition}`,
+            {
+                method: 'GET',
+                headers: {
+                Accept: '*/*',
+                Authorization: `Bearer ${accessToken}`,
+                },
             }
+            );
+
+            if (!response.ok) {
+            throw new Error('Failed to fetch projects');
+            }
+
+            const data = await response.json();
+            console.log('내 스케줄', data.data);
+            setSchdeuleData(data.data);
+        } catch (error) {
+            console.error(error);
+        }
         };
         fetchSchedule();
-    }, [projectId, memberId, condition, isEditModal]);
+    }, [projectId, memberId, condition, isEditModal, scheduleData]);
 
     return (
         <>
-            <Box>
-                <div
-                    style={{
-                        width: '100%',
-                        display: 'flex',
-                        justifyContent: 'space-evenly',
-                    }}
-                >
-                    <div
-                        style={{
-                            justifyContent: 'flex-start',
-                            flexBasis: '10%',
-                        }}
-                    />
-                    <Title>나의 시간표</Title>
-                    <EditBtn onClick={onSetIsEditModal}>수정하기</EditBtn>
-                    <div
-                        style={{ justifyContent: 'flex-end', flexBasis: '1%' }}
-                    />
-                </div>
-                <MyTime scheduleData={scheduleData} />
-            </Box>
-
-            <EditMySchedule
-                onSetIsEditModal={onSetIsEditModal}
-                scheduleData={scheduleData}
-                isEditModal={isEditModal}
+        <Box>
+            <div
+            style={{
+                width: '100%',
+                display: 'flex',
+                justifyContent: 'space-evenly',
+            }}
+            >
+            <div
+                style={{
+                justifyContent: 'flex-start',
+                flexBasis: '10%',
+                }}
             />
+            <Title>나의 시간표</Title>
+            <EditBtn onClick={onSetIsEditModal}>수정하기</EditBtn>
+            <div style={{ justifyContent: 'flex-end', flexBasis: '1%' }} />
+            </div>
+            <MyTime scheduleData={scheduleData} />
+        </Box>
+
+        <EditMySchedule
+            onSetIsEditModal={onSetIsEditModal}
+            scheduleData={scheduleData}
+            isEditModal={isEditModal}
+            setSchdeuleData={setSchdeuleData}
+            condition={condition}
+        />
         </>
     );
-};
+    };
 
-export default MySchedule;
+    export default MySchedule;

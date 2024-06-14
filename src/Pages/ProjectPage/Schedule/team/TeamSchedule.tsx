@@ -97,7 +97,7 @@ const TeamSchedule: React.FC<TeamScheduleProps> = ({ isEditModal }) => {
       }
     };
     fetchSchedule();
-  }, [projectId, condition, isEditModal]);
+  }, [projectId, condition, isEditModal, scheduleData]);
 
   return (
     <Box>
