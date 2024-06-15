@@ -1,14 +1,14 @@
-import styled from 'styled-components';
-import React, { useContext, useState } from 'react';
-import { DateContext } from '#/hooks/context/dateContext';
-import { formatScheduleData } from '../../formatScheduleData';
 import { Http } from '#/constants/backendURL';
-import { useParams } from 'react-router-dom';
+import { DateContext } from '#/hooks/context/dateContext';
+import { ProjectContext } from '#/hooks/context/projectContext';
 import { ScheduleWeekResponse } from '#/Types/scheduletype';
 import ModalPortal from '#/utils/ModalPotal';
 import useScrollLock from '#/utils/useScrollLock';
+import React, { useContext, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import styled from 'styled-components';
+import { formatScheduleData } from '../../formatScheduleData';
 import EditMyTime from './EditMyTime';
-import { ProjectContext } from '#/hooks/context/projectContext';
 
 const ModalBlackOut = styled.div`
     width: 100%;
@@ -117,12 +117,14 @@ interface EditMyScheduleProps {
     isEditModal: boolean;
     onSetIsEditModal: () => void;
     scheduleData: ScheduleWeekResponse | null;
+    fetchSchedule: () => Promise<void>;
 }
 
 const EditMySchedule: React.FC<EditMyScheduleProps> = ({
     isEditModal,
     onSetIsEditModal,
     scheduleData,
+    fetchSchedule,
 }) => {
     const { projectData } = useContext(ProjectContext);
     const startDateString = projectData?.startDate;
@@ -152,7 +154,6 @@ const EditMySchedule: React.FC<EditMyScheduleProps> = ({
         {}
     );
 
-    console.log(selection);
     const postSchedule = async (scheduleData: ScheduleData) => {
         const accessToken = localStorage.getItem('access_token');
         try {
@@ -206,7 +207,7 @@ const EditMySchedule: React.FC<EditMyScheduleProps> = ({
         }
     };
 
-    const handleConfirm = () => {
+    const handleConfirm = async () => {
         const projectStartDate = projectData?.startDate;
         const projectEndDate = projectData?.endDate;
 
@@ -238,12 +239,13 @@ const EditMySchedule: React.FC<EditMyScheduleProps> = ({
 
         try {
             if (scheduleData && scheduleData.schedule.length > 0) {
-                putSchedule(newScheduleData);
+                await putSchedule(newScheduleData);
             } else {
-                postSchedule(newScheduleData);
+                await postSchedule(newScheduleData);
             }
             setSelection({});
             onSetIsEditModal();
+            fetchSchedule(); // 일정 등록/수정 후에 fetchSchedule 함수를 호출합니다.
         } catch (error) {
             console.error('Error post/update schedule:', error);
         }
@@ -267,7 +269,9 @@ const EditMySchedule: React.FC<EditMyScheduleProps> = ({
                             <EditMyTime
                                 weekDates={weekDates || []}
                                 selection={selection}
-                                setSelection={setSelection}
+                                onSelectionChange={(newSelection) =>
+                                    setSelection(newSelection)
+                                }
                             />
                         </Box>
                         <ConfirmBtn onClick={handleConfirm}>
