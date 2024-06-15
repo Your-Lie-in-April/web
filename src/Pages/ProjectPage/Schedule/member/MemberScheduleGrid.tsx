@@ -40,7 +40,7 @@ const MemberScheduleGrid: React.FC<MemberScheduleGridProps> = () => {
         const fetchSchedule = async () => {
             try {
                 const response = await fetch(
-                    `${Http}/v1/projects/${projectId}/schedules?condition=${condition}`,
+                    `${Http}/v2/projects/${projectId}/schedules?condition=${condition}`,
                     {
                         method: 'GET',
                         headers: {
