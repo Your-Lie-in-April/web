@@ -56,18 +56,24 @@ interface SelectedSlot {
 const isProjectHour = (
     date: string,
     hour: number,
-    projectStartTime: number | undefined,
-    projectEndTime: number | undefined
+    minute: number,
+    projectStartTime: string | undefined,
+    projectEndTime: string | undefined
 ) => {
     if (projectStartTime !== undefined && projectEndTime !== undefined) {
+        const [startHour, startMinute] = projectStartTime
+            .split(':')
+            .map(Number);
+        const [endHour, endMinute] = projectEndTime.split(':').map(Number);
+
         const slotDateTime = new Date(date);
-        slotDateTime.setHours(hour);
+        slotDateTime.setHours(hour, minute);
 
         const projectStartDateTime = new Date(date);
-        projectStartDateTime.setHours(projectStartTime);
+        projectStartDateTime.setHours(startHour, startMinute);
 
         const projectEndDateTime = new Date(date);
-        projectEndDateTime.setHours(projectEndTime);
+        projectEndDateTime.setHours(endHour, endMinute);
 
         return (
             slotDateTime >= projectStartDateTime &&
@@ -90,25 +96,11 @@ const EditMyTime: React.FC<EditMyTimeProps> = ({
 }) => {
     const { projectData } = useContext(ProjectContext);
 
-    const startDateString = projectData?.startDate;
-    const endDateString = projectData?.endDate;
-    const startTimeString = projectData?.startTime;
-    const endTimeString = projectData?.endTime;
+    const startTimeString = projectData?.startTime?.toString();
+    const endTimeString = projectData?.endTime?.toString();
 
-    const startDateTime =
-        startDateString && startTimeString
-            ? new Date(`${startDateString}T${startTimeString}`)
-            : undefined;
-
-    const endDateTime =
-        endDateString && endTimeString
-            ? new Date(`${endDateString}T${endTimeString}`)
-            : undefined;
-
-    const projectStartTime = startDateTime
-        ? startDateTime.getHours()
-        : undefined;
-    const projectEndTime = endDateTime ? endDateTime.getHours() : undefined;
+    const projectStartTime = startTimeString;
+    const projectEndTime = endTimeString;
 
     const [firstClickSlot, setFirstClickSlot] = useState<number>(0);
     const [firstClickSlotState, setFirstClickSlotState] =
@@ -125,6 +117,7 @@ const EditMyTime: React.FC<EditMyTimeProps> = ({
         const isWithinProjectTime = isProjectHour(
             date,
             hour,
+            minute,
             projectStartTime,
             projectEndTime
         );
@@ -158,6 +151,7 @@ const EditMyTime: React.FC<EditMyTimeProps> = ({
             const isWithinProjectTime = isProjectHour(
                 date,
                 hour,
+                minute,
                 projectStartTime,
                 projectEndTime
             );
