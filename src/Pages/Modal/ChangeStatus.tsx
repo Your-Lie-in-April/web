@@ -169,6 +169,7 @@ const ChangeStatus: React.FC<ChangeStatusProps> = ({
                                             type='text'
                                             onChange={handleStatusChange}
                                             maxLength={25}
+                                            placeholder={userData?.state}
                                         />
                                         <LimitText>
                                             {newState.length}/25
