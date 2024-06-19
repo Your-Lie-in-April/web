@@ -3,7 +3,7 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import InvitationModal from '../../Modal/InvitationModal';
 
-const BtnContainer = styled.button`
+const BtnContainer = styled.div`
     width: 52px;
     height: 22px;
     display: flex;
@@ -21,6 +21,7 @@ const BtnContainer = styled.button`
     font-style: normal;
     font-weight: 500;
     line-height: normal;
+    cursor: pointer;
 
     &:focus {
         border: none;
@@ -47,7 +48,7 @@ const InviteBtn: React.FC<InviteBtnProps> = ({ projectId, projectData }) => {
                 <InvitationModal
                     projectId={projectId}
                     projectData={projectData}
-                    toggleBtn = {toggleBtn}
+                    toggleBtn={toggleBtn}
                 />
             )}
         </>
