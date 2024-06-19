@@ -1,6 +1,7 @@
-import { FC } from 'react';
+import { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+import { useInvitationContext } from '../ProjectPage/invitationContext';
 const InviteDiv = styled.div`
     display: inline-flex;
     width: 406px;
@@ -68,6 +69,28 @@ const DeceptButton = styled.button`
     color: #ffffff;
 `;
 const Invitation: FC = () => {
+    const { invitationLink } = useInvitationContext();
+    const [projectName, setProjectName] = useState<string>('');
+    console.log(invitationLink);
+    const acceptInvite = async (invitationLink: string) => {
+        try {
+            const accessToken = localStorage.getItem('access_token');
+            const response = await fetch(invitationLink, {
+                method: 'POST',
+                headers: {
+                    accept: '*/*',
+                    Authorization: `Bearer ${accessToken}`,
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error('초대 수락에 실패했습니다.');
+            }
+        } catch (error) {
+            console.error('초대 수락 중 오류 발생:', error);
+        }
+    };
+
     return (
         <InviteDiv>
             <TextDiv>
@@ -75,7 +98,7 @@ const Invitation: FC = () => {
                 <TitleText>000님이 초대를 요청했습니다</TitleText>
                 <AfirmText>수락하시겠습니까?</AfirmText>
                 <ButtonDiv>
-                    <AcceptButton>수락</AcceptButton>
+                    <AcceptButton onClick={() => acceptInvite(invitationLink)}>수락</AcceptButton>
                     <DeceptButton>거절</DeceptButton>
                 </ButtonDiv>
             </TextDiv>
