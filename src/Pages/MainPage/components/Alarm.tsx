@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import styled from 'styled-components';
-
+import Alarms from './alarms';
 const AlarmDiv = styled.div`
     display: flex;
     flex-direction: column;
@@ -41,7 +41,10 @@ const Alarm: FC = () => {
     return (
         <AlarmDiv>
             <AlarmText>알림</AlarmText>
-            <CommingSoon>Comming Soon</CommingSoon>
+            <CommingSoon>
+                Comming Soon
+                <Alarms />
+            </CommingSoon>
         </AlarmDiv>
     );
 };
