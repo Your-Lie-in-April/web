@@ -208,10 +208,11 @@ const MainPage: FC = () => {
                             <Pinned />
                         </div>
                         <ProjectList projects={searchResults} />
+                        <Pagination currentPage={currentPage} totalPages={10} onPageChange={handlePageChange} />
                     </div>
                 </div>
             </MainContainer>
-            <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
+
             <div
                 style={{
                     height: '300px',

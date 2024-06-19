@@ -1,5 +1,7 @@
 import React, { FC } from 'react';
 import styled from 'styled-components';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 
 interface PaginationProps {
     currentPage: number;
@@ -11,28 +13,30 @@ const PaginationContainer = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 20px;
+    margin-top: 35px;
+    margin: auto;
 `;
 
-const PageIndicator = styled.span`
-    margin: 0 10px;
-    color: #633ae2;
-    font-weight: bold;
-`;
-
-const PageButton = styled.button<{ disabled: boolean }>`
-    background-color: #633ae2;
-    color: white;
-    border: none;
-    padding: 10px 20px;
+const PageIndicator = styled.div<{ active: boolean }>`
+    width: ${({ active }) => (active ? '15px' : '10px')};
+    height: ${({ active }) => (active ? '15px' : '10px')};
     margin: 0 5px;
+    background-color: ${({ active }) => (active ? '#633ae2' : '#fbfbfb')};
+    border-radius: 50%;
     cursor: pointer;
-    border-radius: 5px;
-    outline: none;
+`;
+const IconButton = styled.button`
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    margin: 0 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-    &:disabled {
-        opacity: 0.6;
-        cursor: not-allowed;
+    svg {
+        color: ${({ disabled }) => (disabled ? '#ccc' : '#633ae2')};
     }
 `;
 
@@ -49,15 +53,15 @@ const Pagination: FC<PaginationProps> = ({ currentPage, totalPages, onPageChange
 
     return (
         <PaginationContainer>
-            <PageButton onClick={handlePrevious} disabled={currentPage === 0}>
-                {'<'}
-            </PageButton>
-            <PageIndicator>
-                {currentPage + 1} / {totalPages}
-            </PageIndicator>
-            <PageButton onClick={handleNext} disabled={currentPage === totalPages - 1}>
-                {'>'}
-            </PageButton>
+            <IconButton onClick={handlePrevious}>
+                <ChevronLeftIcon style={{ fontSize: 30 }} />
+            </IconButton>
+            {Array.from({ length: totalPages }, (_, index) => (
+                <PageIndicator key={index} active={index === currentPage} onClick={() => onPageChange(index)} />
+            ))}
+            <IconButton onClick={handleNext}>
+                <ChevronRightIcon />
+            </IconButton>
         </PaginationContainer>
     );
 };
