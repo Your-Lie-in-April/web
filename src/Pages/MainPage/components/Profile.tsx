@@ -9,6 +9,7 @@ const LoginDiv = styled.div`
   height: 218px;
   border-radius: 10px;
   background-color: #ffffff;
+  text-align: center;
 `;
 
 const ImageDiv = styled.div`
@@ -51,6 +52,16 @@ const DefaultImg = () => (
   </svg>
 );
 
+const StatusContainer = styled.div`
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+`;
+
+
 const Profile: React.FC = () => {
   const { userData } = useUserContext();
 
@@ -64,7 +75,14 @@ const Profile: React.FC = () => {
         )}
       </ImageDiv>
       <Text>{userData?.email}</Text>
-      <Text>{userData ? userData.state : '로그인 되어 있지 않음'}</Text>
+      <StatusContainer>
+        <Text
+        style={{
+        marginLeft : "8px",
+        marginRight : "8px"
+        }}
+        >{userData ? userData.state : '로그인 되어 있지 않음'}</Text>
+      </StatusContainer>
     </LoginDiv>
   );
 };
