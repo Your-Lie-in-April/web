@@ -146,7 +146,6 @@ const ChangeNickName: React.FC<ChangeNickNameProps> = ({
                                 </Title>
                                 <NickNameField
                                     type='text'
-                                    value={newNick}
                                     onChange={handleNickChange}
                                 />
                                 <ButtonsContainer
