@@ -99,7 +99,14 @@ const MemberProfile = ({
               justifyContent: 'center',
             }}
           >
-            <CommonText>
+            <CommonText
+               style={{
+                maxWidth: '150px',
+                fontSize: '14px',
+                overflow: 'hidden',
+                whiteSpace: 'nowrap',
+                textOverflow: 'ellipsis',
+            }}>
               {member?.nickname}
               {isCurrentUser ? '(본인)' : ''}
             </CommonText>
