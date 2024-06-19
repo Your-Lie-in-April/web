@@ -79,19 +79,6 @@ const CancelBtn = styled(CommonButton)`
     color: #ffffff;
 `;
 
-const LimitText = styled.div`
-    color: #a4a4a4;
-    text-align: center;
-    font-family: Pretendard;
-    font-size: 10px;
-    font-style: normal;
-    font-weight: 300;
-    line-height: normal;
-    position: absolute;
-    bottom: 4px;
-    right: 16px;
-`;
-
 interface ChangeNickNameProps {
     isEditModal: boolean;
     onSetIsEditModal: () => void;
@@ -132,9 +119,7 @@ const ChangeNickName: React.FC<ChangeNickNameProps> = ({
     };
 
     const handleNickChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.value.length <= 25) {
-            setNewNick(e.target.value);
-        }
+        setNewNick(e.target.value);
     };
 
     useScrollLock(isEditModal);
@@ -159,15 +144,11 @@ const ChangeNickName: React.FC<ChangeNickNameProps> = ({
                                 <Title>
                                     프로젝트에서 사용할 닉네임을 작성해주세요
                                 </Title>
-                                <div style={{ position: 'relative' }}>
-                                    <NickNameField
-                                        type='text'
-                                        value={newNick}
-                                        onChange={handleNickChange}
-                                        maxLength={25}
-                                    />
-                                    <LimitText>{newNick.length}/25</LimitText>
-                                </div>
+                                <NickNameField
+                                    type='text'
+                                    value={newNick}
+                                    onChange={handleNickChange}
+                                />
                                 <ButtonsContainer
                                     style={{ alignSelf: 'flex-end' }}
                                 >

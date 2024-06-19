@@ -39,7 +39,7 @@ const StatusField = styled.input`
     font-style: normal;
     font-weight: 400;
     line-height: normal;
-    padding: 9px 16px;
+    padding: 4px 16px;
     box-sizing: border-box;
     border: none;
     outline: none;
@@ -81,6 +81,19 @@ const CancelBtn = styled(CommonButton)`
     background: #d9d9d9;
 `;
 
+const LimitText = styled.div`
+    color: #a4a4a4;
+    text-align: center;
+    font-family: Pretendard;
+    font-size: 10px;
+    font-style: normal;
+    font-weight: 300;
+    line-height: normal;
+    position: absolute;
+    bottom: 4px;
+    right: 16px;
+`;
+
 interface ChangeStatusProps {
     editStatusModal: boolean;
     onSetEditStatusModal: () => void;
@@ -95,7 +108,9 @@ const ChangeStatus: React.FC<ChangeStatusProps> = ({
     const accessToken = localStorage.getItem('access_token');
 
     const handleStatusChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setNewState(e.target.value);
+        if (e.target.value.length <= 25) {
+            setNewState(e.target.value);
+        }
     };
 
     const updateStatus = async () => {
@@ -149,11 +164,17 @@ const ChangeStatus: React.FC<ChangeStatusProps> = ({
                                     }}
                                 >
                                     <Title>상태메시지를 작성해주세요</Title>
-                                    <StatusField
-                                        type="text"
-                                        placeholder={userData?.state}
-                                        onChange={handleStatusChange}
-                                    />
+                                    <div style={{ position: 'relative' }}>
+                                        <StatusField
+                                            type='text'
+                                            placeholder={userData?.state}
+                                            onChange={handleStatusChange}
+                                            maxLength={25}
+                                        />
+                                        <LimitText>
+                                            {newState.length}/25
+                                        </LimitText>{' '}
+                                    </div>
                                 </div>
                                 <ButtonsContainer
                                     style={{ alignSelf: 'flex-end' }}
