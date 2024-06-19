@@ -167,7 +167,6 @@ const ChangeStatus: React.FC<ChangeStatusProps> = ({
                                     <div style={{ position: 'relative' }}>
                                         <StatusField
                                             type='text'
-                                            placeholder={userData?.state}
                                             onChange={handleStatusChange}
                                             maxLength={25}
                                         />

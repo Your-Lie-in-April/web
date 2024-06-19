@@ -101,7 +101,7 @@ const MemberProfile = ({
           >
             <CommonText
                style={{
-                maxWidth: '150px',
+                maxWidth: '196px',
                 fontSize: '14px',
                 overflow: 'hidden',
                 whiteSpace: 'nowrap',
@@ -114,6 +114,10 @@ const MemberProfile = ({
               style={{
                 fontSize: '10px',
                 fontWeight: '400',
+                maxWidth: '196px',
+                overflow: 'hidden',
+                whiteSpace: 'nowrap',
+                textOverflow: 'ellipsis',
               }}
             >
               {member?.state}

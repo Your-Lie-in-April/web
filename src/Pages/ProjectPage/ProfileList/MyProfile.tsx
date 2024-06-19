@@ -217,7 +217,16 @@ const MyProfile = () => {
                         <MyEmailText>{me?.email}</MyEmailText>
                     </div>
                 </div>
-                <MyStatus>{me?.state}</MyStatus>
+                <MyStatus
+                    style={{
+                        width: '100%',
+                        overflow: 'hidden',
+                        whiteSpace: 'nowrap',
+                        textOverflow: 'ellipsis',
+                    }}
+                >
+                    {me?.state}
+                </MyStatus>
             </MyProfileBox>
             <ChangeNickName
                 onSetIsEditModal={onSetIsEditModal}

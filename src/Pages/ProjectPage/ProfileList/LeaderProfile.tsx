@@ -80,7 +80,7 @@ const LeaderProfile = ({
           >
             <CommonText
                style={{
-                maxWidth: '150px',
+                maxWidth: '158px',
                 fontSize: '14px',
                 overflow: 'hidden',
                 whiteSpace: 'nowrap',
@@ -93,6 +93,10 @@ const LeaderProfile = ({
               style={{
                 fontSize: '10px',
                 fontWeight: '400',
+                maxWidth: '158px',
+                overflow: 'hidden',
+                whiteSpace: 'nowrap',
+                textOverflow: 'ellipsis',
               }}
             >
               {member?.state}
