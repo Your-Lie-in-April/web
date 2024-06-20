@@ -111,7 +111,7 @@ const Make = styled.button`
     align-items: center;
     justify-content: center;
     margin-top: 130px;
-    color : #000000;
+    color: #000000;
 
     &:hover {
         border-color: black;
@@ -126,9 +126,9 @@ interface InfoProps {
     setTitle: Dispatch<SetStateAction<string>>;
     setColor: Dispatch<SetStateAction<string>>;
     setImg: Dispatch<SetStateAction<string>>;
+    setImgId: Dispatch<SetStateAction<string>>;
 }
-
-const Info: FC<InfoProps> = ({ setContent, setTitle, setColor, setImg }) => {
+const Info: FC<InfoProps> = ({ setContent, setTitle, setColor, setImg, setImgId }) => {
     const [isTitleClicked, setIsTitleClicked] = useState<boolean>(false);
     const [isContentClicked, setIsContentClicked] = useState<boolean>(false);
     const [isCoverClicked, setIsCoverClicked] = useState<boolean>(false);
@@ -160,11 +160,12 @@ const Info: FC<InfoProps> = ({ setContent, setTitle, setColor, setImg }) => {
         setColor(color);
     };
 
-    const handleImageSelect = (url: string) => {
+    const handleImageSelect = (url: string, id: string) => {
         setSelectedImageUrl(url);
         setSelectedColor(null);
         setSelectedHex(null);
         setImg(url);
+        setImgId(id);
     };
 
     const handleHexSelect = (color: string) => {

@@ -116,16 +116,20 @@ const colors = ['#633AE2', '#FFCB3B', '#64AFF5', '#C2D57A', '#EB5757', '#212121'
 
 interface CoverProps {
     onColorSelect: (color: string) => void;
-    onImageSelect: (url: string) => void;
+    onImageSelect: (url: string, id: string) => void;
     onHexSelect: (color: string) => void;
     toggleCover: () => void;
+}
+interface ApiResponseItem {
+    id: string;
+    url: string;
 }
 
 const Cover: FC<CoverProps> = ({ onColorSelect, onImageSelect, onHexSelect, toggleCover }) => {
     const [color, setColor] = useState('#fff');
     const [openHex, setOpenHex] = useState<boolean>(false);
     const [img, setImg] = useState<string>('');
-    const [urls, setUrls] = useState<string[]>([]);
+    const [images, setImages] = useState<ApiResponseItem[]>([]);
     const accessToken = localStorage.getItem('access_token');
     const coverImg = async () => {
         const response = await fetch(`${Http}/v1/covers?page=0&size=10`, {
@@ -140,21 +144,22 @@ const Cover: FC<CoverProps> = ({ onColorSelect, onImageSelect, onHexSelect, togg
         }
 
         const data = await response.json();
-        setUrls(data.data.map((item: any) => item.url));
+        setImages(data.data);
 
-        console.log('배경사진', urls);
+        console.log('배경사진', data.data);
     };
 
     useEffect(() => {
         coverImg();
         coverImg().catch((error) => console.error('Fetching URLs failed:', error));
     }, []);
+
     const handleColorClick = (color: string) => {
         setColor(color);
         onColorSelect(color);
     };
-    const handleImageClick = (url: string) => {
-        onImageSelect(url);
+    const handleImageClick = (url: string, id: string) => {
+        onImageSelect(id, url);
         setImg(url);
     };
 
@@ -204,17 +209,17 @@ const Cover: FC<CoverProps> = ({ onColorSelect, onImageSelect, onHexSelect, togg
                 <ImageContainer>
                     이미지
                     <ImageChoose>
-                        {urls.length > 0 ? (
-                            urls.map((url, index) => (
+                        {images.length > 0 ? (
+                            images.map((item) => (
                                 <Image
-                                    key={index}
+                                    key={item.id}
                                     style={{
-                                        backgroundImage: `url('${url}')`,
+                                        backgroundImage: `url('${item.url}')`,
                                         backgroundSize: 'cover',
                                         backgroundRepeat: 'no-repeat',
                                         backgroundPosition: 'center',
                                     }}
-                                    onClick={() => handleImageClick(url)}
+                                    onClick={() => handleImageClick(item.id, item.url)}
                                 ></Image>
                             ))
                         ) : (

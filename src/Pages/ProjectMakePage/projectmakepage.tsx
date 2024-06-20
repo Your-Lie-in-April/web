@@ -74,6 +74,7 @@ const ProjectMakePage: FC = () => {
     const [title, setTitle] = useState<string>('');
     const [color, setColor] = useState<string>('#D6CBEF');
     const [img, setImg] = useState<string>('');
+    const [imgId, setImgId] = useState<string>('');
     const [starttime, setStartTime] = useState('AM 09:00');
     const [endtime, setEndTime] = useState('AM 09:00');
     const [selectedDays, setSelectedDays] = useState<string[]>([]);
@@ -102,7 +103,7 @@ const ProjectMakePage: FC = () => {
             daysOfWeek: selectedDays,
             isStored: false,
             color: color,
-            coverImageId: img,
+            coverImageId: imgId,
         };
         console.log('payload', payload);
         // if (!accessToken) {
@@ -141,7 +142,7 @@ const ProjectMakePage: FC = () => {
                     backgroundColor: '#212121',
                 }}
             />
-            <Info setContent={setContent} setTitle={setTitle} setColor={setColor} setImg={setImg} />
+            <Info setContent={setContent} setTitle={setTitle} setColor={setColor} setImg={setImg} setImgId={setImgId} />
             <div
                 style={{
                     height: '109px',
