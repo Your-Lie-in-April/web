@@ -127,9 +127,10 @@ interface ApiResponseItem {
 
 const Cover: FC<CoverProps> = ({ onColorSelect, onImageSelect, onHexSelect, toggleCover }) => {
     const [color, setColor] = useState('#fff');
+    const [imgId, setImgId] = useState('');
     const [openHex, setOpenHex] = useState<boolean>(false);
-    const [img, setImg] = useState<string>('');
     const [images, setImages] = useState<ApiResponseItem[]>([]);
+
     const accessToken = localStorage.getItem('access_token');
     const coverImg = async () => {
         const response = await fetch(`${Http}/v1/covers?page=0&size=10`, {
@@ -156,17 +157,12 @@ const Cover: FC<CoverProps> = ({ onColorSelect, onImageSelect, onHexSelect, togg
 
     const handleColorClick = (color: string) => {
         setColor(color);
-        setImg('');
         onColorSelect(color);
-        onImageSelect('', '');
     };
-    const handleImageClick = (id: string, url: string) => {
-        setImg(url);
-        setColor('');
-        onImageSelect(id, url);
-        onColorSelect('');
+    const handleImageClick = (url: string, id: string) => {
+        onImageSelect(url, id);
+        setImgId(id);
     };
-
     const handleColorChange = useCallback(
         (color: ColorResult) => {
             let hexCode = color.hex;
@@ -174,11 +170,9 @@ const Cover: FC<CoverProps> = ({ onColorSelect, onImageSelect, onHexSelect, togg
                 hexCode = `rgba(${color.rgb.r}, ${color.rgb.g}, ${color.rgb.b}, ${color.rgb.a})`;
             }
             setColor(hexCode);
-            setImg('');
             onHexSelect(hexCode);
-            onImageSelect('', '');
         },
-        [onHexSelect, onImageSelect]
+        [onHexSelect]
     );
 
     const toggleHex = () => {
@@ -225,7 +219,7 @@ const Cover: FC<CoverProps> = ({ onColorSelect, onImageSelect, onHexSelect, togg
                                         backgroundRepeat: 'no-repeat',
                                         backgroundPosition: 'center',
                                     }}
-                                    onClick={() => handleImageClick(item.id, item.url)}
+                                    onClick={() => handleImageClick(item.url, item.id)}
                                 ></Image>
                             ))
                         ) : (

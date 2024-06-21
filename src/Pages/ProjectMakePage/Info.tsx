@@ -158,6 +158,8 @@ const Info: FC<InfoProps> = ({ setContent, setTitle, setColor, setImg, setImgId 
         setSelectedImageUrl(null);
         setSelectedHex(null);
         setColor(color);
+        setImg('');
+        setImgId('');
     };
 
     const handleImageSelect = (url: string, id: string) => {
@@ -166,12 +168,15 @@ const Info: FC<InfoProps> = ({ setContent, setTitle, setColor, setImg, setImgId 
         setSelectedHex(null);
         setImg(url);
         setImgId(id);
+        setColor('');
     };
-
     const handleHexSelect = (color: string) => {
         setSelectedColor(null);
         setSelectedImageUrl(null);
         setSelectedHex(color);
+        setColor(color);
+        setImg('');
+        setImgId('');
     };
 
     return (
