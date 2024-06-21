@@ -52,7 +52,6 @@ const ProjectTitle = styled.div`
     font-weight: 400;
     line-height: normal;
     margin-top: 8px;
-    margin: auto;
 `;
 
 const CreatedAt = styled.span`
@@ -64,13 +63,14 @@ const CreatedAt = styled.span`
     line-height: normal;
 `;
 
-const NotificationContent = styled.div`
+const NotificationContent = styled.div<{ isIconVisible: boolean }>`
     color: #7d7d7d;
     font-family: Pretendard;
     font-size: 13px;
     font-style: normal;
     font-weight: 400;
     line-height: normal;
+    margin-left: ${(props) => (props.isIconVisible ? '14px' : '0')};
 `;
 
 const ProjectTitleContainer = styled.div`
@@ -192,15 +192,13 @@ const Alarm: FC = () => {
             {alarmMessages.map((alarm, index) => (
                 <NotificationBox key={index} isFirst={index === 0}>
                     <ProjectTitleContainer>
-                        <div style={{ display: 'flex', flexDirection: 'row' }}>
-                            {isIconVisible && (
-                                <CheckBoxIcon style={{ cursor: 'pointer', color: '#A4A4A4', marginLeft: -10 }} />
-                            )}
+                        <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                            {isIconVisible && <CheckBoxIcon style={{ color: '#A4A4A4', marginLeft: -10 }} />}
                             <ProjectTitle>{alarm.projectTitle}</ProjectTitle>
                         </div>
                         <CreatedAt>{alarm.createdAt}</CreatedAt>
                     </ProjectTitleContainer>
-                    <NotificationContent>{alarm.message}</NotificationContent>
+                    <NotificationContent isIconVisible={isIconVisible}>{alarm.message}</NotificationContent>
                 </NotificationBox>
             ))}
         </AlarmDiv>
