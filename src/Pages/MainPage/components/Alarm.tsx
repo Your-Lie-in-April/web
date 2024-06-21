@@ -34,7 +34,6 @@ const NotificationBox = styled.div<{ isFirst: boolean }>`
     width: 275px;
     height: 59px;
     padding: 8px;
-
     flex-shrink: 0;
     background: #f5f5f5;
     border-bottom: 1px solid #7d7d7d;
@@ -52,6 +51,14 @@ const ProjectTitle = styled.div`
     line-height: normal;
     margin-top: 8px;
 `;
+const CreatedAt = styled.span`
+    color: #a4a4a4;
+    font-family: Pretendard;
+    font-size: 10px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+`;
 
 const NotificationContent = styled.div`
     color: #7d7d7d;
@@ -60,10 +67,35 @@ const NotificationContent = styled.div`
     font-style: normal;
     font-weight: 400;
     line-height: normal;
+\
 `;
+function formatTimeAgo(timestamp: string): string {
+    const date = new Date(timestamp);
+    const now = new Date();
+
+    const diffMs = now.getTime() - date.getTime();
+    const diffSeconds = Math.floor(diffMs / 1000);
+    const diffMinutes = Math.floor(diffSeconds / 60);
+    const diffHours = Math.floor(diffMinutes / 60);
+    const diffDays = Math.floor(diffHours / 24);
+
+    if (diffSeconds < 60) {
+        return '지금';
+    } else if (diffMinutes < 60) {
+        return `${diffMinutes}분 전`;
+    } else if (diffHours < 24) {
+        return `${diffHours}시간 전`;
+    } else if (diffDays < 7) {
+        return `${diffDays}일 전`;
+    } else {
+        return date.toLocaleDateString();
+    }
+}
 
 const Alarm: FC = () => {
-    const [alarmMessages, setAlarmMessages] = useState<{ projectTitle: string; message: string }[]>([]);
+    const [alarmMessages, setAlarmMessages] = useState<{ projectTitle: string; message: string; createdAt: string }[]>(
+        []
+    );
     const sseURL = `${Http}/v1/sse/subscribe`;
     const token = localStorage.getItem('access_token');
 
@@ -88,6 +120,7 @@ const Alarm: FC = () => {
             const messages = parsedData.data.map((item: any) => ({
                 projectTitle: item.project.title,
                 message: item.message,
+                createdAt: formatTimeAgo(item.createdAt),
             }));
             setAlarmMessages(messages);
         });
@@ -122,6 +155,7 @@ const Alarm: FC = () => {
                 const messages = data.data.map((item: any) => ({
                     projectTitle: item.project.title,
                     message: item.message,
+                    createdAt: formatTimeAgo(item.createdAt),
                 }));
                 setAlarmMessages(messages);
             } catch (error) {
@@ -137,7 +171,17 @@ const Alarm: FC = () => {
             <Text>알림</Text>
             {alarmMessages.map((alarm, index) => (
                 <NotificationBox key={index} isFirst={index === 0}>
-                    <ProjectTitle>{alarm.projectTitle}</ProjectTitle>
+                    <div
+                        style={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                        }}
+                    >
+                        <ProjectTitle>{alarm.projectTitle}</ProjectTitle>
+                        <CreatedAt>{alarm.createdAt}</CreatedAt>
+                    </div>
                     <NotificationContent>{alarm.message}</NotificationContent>
                 </NotificationBox>
             ))}
