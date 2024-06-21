@@ -3,11 +3,12 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import InboxOutlinedIcon from '@mui/icons-material/InboxOutlined';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import PushPinOutlinedIcon from '@mui/icons-material/PushPinOutlined';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { ProjectEntity } from '../../../Types/projecttype';
 import LeaveProject from '../../Modal/LeaveProject';
+import DeleteProject from '#/Pages/Modal/DeleteProject';
 
 interface MoreTextProps extends React.HTMLAttributes<HTMLDivElement> {
     isMove?: boolean;
