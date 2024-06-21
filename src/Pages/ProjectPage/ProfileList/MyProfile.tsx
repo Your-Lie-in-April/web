@@ -223,9 +223,10 @@ const MyProfile = () => {
                         overflow: 'hidden',
                         whiteSpace: 'nowrap',
                         textOverflow: 'ellipsis',
+                        color: me?.state ? '#000000' : '#7D7D7D',
                     }}
                 >
-                    {me?.state}
+                    {me?.state || '상태 메시지 등록이 되어있지 않습니다'}
                 </MyStatus>
             </MyProfileBox>
             <ChangeNickName

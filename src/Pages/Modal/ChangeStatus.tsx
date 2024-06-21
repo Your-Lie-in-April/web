@@ -99,7 +99,10 @@ interface ChangeStatusProps {
     onSetEditStatusModal: () => void;
 }
 
-const ChangeStatus: React.FC<ChangeStatusProps> = ({ editStatusModal, onSetEditStatusModal }) => {
+const ChangeStatus: React.FC<ChangeStatusProps> = ({
+    editStatusModal,
+    onSetEditStatusModal,
+}) => {
     const { userData, setUserData } = useUserContext();
     const [newState, setNewState] = useState('');
     const accessToken = localStorage.getItem('access_token');
@@ -112,7 +115,11 @@ const ChangeStatus: React.FC<ChangeStatusProps> = ({ editStatusModal, onSetEditS
 
     const updateStatus = async () => {
         try {
-            const finalStatus = newState.trim() === '' ? '(없음)' : newState;
+            const finalStatus = newState.trim();
+            if (finalStatus === '') {
+                alert('상태 메세지를 입력해주세요 👀');
+                return;
+            }
             const response = await fetch(`${Http}/v1/members/${finalStatus}`, {
                 method: 'PUT',
                 headers: {
@@ -173,16 +180,21 @@ const ChangeStatus: React.FC<ChangeStatusProps> = ({ editStatusModal, onSetEditS
                                             type='text'
                                             onChange={handleStatusChange}
                                             maxLength={25}
-                                            placeholder={userData?.state}
                                         />
                                         <LimitText>
                                             {newState.length}/25
                                         </LimitText>{' '}
                                     </div>
                                 </div>
-                                <ButtonsContainer style={{ alignSelf: 'flex-end' }}>
-                                    <ConfirmBtn onClick={updateStatus}>확인</ConfirmBtn>
-                                    <CancelBtn onClick={onSetEditStatusModal}>취소</CancelBtn>
+                                <ButtonsContainer
+                                    style={{ alignSelf: 'flex-end' }}
+                                >
+                                    <ConfirmBtn onClick={updateStatus}>
+                                        확인
+                                    </ConfirmBtn>
+                                    <CancelBtn onClick={onSetEditStatusModal}>
+                                        취소
+                                    </CancelBtn>
                                 </ButtonsContainer>
                             </div>
                         </Box>
