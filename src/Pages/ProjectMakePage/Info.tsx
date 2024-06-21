@@ -14,7 +14,7 @@ const Container = styled.div`
     align-items: center;
     justify-content: center;
     background-color: #ffffff;
-    border: 1px solid #000000;
+    border-bottom: 1px solid #000000;
 
     position: relative;
     z-index: 5;
@@ -118,7 +118,11 @@ const Make = styled.button`
     }
 
     &:focus {
-        outline: none;
+        border: 1px solid #000000;
+    }
+
+    &:active {
+        border: 1px solid #000000;
     }
 `;
 interface InfoProps {
