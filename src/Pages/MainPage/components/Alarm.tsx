@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { EventSourcePolyfill, NativeEventSource } from 'event-source-polyfill';
 import 'react-toastify/dist/ReactToastify.css';
 import { Http } from '#/constants/backendURL';
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
 
 const AlarmDiv = styled.div`
     display: flex;
@@ -12,6 +13,7 @@ const AlarmDiv = styled.div`
     height: 918px;
     background-color: #f5f5f5;
     border-radius: 10px;
+    position: relative;
 `;
 
 const Text = styled.div`
@@ -50,7 +52,9 @@ const ProjectTitle = styled.div`
     font-weight: 400;
     line-height: normal;
     margin-top: 8px;
+    margin: auto;
 `;
+
 const CreatedAt = styled.span`
     color: #a4a4a4;
     font-family: Pretendard;
@@ -67,8 +71,15 @@ const NotificationContent = styled.div`
     font-style: normal;
     font-weight: 400;
     line-height: normal;
-\
 `;
+
+const ProjectTitleContainer = styled.div`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 4px;
+`;
+
 function formatTimeAgo(timestamp: string): string {
     const date = new Date(timestamp);
     const now = new Date();
@@ -96,6 +107,7 @@ const Alarm: FC = () => {
     const [alarmMessages, setAlarmMessages] = useState<{ projectTitle: string; message: string; createdAt: string }[]>(
         []
     );
+    const [isIconVisible, setIsIconVisible] = useState<boolean>(false);
     const sseURL = `${Http}/v1/sse/subscribe`;
     const token = localStorage.getItem('access_token');
 
@@ -166,22 +178,28 @@ const Alarm: FC = () => {
         fetchNotifications();
     }, []);
 
+    const toggleIconVisibility = () => {
+        setIsIconVisible(!isIconVisible);
+    };
+
     return (
         <AlarmDiv>
             <Text>알림</Text>
+            <CheckBoxIcon
+                onClick={toggleIconVisibility}
+                style={{ cursor: 'pointer', color: '#A4A4A4', position: 'absolute', left: 8, top: 48 }}
+            />
             {alarmMessages.map((alarm, index) => (
                 <NotificationBox key={index} isFirst={index === 0}>
-                    <div
-                        style={{
-                            display: 'flex',
-                            flexDirection: 'row',
-                            justifyContent: 'space-between',
-                            alignItems: 'center',
-                        }}
-                    >
-                        <ProjectTitle>{alarm.projectTitle}</ProjectTitle>
+                    <ProjectTitleContainer>
+                        <div style={{ display: 'flex', flexDirection: 'row' }}>
+                            {isIconVisible && (
+                                <CheckBoxIcon style={{ cursor: 'pointer', color: '#A4A4A4', marginLeft: -10 }} />
+                            )}
+                            <ProjectTitle>{alarm.projectTitle}</ProjectTitle>
+                        </div>
                         <CreatedAt>{alarm.createdAt}</CreatedAt>
-                    </div>
+                    </ProjectTitleContainer>
                     <NotificationContent>{alarm.message}</NotificationContent>
                 </NotificationBox>
             ))}
