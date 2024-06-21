@@ -11,7 +11,7 @@ const GlobalStyle = createGlobalStyle`
   body {
     width : 100%;
     min-width : 1366px;
-    height : 1920px;
+    max-height : 1920px;
     margin: 0 auto;
     background-color: #212121;
     -ms-overflow-style: none;
@@ -28,7 +28,6 @@ const Container = styled.div`
     background-color: white;
     flex-direction: column;
     align-items: center;
-
     gap: 78px;
     border: none;
     box-shadow: none;
@@ -50,11 +49,6 @@ const SButton = styled.button`
     border-radius: 60px;
     background: #633ae2;
     white-space: nowrap;
-
-    &:focus {
-        outline: none;
-        border: none;
-    }
 `;
 
 const SButtonText = styled.text`
@@ -134,20 +128,24 @@ const ProjectMakePage: FC = () => {
             <AfterLogin />
             <div
                 style={{
-                    height: '20px',
+                    height: '16px',
                     width: '100%',
-                    backgroundColor: '#212121',
+                    backgroundColor: '#000000',
                 }}
             />
             <Info setContent={setContent} setTitle={setTitle} setColor={setColor} setImg={setImg} setImgId={setImgId} />
             <div
                 style={{
+                    height: '24px',
+                    width: '100%',
+                    backgroundColor: '#000000',
+                }}
+            />
+            <div
+                style={{
                     height: '109px',
                     width: '100%',
-                    backgroundColor: 'white',
-                    margin: '0',
-                    border: 'none',
-                    boxShadow: 'none',
+                    backgroundColor: '#ffffff',
                 }}
             />
             <Container>
@@ -184,10 +182,14 @@ const ProjectMakePage: FC = () => {
                 style={{
                     height: '109px',
                     width: '100%',
-                    backgroundColor: 'white',
-                    margin: '0',
-                    border: 'none',
-                    boxShadow: 'none',
+                    backgroundColor: '#ffffff',
+                }}
+            />
+            <div
+                style={{
+                    height: '300px',
+                    width: '100%',
+                    backgroundColor: '#000000',
                 }}
             />
         </>

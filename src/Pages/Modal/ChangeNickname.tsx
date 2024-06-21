@@ -1,7 +1,10 @@
+import { Http } from '#/constants/backendURL';
 import ModalPortal from '#/utils/ModalPotal';
 import useScrollLock from '#/utils/useScrollLock';
 import { useState } from 'react';
+import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
+import { useUserContext } from '../MainPage/MainPage';
 import { ModalBlackOut, ModalContainer } from './ModalCommon';
 
 const Box = styled.div`
@@ -33,7 +36,7 @@ const NickNameField = styled.input`
     color: #000000;
     font-size: 18px;
     font-weight: 400;
-    padding: 9px 16px;
+    padding: 4px 16px;
     box-sizing: border-box;
     border: none;
     outline: none;
@@ -79,20 +82,44 @@ const CancelBtn = styled(CommonButton)`
 interface ChangeNickNameProps {
     isEditModal: boolean;
     onSetIsEditModal: () => void;
-    onNickChange: (newNick: string) => void;
 }
 
 const ChangeNickName: React.FC<ChangeNickNameProps> = ({
     isEditModal,
     onSetIsEditModal,
-    onNickChange,
 }) => {
-    const [newNick, setNewNick] = useState('');
+    const { projectId } = useParams<{ projectId: string }>();
+    const { userData, setUserData } = useUserContext();
+    const [newNick, setNewNick] = useState(userData?.nickname || '');
+    const accessToken = localStorage.getItem('access_token');
 
-    const handleConfirm = () => {
-        console.log('new nickname:', newNick);
-        onNickChange(newNick);
-        onSetIsEditModal();
+    const updateMyNick = async () => {
+        try {
+            const response = await fetch(
+                `${Http}/v1/projects/members/nickname?projectId=${projectId}&nickname=${newNick}`,
+                {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${accessToken}`,
+                        credential: 'include',
+                    },
+                    body: JSON.stringify({ state: newNick }),
+                }
+            );
+
+            if (!response.ok) throw new Error('닉네임 변경 실패');
+
+            const updatedUserData = await response.json();
+            setUserData({ ...userData, nickname: updatedUserData.nickname });
+            onSetIsEditModal();
+        } catch (error) {
+            console.error('업데이트 실패:', error);
+        }
+    };
+
+    const handleNickChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setNewNick(e.target.value);
     };
 
     useScrollLock(isEditModal);
@@ -118,14 +145,13 @@ const ChangeNickName: React.FC<ChangeNickNameProps> = ({
                                     프로젝트에서 사용할 닉네임을 작성해주세요
                                 </Title>
                                 <NickNameField
-                                    type="text"
-                                    value={newNick}
-                                    onChange={(e) => setNewNick(e.target.value)}
+                                    type='text'
+                                    onChange={handleNickChange}
                                 />
                                 <ButtonsContainer
                                     style={{ alignSelf: 'flex-end' }}
                                 >
-                                    <ConfirmBtn onClick={handleConfirm}>
+                                    <ConfirmBtn onClick={updateMyNick}>
                                         확인
                                     </ConfirmBtn>
                                     <CancelBtn onClick={onSetIsEditModal}>

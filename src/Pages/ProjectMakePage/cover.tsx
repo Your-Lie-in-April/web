@@ -93,8 +93,9 @@ const ImageChoose = styled.div`
     justify-content: center;
     align-items: center;
     flex-wrap: wrap;
+    row-gap: 8px;
 `;
-const Image = styled.button`
+const Image = styled.div`
     width: 50px;
     height: 50px;
     margin: 0;
@@ -102,6 +103,7 @@ const Image = styled.button`
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
+    cursor: pointer;
 `;
 const HEXContainer = styled.div`
     width: 300px;
