@@ -57,6 +57,7 @@ const TitleText = styled.input`
     border: transparent;
     color: black;
     outline: none;
+    background-color: white;
     &:focus {
         outline: none;
     }
@@ -89,7 +90,7 @@ const ContentText = styled.textarea<ContentTextProps>`
         color: #000000;
     }
     overflow: hidden;
-    background-color: #ffffff;
+    background-color: transparent;
     position: relative;
 `;
 
