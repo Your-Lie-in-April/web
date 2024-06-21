@@ -1,14 +1,7 @@
 import { Http } from '#/constants/backendURL';
 import { MemberEntity } from '#/Types/membertype';
 import { ProjectEntity } from '#/Types/projecttype';
-import {
-  createContext,
-  FC,
-  ReactNode,
-  useContext,
-  useEffect,
-  useState,
-} from 'react';
+import { createContext, FC, ReactNode, useContext, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import styled, { createGlobalStyle } from 'styled-components';
 import AfterLogin from '../Layouts/AfterLogin';
@@ -20,6 +13,7 @@ import NewProject from './components/NewProject';
 import Pinned from './components/Pinned';
 import Profile from './components/Profile';
 import ProjectList from './components/ProjectList';
+import Pagination from './components/pagination';
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -36,194 +30,196 @@ const GlobalStyle = createGlobalStyle`
 `;
 
 const MainContainer = styled.div`
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  margin: 0 auto;
-  max-width: 1284px;
-  box-sizing: border-box;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+    max-width: 1284px;
+    box-sizing: border-box;
 `;
 
 function useQuery() {
-  const location = useLocation();
-  return new URLSearchParams(location.search);
+    const location = useLocation();
+    return new URLSearchParams(location.search);
 }
 
 type UserContextType = {
-  userData: MemberEntity | null;
-  setUserData: (userData: MemberEntity | null) => void;
+    userData: MemberEntity | null;
+    setUserData: (userData: MemberEntity | null) => void;
 };
 
 const UserContext = createContext<UserContextType | null>(null);
 
-export const UserProvider: React.FC<{ children: ReactNode }> = ({
-  children,
-}) => {
-  const [userData, setUserData] = useState<MemberEntity | null>(null);
+export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+    const [userData, setUserData] = useState<MemberEntity | null>(null);
 
-  return (
-    <UserContext.Provider value={{ userData, setUserData }}>
-      {children}
-    </UserContext.Provider>
-  );
+    return <UserContext.Provider value={{ userData, setUserData }}>{children}</UserContext.Provider>;
 };
 
 export const useUserContext = () => {
-  const context = useContext(UserContext);
-  if (context === null)
-    throw new Error('useUserContext must be used within a UserProvider');
-  return context;
+    const context = useContext(UserContext);
+    if (context === null) throw new Error('useUserContext must be used within a UserProvider');
+    return context;
 };
 
 const MainPage: FC = () => {
-  const { userData, setUserData } = useUserContext();
-  const query = useQuery();
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
-  const [projects, setProjects] = useState<ProjectEntity[]>([]);
-  const [searchResults, setSearchResults] = useState<ProjectEntity[]>([]);
+    const { userData, setUserData } = useUserContext();
+    const query = useQuery();
+    const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+    const [projects, setProjects] = useState<ProjectEntity[]>([]);
+    const [searchResults, setSearchResults] = useState<ProjectEntity[]>([]);
+    const [currentPage, setCurrentPage] = useState<number>(0);
+    const [totalPages, setTotalPages] = useState<number>(0);
 
-  useEffect(() => {
-    const accessToken =
-      query.get('access_token') || localStorage.getItem('access_token');
-    const refreshToken =
-      query.get('refresh_token') || localStorage.getItem('refresh_token');
-    const memberId =
-      query.get('member_id') || localStorage.getItem('member_id');
+    useEffect(() => {
+        const accessToken = query.get('access_token') || localStorage.getItem('access_token');
+        const refreshToken = query.get('refresh_token') || localStorage.getItem('refresh_token');
+        const memberId = query.get('member_id') || localStorage.getItem('member_id');
 
-    if (accessToken) localStorage.setItem('access_token', accessToken);
-    if (refreshToken) localStorage.setItem('refresh_token', refreshToken);
-    if (memberId) localStorage.setItem('member_id', memberId);
+        if (accessToken) localStorage.setItem('access_token', accessToken);
+        if (refreshToken) localStorage.setItem('refresh_token', refreshToken);
+        if (memberId) localStorage.setItem('member_id', memberId);
 
-    if (accessToken && refreshToken) {
-      setIsLoggedIn(true);
-    } else {
-      setIsLoggedIn(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    const accessToken = localStorage.getItem('access_token');
-    const memberId = localStorage.getItem('member_id');
-    console.log(accessToken);
-    console.log(memberId);
-    const fetchUser = async () => {
-      try {
-        const response = await fetch(Http + `/v1/members/${memberId}`, {
-          method: 'GET',
-          headers: {
-            Accept: '*/*',
-            Authorization: `Bearer ${accessToken}`,
-          },
-        });
-        const data = await response.json();
-        console.log(data);
-        setUserData(data?.data);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
-    fetchUser();
-  }, [userData?.nickname, userData?.state]);
-
-  useEffect(() => {
-    const accessToken = localStorage.getItem('access_token');
-    const memberId = localStorage.getItem('member_id');
-    const fetchProjects = async () => {
-      const response = await fetch(
-        `${Http}/v1/projects/members/${memberId}?page=0&size=6`,
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
+        if (accessToken && refreshToken) {
+            setIsLoggedIn(true);
+        } else {
+            setIsLoggedIn(false);
         }
-      );
-      const data = await response.json();
-      console.log(data);
-      setProjects(data.data);
-      setSearchResults(data.data);
+    }, []);
+
+    useEffect(() => {
+        const accessToken = localStorage.getItem('access_token');
+        const memberId = localStorage.getItem('member_id');
+        console.log(accessToken);
+        console.log(memberId);
+        const fetchUser = async () => {
+            try {
+                const response = await fetch(Http + `/v1/members/${memberId}`, {
+                    method: 'GET',
+                    headers: {
+                        Accept: '*/*',
+                        Authorization: `Bearer ${accessToken}`,
+                    },
+                });
+                const data = await response.json();
+                console.log(data);
+                setUserData(data?.data);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+        fetchUser();
+    }, [userData?.nickname, userData?.state]);
+
+    useEffect(() => {
+        const accessToken = localStorage.getItem('access_token');
+        const memberId = localStorage.getItem('member_id');
+
+        const fetchProjects = async (page: number) => {
+            try {
+                const response = await fetch(`${Http}/v1/projects/members/${memberId}?page=${page}&size=6`, {
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`,
+                    },
+                });
+                const data = await response.json();
+                console.log('Projects Data:', data);
+
+                setTotalPages(Math.ceil(data.total / 6));
+
+                setProjects(data.data);
+                setSearchResults(data.data);
+            } catch (error) {
+                console.error('Error fetching projects:', error);
+            }
+        };
+
+        if (accessToken && memberId) {
+            fetchProjects(currentPage);
+        }
+    }, [currentPage]);
+
+    const handleSearch = (query: string) => {
+        const searchProjects = projects.filter((project) => project.title.toLowerCase().includes(query.toLowerCase()));
+        setSearchResults(searchProjects);
     };
 
-    if (accessToken) fetchProjects();
-  }, []);
+    const handlePageChange = (page: number) => {
+        setCurrentPage(page);
+    };
 
-  const handleSearch = (query: string) => {
-    const searchProjects = projects.filter((project) =>
-      project.title.toLowerCase().includes(query.toLowerCase())
-    );
-    setSearchResults(searchProjects);
-  };
+    return (
+        <>
+            <GlobalStyle />
 
-  return (
-    <>
-      <GlobalStyle />
-
-      {isLoggedIn ? <AfterLogin /> : <BeforeLogin />}
-      <Banner />
-      <div
-        style={{
-          height: '126px',
-        }}
-      />
-      <MainContainer>
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'row',
-            gap: '20px',
-          }}
-        >
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'flex-start',
-              gap: '14px',
-            }}
-          >
-            <Profile />
-            <Alarm />
-          </div>
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'flex-start',
-              gap: '24px',
-            }}
-          >
+            {isLoggedIn ? <AfterLogin /> : <BeforeLogin />}
+            <Banner />
             <div
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'flex-start',
-                gap: '21px',
-              }}
-            >
-              <div
                 style={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  alignItems: 'flex-start',
-                  gap: '8px',
+                    height: '126px',
                 }}
-              >
-                <Search onSearch={handleSearch} />
-                <NewProject />
-              </div>
-              <Pinned />
-            </div>
-            <ProjectList projects={searchResults} />
-          </div>
-        </div>
-      </MainContainer>
+            />
+            <MainContainer>
+                <div
+                    style={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        gap: '20px',
+                    }}
+                >
+                    <div
+                        style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'flex-start',
+                            gap: '14px',
+                        }}
+                    >
+                        <Profile />
+                        <Alarm />
+                    </div>
+                    <div
+                        style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'flex-start',
+                            gap: '24px',
+                        }}
+                    >
+                        <div
+                            style={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'flex-start',
+                                gap: '21px',
+                            }}
+                        >
+                            <div
+                                style={{
+                                    display: 'flex',
+                                    flexDirection: 'row',
+                                    alignItems: 'flex-start',
+                                    gap: '8px',
+                                }}
+                            >
+                                <Search onSearch={handleSearch} />
+                                <NewProject />
+                            </div>
+                            <Pinned />
+                        </div>
+                        <ProjectList projects={searchResults} />
+                        <Pagination currentPage={currentPage} totalPages={10} onPageChange={handlePageChange} />
+                    </div>
+                </div>
+            </MainContainer>
 
-      <div
-        style={{
-          height: '300px',
-        }}
-      />
-    </>
-  );
+            <div
+                style={{
+                    height: '300px',
+                }}
+            />
+        </>
+    );
 };
 
 export default MainPage;

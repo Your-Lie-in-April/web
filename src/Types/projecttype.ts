@@ -13,6 +13,7 @@ export type ProjectEntity = {
     isStored?: boolean;
     coverImageUrl: string | null;
     color: string;
+    coverImageId?: string;
 };
 
 export type ProjectThumbnailResponse = {
