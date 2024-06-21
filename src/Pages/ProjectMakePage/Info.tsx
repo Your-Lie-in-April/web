@@ -89,8 +89,7 @@ const ContentText = styled.textarea<ContentTextProps>`
         color: #000000;
     }
     overflow: hidden;
-    background-color: transparent;
-
+    background-color: #ffffff;
     position: relative;
 `;
 
