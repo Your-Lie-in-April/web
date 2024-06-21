@@ -117,19 +117,31 @@ const colors = ['#633AE2', '#FFCB3B', '#64AFF5', '#C2D57A', '#EB5757', '#212121'
 
 interface CoverProps {
     onColorSelect: (color: string) => void;
-    onImageSelect: (url: string) => void;
+    onImageSelect: (url: string, id: string) => void;
     onHexSelect: (color: string) => void;
     title?: string;
     content?: string;
     projectData?: ProjectEntity | null;
     setEditCover?: Dispatch<SetStateAction<boolean>>;
+    imgId?: string;
+}
+interface ApiResponseItem {
+    id: string;
+    url: string;
 }
 
-const CoverEdit: FC<CoverProps> = ({ onColorSelect, onImageSelect, onHexSelect, title, content, projectData }) => {
+const CoverEdit: FC<CoverProps> = ({
+    onColorSelect,
+    onImageSelect,
+    onHexSelect,
+    title,
+    content,
+    projectData,
+    imgId,
+}) => {
     const [color, setColor] = useState(projectData?.color || '');
     const [openHex, setOpenHex] = useState<boolean>(false);
-    const [img, setImg] = useState<string>('');
-    const [urls, setUrls] = useState<string[]>([]);
+    const [images, setImages] = useState<ApiResponseItem[]>([]);
     const accessToken = localStorage.getItem('access_token');
     const coverImg = async () => {
         const response = await fetch(`${Http}/v1/covers?page=0&size=10`, {
@@ -144,9 +156,9 @@ const CoverEdit: FC<CoverProps> = ({ onColorSelect, onImageSelect, onHexSelect, 
         }
 
         const data = await response.json();
-        setUrls(data.data.map((item: any) => item.url));
+        setImages(data.data);
 
-        console.log('배경사진', urls);
+        console.log('배경사진', data.data);
     };
 
     useEffect(() => {
@@ -158,9 +170,8 @@ const CoverEdit: FC<CoverProps> = ({ onColorSelect, onImageSelect, onHexSelect, 
         setColor(color);
         onColorSelect(color);
     };
-    const handleImageClick = (url: string) => {
-        onImageSelect(url);
-        setImg(url);
+    const handleImageClick = (url: string, id: string) => {
+        onImageSelect(url, id);
     };
 
     const handleColorChange = useCallback(
@@ -183,13 +194,13 @@ const CoverEdit: FC<CoverProps> = ({ onColorSelect, onImageSelect, onHexSelect, 
         const effectiveTitle = title || projectData?.title;
         const effectiveDescription = content || projectData?.description;
         const effectiveColor = color || projectData?.color;
-        const effectiveCoverImageUrl = null || projectData?.coverImageUrl;
+        const effectiveCoverImageId = imgId || projectData?.coverImageId;
 
         const payload = {
             title: effectiveTitle,
             description: effectiveDescription,
             color: effectiveColor,
-            coverImageUrl: effectiveCoverImageUrl,
+            coverImageId: effectiveCoverImageId,
             startDate: projectData?.startDate,
             endDate: projectData?.endDate,
             daysOfWeek: projectData?.daysOfWeek,
@@ -248,17 +259,17 @@ const CoverEdit: FC<CoverProps> = ({ onColorSelect, onImageSelect, onHexSelect, 
                 <ImageContainer>
                     이미지
                     <ImageChoose>
-                        {urls.length > 0 ? (
-                            urls.map((url, index) => (
+                        {images.length > 0 ? (
+                            images.map((item) => (
                                 <Image
-                                    key={index}
+                                    key={item.id}
                                     style={{
-                                        backgroundImage: `url('${url}')`,
+                                        backgroundImage: `url('${item.url}')`,
                                         backgroundSize: 'cover',
                                         backgroundRepeat: 'no-repeat',
                                         backgroundPosition: 'center',
                                     }}
-                                    onClick={() => handleImageClick(url)}
+                                    onClick={() => handleImageClick(item.url, item.id)}
                                 ></Image>
                             ))
                         ) : (
