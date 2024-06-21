@@ -156,11 +156,15 @@ const Cover: FC<CoverProps> = ({ onColorSelect, onImageSelect, onHexSelect, togg
 
     const handleColorClick = (color: string) => {
         setColor(color);
+        setImg('');
         onColorSelect(color);
+        onImageSelect('', '');
     };
-    const handleImageClick = (url: string, id: string) => {
-        onImageSelect(id, url);
+    const handleImageClick = (id: string, url: string) => {
         setImg(url);
+        setColor('');
+        onImageSelect(id, url);
+        onColorSelect('');
     };
 
     const handleColorChange = useCallback(
@@ -170,9 +174,11 @@ const Cover: FC<CoverProps> = ({ onColorSelect, onImageSelect, onHexSelect, togg
                 hexCode = `rgba(${color.rgb.r}, ${color.rgb.g}, ${color.rgb.b}, ${color.rgb.a})`;
             }
             setColor(hexCode);
+            setImg('');
             onHexSelect(hexCode);
+            onImageSelect('', '');
         },
-        [onHexSelect]
+        [onHexSelect, onImageSelect]
     );
 
     const toggleHex = () => {
