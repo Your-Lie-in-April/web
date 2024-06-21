@@ -132,6 +132,12 @@ const ChangeStatus: React.FC<ChangeStatusProps> = ({ editStatusModal, onSetEditS
         }
     };
 
+    useEffect(() => {
+        if (editStatusModal) {
+            setNewState('');
+        }
+    }, [editStatusModal]);
+
     useScrollLock(editStatusModal);
 
     return (
