@@ -14,7 +14,7 @@ const AlarmDiv = styled.div`
     border-radius: 10px;
 `;
 
-const AlarmText = styled.div`
+const Text = styled.div`
     width: 39px;
     height: 26px;
     font-family: 'Pretendard';
@@ -29,19 +29,41 @@ const AlarmText = styled.div`
     white-space: nowrap;
 `;
 
-const CommingSoon = styled.div`
-    height: 33px;
-    font-family: 'Pretendard';
+const NotificationBox = styled.div<{ isFirst: boolean }>`
+    display: flex;
+    width: 275px;
+    height: 59px;
+    padding: 8px;
+
+    flex-shrink: 0;
+    background: #f5f5f5;
+    border-bottom: 1px solid #7d7d7d;
+    border-top: ${(props) => (props.isFirst ? '1px solid #7d7d7d' : 'none')};
+    flex-direction: column;
+    gap: 7px;
+`;
+
+const ProjectTitle = styled.div`
+    color: #a4a4a4;
+    font-family: Pretendard;
+    font-size: 13px;
     font-style: normal;
-    font-weight: 700;
-    font-size: 28px;
-    line-height: 33px;
-    color: #d9d9d9;
-    margin: auto;
+    font-weight: 400;
+    line-height: normal;
+    margin-top: 8px;
+`;
+
+const NotificationContent = styled.div`
+    color: #7d7d7d;
+    font-family: Pretendard;
+    font-size: 13px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
 `;
 
 const Alarm: FC = () => {
-    const [alarmMessage, setAlarmMessage] = useState<string | null>(null);
+    const [alarmMessages, setAlarmMessages] = useState<{ projectTitle: string; message: string }[]>([]);
     const sseURL = `${Http}/v1/sse/subscribe`;
     const token = localStorage.getItem('access_token');
 
@@ -57,12 +79,17 @@ const Alarm: FC = () => {
         });
 
         eventSource.addEventListener('notification', (event: any) => {
-            console.log('에빈ㄴ드');
+            console.log('에아아');
         });
 
         eventSource.addEventListener('message', (event: any) => {
             const { data } = event;
-            setAlarmMessage(data);
+            const parsedData = JSON.parse(data);
+            const messages = parsedData.data.map((item: any) => ({
+                projectTitle: item.project.title,
+                message: item.message,
+            }));
+            setAlarmMessages(messages);
         });
 
         eventSource.onerror = (err) => {
@@ -75,10 +102,45 @@ const Alarm: FC = () => {
         };
     }, [sseURL, token]);
 
+    useEffect(() => {
+        const fetchNotifications = async () => {
+            try {
+                const accessToken = localStorage.getItem('access_token');
+                const response = await fetch(`${Http}/v1/notifications`, {
+                    method: 'GET',
+                    headers: {
+                        Accept: '*/*',
+                        Authorization: `Bearer ${accessToken}`,
+                    },
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to fetch notifications');
+                }
+
+                const data = await response.json();
+                const messages = data.data.map((item: any) => ({
+                    projectTitle: item.project.title,
+                    message: item.message,
+                }));
+                setAlarmMessages(messages);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+
+        fetchNotifications();
+    }, []);
+
     return (
         <AlarmDiv>
-            <AlarmText>알림</AlarmText>
-            {alarmMessage && <CommingSoon>{alarmMessage}</CommingSoon>}
+            <Text>알림</Text>
+            {alarmMessages.map((alarm, index) => (
+                <NotificationBox key={index} isFirst={index === 0}>
+                    <ProjectTitle>{alarm.projectTitle}</ProjectTitle>
+                    <NotificationContent>{alarm.message}</NotificationContent>
+                </NotificationBox>
+            ))}
         </AlarmDiv>
     );
 };
