@@ -1,7 +1,7 @@
 import { Http } from '#/constants/backendURL';
 import ModalPortal from '#/utils/ModalPotal';
 import useScrollLock from '#/utils/useScrollLock';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useUserContext } from '../MainPage/MainPage';
 import { ModalBlackOut, ModalContainer } from './ModalCommon';
@@ -99,12 +99,9 @@ interface ChangeStatusProps {
     onSetEditStatusModal: () => void;
 }
 
-const ChangeStatus: React.FC<ChangeStatusProps> = ({
-    editStatusModal,
-    onSetEditStatusModal,
-}) => {
+const ChangeStatus: React.FC<ChangeStatusProps> = ({ editStatusModal, onSetEditStatusModal }) => {
     const { userData, setUserData } = useUserContext();
-    const [newState, setNewState] = useState(userData?.state || '');
+    const [newState, setNewState] = useState('');
     const accessToken = localStorage.getItem('access_token');
 
     const handleStatusChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -115,20 +112,21 @@ const ChangeStatus: React.FC<ChangeStatusProps> = ({
 
     const updateStatus = async () => {
         try {
-            const response = await fetch(`${Http}/v1/members/${newState}`, {
+            const finalStatus = newState.trim() === '' ? '(없음)' : newState;
+            const response = await fetch(`${Http}/v1/members/${finalStatus}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
                     Authorization: `Bearer ${accessToken}`,
-                    credential: 'include',
                 },
-                body: JSON.stringify({ state: newState }),
+                body: JSON.stringify({ state: finalStatus }),
             });
             if (!response.ok) throw new Error('Status update failed');
 
             const updatedUserData = await response.json();
             setUserData({ ...userData, state: updatedUserData.state });
             onSetEditStatusModal();
+            window.location.reload();
         } catch (error) {
             console.error('업데이트 실패:', error);
         }
@@ -176,15 +174,9 @@ const ChangeStatus: React.FC<ChangeStatusProps> = ({
                                         </LimitText>{' '}
                                     </div>
                                 </div>
-                                <ButtonsContainer
-                                    style={{ alignSelf: 'flex-end' }}
-                                >
-                                    <ConfirmBtn onClick={updateStatus}>
-                                        확인
-                                    </ConfirmBtn>
-                                    <CancelBtn onClick={onSetEditStatusModal}>
-                                        취소
-                                    </CancelBtn>
+                                <ButtonsContainer style={{ alignSelf: 'flex-end' }}>
+                                    <ConfirmBtn onClick={updateStatus}>확인</ConfirmBtn>
+                                    <CancelBtn onClick={onSetEditStatusModal}>취소</CancelBtn>
                                 </ButtonsContainer>
                             </div>
                         </Box>
