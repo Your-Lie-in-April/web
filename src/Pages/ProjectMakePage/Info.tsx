@@ -14,7 +14,7 @@ const Container = styled.div`
     align-items: center;
     justify-content: center;
     background-color: #ffffff;
-    border: 1px solid #000000;
+    border-bottom: 1px solid #000000;
 
     position: relative;
     z-index: 5;
@@ -57,6 +57,7 @@ const TitleText = styled.input`
     border: transparent;
     color: black;
     outline: none;
+    background-color: white;
     &:focus {
         outline: none;
     }
@@ -90,7 +91,6 @@ const ContentText = styled.textarea<ContentTextProps>`
     }
     overflow: hidden;
     background-color: transparent;
-
     position: relative;
 `;
 
@@ -111,14 +111,18 @@ const Make = styled.button`
     align-items: center;
     justify-content: center;
     margin-top: 130px;
-    color : #000000;
+    color: #000000;
 
     &:hover {
         border-color: black;
     }
 
     &:focus {
-        outline: none;
+        border: 1px solid #000000;
+    }
+
+    &:active {
+        border: 1px solid #000000;
     }
 `;
 interface InfoProps {
@@ -126,9 +130,9 @@ interface InfoProps {
     setTitle: Dispatch<SetStateAction<string>>;
     setColor: Dispatch<SetStateAction<string>>;
     setImg: Dispatch<SetStateAction<string>>;
+    setImgId: Dispatch<SetStateAction<string>>;
 }
-
-const Info: FC<InfoProps> = ({ setContent, setTitle, setColor, setImg }) => {
+const Info: FC<InfoProps> = ({ setContent, setTitle, setColor, setImg, setImgId }) => {
     const [isTitleClicked, setIsTitleClicked] = useState<boolean>(false);
     const [isContentClicked, setIsContentClicked] = useState<boolean>(false);
     const [isCoverClicked, setIsCoverClicked] = useState<boolean>(false);
@@ -158,19 +162,25 @@ const Info: FC<InfoProps> = ({ setContent, setTitle, setColor, setImg }) => {
         setSelectedImageUrl(null);
         setSelectedHex(null);
         setColor(color);
+        setImg('');
+        setImgId('');
     };
 
-    const handleImageSelect = (url: string) => {
+    const handleImageSelect = (url: string, id: string) => {
         setSelectedImageUrl(url);
         setSelectedColor(null);
         setSelectedHex(null);
         setImg(url);
+        setImgId(id);
+        setColor('');
     };
-
     const handleHexSelect = (color: string) => {
         setSelectedColor(null);
         setSelectedImageUrl(null);
         setSelectedHex(color);
+        setColor(color);
+        setImg('');
+        setImgId('');
     };
 
     return (
