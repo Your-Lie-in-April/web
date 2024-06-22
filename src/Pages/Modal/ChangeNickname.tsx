@@ -90,13 +90,18 @@ const ChangeNickName: React.FC<ChangeNickNameProps> = ({
 }) => {
     const { projectId } = useParams<{ projectId: string }>();
     const { userData, setUserData } = useUserContext();
-    const [newNick, setNewNick] = useState(userData?.nickname || '');
+    const [newNick, setNewNick] = useState('');
     const accessToken = localStorage.getItem('access_token');
 
     const updateMyNick = async () => {
         try {
+            const finalNick = newNick.trim();
+            if (finalNick === '') {
+                alert('닉네임을 입력해주세요 👀');
+                return;
+            }
             const response = await fetch(
-                `${Http}/v1/projects/members/nickname?projectId=${projectId}&nickname=${newNick}`,
+                `${Http}/v1/projects/members/nickname?projectId=${projectId}&nickname=${finalNick}`,
                 {
                     method: 'PUT',
                     headers: {
@@ -104,7 +109,7 @@ const ChangeNickName: React.FC<ChangeNickNameProps> = ({
                         Authorization: `Bearer ${accessToken}`,
                         credential: 'include',
                     },
-                    body: JSON.stringify({ state: newNick }),
+                    body: JSON.stringify({ state: finalNick }),
                 }
             );
 
@@ -113,6 +118,7 @@ const ChangeNickName: React.FC<ChangeNickNameProps> = ({
             const updatedUserData = await response.json();
             setUserData({ ...userData, nickname: updatedUserData.nickname });
             onSetIsEditModal();
+            window.location.reload();
         } catch (error) {
             console.error('업데이트 실패:', error);
         }
