@@ -17,6 +17,8 @@ const CoverContainer = styled.div`
     width: 300px;
     height: 292px;
     display: flex;
+    align-items: flex-end;
+    gap: 8px;
     border-radius: 8px;
     background: var(--gray00, #fbfbfb);
     box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.25);
@@ -236,14 +238,19 @@ const Cover: FC<CoverProps> = ({ onColorSelect, onImageSelect, onHexSelect, togg
                         display: 'flex',
                         justifyContent: 'center',
                         height: '252px',
-                        marginLeft: '8px',
-                        marginTop: '37px',
                     }}
                 >
                     <ChromePicker
                         disableAlpha={false}
                         color={color}
                         onChange={(selectedColor) => handleColorChange(selectedColor)}
+                        styles={{
+                            default:{
+                                picker:{
+                                    borderRadius: '6px'
+                                }
+                            }
+                        }}
                     />
                 </div>
             ) : null}
