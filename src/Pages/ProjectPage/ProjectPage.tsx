@@ -85,10 +85,10 @@ const ProjectPage: React.FC = () => {
 
   useEffect(() => {
     const accessToken = localStorage.getItem('access_token');
-    // if (!accessToken) {
-    //   navigate('/login');
-    //   return;
-    // }
+    if (!accessToken) {
+      navigate('/login');
+      return;
+    }
     const fetchMember = async () => {
       try {
         const response = await fetch(
