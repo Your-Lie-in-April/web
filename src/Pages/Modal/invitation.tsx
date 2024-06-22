@@ -1,6 +1,8 @@
+import { Http } from '#/constants/backendURL';
+import { ProjectInviteMetaInfo } from '#/Types/projecttype';
 import ModalPortal from '#/utils/ModalPotal';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useInvitationContext } from '../ProjectPage/invitationContext';
 import { ModalBackBlur, ModalContainer } from './ModalCommon';
@@ -43,7 +45,7 @@ const CommonText = styled.text`
     line-height: normal;
 `;
 
-const ProjectName = styled(CommonText)`
+const OverflowText = styled(CommonText)`
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -81,8 +83,8 @@ const DeceptBtn = styled(Button)`
 `;
 
 const Invitation: FC = () => {
+    const [inviteInfo, setInviteInfo] = useState<ProjectInviteMetaInfo>();
     const { invitationLink } = useInvitationContext();
-    const [projectName, setProjectName] = useState<string>('');
     console.log(invitationLink);
     const acceptInvite = async (invitationLink: string) => {
         try {
@@ -103,6 +105,29 @@ const Invitation: FC = () => {
         }
     };
 
+    useEffect(() => {
+        const getMetaInviteInfo = async () => {
+            const accessToken = localStorage.getItem('access_token');
+            const url = `${Http}/v1/projects/invitations?url=${invitationLink}`;
+            const headers = {
+                Accept: '*/*',
+                Authorization: `Bearer ${accessToken}`,
+            };
+
+            try {
+                const response = await fetch(url, { headers });
+                if (!response.ok) {
+                    throw new Error('데이터 가져오기 실패');
+                }
+                const data = await response.json();
+                setInviteInfo(data.data);
+            } catch (error) {
+                console.error('API 요청 중 에러 발생:', error);
+            }
+        };
+        getMetaInviteInfo();
+    }, []);
+
     return (
         <ModalPortal>
             <ModalBackBlur />
@@ -113,9 +138,21 @@ const Invitation: FC = () => {
                             style={{ color: '#eb5757', fontSize: '32' }}
                         />
                         <CommonText>
-                            <ProjectName>000000...</ProjectName> 프로젝트에
+                            <OverflowText>
+                                {inviteInfo?.title &&
+                                inviteInfo.title.length > 8
+                                    ? `${inviteInfo.title.slice(0, 8)}...`
+                                    : inviteInfo?.title}
+                            </OverflowText>
+                            프로젝트에
                             <br />
-                            0000이 초대요청을 보냈습니다
+                            <OverflowText>
+                                {inviteInfo?.invitator &&
+                                inviteInfo.invitator.length > 4
+                                    ? `${inviteInfo.invitator.slice(0, 4)}...`
+                                    : inviteInfo?.invitator}
+                            </OverflowText>
+                            이 초대요청을 보냈습니다
                         </CommonText>
                     </TextDiv>
                     <ButtonDiv>
