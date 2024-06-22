@@ -1,5 +1,5 @@
 import { Http } from '#/constants/backendURL';
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import styled, { createGlobalStyle } from 'styled-components';
 import AfterLogin from '../Layouts/AfterLogin';
@@ -31,6 +31,10 @@ const Container = styled.div`
     gap: 78px;
     border: none;
     box-shadow: none;
+
+    padding-top: 109px;
+    padding-bottom: 109px;
+    box-sizing: border-box;
 `;
 
 const TimeContainer = styled.div`
@@ -73,6 +77,14 @@ const ProjectMakePage: FC = () => {
     const [endtime, setEndTime] = useState('AM 09:00');
     const [selectedDays, setSelectedDays] = useState<string[]>([]);
     const navigate = useNavigate();
+
+    useEffect(() => {
+        const accessToken = localStorage.getItem('access_token');
+        if (!accessToken) {
+            navigate('/login');
+        }
+    }, [navigate]);
+
     const formatTime = (time: string) => {
         const [ampm, timeString] = time.split(' ');
         let [hour, minute] = timeString.split(':').map(Number);
@@ -100,6 +112,8 @@ const ProjectMakePage: FC = () => {
             coverImageId: imgId,
         };
         console.log('payload', payload);
+
+        
 
         try {
             const response = await fetch(Http + `/v1/projects`, {
@@ -141,13 +155,7 @@ const ProjectMakePage: FC = () => {
                     backgroundColor: '#000000',
                 }}
             />
-            <div
-                style={{
-                    height: '109px',
-                    width: '100%',
-                    backgroundColor: '#ffffff',
-                }}
-            />
+            
             <Container>
                 <TimeContainer>
                     <ProjectCalendar
@@ -178,13 +186,7 @@ const ProjectMakePage: FC = () => {
                     <SButtonText>프로젝트 만들기</SButtonText>
                 </SButton>
             </Container>
-            <div
-                style={{
-                    height: '109px',
-                    width: '100%',
-                    backgroundColor: '#ffffff',
-                }}
-            />
+            
             <div
                 style={{
                     height: '300px',
