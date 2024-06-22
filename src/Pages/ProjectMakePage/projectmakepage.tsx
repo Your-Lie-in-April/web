@@ -31,6 +31,10 @@ const Container = styled.div`
     gap: 78px;
     border: none;
     box-shadow: none;
+
+    padding-top: 109px;
+    padding-bottom: 109px;
+    box-sizing: border-box;
 `;
 
 const TimeContainer = styled.div`
@@ -73,6 +77,7 @@ const ProjectMakePage: FC = () => {
     const [endtime, setEndTime] = useState('AM 09:00');
     const [selectedDays, setSelectedDays] = useState<string[]>([]);
     const navigate = useNavigate();
+
     const formatTime = (time: string) => {
         const [ampm, timeString] = time.split(' ');
         let [hour, minute] = timeString.split(':').map(Number);
@@ -82,7 +87,9 @@ const ProjectMakePage: FC = () => {
         } else if (ampm === 'AM' && hour === 12) {
             hour = 0;
         }
-        return `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}:00`;
+        return `${hour.toString().padStart(2, '0')}:${minute
+            .toString()
+            .padStart(2, '0')}:00`;
     };
 
     const makeProject = async () => {
@@ -133,7 +140,13 @@ const ProjectMakePage: FC = () => {
                     backgroundColor: '#000000',
                 }}
             />
-            <Info setContent={setContent} setTitle={setTitle} setColor={setColor} setImg={setImg} setImgId={setImgId} />
+            <Info
+                setContent={setContent}
+                setTitle={setTitle}
+                setColor={setColor}
+                setImg={setImg}
+                setImgId={setImgId}
+            />
             <div
                 style={{
                     height: '24px',
@@ -141,13 +154,7 @@ const ProjectMakePage: FC = () => {
                     backgroundColor: '#000000',
                 }}
             />
-            <div
-                style={{
-                    height: '109px',
-                    width: '100%',
-                    backgroundColor: '#ffffff',
-                }}
-            />
+
             <Container>
                 <TimeContainer>
                     <ProjectCalendar
@@ -178,13 +185,7 @@ const ProjectMakePage: FC = () => {
                     <SButtonText>프로젝트 만들기</SButtonText>
                 </SButton>
             </Container>
-            <div
-                style={{
-                    height: '109px',
-                    width: '100%',
-                    backgroundColor: '#ffffff',
-                }}
-            />
+
             <div
                 style={{
                     height: '300px',
