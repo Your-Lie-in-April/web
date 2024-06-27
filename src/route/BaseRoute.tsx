@@ -1,5 +1,6 @@
 import Login from '#/Pages/Login/Login';
-import { Route, Routes } from 'react-router-dom';
+import getIsLogin from '#/utils/getIsLogin';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import AuthRoute from './AuthRoute';
 import PrivateRoute from './PrivateRoute';
 import UnPrivateRoute from './UnPrivateRoute';
@@ -7,6 +8,14 @@ import UnPrivateRoute from './UnPrivateRoute';
 export default function BaseRoute() {
     return (
         <Routes>
+            <Route
+                path='/login'
+                element={
+                    <UnPrivateRoute>
+                        <Login />
+                    </UnPrivateRoute>
+                }
+            />
             <Route
                 path='/*'
                 element={
@@ -16,11 +25,9 @@ export default function BaseRoute() {
                 }
             />
             <Route
-                path='/login'
+                path='*'
                 element={
-                    <UnPrivateRoute>
-                        <Login />
-                    </UnPrivateRoute>
+                    getIsLogin() ? <Navigate to='/' replace /> : <Navigate to='/login' replace />
                 }
             />
         </Routes>
