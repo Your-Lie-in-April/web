@@ -1,5 +1,5 @@
 import { Http } from '#/constants/backendURL';
-import { FC, useEffect, useState } from 'react';
+import { FC, useState } from 'react';
 import { useNavigate } from 'react-router';
 import styled, { createGlobalStyle } from 'styled-components';
 import AfterLogin from '../Layouts/AfterLogin';
@@ -78,13 +78,6 @@ const ProjectMakePage: FC = () => {
     const [selectedDays, setSelectedDays] = useState<string[]>([]);
     const navigate = useNavigate();
 
-    useEffect(() => {
-        const accessToken = localStorage.getItem('access_token');
-        if (!accessToken) {
-            navigate('/login');
-        }
-    }, [navigate]);
-
     const formatTime = (time: string) => {
         const [ampm, timeString] = time.split(' ');
         let [hour, minute] = timeString.split(':').map(Number);
@@ -112,8 +105,6 @@ const ProjectMakePage: FC = () => {
             coverImageId: imgId,
         };
         console.log('payload', payload);
-
-        
 
         try {
             const response = await fetch(Http + `/v1/projects`, {
@@ -155,7 +146,7 @@ const ProjectMakePage: FC = () => {
                     backgroundColor: '#000000',
                 }}
             />
-            
+
             <Container>
                 <TimeContainer>
                     <ProjectCalendar
@@ -186,7 +177,7 @@ const ProjectMakePage: FC = () => {
                     <SButtonText>프로젝트 만들기</SButtonText>
                 </SButton>
             </Container>
-            
+
             <div
                 style={{
                     height: '300px',
