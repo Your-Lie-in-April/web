@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import CoverEdit from './coveredit';
 
 interface ContentTextProps {
-    focused: boolean;
+    $focused: boolean;
 }
 
 const Container = styled.div`
@@ -74,7 +74,7 @@ const Content = styled.div`
 `;
 
 const ContentText = styled.textarea<ContentTextProps>`
-    color: ${({ focused }) => (focused ? '#000000' : '#7d7d7d')};
+    color: ${({ $focused }) => ($focused ? '#000000' : '#7d7d7d')};
     color: #7d7d7d;
     text-align: center;
     font-family: Pretendard;
@@ -205,7 +205,7 @@ const InfoEdit: FC<InfoEditPros> = ({ projectData, setEditCover }) => {
                     <Content>
                         <ContentText
                             value={content}
-                            focused
+                            $focused
                             onChange={handleTextareaChange}
                             onFocus={() => setIsContentClicked(true)}
                             onBlur={() => setIsContentClicked(false)}

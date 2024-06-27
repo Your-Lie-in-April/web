@@ -35,7 +35,7 @@ const TextDiv = styled.div`
     height: 100%;
 `;
 
-const CommonText = styled.text`
+const CommonText = styled.span`
     color: #000000;
     text-align: center;
     font-family: Pretendard;
