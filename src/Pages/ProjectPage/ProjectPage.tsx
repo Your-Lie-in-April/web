@@ -129,10 +129,12 @@ const ProjectPage: React.FC = () => {
         setProjectData(data.data);
       } catch (error) {
         console.error('API 요청 중 에러 발생:', error);
+        navigate('/', { replace: true });
+
       }
     };
     fetchProjectData();
-  }, [projectId]);
+  }, [projectId, navigate]);
 
   return (
     <ProjectProvider>
