@@ -53,7 +53,7 @@ const TextDiv = styled.div`
   align-self: flex-end;
 `;
 
-const ProjectText = styled.text`
+const ProjectText = styled.span`
   color: #ffffff;
   font-family: 'Pretendard';
   font-size: 32px;
@@ -62,7 +62,7 @@ const ProjectText = styled.text`
   line-height: normal;
 `;
 
-const DetailText = styled.text`
+const DetailText = styled.span`
   color: #ffffff;
   font-family: 'Pretendard';
   font-size: 16px;

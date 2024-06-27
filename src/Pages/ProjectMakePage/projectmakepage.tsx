@@ -55,7 +55,7 @@ const SButton = styled.button`
     white-space: nowrap;
 `;
 
-const SButtonText = styled.text`
+const SButtonText = styled.span`
     color: #fff;
     text-align: center;
     font-family: Pretendard;
