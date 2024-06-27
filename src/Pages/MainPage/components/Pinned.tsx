@@ -106,7 +106,6 @@ const Pinned: React.FC = () => {
         }
 
         const data = await response.json();
-        console.log('설정된거', data);
         setPinnedProjects(data.data[0]);
         setPinnedId(data.data[0].projectId);
         setPinSchedule(data.data[0].schedule);
@@ -121,7 +120,6 @@ const Pinned: React.FC = () => {
     try {
       const accessToken = localStorage.getItem('access_token');
       const url = `${Http}/v1/members/pin/${pinnedId}`;
-      console.log('Request URL:', url);
       const response = await fetch(url, {
         method: 'PATCH',
         headers: {
@@ -130,11 +128,9 @@ const Pinned: React.FC = () => {
           credentials: 'include',
         },
       });
-      console.log('Response:', response);
 
       if (!response.ok) throw new Error('뭔가 이상');
       const result = await response.json();
-      console.log('상단 고정 결과:', result);
       window.alert('핀 설정 해제에 성공했습니다.');
       window.location.reload();
     } catch (error) {

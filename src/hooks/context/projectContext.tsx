@@ -42,7 +42,6 @@ export const ProjectProvider: React.FC<{ children: ReactNode }> = ({
                         }
                     );
                     const data = await response.json();
-                    console.log(data);
                     setProjectData(data.data);
                     setErrorMessage(null);
                 } catch (error) {
