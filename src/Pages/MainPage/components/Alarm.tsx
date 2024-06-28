@@ -52,6 +52,7 @@ const ProjectTitle = styled.div`
     font-weight: 400;
     line-height: normal;
     margin-top: 8px;
+    margin-left: 4px;
 `;
 
 const CreatedAt = styled.span`
@@ -60,10 +61,11 @@ const CreatedAt = styled.span`
     font-size: 10px;
     font-style: normal;
     font-weight: 400;
-    line-height: normal;
 `;
 
 const NotificationContent = styled.div<{ isIconVisible: boolean }>`
+    display: flex;
+    align-items: center;
     color: #7d7d7d;
     font-family: Pretendard;
     font-size: 13px;
@@ -78,6 +80,19 @@ const ProjectTitleContainer = styled.div`
     justify-content: space-between;
     align-items: center;
     gap: 4px;
+`;
+
+const DeleteNotification = styled.div<{ isIconVisible: boolean }>`
+    display: ${(props) => (props.isIconVisible ? 'block' : 'none')};
+    position: absolute;
+    top: 50px;
+    left: 30px;
+    color: #a4a4a4;
+    font-family: Pretendard;
+    font-size: 13px;
+    font-style: normal;
+    font-weight: 400;
+    cursor: pointer;
 `;
 
 function formatTimeAgo(timestamp: string): string {
@@ -113,7 +128,7 @@ const Alarm: FC = () => {
 
     useEffect(() => {
         const EventSource = EventSourcePolyfill || NativeEventSource;
-        const eventSource = new EventSource(`${Http}/v1/sse/subscribe`, {
+        const eventSource = new EventSource(sseURL, {
             headers: {
                 Authorization: `Bearer ${token}`,
                 Connection: 'keep-alive',
@@ -123,18 +138,26 @@ const Alarm: FC = () => {
         });
 
         eventSource.addEventListener('notification', (event: any) => {
-            console.log('에아아');
+            console.log('Notification event received');
         });
 
         eventSource.addEventListener('message', (event: any) => {
             const { data } = event;
-            const parsedData = JSON.parse(data);
-            const messages = parsedData.data.map((item: any) => ({
-                projectTitle: item.project.title,
-                message: item.message,
-                createdAt: formatTimeAgo(item.createdAt),
-            }));
-            setAlarmMessages(messages);
+            try {
+                if (isValidJSON(data)) {
+                    const parsedData = JSON.parse(data);
+                    const messages = parsedData.data.map((item: any) => ({
+                        projectTitle: item.project.title,
+                        message: item.message,
+                        createdAt: formatTimeAgo(item.createdAt),
+                    }));
+                    setAlarmMessages(messages);
+                } else {
+                    console.warn('Received data is not valid JSON:', data);
+                }
+            } catch (error) {
+                console.error('Failed to parse JSON data:', data, error);
+            }
         });
 
         eventSource.onerror = (err) => {
@@ -146,6 +169,15 @@ const Alarm: FC = () => {
             eventSource.close();
         };
     }, [sseURL, token]);
+
+    const isValidJSON = (data: string) => {
+        try {
+            JSON.parse(data);
+            return true;
+        } catch {
+            return false;
+        }
+    };
 
     useEffect(() => {
         const fetchNotifications = async () => {
@@ -164,14 +196,18 @@ const Alarm: FC = () => {
                 }
 
                 const data = await response.json();
-                const messages = data.data.map((item: any) => ({
-                    projectTitle: item.project.title,
-                    message: item.message,
-                    createdAt: formatTimeAgo(item.createdAt),
-                }));
-                setAlarmMessages(messages);
+                if (Array.isArray(data.data.data)) {
+                    const messages = data.data.data.map((item: any) => ({
+                        projectTitle: item.project.title,
+                        message: item.message,
+                        createdAt: formatTimeAgo(item.createdAt),
+                    }));
+                    setAlarmMessages(messages);
+                } else {
+                    console.error('Response data is not an array:', data);
+                }
             } catch (error) {
-                console.error(error);
+                console.error('Failed to fetch notifications:', error);
             }
         };
 
@@ -187,13 +223,18 @@ const Alarm: FC = () => {
             <Text>알림</Text>
             <CheckBoxIcon
                 onClick={toggleIconVisibility}
-                style={{ cursor: 'pointer', color: '#A4A4A4', position: 'absolute', left: 8, top: 48 }}
+                style={{ fontSize: 20, cursor: 'pointer', color: '#A4A4A4', position: 'absolute', left: 8, top: 48 }}
             />
+            <DeleteNotification isIconVisible={isIconVisible} onClick={() => console.log('알림 삭제')}>
+                알림삭제
+            </DeleteNotification>
             {alarmMessages.map((alarm, index) => (
                 <NotificationBox key={index} isFirst={index === 0}>
                     <ProjectTitleContainer>
                         <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                            {isIconVisible && <CheckBoxIcon style={{ color: '#A4A4A4', marginLeft: -10 }} />}
+                            {isIconVisible && (
+                                <CheckBoxIcon style={{ color: '#A4A4A4', marginLeft: -10, fontSize: 20 }} />
+                            )}
                             <ProjectTitle>{alarm.projectTitle}</ProjectTitle>
                         </div>
                         <CreatedAt>{alarm.createdAt}</CreatedAt>
