@@ -87,12 +87,21 @@ const DeleteNotification = styled.div<{ isIconVisible: boolean }>`
     position: absolute;
     top: 50px;
     left: 30px;
-    color: #a4a4a4;
+    color: #633ae2;
     font-family: Pretendard;
     font-size: 13px;
     font-style: normal;
     font-weight: 400;
     cursor: pointer;
+`;
+
+const StyledCheckBoxIcon = styled(CheckBoxIcon)<{ isIconVisible: boolean }>`
+    font-size: 20px !important;
+    cursor: pointer;
+    color: ${(props) => (props.isIconVisible ? '#633AE2' : '#A4A4A4')} !important;
+    position: absolute;
+    left: 8px;
+    top: 48px;
 `;
 
 function formatTimeAgo(timestamp: string): string {
@@ -221,10 +230,7 @@ const Alarm: FC = () => {
     return (
         <AlarmDiv>
             <Text>알림</Text>
-            <CheckBoxIcon
-                onClick={toggleIconVisibility}
-                style={{ fontSize: 20, cursor: 'pointer', color: '#A4A4A4', position: 'absolute', left: 8, top: 48 }}
-            />
+            <StyledCheckBoxIcon onClick={toggleIconVisibility} isIconVisible={isIconVisible} />
             <DeleteNotification isIconVisible={isIconVisible} onClick={() => console.log('알림 삭제')}>
                 알림삭제
             </DeleteNotification>
