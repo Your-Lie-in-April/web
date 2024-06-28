@@ -71,8 +71,8 @@ const StoragePage = () => {
                 const data = await response.json();
                 console.log(data);
                 if (page === 0) {
-                    setStoreList(data.data);
-                    setSearchResults(data.data);
+                    setStoreList(data.data.data);
+                    setSearchResults(data.data.data);
                 } else {
                     setStoreList((prevProjects) => [...prevProjects, ...data.data]);
                     setSearchResults((prevProjects) => [...prevProjects, ...data.data]);
