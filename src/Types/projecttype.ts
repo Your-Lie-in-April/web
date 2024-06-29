@@ -64,6 +64,12 @@ export type ProjectCreateUpdateRequest = {
     color: string;
 };
 
+export type ProjectInviteMetaInfo = {
+    title: string;
+    invitator: string;
+    isExpired: boolean;
+};
+
 // GET /v1/projects/all
 // 프로젝트 전체 리스트를 조회했을 때 응답 객체 타입
 export type ProjectResDto = ProjectEntity[];

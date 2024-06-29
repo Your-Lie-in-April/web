@@ -6,12 +6,12 @@ import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import InfoEdit from './infoedit';
 
-const Container = styled.div<{ color?: string; imageUrl?: string | null }>`
+const Container = styled.div<{ color?: string; $imageUrl?: string | null }>`
     position: relative;
     width: 100%;
     height: 200px;
     background: ${(props) =>
-        props.imageUrl ? `url(${props.imageUrl}) center/cover no-repeat` : props.color || '#d9d9d9'};
+        props.$imageUrl ? `url(${props.$imageUrl}) center/cover no-repeat` : props.color || '#d9d9d9'};
     box-sizing: border-box;
     padding-top: 28px;
 `;
@@ -121,7 +121,7 @@ export const ProjectInfoDetail: React.FC<ProjectInfoDetailProps> = ({ onClick, p
         }
     };
     return (
-        <Container color={projectData?.color} imageUrl={projectData?.coverImageUrl}>
+        <Container color={projectData?.color} $imageUrl={projectData?.coverImageUrl}>
             <ProjectInfoDiv>
                 <CommonText style={{ fontSize: '42px', fontWeight: '700' }}>{projectData?.title}</CommonText>
                 <CommonText>{projectData?.description}</CommonText>

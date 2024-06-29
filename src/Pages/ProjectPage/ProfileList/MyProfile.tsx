@@ -149,7 +149,6 @@ const MyProfile = () => {
                 }
                 const data = await response.json();
                 setMe(data.data);
-                console.log('본인 데이터:', data);
             } catch (error) {
                 console.error('API 요청 중 에러 발생:', error);
             }

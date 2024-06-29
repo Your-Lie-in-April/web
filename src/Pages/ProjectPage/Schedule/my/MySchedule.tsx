@@ -86,12 +86,10 @@ const MySchedule: React.FC<MyScheduleProps> = ({
 
     // 프로젝트 ID 가져옴
     const { projectId } = useParams();
-    console.log(`myTime projectId: ${projectId}`);
 
     // 달력 선택 날짜 가져옴
     const date = useContext(DateContext);
     const condition = dayjs(date?.selectedDate).format('YYYY-MM-DD') ?? '';
-    console.log(`condition : ${condition}`);
 
     const [scheduleData, setSchdeuleData] =
         useState<ScheduleWeekResponse | null>(null);
@@ -116,7 +114,6 @@ const MySchedule: React.FC<MyScheduleProps> = ({
             }
 
             const data = await response.json();
-            console.log('내 스케줄', data.data);
             setSchdeuleData(data.data);
         } catch (error) {
             console.error(error);

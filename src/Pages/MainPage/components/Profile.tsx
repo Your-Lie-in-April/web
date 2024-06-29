@@ -33,12 +33,12 @@ const CommonText = styled.div`
     margin-top: 12px;
 `;
 
-const Text = styled.div<{ loggedIn?: boolean; hasStatus?: boolean }>`
+const Text = styled.div<{ $loggedIn?: boolean; $hasStatus?: boolean }>`
     font-family: 'pretendard';
     font-weight: 500;
     font-size: 14px;
-    color: ${({ loggedIn, hasStatus }) =>
-        loggedIn ? (hasStatus ? 'black' : '#A4A4A4') : '#A4A4A4'};
+    color: ${({ $loggedIn, $hasStatus }) =>
+        $loggedIn ? ($hasStatus ? 'black' : '#A4A4A4') : '#A4A4A4'};
     margin-top: 12px;
 `;
 
@@ -88,8 +88,8 @@ const Profile: React.FC = () => {
             <CommonText>{userData?.email}</CommonText>
             <StatusContainer>
                 <Text
-                    loggedIn={isLoggedIn}
-                    hasStatus={hasStatus}
+                    $loggedIn={isLoggedIn}
+                    $hasStatus={hasStatus}
                     style={{
                         marginLeft: '8px',
                         marginRight: '8px',
