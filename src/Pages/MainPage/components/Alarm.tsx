@@ -5,6 +5,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { Http } from '#/constants/backendURL';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import { useNavigate } from 'react-router-dom';
+import DeleteAlarm from '#/Pages/Modal/deletealarm';
 
 const AlarmDiv = styled.div`
     display: flex;
@@ -255,6 +256,7 @@ const Alarm: FC = () => {
             <DeleteNotification isIconVisible={isIconVisible} onClick={() => console.log('알림 삭제')}>
                 알림삭제
             </DeleteNotification>
+            <DeleteAlarm />
             {alarmMessages.map((alarm, index) => (
                 <NotificationBox
                     key={index}
