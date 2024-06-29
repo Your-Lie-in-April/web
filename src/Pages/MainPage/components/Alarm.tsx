@@ -4,6 +4,7 @@ import { EventSourcePolyfill, NativeEventSource } from 'event-source-polyfill';
 import 'react-toastify/dist/ReactToastify.css';
 import { Http } from '#/constants/backendURL';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
+import { useNavigate } from 'react-router-dom';
 
 const AlarmDiv = styled.div`
     display: flex;
@@ -42,6 +43,7 @@ const NotificationBox = styled.div<{ isFirst: boolean }>`
     border-top: ${(props) => (props.isFirst ? '1px solid #7d7d7d' : 'none')};
     flex-direction: column;
     gap: 7px;
+    cursor: pointer;
 `;
 
 const ProjectTitle = styled.div`
@@ -128,14 +130,15 @@ function formatTimeAgo(timestamp: string): string {
 }
 
 const Alarm: FC = () => {
-    const [alarmMessages, setAlarmMessages] = useState<{ projectTitle: string; message: string; createdAt: string }[]>(
-        []
-    );
+    const [alarmMessages, setAlarmMessages] = useState<
+        { projectTitle: string; message: string; createdAt: string; projectId: string }[]
+    >([]);
     const [isIconVisible, setIsIconVisible] = useState<boolean>(false);
     const [checkedState, setCheckedState] = useState<boolean[]>([]);
 
     const sseURL = `${Http}/v1/sse/subscribe`;
     const token = localStorage.getItem('access_token');
+    const navigate = useNavigate();
 
     useEffect(() => {
         const EventSource = EventSourcePolyfill || NativeEventSource;
@@ -161,6 +164,7 @@ const Alarm: FC = () => {
                         projectTitle: item.project.title,
                         message: item.message,
                         createdAt: formatTimeAgo(item.createdAt),
+                        projectId: item.project.projectId,
                     }));
                     setAlarmMessages(messages);
                 } else {
@@ -212,7 +216,9 @@ const Alarm: FC = () => {
                         projectTitle: item.project.title,
                         message: item.message,
                         createdAt: formatTimeAgo(item.createdAt),
+                        projectId: item.project.projectId,
                     }));
+                    console.log('메시지들', data.data);
                     setAlarmMessages(messages);
                 } else {
                     console.error('Response data is not an array:', data);
@@ -238,6 +244,10 @@ const Alarm: FC = () => {
         setCheckedState(updatedCheckedState);
     };
 
+    const handleNotificationClick = (projectId: string) => {
+        navigate(`/project/${projectId}`);
+    };
+
     return (
         <AlarmDiv>
             <Text>알림</Text>
@@ -246,12 +256,19 @@ const Alarm: FC = () => {
                 알림삭제
             </DeleteNotification>
             {alarmMessages.map((alarm, index) => (
-                <NotificationBox key={index} isFirst={index === 0}>
+                <NotificationBox
+                    key={index}
+                    isFirst={index === 0}
+                    onClick={() => handleNotificationClick(alarm.projectId)}
+                >
                     <ProjectTitleContainer>
                         <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                             {isIconVisible && (
                                 <CheckBoxIcon
-                                    onClick={() => handleCheckBoxClick(index)}
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleCheckBoxClick(index);
+                                    }}
                                     style={{
                                         color: checkedState[index] ? '#633AE2' : '#A4A4A4',
                                         marginLeft: -10,
