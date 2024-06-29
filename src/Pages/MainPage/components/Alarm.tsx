@@ -132,11 +132,11 @@ function formatTimeAgo(timestamp: string): string {
 
 const Alarm: FC = () => {
     const [alarmMessages, setAlarmMessages] = useState<
-        { projectTitle: string; message: string; createdAt: string; projectId: string }[]
+        { projectTitle: string; message: string; createdAt: string; projectId: string; notificationId: string }[]
     >([]);
     const [isIconVisible, setIsIconVisible] = useState<boolean>(false);
     const [checkedState, setCheckedState] = useState<boolean[]>([]);
-
+    const [isDeleted, setIsDeleted] = useState<boolean>(false);
     const sseURL = `${Http}/v1/sse/subscribe`;
     const token = localStorage.getItem('access_token');
     const navigate = useNavigate();
@@ -166,6 +166,7 @@ const Alarm: FC = () => {
                         message: item.message,
                         createdAt: formatTimeAgo(item.createdAt),
                         projectId: item.project.projectId,
+                        notificationId: item.notificationId,
                     }));
                     setAlarmMessages(messages);
                 } else {
@@ -218,6 +219,7 @@ const Alarm: FC = () => {
                         message: item.message,
                         createdAt: formatTimeAgo(item.createdAt),
                         projectId: item.project.projectId,
+                        notificationId: item.notificationId,
                     }));
                     console.log('메시지들', data.data);
                     setAlarmMessages(messages);
@@ -231,6 +233,31 @@ const Alarm: FC = () => {
 
         fetchNotifications();
     }, []);
+
+    const handleDeleteNotifications = async () => {
+        const notificationsToDelete = alarmMessages.filter((_, index) => checkedState[index]);
+
+        try {
+            const accessToken = localStorage.getItem('access_token');
+
+            for (const notification of notificationsToDelete) {
+                await fetch(`${Http}/v1/notifications/${notification.notificationId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        Accept: '*/*',
+                        Authorization: `Bearer ${accessToken}`,
+                    },
+                });
+            }
+            console.log('메세지 삭제 성공');
+            const remainingNotifications = alarmMessages.filter((_, index) => !checkedState[index]);
+            setAlarmMessages(remainingNotifications);
+            setCheckedState(Array(remainingNotifications.length).fill(false));
+            setIsDeleted(true);
+        } catch (error) {
+            console.error('Failed to delete notifications:', error);
+        }
+    };
 
     useEffect(() => {
         setCheckedState(Array(alarmMessages.length).fill(false));
@@ -253,7 +280,7 @@ const Alarm: FC = () => {
         <AlarmDiv>
             <Text>알림</Text>
             <StyledCheckBoxIcon onClick={toggleIconVisibility} isIconVisible={isIconVisible} />
-            <DeleteNotification isIconVisible={isIconVisible} onClick={() => console.log('알림 삭제')}>
+            <DeleteNotification isIconVisible={isIconVisible} onClick={handleDeleteNotifications}>
                 알림삭제
             </DeleteNotification>
             {alarmMessages.map((alarm, index) => (
@@ -286,7 +313,7 @@ const Alarm: FC = () => {
                     <NotificationContent isIconVisible={isIconVisible}>{alarm.message}</NotificationContent>
                 </NotificationBox>
             ))}
-            <DeleteAlarm />
+            {isDeleted && <DeleteAlarm />}
         </AlarmDiv>
     );
 };
