@@ -45,7 +45,7 @@ const NotificationBox = styled.div<{ isFirst: boolean }>`
 `;
 
 const ProjectTitle = styled.div`
-    color: #a4a4a4;
+    color: #000000;
     font-family: Pretendard;
     font-size: 13px;
     font-style: normal;
@@ -132,6 +132,8 @@ const Alarm: FC = () => {
         []
     );
     const [isIconVisible, setIsIconVisible] = useState<boolean>(false);
+    const [checkedState, setCheckedState] = useState<boolean[]>([]);
+
     const sseURL = `${Http}/v1/sse/subscribe`;
     const token = localStorage.getItem('access_token');
 
@@ -223,8 +225,17 @@ const Alarm: FC = () => {
         fetchNotifications();
     }, []);
 
+    useEffect(() => {
+        setCheckedState(Array(alarmMessages.length).fill(false));
+    }, [alarmMessages]);
+
     const toggleIconVisibility = () => {
         setIsIconVisible(!isIconVisible);
+    };
+
+    const handleCheckBoxClick = (index: number) => {
+        const updatedCheckedState = checkedState.map((item, idx) => (idx === index ? !item : item));
+        setCheckedState(updatedCheckedState);
     };
 
     return (
@@ -239,7 +250,16 @@ const Alarm: FC = () => {
                     <ProjectTitleContainer>
                         <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                             {isIconVisible && (
-                                <CheckBoxIcon style={{ color: '#A4A4A4', marginLeft: -10, fontSize: 20 }} />
+                                <CheckBoxIcon
+                                    onClick={() => handleCheckBoxClick(index)}
+                                    style={{
+                                        color: checkedState[index] ? '#633AE2' : '#A4A4A4',
+                                        marginLeft: -10,
+                                        fontSize: 20,
+                                        cursor: 'pointer',
+                                        marginBottom: -7,
+                                    }}
+                                />
                             )}
                             <ProjectTitle>{alarm.projectTitle}</ProjectTitle>
                         </div>
