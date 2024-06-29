@@ -46,7 +46,7 @@ const NotificationBox = styled.div<{ isFirst: boolean }>`
     cursor: pointer;
 `;
 
-const ProjectTitle = styled.div`
+const ProjectTitle = styled.div<{ isIconVisible: boolean }>`
     color: #000000;
     font-family: Pretendard;
     font-size: 13px;
@@ -54,7 +54,7 @@ const ProjectTitle = styled.div`
     font-weight: 400;
     line-height: normal;
     margin-top: 8px;
-    margin-left: 4px;
+    margin-left: ${(props) => (props.isIconVisible ? '4px' : '0')};
 `;
 
 const CreatedAt = styled.span`
@@ -278,7 +278,7 @@ const Alarm: FC = () => {
                                     }}
                                 />
                             )}
-                            <ProjectTitle>{alarm.projectTitle}</ProjectTitle>
+                            <ProjectTitle isIconVisible={isIconVisible}>{alarm.projectTitle}</ProjectTitle>
                         </div>
                         <CreatedAt>{alarm.createdAt}</CreatedAt>
                     </ProjectTitleContainer>
