@@ -1,13 +1,13 @@
+import { Http } from '#/constants/backendURL';
+import { DateContext } from '#/hooks/context/dateContext';
+import { useUserContext } from '#/Pages/MainPage/MainPage';
+import { ScheduleWeekResponse } from '#/Types/scheduletype';
+import dayjs from 'dayjs';
+import { useCallback, useContext, useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import EditMySchedule from './edit/EditMySchedule';
 import MyTime from './MyTime';
-import { useContext, useEffect, useState } from 'react';
-import { useUserContext } from '#/Pages/MainPage/MainPage';
-import { DateContext } from '#/hooks/context/dateContext';
-import dayjs from 'dayjs';
-import { Http } from '#/constants/backendURL';
-import { ScheduleWeekResponse } from '#/Types/scheduletype';
-import { useParams } from 'react-router-dom';
 
 const Box = styled.div`
     width: 661px;
@@ -86,45 +86,44 @@ const MySchedule: React.FC<MyScheduleProps> = ({
 
     // 프로젝트 ID 가져옴
     const { projectId } = useParams();
-    console.log(`myTime projectId: ${projectId}`);
 
     // 달력 선택 날짜 가져옴
     const date = useContext(DateContext);
     const condition = dayjs(date?.selectedDate).format('YYYY-MM-DD') ?? '';
-    console.log(`condition : ${condition}`);
 
     const [scheduleData, setSchdeuleData] =
         useState<ScheduleWeekResponse | null>(null);
     // 스케줄 데이터 가져옴
-    useEffect(() => {
+    const fetchSchedule = useCallback(async () => {
         const accessToken = localStorage.getItem('access_token');
         const memberId = localStorage.getItem('member_id');
-        const fetchSchedule = async () => {
-            try {
-                const response = await fetch(
-                    `${Http}/v1/projects/${projectId}/members/${memberId}/schedules?condition=${condition}`,
-                    {
-                        method: 'GET',
-                        headers: {
-                            Accept: '*/*',
-                            Authorization: `Bearer ${accessToken}`,
-                        },
-                    }
-                );
-
-                if (!response.ok) {
-                    throw new Error('Failed to fetch projects');
+        try {
+            const response = await fetch(
+                `${Http}/v1/projects/${projectId}/members/${memberId}/schedules?condition=${condition}`,
+                {
+                    method: 'GET',
+                    headers: {
+                        Accept: '*/*',
+                        Authorization: `Bearer ${accessToken}`,
+                    },
                 }
+            );
 
-                const data = await response.json();
-                console.log('내 스케줄', data.data);
-                setSchdeuleData(data.data);
-            } catch (error) {
-                console.error(error);
+            if (!response.ok) {
+                throw new Error('Failed to fetch projects');
             }
-        };
+
+            const data = await response.json();
+            setSchdeuleData(data.data);
+        } catch (error) {
+            console.error(error);
+        }
+    }, [projectId, memberId, condition]);
+
+    useEffect(() => {
         fetchSchedule();
-    }, [projectId, memberId, condition, isEditModal]);
+    }, [fetchSchedule]);
+
 
     return (
         <>
@@ -155,6 +154,7 @@ const MySchedule: React.FC<MyScheduleProps> = ({
                 onSetIsEditModal={onSetIsEditModal}
                 scheduleData={scheduleData}
                 isEditModal={isEditModal}
+                fetchSchedule={fetchSchedule}
             />
         </>
     );

@@ -14,7 +14,7 @@ const PaginationContainer = styled.div`
     justify-content: center;
     align-items: center;
     margin-top: 35px;
-    margin: auto;
+    margin: 0 auto;
 `;
 
 const PageIndicator = styled.div<{ active: boolean }>`
@@ -25,6 +25,7 @@ const PageIndicator = styled.div<{ active: boolean }>`
     border-radius: 50%;
     cursor: pointer;
 `;
+
 const IconButton = styled.button`
     background: none;
     border: none;
@@ -36,7 +37,7 @@ const IconButton = styled.button`
     justify-content: center;
 
     svg {
-        color: ${({ disabled }) => (disabled ? '#ccc' : '#633ae2')};
+        color: ${({ disabled }) => (disabled ? '#D9D9D9' : '#633ae2')};
     }
 `;
 

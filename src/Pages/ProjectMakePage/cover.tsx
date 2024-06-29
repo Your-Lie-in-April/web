@@ -1,25 +1,17 @@
 import { Http } from '#/constants/backendURL';
+import AddCircleRoundedIcon from '@mui/icons-material/AddCircleRounded';
 import { FC, useCallback, useEffect, useState } from 'react';
 import { ChromePicker, ColorResult } from 'react-color';
 import styled from 'styled-components';
 
-const plus = (
-    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
-        <path
-            fill-rule="evenodd"
-            clip-rule="evenodd"
-            d="M11 2C11 0.895431 10.1046 0 9 0C7.89543 0 7 0.89543 7 2V7H2C0.895431 7 0 7.89543 0 9C0 10.1046 0.89543 11 2 11H7V16C7 17.1046 7.89543 18 9 18C10.1046 18 11 17.1046 11 16V11H16C17.1046 11 18 10.1046 18 9C18 7.89543 17.1046 7 16 7H11V2Z"
-            fill="white"
-        />
-    </svg>
-);
 const CoverContainer = styled.div`
     width: 300px;
     height: 292px;
-    display: flex;
+    gap: 8px;
     border-radius: 8px;
     background: var(--gray00, #fbfbfb);
     box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.25);
+    position: relative;
 `;
 
 const ConverInnerContainer = styled.div`
@@ -71,6 +63,9 @@ const Color = styled.button`
     border-radius: 50%;
     margin: 0;
     padding: 0;
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
     &:hover {
         cursor: pointer;
     }
@@ -93,8 +88,9 @@ const ImageChoose = styled.div`
     justify-content: center;
     align-items: center;
     flex-wrap: wrap;
+    row-gap: 8px;
 `;
-const Image = styled.button`
+const Image = styled.div`
     width: 50px;
     height: 50px;
     margin: 0;
@@ -102,17 +98,17 @@ const Image = styled.button`
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
+    cursor: pointer;
 `;
-const HEXContainer = styled.div`
-    width: 300px;
-    height: 478px;
-    gap: 8px;
-    border-radius: 6px;
-    background: white;
-    box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.25);
-    margin-top: 8px;
-`;
-const colors = ['#633AE2', '#FFCB3B', '#64AFF5', '#C2D57A', '#EB5757', '#212121'];
+
+const colors = [
+    '#633AE2',
+    '#FFCB3B',
+    '#64AFF5',
+    '#C2D57A',
+    '#EB5757',
+    '#212121',
+];
 
 interface CoverProps {
     onColorSelect: (color: string) => void;
@@ -125,7 +121,12 @@ interface ApiResponseItem {
     url: string;
 }
 
-const Cover: FC<CoverProps> = ({ onColorSelect, onImageSelect, onHexSelect, toggleCover }) => {
+const Cover: FC<CoverProps> = ({
+    onColorSelect,
+    onImageSelect,
+    onHexSelect,
+    toggleCover,
+}) => {
     const [color, setColor] = useState('#fff');
     const [imgId, setImgId] = useState('');
     const [openHex, setOpenHex] = useState<boolean>(false);
@@ -152,7 +153,9 @@ const Cover: FC<CoverProps> = ({ onColorSelect, onImageSelect, onHexSelect, togg
 
     useEffect(() => {
         coverImg();
-        coverImg().catch((error) => console.error('Fetching URLs failed:', error));
+        coverImg().catch((error) =>
+            console.error('Fetching URLs failed:', error)
+        );
     }, []);
 
     const handleColorClick = (color: string) => {
@@ -187,6 +190,11 @@ const Cover: FC<CoverProps> = ({ onColorSelect, onImageSelect, onHexSelect, togg
                 <ColorContainer>
                     단색
                     <ColorChoose>
+                        <Color onClick={toggleHex}>
+                            <AddCircleRoundedIcon
+                                sx={{ fontSize: '36px', color: '#D9D9D9' }}
+                            />
+                        </Color>
                         {colors.map((color, index) => (
                             <Color
                                 key={index}
@@ -201,9 +209,6 @@ const Cover: FC<CoverProps> = ({ onColorSelect, onImageSelect, onHexSelect, togg
                             }}
                             onClick={() => handleColorClick('#ffffff')}
                         />
-                        <Color style={{ background: '#D9D9D9' }} onClick={toggleHex}>
-                            {plus}
-                        </Color>
                     </ColorChoose>
                 </ColorContainer>
                 <ImageContainer>
@@ -219,7 +224,9 @@ const Cover: FC<CoverProps> = ({ onColorSelect, onImageSelect, onHexSelect, togg
                                         backgroundRepeat: 'no-repeat',
                                         backgroundPosition: 'center',
                                     }}
-                                    onClick={() => handleImageClick(item.url, item.id)}
+                                    onClick={() =>
+                                        handleImageClick(item.url, item.id)
+                                    }
                                 ></Image>
                             ))
                         ) : (
@@ -234,14 +241,24 @@ const Cover: FC<CoverProps> = ({ onColorSelect, onImageSelect, onHexSelect, togg
                         display: 'flex',
                         justifyContent: 'center',
                         height: '252px',
-                        marginLeft: '8px',
-                        marginTop: '37px',
+                        position: 'absolute',
+                        right: 'calc(100% + 8px)',
+                        bottom: '0',
                     }}
                 >
                     <ChromePicker
                         disableAlpha={false}
                         color={color}
-                        onChange={(selectedColor) => handleColorChange(selectedColor)}
+                        onChange={(selectedColor) =>
+                            handleColorChange(selectedColor)
+                        }
+                        styles={{
+                            default: {
+                                picker: {
+                                    borderRadius: '6px',
+                                },
+                            },
+                        }}
                     />
                 </div>
             ) : null}

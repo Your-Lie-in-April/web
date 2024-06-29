@@ -11,7 +11,7 @@ const GlobalStyle = createGlobalStyle`
   body {
     width : 100%;
     min-width : 1366px;
-    height : 1920px;
+    max-height : 1920px;
     margin: 0 auto;
     background-color: #212121;
     -ms-overflow-style: none;
@@ -28,10 +28,13 @@ const Container = styled.div`
     background-color: white;
     flex-direction: column;
     align-items: center;
-
     gap: 78px;
     border: none;
     box-shadow: none;
+
+    padding-top: 109px;
+    padding-bottom: 109px;
+    box-sizing: border-box;
 `;
 
 const TimeContainer = styled.div`
@@ -50,14 +53,9 @@ const SButton = styled.button`
     border-radius: 60px;
     background: #633ae2;
     white-space: nowrap;
-
-    &:focus {
-        outline: none;
-        border: none;
-    }
 `;
 
-const SButtonText = styled.text`
+const SButtonText = styled.span`
     color: #fff;
     text-align: center;
     font-family: Pretendard;
@@ -79,6 +77,7 @@ const ProjectMakePage: FC = () => {
     const [endtime, setEndTime] = useState('AM 09:00');
     const [selectedDays, setSelectedDays] = useState<string[]>([]);
     const navigate = useNavigate();
+
     const formatTime = (time: string) => {
         const [ampm, timeString] = time.split(' ');
         let [hour, minute] = timeString.split(':').map(Number);
@@ -134,22 +133,20 @@ const ProjectMakePage: FC = () => {
             <AfterLogin />
             <div
                 style={{
-                    height: '20px',
+                    height: '16px',
                     width: '100%',
-                    backgroundColor: '#212121',
+                    backgroundColor: '#000000',
                 }}
             />
             <Info setContent={setContent} setTitle={setTitle} setColor={setColor} setImg={setImg} setImgId={setImgId} />
             <div
                 style={{
-                    height: '109px',
+                    height: '24px',
                     width: '100%',
-                    backgroundColor: 'white',
-                    margin: '0',
-                    border: 'none',
-                    boxShadow: 'none',
+                    backgroundColor: '#000000',
                 }}
             />
+
             <Container>
                 <TimeContainer>
                     <ProjectCalendar
@@ -180,14 +177,12 @@ const ProjectMakePage: FC = () => {
                     <SButtonText>프로젝트 만들기</SButtonText>
                 </SButton>
             </Container>
+
             <div
                 style={{
-                    height: '109px',
+                    height: '300px',
                     width: '100%',
-                    backgroundColor: 'white',
-                    margin: '0',
-                    border: 'none',
-                    boxShadow: 'none',
+                    backgroundColor: '#000000',
                 }}
             />
         </>

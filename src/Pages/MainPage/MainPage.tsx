@@ -2,7 +2,7 @@ import { Http } from '#/constants/backendURL';
 import { MemberEntity } from '#/Types/membertype';
 import { ProjectEntity } from '#/Types/projecttype';
 import { createContext, FC, ReactNode, useContext, useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import styled, { createGlobalStyle } from 'styled-components';
 import AfterLogin from '../Layouts/AfterLogin';
 import BeforeLogin from '../Layouts/BeforeLogin';
@@ -10,10 +10,10 @@ import Search from '../Layouts/Search';
 import Alarm from './components/Alarm';
 import Banner from './components/Banner';
 import NewProject from './components/NewProject';
+import Pagination from './components/pagination';
 import Pinned from './components/Pinned';
 import Profile from './components/Profile';
 import ProjectList from './components/ProjectList';
-import Pagination from './components/pagination';
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -48,12 +48,14 @@ type UserContextType = {
     setUserData: (userData: MemberEntity | null) => void;
 };
 
-const UserContext = createContext<UserContextType | null>(null);
+export const UserContext = createContext<UserContextType | null>(null);
 
 export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [userData, setUserData] = useState<MemberEntity | null>(null);
 
-    return <UserContext.Provider value={{ userData, setUserData }}>{children}</UserContext.Provider>;
+    return (
+        <UserContext.Provider value={{ userData, setUserData }}>{children}</UserContext.Provider>
+    );
 };
 
 export const useUserContext = () => {
@@ -65,6 +67,7 @@ export const useUserContext = () => {
 const MainPage: FC = () => {
     const { userData, setUserData } = useUserContext();
     const query = useQuery();
+    const navigate = useNavigate();
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
     const [projects, setProjects] = useState<ProjectEntity[]>([]);
     const [searchResults, setSearchResults] = useState<ProjectEntity[]>([]);
@@ -117,11 +120,14 @@ const MainPage: FC = () => {
 
         const fetchProjects = async (page: number) => {
             try {
-                const response = await fetch(`${Http}/v1/projects/members/${memberId}?page=${page}&size=6`, {
-                    headers: {
-                        Authorization: `Bearer ${accessToken}`,
-                    },
-                });
+                const response = await fetch(
+                    `${Http}/v1/projects/members/${memberId}?page=${page}&size=6`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${accessToken}`,
+                        },
+                    }
+                );
                 const data = await response.json();
                 console.log('Projects Data:', data);
 
@@ -140,7 +146,9 @@ const MainPage: FC = () => {
     }, [currentPage]);
 
     const handleSearch = (query: string) => {
-        const searchProjects = projects.filter((project) => project.title.toLowerCase().includes(query.toLowerCase()));
+        const searchProjects = projects.filter((project) =>
+            project.title.toLowerCase().includes(query.toLowerCase())
+        );
         setSearchResults(searchProjects);
     };
 
@@ -208,7 +216,13 @@ const MainPage: FC = () => {
                             <Pinned />
                         </div>
                         <ProjectList projects={searchResults} />
-                        <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
+                {isLoggedIn && (
+                            <Pagination
+                                currentPage={currentPage}
+                                totalPages={totalPages}
+                                onPageChange={handlePageChange}
+                            />
+                        )}
                     </div>
                 </div>
             </MainContainer>

@@ -63,7 +63,6 @@ const TeamSchedule: React.FC<TeamScheduleProps> = ({ isEditModal }) => {
   // 달력 선택 날짜 가져옴
   const date = useContext(DateContext);
   const condition = dayjs(date?.selectedDate).format("YYYY-MM-DD") ?? "";
-  console.log(`condition : ${condition}`);
 
   const [scheduleData, setSchdeuleData] = useState<ScheduleAllMembersResDto[]>(
     []
@@ -90,7 +89,6 @@ const TeamSchedule: React.FC<TeamScheduleProps> = ({ isEditModal }) => {
         }
 
         const data = await response.json();
-        console.log("멤버 스케줄", data.data);
         setSchdeuleData(data.data);
       } catch (error) {
         console.error(error);

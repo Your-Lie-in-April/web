@@ -8,27 +8,27 @@ import ConfirmCopyLink from './ConfirmCopyLink';
 import { useInvitationContext } from '../ProjectPage/invitationContext';
 
 interface CommonButtonProps {
-    primary?: boolean;
+    $primary?: boolean;
     onClick?: () => void;
 }
 
-const ModalBlackOut = styled.div<{ isVisible: boolean }>`
+const ModalBlackOut = styled.div<{ $isVisible: boolean }>`
     width: 100%;
     height: 100%;
     position: fixed;
     left: 0;
     top: 0;
-    background: rgba(0, 0, 0, ${({ isVisible }) => (isVisible ? '0.5' : '0')});
+    background: rgba(0, 0, 0, ${({ $isVisible }) => ($isVisible ? '0.5' : '0')});
     z-index: 100;
     transition: background 1s ease;
 `;
 
-const ModalContainer = styled.div<{ isVisible: boolean }>`
+const ModalContainer = styled.div<{ $isVisible: boolean }>`
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    opacity: ${({ isVisible }) => (isVisible ? '1' : '0')};
+    opacity: ${({ $isVisible }) => ($isVisible ? '1' : '0')};
     transition: opacity 1s ease;
     z-index: 999;
 `;
@@ -94,7 +94,7 @@ const CommonButton = styled.button<CommonButtonProps>`
     font-weight: 500;
     line-height: normal;
     color: #ffffff;
-    background-color: ${(props) => (props.primary ? '#633AE2' : '#d9d9d9')};
+    background-color: ${(props) => (props.$primary ? '#633AE2' : '#d9d9d9')};
 
     &:focus {
         border: none;
@@ -181,8 +181,8 @@ const InvitationModal: React.FC<InvitationModalProps> = ({ projectData, projectI
         <>
             {!isModalCompleteHidden && (
                 <ModalPortal>
-                    <ModalBlackOut isVisible={isVisible} onClick={toggleBtn} />
-                    <ModalContainer isVisible={isVisible}>
+                    <ModalBlackOut $isVisible={isVisible} onClick={toggleBtn} />
+                    <ModalContainer $isVisible={isVisible}>
                         <Box>
                             <div
                                 style={{
@@ -208,10 +208,10 @@ const InvitationModal: React.FC<InvitationModalProps> = ({ projectData, projectI
                                     <InviteField value={link} readOnly />
                                 </div>
                                 <ButtonsContainer style={{ alignSelf: 'flex-end' }}>
-                                    <CommonButton primary={!isBtnClick} onClick={generateLink}>
+                                    <CommonButton $primary={!isBtnClick} onClick={generateLink}>
                                         링크생성
                                     </CommonButton>
-                                    <CommonButton primary={isBtnClick} onClick={() => onClickCopyLink(link)}>
+                                    <CommonButton $primary={isBtnClick} onClick={() => onClickCopyLink(link)}>
                                         링크복사
                                     </CommonButton>
                                 </ButtonsContainer>

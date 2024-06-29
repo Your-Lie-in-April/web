@@ -85,10 +85,6 @@ const ProjectPage: React.FC = () => {
 
   useEffect(() => {
     const accessToken = localStorage.getItem('access_token');
-    // if (!accessToken) {
-    //   navigate('/login');
-    //   return;
-    // }
     const fetchMember = async () => {
       try {
         const response = await fetch(
@@ -107,7 +103,6 @@ const ProjectPage: React.FC = () => {
         }
 
         const data = await response.json();
-        console.log('멤버', data.data);
         setMembers(data.data);
       } catch (error) {
         console.error(error);
@@ -132,13 +127,14 @@ const ProjectPage: React.FC = () => {
         }
         const data = await response.json();
         setProjectData(data.data);
-        console.log('프로젝트 데이터:', data);
       } catch (error) {
         console.error('API 요청 중 에러 발생:', error);
+        navigate('/', { replace: true });
+
       }
     };
     fetchProjectData();
-  }, [projectId]);
+  }, [projectId, navigate]);
 
   return (
     <ProjectProvider>
