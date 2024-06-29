@@ -131,10 +131,10 @@ const MainPage: FC = () => {
                 const data = await response.json();
                 console.log('Projects Data:', data);
 
-                setTotalPages(Math.ceil(data.total / 6));
+                setTotalPages(data.data.totalPages);
 
-                setProjects(data.data);
-                setSearchResults(data.data);
+                setProjects(data.data.data);
+                setSearchResults(data.data.data);
             } catch (error) {
                 console.error('Error fetching projects:', error);
             }
@@ -216,10 +216,10 @@ const MainPage: FC = () => {
                             <Pinned />
                         </div>
                         <ProjectList projects={searchResults} />
-                        {isLoggedIn && (
+                {isLoggedIn && (
                             <Pagination
                                 currentPage={currentPage}
-                                totalPages={10}
+                                totalPages={totalPages}
                                 onPageChange={handlePageChange}
                             />
                         )}

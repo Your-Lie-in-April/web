@@ -161,8 +161,6 @@ const CoverEdit: FC<CoverProps> = ({
 
         const data = await response.json();
         setImages(data.data);
-
-        console.log('배경사진', data.data);
     };
 
     useEffect(() => {
@@ -199,20 +197,30 @@ const CoverEdit: FC<CoverProps> = ({
         const accessToken = localStorage.getItem('access_token');
         const effectiveTitle = title || projectData?.title;
         const effectiveDescription = content || projectData?.description;
-        const effectiveColor = color || projectData?.color;
-        const effectiveCoverImageId = imgId || projectData?.coverImageId;
 
-        const payload = {
+        // 색상 또는 이미지가 선택되었는지 확인
+        const hasColor = color && color !== projectData?.color;
+        const hasCoverImageId = imgId && imgId !== projectData?.coverImageId;
+
+        const payload: any = {
             title: effectiveTitle,
             description: effectiveDescription,
-            color: effectiveColor,
-            coverImageId: effectiveCoverImageId,
             startDate: projectData?.startDate,
             endDate: projectData?.endDate,
             daysOfWeek: projectData?.daysOfWeek,
             isStored: projectData?.isStored,
         };
-        console.log(payload);
+
+        if (hasColor) {
+            payload.color = color;
+        }
+
+        if (hasCoverImageId) {
+            payload.coverImageId = imgId;
+        }
+
+        console.log('전달되는것들', payload);
+
         try {
             const response = await fetch(
                 Http + `/v1/projects/${projectData?.projectId}`,

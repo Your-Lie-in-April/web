@@ -26,6 +26,7 @@ const Title = styled.div`
     color: #ffffff;
     text-align: center;
     font-size: 42px;
+
     font-weight: 700;
     line-height: normal;
 `;
@@ -61,6 +62,7 @@ const StoragePage = () => {
     const [page, setPage] = useState<number>(0);
     const [size] = useState<number>(9);
     const [totalPages, setTotalPages] = useState<number>(0);
+
     const [hasMore, setHasMore] = useState<boolean>(true);
 
     const observer = useRef<IntersectionObserver | null>(null);
@@ -68,6 +70,7 @@ const StoragePage = () => {
     const lastProjectRef = useCallback(
         (node: HTMLDivElement | null) => {
             if (observer.current) observer.current.disconnect();
+
             observer.current = new IntersectionObserver(
                 (entries) => {
                     if (entries[0].isIntersecting && hasMore) {
@@ -110,7 +113,6 @@ const StoragePage = () => {
                 const data = await response.json();
                 console.log(data.data.data);
                 setTotalPages(data.data.totalPages);
-
                 if (page === 0) {
                     setStoreList(data.data.data);
                     setSearchResults(data.data.data);
@@ -141,7 +143,6 @@ const StoragePage = () => {
         );
         setSearchResults(searchProjects);
     };
-
     return (
         <>
             <GlobalStyle />
