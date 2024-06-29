@@ -149,7 +149,7 @@ const Login: FC = () => {
   };
 
   useEffect(() => {
-    const accessToken = localStorage.getItem('accesstoken');
+    const accessToken = localStorage.getItem('access_token');
     const memberId = localStorage.getItem('member_id');
 
     console.log(accessToken);
@@ -183,7 +183,7 @@ const Login: FC = () => {
           </Container>
           <div style={{ height: '104px', width: '100%' }} />
           <LoginBanner>
-            <text
+            <span
               style={{
                 color: '#fff',
                 textAlign: 'center',
@@ -192,7 +192,7 @@ const Login: FC = () => {
               }}
             >
               Sign up
-            </text>
+            </span>
             <Google onClick={oAuth}>
               <GoogleLogin>
                 <img src={googleLogo} alt='Google Logo' />

@@ -13,6 +13,7 @@ export type ProjectEntity = {
     isStored?: boolean;
     coverImageUrl: string | null;
     color: string;
+    coverImageId?: string;
 };
 
 export type ProjectThumbnailResponse = {
@@ -61,6 +62,12 @@ export type ProjectCreateUpdateRequest = {
     sun: boolean;
     coverImageUrl: string | null;
     color: string;
+};
+
+export type ProjectInviteMetaInfo = {
+    title: string;
+    invitator: string;
+    isExpired: boolean;
 };
 
 // GET /v1/projects/all

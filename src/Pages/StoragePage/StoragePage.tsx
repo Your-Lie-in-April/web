@@ -84,10 +84,7 @@ const StoragePage = () => {
           setSearchResults((prevProjects) => [...prevProjects, ...data.data]);
         }
         setHasMore(data.data.length > 0);
-      } else {
-        navigate('/login');
-        return;
-      }
+      } 
     } catch (error) {
       console.error('업데이트 실패:', error);
     }

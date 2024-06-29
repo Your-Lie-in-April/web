@@ -43,7 +43,7 @@ const MemPickDiv = styled.div`
 `;
 
 export const MemDropdown = styled.div`
-    width: 194px;
+    width: 208px;
     max-height: 124px;
     border-radius: 5px;
     background: #f5f5f5;
@@ -52,7 +52,7 @@ export const MemDropdown = styled.div`
     flex-direction: column;
     overflow-y: auto;
     position: absolute;
-    top: 30px;
+    top: 40px;
     right: 0;
     box-sizing: border-box;
 
@@ -61,11 +61,15 @@ export const MemDropdown = styled.div`
     }
 
     li {
+        display: flex;
+        align-items: center;
+        justify-content: center;
         list-style: none;
         width: 100%;
         height: 30px;
         text-align: center;
         color: #7d7d7d;
+        font-size: 24px;
     }
 
     li:hover {
@@ -82,6 +86,9 @@ const CommonText = styled.text`
     font-style: normal;
     font-weight: 400;
     line-height: normal;
+
+    display: flex;
+    align-items: center;
 `;
 
 const MemberNick = styled(CommonText)`
@@ -127,7 +134,10 @@ interface TransferAuthModalProps {
     isAuthClick: boolean;
     onIsAuthClick: () => void;
 }
-const TransferAuthModal: React.FC<TransferAuthModalProps> = ({ isAuthClick, onIsAuthClick }) => {
+const TransferAuthModal: React.FC<TransferAuthModalProps> = ({
+    isAuthClick,
+    onIsAuthClick,
+}) => {
     const { projectId } = useParams<{ projectId: string }>();
     const [members, setMembers] = useState<MemberEntity[] | undefined>();
     const [selectMem, setSelectMem] = useState<string>('');
@@ -139,13 +149,16 @@ const TransferAuthModal: React.FC<TransferAuthModalProps> = ({ isAuthClick, onIs
         const accessToken = localStorage.getItem('access_token');
         const fetchMember = async () => {
             try {
-                const response = await fetch(`${Http}/v1/projects/${projectId}/members`, {
-                    method: 'GET',
-                    headers: {
-                        Accept: '*/*',
-                        Authorization: `Bearer ${accessToken}`,
-                    },
-                });
+                const response = await fetch(
+                    `${Http}/v1/projects/${projectId}/members`,
+                    {
+                        method: 'GET',
+                        headers: {
+                            Accept: '*/*',
+                            Authorization: `Bearer ${accessToken}`,
+                        },
+                    }
+                );
 
                 if (!response.ok) {
                     throw new Error('Failed to fetch members');
@@ -154,7 +167,9 @@ const TransferAuthModal: React.FC<TransferAuthModalProps> = ({ isAuthClick, onIs
                 const data = await response.json();
                 console.log('멤버', data.data);
 
-                const nonPrivilegedMembers = data.data.filter((member: MemberEntity) => !member.isPrivileged);
+                const nonPrivilegedMembers = data.data.filter(
+                    (member: MemberEntity) => !member.isPrivileged
+                );
 
                 if (nonPrivilegedMembers.length > 0) {
                     setSelectMem(nonPrivilegedMembers[0].nickname);
@@ -177,7 +192,7 @@ const TransferAuthModal: React.FC<TransferAuthModalProps> = ({ isAuthClick, onIs
     const handleClose = () => {
         onIsAuthClick();
         setIsOpen(false);
-    }
+    };
 
     const handleSetIsOpen = () => {
         setIsOpen(!isOpen);
@@ -246,9 +261,8 @@ const TransferAuthModal: React.FC<TransferAuthModalProps> = ({ isAuthClick, onIs
                                             style={{
                                                 width: '100%',
                                                 display: 'flex',
-                                                flexDirection: 'row',
-                                                gap: '12px',
                                                 alignItems: 'center',
+                                                position: 'relative',
                                             }}
                                         >
                                             <ul
@@ -262,16 +276,22 @@ const TransferAuthModal: React.FC<TransferAuthModalProps> = ({ isAuthClick, onIs
                                             </ul>
                                             {isOpen ? (
                                                 <ExpandLessIcon
-                                                    style={{
-                                                        width: '12px',
-                                                        height: '11px',
+                                                    sx={{
+                                                        fontSize: '12px',
+                                                        width: '20px',
+                                                        height: '20px',
+                                                        position: 'absolute',
+                                                        right: '10px',
                                                     }}
                                                 />
                                             ) : (
                                                 <ExpandMoreIcon
-                                                    style={{
-                                                        width: '12px',
-                                                        height: '11px',
+                                                    sx={{
+                                                        fontSize: '12px',
+                                                        width: '20px',
+                                                        height: '20px',
+                                                        position: 'absolute',
+                                                        right: '10px',
                                                     }}
                                                 />
                                             )}
@@ -280,7 +300,14 @@ const TransferAuthModal: React.FC<TransferAuthModalProps> = ({ isAuthClick, onIs
                                         {isOpen && members && (
                                             <MemDropdown>
                                                 {members.map((mem) => (
-                                                    <li key={mem.memberId} onClick={() => handleSetSelectMem(mem)}>
+                                                    <li
+                                                        key={mem.memberId}
+                                                        onClick={() =>
+                                                            handleSetSelectMem(
+                                                                mem
+                                                            )
+                                                        }
+                                                    >
                                                         {mem.nickname}
                                                     </li>
                                                 ))}
@@ -289,7 +316,8 @@ const TransferAuthModal: React.FC<TransferAuthModalProps> = ({ isAuthClick, onIs
                                     </MemPickDiv>
 
                                     <CommonText>
-                                        <MemberNick>{selectMem}</MemberNick> 에게 권한을 양도하겠습니까?
+                                        <MemberNick>{selectMem}</MemberNick>{' '}
+                                        &nbsp;에게 권한을 양도하겠습니까?
                                     </CommonText>
                                 </div>
                                 <ButtonsContainer
@@ -298,8 +326,12 @@ const TransferAuthModal: React.FC<TransferAuthModalProps> = ({ isAuthClick, onIs
                                         padding: '0 20px 0 20px',
                                     }}
                                 >
-                                    <ConfirmBtn onClick={handleConfirm}>확인</ConfirmBtn>
-                                    <CancelBtn onClick={handleClose}>취소</CancelBtn>
+                                    <ConfirmBtn onClick={handleConfirm}>
+                                        확인
+                                    </ConfirmBtn>
+                                    <CancelBtn onClick={handleClose}>
+                                        취소
+                                    </CancelBtn>
                                 </ButtonsContainer>
                             </div>
                         </Box>

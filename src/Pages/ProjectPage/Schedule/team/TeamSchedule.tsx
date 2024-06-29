@@ -60,9 +60,9 @@ const TeamSchedule: React.FC<TeamScheduleProps> = ({ isEditModal }) => {
     const { projectData } = useContext(ProjectContext);
     const projectTitle = projectData?.title;
 
-    // 달력 선택 날짜 가져옴
-    const date = useContext(DateContext);
-    const condition = dayjs(date?.selectedDate).format('YYYY-MM-DD') ?? '';
+  // 달력 선택 날짜 가져옴
+  const date = useContext(DateContext);
+  const condition = dayjs(date?.selectedDate).format("YYYY-MM-DD") ?? "";
 
     const [scheduleData, setSchdeuleData] = useState<
         ScheduleAllMembersResDto[]
@@ -88,14 +88,14 @@ const TeamSchedule: React.FC<TeamScheduleProps> = ({ isEditModal }) => {
                     throw new Error('Failed to fetch pinned projects');
                 }
 
-                const data = await response.json();
-                setSchdeuleData(data.data);
-            } catch (error) {
-                console.error(error);
-            }
-        };
-        fetchSchedule();
-    }, [projectId, condition, isEditModal]);
+        const data = await response.json();
+        setSchdeuleData(data.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchSchedule();
+  }, [projectId, condition, isEditModal]);
 
     return (
         <Box>

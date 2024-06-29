@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import CoverEdit from './coveredit';
 
 interface ContentTextProps {
-    focused: boolean;
+    $focused: boolean;
 }
 
 const Container = styled.div`
@@ -15,7 +15,7 @@ const Container = styled.div`
     align-items: center;
     justify-content: center;
     background-color: #ffffff;
-    border: 1px solid #000000;
+    border-bottom: 1px solid #000000;
 
     position: relative;
     z-index: 5;
@@ -58,6 +58,7 @@ const TitleText = styled.input`
     border: transparent;
     color: black;
     outline: none;
+    background-color: white;
     &:focus {
         outline: none;
     }
@@ -73,7 +74,7 @@ const Content = styled.div`
 `;
 
 const ContentText = styled.textarea<ContentTextProps>`
-    color: ${({ focused }) => (focused ? '#000000' : '#7d7d7d')};
+    color: ${({ $focused }) => ($focused ? '#000000' : '#7d7d7d')};
     color: #7d7d7d;
     text-align: center;
     font-family: Pretendard;
@@ -112,13 +113,18 @@ const Make = styled.button`
     align-items: center;
     justify-content: center;
     margin-top: 130px;
+    color: #000000;
 
     &:hover {
         border-color: black;
     }
 
     &:focus {
-        outline: none;
+        border: 1px solid #000000;
+    }
+
+    &:active {
+        border: 1px solid #000000;
     }
 `;
 interface InfoEditPros {
@@ -135,7 +141,7 @@ const InfoEdit: FC<InfoEditPros> = ({ projectData, setEditCover }) => {
     const [selectedColor, setSelectedColor] = useState<string | null>(null);
     const [selectedImageUrl, setSelectedImageUrl] = useState<string | null>(null);
     const [selectedHex, setSelectedHex] = useState<string | null>(null);
-
+    const [selectedImgId, setSelectedImageId] = useState<string>('');
     const handleTextareaChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
         const inputText = e.target.value;
         const limitedText = inputText.slice(0, 58);
@@ -159,10 +165,11 @@ const InfoEdit: FC<InfoEditPros> = ({ projectData, setEditCover }) => {
         setSelectedHex(null);
     };
 
-    const handleImageSelect = (url: string) => {
+    const handleImageSelect = (url: string, id: string) => {
         setSelectedImageUrl(url);
         setSelectedColor(null);
         setSelectedHex(null);
+        setSelectedImageId(id);
     };
 
     const handleHexSelect = (color: string) => {
@@ -198,7 +205,7 @@ const InfoEdit: FC<InfoEditPros> = ({ projectData, setEditCover }) => {
                     <Content>
                         <ContentText
                             value={content}
-                            focused
+                            $focused
                             onChange={handleTextareaChange}
                             onFocus={() => setIsContentClicked(true)}
                             onBlur={() => setIsContentClicked(false)}
@@ -224,6 +231,7 @@ const InfoEdit: FC<InfoEditPros> = ({ projectData, setEditCover }) => {
                                 onColorSelect={handleColorSelect}
                                 onImageSelect={handleImageSelect}
                                 onHexSelect={handleHexSelect}
+                                imgId={selectedImgId}
                             />
                         </div>
                     )}

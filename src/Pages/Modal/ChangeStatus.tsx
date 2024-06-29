@@ -1,7 +1,7 @@
 import { Http } from '#/constants/backendURL';
 import ModalPortal from '#/utils/ModalPotal';
 import useScrollLock from '#/utils/useScrollLock';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useUserContext } from '../MainPage/MainPage';
 import { ModalBlackOut, ModalContainer } from './ModalCommon';
@@ -19,7 +19,7 @@ const Box = styled.div`
     box-sizing: border-box;
 `;
 
-const Title = styled.text`
+const Title = styled.span`
     color: #000000;
     font-family: Pretendard;
     font-size: 20px;
@@ -39,7 +39,7 @@ const StatusField = styled.input`
     font-style: normal;
     font-weight: 400;
     line-height: normal;
-    padding: 9px 16px;
+    padding: 4px 16px;
     box-sizing: border-box;
     border: none;
     outline: none;
@@ -81,6 +81,19 @@ const CancelBtn = styled(CommonButton)`
     background: #d9d9d9;
 `;
 
+const LimitText = styled.div`
+    color: #a4a4a4;
+    text-align: center;
+    font-family: Pretendard;
+    font-size: 10px;
+    font-style: normal;
+    font-weight: 300;
+    line-height: normal;
+    position: absolute;
+    bottom: 4px;
+    right: 16px;
+`;
+
 interface ChangeStatusProps {
     editStatusModal: boolean;
     onSetEditStatusModal: () => void;
@@ -91,33 +104,46 @@ const ChangeStatus: React.FC<ChangeStatusProps> = ({
     onSetEditStatusModal,
 }) => {
     const { userData, setUserData } = useUserContext();
-    const [newState, setNewState] = useState(userData?.state || '');
+    const [newState, setNewState] = useState('');
     const accessToken = localStorage.getItem('access_token');
 
     const handleStatusChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setNewState(e.target.value);
+        if (e.target.value.length <= 25) {
+            setNewState(e.target.value);
+        }
     };
 
     const updateStatus = async () => {
         try {
-            const response = await fetch(`${Http}/v1/members/${newState}`, {
+            const finalStatus = newState.trim();
+            if (finalStatus === '') {
+                alert('상태 메세지를 입력해주세요 👀');
+                return;
+            }
+            const response = await fetch(`${Http}/v1/members/${finalStatus}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
                     Authorization: `Bearer ${accessToken}`,
-                    credential: 'include',
                 },
-                body: JSON.stringify({ state: newState }),
+                body: JSON.stringify({ state: finalStatus }),
             });
             if (!response.ok) throw new Error('Status update failed');
 
             const updatedUserData = await response.json();
             setUserData({ ...userData, state: updatedUserData.state });
             onSetEditStatusModal();
+            window.location.reload();
         } catch (error) {
             console.error('업데이트 실패:', error);
         }
     };
+
+    useEffect(() => {
+        if (editStatusModal) {
+            setNewState('');
+        }
+    }, [editStatusModal]);
 
     useScrollLock(editStatusModal);
 
@@ -149,11 +175,16 @@ const ChangeStatus: React.FC<ChangeStatusProps> = ({
                                     }}
                                 >
                                     <Title>상태메시지를 작성해주세요</Title>
-                                    <StatusField
-                                        type="text"
-                                        placeholder={userData?.state}
-                                        onChange={handleStatusChange}
-                                    />
+                                    <div style={{ position: 'relative' }}>
+                                        <StatusField
+                                            type='text'
+                                            onChange={handleStatusChange}
+                                            maxLength={25}
+                                        />
+                                        <LimitText>
+                                            {newState.length}/25
+                                        </LimitText>{' '}
+                                    </div>
                                 </div>
                                 <ButtonsContainer
                                     style={{ alignSelf: 'flex-end' }}

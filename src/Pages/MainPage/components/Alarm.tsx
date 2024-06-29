@@ -1,5 +1,8 @@
-import { FC } from 'react';
+import { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { EventSourcePolyfill, NativeEventSource } from 'event-source-polyfill';
+import 'react-toastify/dist/ReactToastify.css';
+import { Http } from '#/constants/backendURL';
 
 const AlarmDiv = styled.div`
     display: flex;
@@ -38,10 +41,44 @@ const CommingSoon = styled.div`
 `;
 
 const Alarm: FC = () => {
+    const [alarmMessage, setAlarmMessage] = useState<string | null>(null);
+    const sseURL = `${Http}/v1/sse/subscribe`;
+    const token = localStorage.getItem('access_token');
+
+    useEffect(() => {
+        const EventSource = EventSourcePolyfill || NativeEventSource;
+        const eventSource = new EventSource(`${Http}/v1/sse/subscribe`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                Connection: 'keep-alive',
+                Accept: 'text/event-stream',
+            },
+            heartbeatTimeout: 86400000,
+        });
+
+        eventSource.addEventListener('notification', (event: any) => {
+            console.log('에빈ㄴ드');
+        });
+
+        eventSource.addEventListener('message', (event: any) => {
+            const { data } = event;
+            setAlarmMessage(data);
+        });
+
+        eventSource.onerror = (err) => {
+            console.error('EventSource failed:', err);
+            eventSource.close();
+        };
+
+        return () => {
+            eventSource.close();
+        };
+    }, [sseURL, token]);
+
     return (
         <AlarmDiv>
             <AlarmText>알림</AlarmText>
-            <CommingSoon>Comming Soon</CommingSoon>
+            {alarmMessage && <CommingSoon>{alarmMessage}</CommingSoon>}
         </AlarmDiv>
     );
 };

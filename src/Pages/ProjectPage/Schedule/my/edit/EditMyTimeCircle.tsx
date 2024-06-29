@@ -13,25 +13,29 @@ interface TimeSlotProps {
     date: string;
     hour: number;
     minute: number;
-    projectStartTime: number | undefined;
-    projectEndTime: number | undefined;
+    projectStartTime: string | undefined;
+    projectEndTime: string | undefined;
 }
 
 const isProjectHour = (
     date: string,
     hour: number,
-    projectStartTime: number | undefined,
-    projectEndTime: number | undefined
+    minute: number,
+    projectStartTime: string | undefined,
+    projectEndTime: string | undefined
 ) => {
     if (projectStartTime !== undefined && projectEndTime !== undefined) {
+        const [startHour, startMinute] = projectStartTime.split(':').map(Number);
+        const [endHour, endMinute] = projectEndTime.split(':').map(Number);
+
         const slotDateTime = new Date(date);
-        slotDateTime.setHours(hour);
+        slotDateTime.setHours(hour, minute);
 
         const projectStartDateTime = new Date(date);
-        projectStartDateTime.setHours(projectStartTime);
+        projectStartDateTime.setHours(startHour, startMinute);
 
         const projectEndDateTime = new Date(date);
-        projectEndDateTime.setHours(projectEndTime);
+        projectEndDateTime.setHours(endHour, endMinute);
 
         return (
             slotDateTime >= projectStartDateTime &&
@@ -60,7 +64,13 @@ export const TimeSlotLeft: React.FC<TimeSlotProps> = ({
         onMouseEnter();
     };
 
-    const isProjectTime = isProjectHour(date, hour, projectStartTime, projectEndTime);
+    const isProjectTime = isProjectHour(
+        date,
+        hour,
+        minute,
+        projectStartTime,
+        projectEndTime
+    );
 
     return (
         <div
@@ -107,7 +117,13 @@ export const TimeSlotRight: React.FC<TimeSlotProps> = ({
         onMouseEnter();
     };
 
-    const isProjectTime = isProjectHour(date, hour, projectStartTime, projectEndTime);
+    const isProjectTime = isProjectHour(
+        date,
+        hour,
+        minute,
+        projectStartTime,
+        projectEndTime
+    );
 
     return (
         <div

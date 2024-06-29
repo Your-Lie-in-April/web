@@ -5,29 +5,30 @@ import useScrollLock from '#/utils/useScrollLock';
 import { useState } from 'react';
 import styled from 'styled-components';
 import ConfirmCopyLink from './ConfirmCopyLink';
+import { useInvitationContext } from '../ProjectPage/invitationContext';
 
 interface CommonButtonProps {
-    primary?: boolean;
+    $primary?: boolean;
     onClick?: () => void;
 }
 
-const ModalBlackOut = styled.div<{ isVisible: boolean }>`
+const ModalBlackOut = styled.div<{ $isVisible: boolean }>`
     width: 100%;
     height: 100%;
     position: fixed;
     left: 0;
     top: 0;
-    background: rgba(0, 0, 0, ${({ isVisible }) => (isVisible ? '0.5' : '0')});
+    background: rgba(0, 0, 0, ${({ $isVisible }) => ($isVisible ? '0.5' : '0')});
     z-index: 100;
     transition: background 1s ease;
 `;
 
-const ModalContainer = styled.div<{ isVisible: boolean }>`
+const ModalContainer = styled.div<{ $isVisible: boolean }>`
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    opacity: ${({ isVisible }) => (isVisible ? '1' : '0')};
+    opacity: ${({ $isVisible }) => ($isVisible ? '1' : '0')};
     transition: opacity 1s ease;
     z-index: 999;
 `;
@@ -93,7 +94,7 @@ const CommonButton = styled.button<CommonButtonProps>`
     font-weight: 500;
     line-height: normal;
     color: #ffffff;
-    background-color: ${(props) => (props.primary ? '#633AE2' : '#d9d9d9')};
+    background-color: ${(props) => (props.$primary ? '#633AE2' : '#d9d9d9')};
 
     &:focus {
         border: none;
@@ -106,41 +107,37 @@ interface InvitationModalProps {
     toggleBtn: () => void;
 }
 
-const InvitationModal: React.FC<InvitationModalProps> = ({
-    projectData,
-    projectId,
-    toggleBtn,
-}) => {
+const InvitationModal: React.FC<InvitationModalProps> = ({ projectData, projectId, toggleBtn }) => {
+    const { setInvitationLink, invitationLink } = useInvitationContext();
     const [link, setLink] = useState<string>('');
     const [isModalOpen, setIsModalOpen] = useState<boolean>(true);
     const [isBtnClick, setIsBtnClick] = useState<boolean>(false);
     const [isVisible, setIsVisible] = useState<boolean>(true);
-    const [showConfirmCopyLink, setShowConfirmCopyLink] =
-        useState<boolean>(false);
-    const [isModalCompleteHidden, setIsModalCompleteHidden] =
-        useState<boolean>(false);
+    const [showConfirmCopyLink, setShowConfirmCopyLink] = useState<boolean>(false);
+    const [isModalCompleteHidden, setIsModalCompleteHidden] = useState<boolean>(false);
     const accessToken = localStorage.getItem('access_token');
 
     const makeInvitation = async () => {
         try {
-            const response = await fetch(
-                `${Http}/v1/projects/${projectId}/invitation`,
-                {
-                    method: 'POST',
-                    headers: {
-                        Accept: '*/*',
-                        Authorization: `Bearer ${accessToken}`,
-                    },
-                }
-            );
+            const response = await fetch(`${Http}/v1/projects/${projectId}/invitation`, {
+                method: 'POST',
+                headers: {
+                    Accept: '*/*',
+                    Authorization: `Bearer ${accessToken}`,
+                },
+            });
 
             if (!response.ok) {
                 throw new Error('회원 초대 링크 생성 실패');
             }
 
             const data = await response.json();
-            console.log('링크', data.data);
-            setLink(`${Http}/v1/invitation/` + data.data);
+            console.log('데이터', data.data);
+            console.log('링크', data.data.link);
+            const generatedLink = `${Http}/v1/invitation/` + data.data.link;
+            setLink(generatedLink);
+            setInvitationLink(generatedLink);
+            console.log('invitationLink after set:', generatedLink);
         } catch (error) {
             console.error(error);
         }
@@ -160,7 +157,9 @@ const InvitationModal: React.FC<InvitationModalProps> = ({
             setIsModalCompleteHidden(true);
             setShowConfirmCopyLink(true);
             setIsModalOpen(false);
-            setTimeout(() => {}, 100);
+            setTimeout(() => {
+                console.log('invitationLink in closeModal:', invitationLink); // invitationLink를 콘솔에 출력
+            }, 100);
         }, 1000);
     };
 
@@ -182,8 +181,8 @@ const InvitationModal: React.FC<InvitationModalProps> = ({
         <>
             {!isModalCompleteHidden && (
                 <ModalPortal>
-                    <ModalBlackOut isVisible={isVisible} onClick={toggleBtn} />
-                    <ModalContainer isVisible={isVisible}>
+                    <ModalBlackOut $isVisible={isVisible} onClick={toggleBtn} />
+                    <ModalContainer $isVisible={isVisible}>
                         <Box>
                             <div
                                 style={{
@@ -208,19 +207,11 @@ const InvitationModal: React.FC<InvitationModalProps> = ({
                                     <Title>{projectData?.title}</Title>
                                     <InviteField value={link} readOnly />
                                 </div>
-                                <ButtonsContainer
-                                    style={{ alignSelf: 'flex-end' }}
-                                >
-                                    <CommonButton
-                                        primary={!isBtnClick}
-                                        onClick={generateLink}
-                                    >
+                                <ButtonsContainer style={{ alignSelf: 'flex-end' }}>
+                                    <CommonButton $primary={!isBtnClick} onClick={generateLink}>
                                         링크생성
                                     </CommonButton>
-                                    <CommonButton
-                                        primary={isBtnClick}
-                                        onClick={() => onClickCopyLink(link)}
-                                    >
+                                    <CommonButton $primary={isBtnClick} onClick={() => onClickCopyLink(link)}>
                                         링크복사
                                     </CommonButton>
                                 </ButtonsContainer>

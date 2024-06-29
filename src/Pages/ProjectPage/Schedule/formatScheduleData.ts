@@ -63,7 +63,7 @@ export const formatScheduleData = (
         const isValidStartTime =
             projectStartTime !== undefined && slot.hour >= projectStartTime;
         const isValidEndTime =
-            projectEndTime !== undefined && slot.hour < projectEndTime;
+            projectEndTime !== undefined && slot.hour <= projectEndTime;
         const isValidDate =
             projectStartDate &&
             projectEndDate &&

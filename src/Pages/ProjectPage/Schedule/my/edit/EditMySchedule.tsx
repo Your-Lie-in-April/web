@@ -117,18 +117,14 @@ interface EditMyScheduleProps {
     isEditModal: boolean;
     onSetIsEditModal: () => void;
     scheduleData: ScheduleWeekResponse | null;
-    setSchdeuleData: React.Dispatch<
-        React.SetStateAction<ScheduleWeekResponse | null>
-    >;
-    condition: string;
+    fetchSchedule: () => Promise<void>;
 }
 
 const EditMySchedule: React.FC<EditMyScheduleProps> = ({
     isEditModal,
     onSetIsEditModal,
     scheduleData,
-    setSchdeuleData,
-    condition,
+    fetchSchedule,
 }) => {
     const { projectData } = useContext(ProjectContext);
     const startDateString = projectData?.startDate;
@@ -235,33 +231,13 @@ const EditMySchedule: React.FC<EditMyScheduleProps> = ({
 
         try {
             if (scheduleData && scheduleData.schedule.length > 0) {
-                putSchedule(newScheduleData);
+                await putSchedule(newScheduleData);
             } else {
-                postSchedule(newScheduleData);
+                await postSchedule(newScheduleData);
             }
             setSelection({});
             onSetIsEditModal();
-
-            // 스케줄 데이터 다시 가져오기
-            const accessToken = localStorage.getItem('access_token');
-            const memberId = localStorage.getItem('member_id');
-            const response = await fetch(
-                `${Http}/v1/projects/${projectId}/members/${memberId}/schedules?condition=${condition}`,
-                {
-                    method: 'GET',
-                    headers: {
-                        Accept: '*/*',
-                        Authorization: `Bearer ${accessToken}`,
-                    },
-                }
-            );
-
-            if (!response.ok) {
-                throw new Error('Failed to fetch schedule');
-            }
-
-            const data = await response.json();
-            setSchdeuleData(data.data);
+            fetchSchedule(); // 일정 등록/수정 후에 fetchSchedule 함수를 호출합니다.
         } catch (error) {
             console.error('Error post/update schedule:', error);
         }
@@ -285,7 +261,9 @@ const EditMySchedule: React.FC<EditMyScheduleProps> = ({
                             <EditMyTime
                                 weekDates={weekDates || []}
                                 selection={selection}
-                                setSelection={setSelection}
+                                onSelectionChange={(newSelection) =>
+                                    setSelection(newSelection)
+                                }
                             />
                         </Box>
                         <ConfirmBtn onClick={handleConfirm}>

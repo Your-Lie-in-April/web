@@ -1,14 +1,7 @@
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { ko } from 'date-fns/locale/ko';
-import {
-    Dispatch,
-    FC,
-    SetStateAction,
-    useEffect,
-    useRef,
-    useState,
-} from 'react';
+import { Dispatch, FC, SetStateAction, useEffect, useRef, useState } from 'react';
 import ReactDatePicker from 'react-datepicker';
 import styled from 'styled-components';
 import '/src/styles/projecttime.css';
@@ -192,34 +185,44 @@ const ProjectTime: FC<ProjectTimeProps> = ({
     const [isEndOpen, setIsEndOpen] = useState<boolean>(false);
     const startDropdownRef = useRef<HTMLDivElement>(null);
     const endDropdownRef = useRef<HTMLDivElement>(null);
-    const dayNames = [
-        'SUNDAY',
-        'MONDAY',
-        'TUESDAY',
-        'WEDNESDAY',
-        'THURSDAY',
-        'FRIDAY',
-        'SATURDAY',
-    ];
 
-    const Times = [];
+    const dayNames = ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'];
+
+    type Time = {
+        value: string;
+        label: string;
+        hour: string;
+        minute: string;
+        ampm: string;
+    };
+
+    const Times: Time[] = [];
     for (let hour = 9; hour < 24; hour++) {
         const ampm = hour < 12 ? 'AM' : 'PM';
-        const displayHour = hour === 0 ? 0 : hour > 12 ? hour - 12 : hour;
+        const displayHour = hour === 0 ? 12 : hour > 12 ? hour - 12 : hour;
         for (let minute = 0; minute < 60; minute += 30) {
             const formattedHour = displayHour.toString().padStart(2, '0');
             const formattedMinute = minute.toString().padStart(2, '0');
             const time = `${ampm} ${formattedHour}:${formattedMinute}`;
             Times.push({
-                value: `${formattedHour}:${formattedMinute}`,
+                value: `${hour.toString().padStart(2, '0')}:${formattedMinute}`,
                 label: time,
-                hour: formattedHour,
+                hour: hour.toString().padStart(2, '0'),
                 minute: formattedMinute,
                 ampm,
             });
         }
     }
 
+    const filterTimes = (start: string): Time[] => {
+        const [startHour, startMinute] = start.split(':').map(Number);
+        return Times.filter(({ hour, minute }) => {
+            const currentHour = parseInt(hour, 10);
+            const currentMinute = parseInt(minute, 10);
+            return currentHour > startHour || (currentHour === startHour && currentMinute > startMinute);
+        });
+    };
+    const [filteredEndTimes, setFilteredEndTimes] = useState<Time[]>(Times);
     const toggleWeekend = (day: string) => {
         console.log(`Toggling day: ${day}`);
 
@@ -236,19 +239,11 @@ const ProjectTime: FC<ProjectTimeProps> = ({
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
-            if (
-                startDropdownRef.current &&
-                !startDropdownRef.current.contains(event.target as Node) &&
-                isStartOpen
-            ) {
+            if (startDropdownRef.current && !startDropdownRef.current.contains(event.target as Node) && isStartOpen) {
                 setIsStartOpen(false);
             }
 
-            if (
-                endDropdownRef.current &&
-                !endDropdownRef.current.contains(event.target as Node) &&
-                isEndOpen
-            ) {
+            if (endDropdownRef.current && !endDropdownRef.current.contains(event.target as Node) && isEndOpen) {
                 setIsEndOpen(false);
             }
         };
@@ -262,10 +257,23 @@ const ProjectTime: FC<ProjectTimeProps> = ({
 
     const startSelect = () => {
         setIsStartOpen(!isStartOpen);
+        setIsEndOpen(false);
     };
 
     const endSelect = () => {
         setIsEndOpen(!isEndOpen);
+        setIsStartOpen(false);
+    };
+
+    const handleStartTimeSelect = (time: Time) => {
+        setStartTime(time.label);
+        const newFilteredEndTimes = filterTimes(time.value);
+        setFilteredEndTimes(newFilteredEndTimes);
+        setIsStartOpen(false);
+
+        if (newFilteredEndTimes.length > 0) {
+            setEndTime(newFilteredEndTimes[0].label);
+        }
     };
 
     return (
@@ -315,11 +323,7 @@ const ProjectTime: FC<ProjectTimeProps> = ({
                 <Text>생성할 요일</Text>
                 <WeekendContainer>
                     {dayNames.map((day, index) => (
-                        <Weekend
-                            key={index}
-                            selected={selectedDays.includes(day)}
-                            onClick={() => toggleWeekend(day)}
-                        >
+                        <Weekend key={index} selected={selectedDays.includes(day)} onClick={() => toggleWeekend(day)}>
                             {day.substring(0, 1)}
                         </Weekend>
                     ))}
@@ -349,35 +353,21 @@ const ProjectTime: FC<ProjectTimeProps> = ({
                         onClick={startSelect}
                     >
                         <div style={{ width: '146px' }}>{starttime}</div>
-                        {!isStartOpen && (
-                            <ExpandMoreIcon sx={{ fontSize: '22px' }} />
-                        )}
-                        {isStartOpen && (
-                            <ExpandLessIcon sx={{ fontSize: '22px' }} />
-                        )}
+                        {!isStartOpen && <ExpandMoreIcon sx={{ fontSize: '22px' }} />}
+                        {isStartOpen && <ExpandLessIcon sx={{ fontSize: '22px' }} />}
                     </TimePicker>
 
                     {isStartOpen && (
-                        <TimePickerContainer
-                            style={{ position: 'absolute', marginTop: '4px' }}
-                        >
+                        <TimePickerContainer style={{ position: 'absolute', marginTop: '4px' }}>
                             {Times.map((time, index) => (
-                                <TimeOption
-                                    key={index}
-                                    onClick={() => {
-                                        setStartTime(time.label);
-                                        setIsStartOpen(false);
-                                    }}
-                                >
+                                <TimeOption key={index} onClick={() => handleStartTimeSelect(time)}>
                                     {time.label}
                                 </TimeOption>
                             ))}
                         </TimePickerContainer>
                     )}
                 </DateContainer>
-                <Separator style={{ marginLeft: '28px', marginRight: '28px' }}>
-                    ~
-                </Separator>
+                <Separator style={{ marginLeft: '28px', marginRight: '28px' }}>~</Separator>
 
                 <DateContainer style={{ gap: '4px' }}>
                     <Text>시간표 종료시간</Text>
@@ -393,18 +383,12 @@ const ProjectTime: FC<ProjectTimeProps> = ({
                         onClick={endSelect}
                     >
                         <div style={{ width: '146px' }}>{endtime}</div>
-                        {!isEndOpen && (
-                            <ExpandMoreIcon sx={{ fontSize: '22px' }} />
-                        )}
-                        {isEndOpen && (
-                            <ExpandLessIcon sx={{ fontSize: '22px' }} />
-                        )}
+                        {!isEndOpen && <ExpandMoreIcon sx={{ fontSize: '22px' }} />}
+                        {isEndOpen && <ExpandLessIcon sx={{ fontSize: '22px' }} />}
                     </TimePicker>
                     {isEndOpen && (
-                        <TimePickerContainer
-                            style={{ position: 'absolute', marginTop: '4px' }}
-                        >
-                            {Times.map((time, index) => (
+                        <TimePickerContainer style={{ position: 'absolute', marginTop: '4px' }}>
+                            {filteredEndTimes.map((time, index) => (
                                 <TimeOption
                                     key={index}
                                     onClick={() => {
