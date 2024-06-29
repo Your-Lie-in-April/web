@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 const Container = styled.div<{ opacity: number }>`
     position: relative;
-    top: 118px;
+    top: -150px;
     left: 100px;
     transform: translate(-50%, -50%);
     z-index: 1000;

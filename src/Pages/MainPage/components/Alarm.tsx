@@ -256,7 +256,6 @@ const Alarm: FC = () => {
             <DeleteNotification isIconVisible={isIconVisible} onClick={() => console.log('알림 삭제')}>
                 알림삭제
             </DeleteNotification>
-            <DeleteAlarm />
             {alarmMessages.map((alarm, index) => (
                 <NotificationBox
                     key={index}
@@ -287,6 +286,7 @@ const Alarm: FC = () => {
                     <NotificationContent isIconVisible={isIconVisible}>{alarm.message}</NotificationContent>
                 </NotificationBox>
             ))}
+            <DeleteAlarm />
         </AlarmDiv>
     );
 };
