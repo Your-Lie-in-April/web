@@ -122,13 +122,7 @@ const EditButton = styled.button`
 `;
 
 const EditIcon: React.FC = () => (
-    <svg
-        xmlns='http://www.w3.org/2000/svg'
-        width='22'
-        height='22'
-        viewBox='0 0 22 22'
-        fill='none'
-    >
+    <svg xmlns='http://www.w3.org/2000/svg' width='22' height='22' viewBox='0 0 22 22' fill='none'>
         <svg
             xmlns='http://www.w3.org/2000/svg'
             width='22'
@@ -195,10 +189,7 @@ interface MyPageModalProps {
     onSetIsLogout: () => void;
 }
 
-const MyPageModal: React.FC<MyPageModalProps> = ({
-    onSetIsMyPageModal,
-    onSetIsLogout,
-}) => {
+const MyPageModal: React.FC<MyPageModalProps> = ({ onSetIsMyPageModal, onSetIsLogout }) => {
     const [editStatusModal, setEditStatusModal] = useState(false);
     const [me, setMe] = useState<MemberEntity>();
 
@@ -274,18 +265,14 @@ const MyPageModal: React.FC<MyPageModalProps> = ({
                                     flexBasis: '0%',
                                 }}
                             />
-                            <NoStatusText>
-                                상태 메시지 등록이 되어있지 않습니다
-                            </NoStatusText>
+                            <NoStatusText>상태 메시지 등록이 되어있지 않습니다</NoStatusText>
                         </>
                     )}
                     <EditButton onClick={onSetEditStatusModal}>
                         <EditIcon />
                     </EditButton>
                 </StatusBox>
-                <StorageBtn onClick={handlemyproject}>
-                    프로젝트 보관함
-                </StorageBtn>
+                <StorageBtn onClick={handlemyproject}>프로젝트 보관함</StorageBtn>
                 <LogoutBtn onClick={onSetIsLogout}>
                     <LogoutOutlinedIcon
                         sx={{

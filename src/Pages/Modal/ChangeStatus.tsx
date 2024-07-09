@@ -19,7 +19,7 @@ const Box = styled.div`
     box-sizing: border-box;
 `;
 
-const Title = styled.text`
+const Title = styled.span`
     color: #000000;
     font-family: Pretendard;
     font-size: 20px;
