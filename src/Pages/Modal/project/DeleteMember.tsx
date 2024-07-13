@@ -1,4 +1,4 @@
-import { Http } from '#/constants/backendURL';
+import { Http } from '#/constants/urls';
 import { MemberEntity } from '#/types/memberType';
 import ModalPortal from '#/utils/ModalPotal';
 import useScrollLock from '#/utils/useScrollLock';

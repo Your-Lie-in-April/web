@@ -1,4 +1,5 @@
-import { Http } from '#/constants/backendURL';
+import { Http } from '#/constants/urls';
+import { accessToken } from '#/utils/token';
 import { FC, useState } from 'react';
 import { useNavigate } from 'react-router';
 import styled, { createGlobalStyle } from 'styled-components';
@@ -6,7 +7,6 @@ import AfterLogin from '../Layouts/AfterLogin';
 import Info from './Info';
 import ProjectCalendar from './projectcalendar';
 import ProjectTime from './projecttime';
-import { accessToken } from '#/utils/token';
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -137,7 +137,13 @@ const ProjectMakePage: FC = () => {
                     backgroundColor: '#000000',
                 }}
             />
-            <Info setContent={setContent} setTitle={setTitle} setColor={setColor} setImg={setImg} setImgId={setImgId} />
+            <Info
+                setContent={setContent}
+                setTitle={setTitle}
+                setColor={setColor}
+                setImg={setImg}
+                setImgId={setImgId}
+            />
             <div
                 style={{
                     height: '24px',

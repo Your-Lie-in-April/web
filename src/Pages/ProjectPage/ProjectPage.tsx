@@ -1,4 +1,4 @@
-import { Http } from '#/constants/backendURL';
+import { Http } from '#/constants/urls';
 import { DateProvider } from '#/hooks/context/dateContext';
 import { ProjectProvider } from '#/hooks/context/projectContext';
 import { MemberEntity } from '#/types/memberType';

@@ -7,6 +7,9 @@ const useScrollLock = (isLocked: boolean): void => {
         } else {
             document.body.style.overflow = '';
         }
+        return () => {
+            document.body.style.overflow = '';
+        };
     }, [isLocked]);
 };
 

@@ -1,4 +1,4 @@
-import { Http } from '#/constants/backendURL';
+import { Http } from '#/constants/urls';
 import { ProjectEntity } from '#/types/projectType';
 import InboxOutlinedIcon from '@mui/icons-material/InboxOutlined';
 import { useState } from 'react';

@@ -1,4 +1,4 @@
-import { Http } from './backendURL';
+import { Http } from './urls';
 
 export const API = {
     // member-controller
@@ -14,9 +14,12 @@ export const API = {
     PROJECT_PUT: (projectId?: number) => `${Http}/v1/projects/${projectId ?? ':projectId'}`,
     PROJECT_DELETE: (projectId?: number) => `${Http}/v1/projects/${projectId ?? ':projectId'}`,
     PROJECT_POST: `${Http}/v1/projects`,
+
     PROJECT_INVITATION_LINK: (projectId?: number) =>
         `${Http}/v1/projects/${projectId ?? `:projectId`}/invitation`,
-    PROJECT_INVITATION_URL: (url?: string) => `${Http}/v1/projects/invitation${url ?? ':url'}`,
+    PROJECT_INVITATION_MEM: (url?: string) => `${Http}/v1/invitation/${url}`,
+    PROJECT_INVITATION_INFO: (url: string) => `${Http}/v1/projects/invitations?url=${url}`,
+
     PROJECT_TRANSFER_PREVILEGE: (projectId?: number) =>
         `${Http}/v1/projects/${projectId ?? ':projectId'}/transfer-privilege`,
     PROJECT_IN_MEMBERS: (projectId?: number) =>
@@ -27,7 +30,7 @@ export const API = {
         `${Http}/v1/projects/members/${memberId ?? ':memberId'}?page=${page}&size=${size}`,
     PROJECT_PIN: (memberId?: number) =>
         `${Http}/v1/projects/members/${memberId ?? ':memberId'}/pin`,
-    PROJECT_IVTATION_INFO: `${Http}/v1/projects/invitations`,
+
     PROJECT_COVER_IMG: `${Http}/v1/covers`,
     PROJECT_DELETE_MEMBER: (projectId?: number, memberId?: number) =>
         `${Http}/v1/projects/${projectId ?? ':projectId'}/members/${memberId ?? ':memberId'}`,

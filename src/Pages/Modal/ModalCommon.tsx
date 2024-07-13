@@ -28,5 +28,5 @@ export const ModalBackBlur = styled.div`
     transform: translate(-50%, -50%);
     z-index: 100;
     background: rgba(0, 0, 0, 0.4);
-    backdrop-filter: blur(2px);
+    backdrop-filter: blur(1px);
 `;

@@ -1,4 +1,4 @@
-import { Http } from '#/constants/backendURL';
+import { Http } from '#/constants/urls';
 
 export async function refreshToken() {
     const refreshToken = localStorage.getItem('refresh_token');

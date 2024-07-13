@@ -8,6 +8,78 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import DeleteProject from '../Modal/project/DeleteProject';
 
+const StorageProject = ({ project }: { project: ProjectThumbnailResponse }) => {
+    const [showMore, setShowMore] = useState<boolean>(false);
+    const [isClick, setIsClick] = useState<boolean>(false);
+    const navigate = useNavigate();
+
+    const toggleMoreBtn = () => {
+        setShowMore(!showMore);
+    };
+
+    const onClickItem = () => {
+        setIsClick(!isClick);
+    };
+    const { mutate: handleStored } = usePatchStoredMutation(project.projectId);
+
+    return (
+        <>
+            <ProjectBox
+                style={{ backgroundColor: project.color }}
+                $coverImageUrl={project.coverImageUrl}
+            >
+                {showMore && (
+                    <MoreBox>
+                        <div
+                            style={{
+                                display: 'flex',
+                                gap: '30px',
+                                justifyContent: 'center',
+                            }}
+                        >
+                            <MoreItem onClick={() => handleStored()}>
+                                <RestartAltIcon sx={{ fontSize: 48, color: '#F1F1F1' }} />
+                                <MoreText>보관 취소</MoreText>
+                            </MoreItem>
+                            <MoreItem onClick={onClickItem}>
+                                <DeleteIcon sx={{ fontSize: 48, color: '#F1F1F1' }} />
+                                <MoreText>삭제하기</MoreText>
+                            </MoreItem>
+                        </div>
+                    </MoreBox>
+                )}
+                <div
+                    style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '4px',
+                    }}
+                >
+                    <MoreDiv>
+                        <MoreButton>
+                            <StyledMoreBtn sx={{ fontSize: 32 }} onClick={toggleMoreBtn} />
+                        </MoreButton>
+                    </MoreDiv>
+                    <TextBox onClick={() => navigate(`/project/${project.projectId}`)}>
+                        <ProjectName>{project.title}</ProjectName>
+                        <DetailText>{project.description}</DetailText>
+                    </TextBox>
+                </div>
+            </ProjectBox>
+            <DeleteProject
+                onClose={onClickItem}
+                projectId={project.projectId}
+                title={project.title}
+                isClick={isClick}
+            />
+        </>
+    );
+};
+
+export default StorageProject;
+
+
+
 interface ProjectBoxProps {
     $color?: string;
     $coverImageUrl?: string | null;
@@ -141,73 +213,3 @@ const MoreText = styled.div`
     line-height: normal;
     text-transform: uppercase;
 `;
-
-const StorageProject = ({ project }: { project: ProjectThumbnailResponse }) => {
-    const [showMore, setShowMore] = useState<boolean>(false);
-    const [isClick, setIsClick] = useState<boolean>(false);
-    const navigate = useNavigate();
-
-    const toggleMoreBtn = () => {
-        setShowMore(!showMore);
-    };
-
-    const onClickItem = () => {
-        setIsClick(!isClick);
-    };
-    const { mutate: handleStored } = usePatchStoredMutation(project.projectId);
-
-    return (
-        <>
-            <ProjectBox
-                style={{ backgroundColor: project.color }}
-                $coverImageUrl={project.coverImageUrl}
-            >
-                {showMore && (
-                    <MoreBox>
-                        <div
-                            style={{
-                                display: 'flex',
-                                gap: '30px',
-                                justifyContent: 'center',
-                            }}
-                        >
-                            <MoreItem onClick={() => handleStored()}>
-                                <RestartAltIcon sx={{ fontSize: 48, color: '#F1F1F1' }} />
-                                <MoreText>보관 취소</MoreText>
-                            </MoreItem>
-                            <MoreItem onClick={onClickItem}>
-                                <DeleteIcon sx={{ fontSize: 48, color: '#F1F1F1' }} />
-                                <MoreText>삭제하기</MoreText>
-                            </MoreItem>
-                        </div>
-                    </MoreBox>
-                )}
-                <div
-                    style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: '4px',
-                    }}
-                >
-                    <MoreDiv>
-                        <MoreButton>
-                            <StyledMoreBtn sx={{ fontSize: 32 }} onClick={toggleMoreBtn} />
-                        </MoreButton>
-                    </MoreDiv>
-                    <TextBox onClick={() => navigate(`/project/${project.projectId}`)}>
-                        <ProjectName>{project.title}</ProjectName>
-                        <DetailText>{project.description}</DetailText>
-                    </TextBox>
-                </div>
-            </ProjectBox>
-            <DeleteProject
-                onClose={onClickItem}
-                projectId={project.projectId}
-                title={project.title}
-                isClick={isClick}
-            />
-        </>
-    );
-};
-
-export default StorageProject;

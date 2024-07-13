@@ -4,6 +4,7 @@ import {
     ProjectDeleteMeReqDto,
     ProjectDeleteReqDto,
     ProjectGetResDto,
+    ProjectInvitationMetaResDto,
     ProjectInviteLinkReqDto,
     ProjectInviteMemReqDto,
     ProjectMemberResDto,
@@ -94,7 +95,15 @@ export const deleteProjectMember = async (projectId: number, memberId: number) =
 export const postProjectInviteMember = async (url: string) => {
     return await getAPIResponseData<ProjectInviteMemReqDto>({
         method: 'POST',
-        url: API.PROJECT_INVITATION_URL(url),
+        url: API.PROJECT_INVITATION_MEM(url),
+    });
+};
+
+// 초대 프로젝트 메타 정보
+export const getProjectInviteInfo = async (url: string) => {
+    return await getAPIResponseData<ProjectInvitationMetaResDto>({
+        method: 'GET',
+        url: API.PROJECT_INVITATION_INFO(url),
     });
 };
 

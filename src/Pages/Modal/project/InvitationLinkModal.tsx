@@ -1,11 +1,127 @@
-import { Http } from '#/constants/backendURL';
-import { useInvitationContext } from '#/Pages/ProjectPage/invitationContext';
+import { baseUrl } from '#/constants/urls';
+import usePostLinkMutation from '#/hooks/apis/mutations/project/usePostLinkMutation';
+import { useInvitationContext } from '#/hooks/context/invitationContext';
 import { ProjectEntity } from '#/types/projectType';
 import ModalPortal from '#/utils/ModalPotal';
 import useScrollLock from '#/utils/useScrollLock';
 import { useState } from 'react';
 import styled from 'styled-components';
 import ConfirmCopyLink from './ConfirmCopyLink';
+
+interface InvitationLinkModalProps {
+    projectId: string | undefined;
+    projectData: ProjectEntity | null;
+    toggleBtn: () => void;
+}
+
+const InvitationLinkModal: React.FC<InvitationLinkModalProps> = ({
+    projectData,
+    projectId,
+    toggleBtn,
+}) => {
+    const { invitationLink, setInvitationLink } = useInvitationContext();
+    const [link, setLink] = useState<string>('');
+    const [isModalOpen, setIsModalOpen] = useState<boolean>(true);
+    const [isBtnClick, setIsBtnClick] = useState<boolean>(false);
+    const [isVisible, setIsVisible] = useState<boolean>(true);
+    const [showConfirmCopyLink, setShowConfirmCopyLink] = useState<boolean>(false);
+    const [isModalCompleteHidden, setIsModalCompleteHidden] = useState<boolean>(false);
+
+    const { mutate } = usePostLinkMutation(Number(projectId));
+    const makeInvitation = () => {
+        mutate(undefined, {
+            onSuccess: (data) => {
+                const newLink = `${baseUrl}/invitation/${data.link}`;
+                setLink(newLink);
+                setInvitationLink(newLink);
+            },
+        });
+    };
+
+    // 링크 생성 로직
+    const generateLink = () => {
+        setIsBtnClick(false);
+        makeInvitation();
+    };
+
+    // 복사 버튼 클릭시 모달 닫기
+    const closeModal = () => {
+        setIsVisible(false);
+        setTimeout(() => {
+            setIsModalCompleteHidden(true);
+            setShowConfirmCopyLink(true);
+            setIsModalOpen(false);
+            setTimeout(() => {
+                console.log('invitationLink in closeModal:', invitationLink);
+            }, 100);
+        }, 1000);
+    };
+
+    // Clipboard API를 이용해 초대링크 복사
+    const onClickCopyLink = async (url: string) => {
+        try {
+            await navigator.clipboard.writeText(url);
+            setIsBtnClick(true);
+            closeModal();
+        } catch (e) {
+            alert('초대코드 복사에 실패했습니다😭');
+        }
+    };
+
+    useScrollLock(isModalOpen);
+
+    return (
+        <>
+            {!isModalCompleteHidden && (
+                <ModalPortal>
+                    <ModalBlackOut $isVisible={isVisible} onClick={toggleBtn} />
+                    <ModalContainer $isVisible={isVisible}>
+                        <Box>
+                            <div
+                                style={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'center',
+                                    gap: '18px',
+                                    width: '100%',
+                                    height: '100%',
+                                }}
+                            >
+                                <div
+                                    style={{
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        alignItems: 'center',
+                                        gap: '18px',
+                                        width: '100%',
+                                        height: '100%',
+                                    }}
+                                >
+                                    <Title>{projectData?.title}</Title>
+                                    <InviteField value={link} readOnly />
+                                </div>
+                                <ButtonsContainer style={{ alignSelf: 'flex-end' }}>
+                                    <CommonButton $primary={!isBtnClick} onClick={generateLink}>
+                                        링크생성
+                                    </CommonButton>
+                                    <CommonButton
+                                        $primary={isBtnClick}
+                                        onClick={() => onClickCopyLink(link)}
+                                    >
+                                        링크복사
+                                    </CommonButton>
+                                </ButtonsContainer>
+                            </div>
+                        </Box>
+                    </ModalContainer>
+                </ModalPortal>
+            )}
+            {showConfirmCopyLink && <ConfirmCopyLink />}
+        </>
+    );
+};
+
+export default InvitationLinkModal;
 
 interface CommonButtonProps {
     $primary?: boolean;
@@ -101,131 +217,3 @@ const CommonButton = styled.button<CommonButtonProps>`
         outline: none;
     }
 `;
-interface InvitationModalProps {
-    projectId: string | undefined;
-    projectData: ProjectEntity | null;
-    toggleBtn: () => void;
-}
-
-const InvitationModal: React.FC<InvitationModalProps> = ({ projectData, projectId, toggleBtn }) => {
-    const { setInvitationLink, invitationLink } = useInvitationContext();
-    const [link, setLink] = useState<string>('');
-    const [isModalOpen, setIsModalOpen] = useState<boolean>(true);
-    const [isBtnClick, setIsBtnClick] = useState<boolean>(false);
-    const [isVisible, setIsVisible] = useState<boolean>(true);
-    const [showConfirmCopyLink, setShowConfirmCopyLink] = useState<boolean>(false);
-    const [isModalCompleteHidden, setIsModalCompleteHidden] = useState<boolean>(false);
-    const accessToken = localStorage.getItem('access_token');
-
-    const makeInvitation = async () => {
-        try {
-            const response = await fetch(`${Http}/v1/projects/${projectId}/invitation`, {
-                method: 'POST',
-                headers: {
-                    Accept: '*/*',
-                    Authorization: `Bearer ${accessToken}`,
-                },
-            });
-
-            if (!response.ok) {
-                throw new Error('회원 초대 링크 생성 실패');
-            }
-
-            const data = await response.json();
-            console.log('데이터', data.data);
-            console.log('링크', data.data.link);
-            const generatedLink = `${Http}/v1/invitation/` + data.data.link;
-            setLink(generatedLink);
-            setInvitationLink(generatedLink);
-            console.log('invitationLink after set:', generatedLink);
-        } catch (error) {
-            console.error(error);
-        }
-    };
-
-    // 링크 생성 로직
-    const generateLink = () => {
-        setIsBtnClick(false);
-        makeInvitation();
-    };
-
-    // 복사 버튼 클릭시 모달 닫기
-    const closeModal = () => {
-        setIsVisible(false);
-
-        setTimeout(() => {
-            setIsModalCompleteHidden(true);
-            setShowConfirmCopyLink(true);
-            setIsModalOpen(false);
-            setTimeout(() => {
-                console.log('invitationLink in closeModal:', invitationLink); // invitationLink를 콘솔에 출력
-            }, 100);
-        }, 1000);
-    };
-
-    // Clipboard API를 이용해 초대링크 복사
-    const onClickCopyLink = async (url: string) => {
-        try {
-            await navigator.clipboard.writeText(url);
-            setIsBtnClick(true);
-            closeModal();
-        } catch (e) {
-            alert('초대코드 복사에 실패했습니다😭');
-        }
-    };
-    console.log('인바이트모달', projectData);
-
-    useScrollLock(isModalOpen);
-
-    return (
-        <>
-            {!isModalCompleteHidden && (
-                <ModalPortal>
-                    <ModalBlackOut $isVisible={isVisible} onClick={toggleBtn} />
-                    <ModalContainer $isVisible={isVisible}>
-                        <Box>
-                            <div
-                                style={{
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    alignItems: 'center',
-                                    gap: '18px',
-                                    width: '100%',
-                                    height: '100%',
-                                }}
-                            >
-                                <div
-                                    style={{
-                                        display: 'flex',
-                                        flexDirection: 'column',
-                                        alignItems: 'center',
-                                        gap: '18px',
-                                        width: '100%',
-                                        height: '100%',
-                                    }}
-                                >
-                                    <Title>{projectData?.title}</Title>
-                                    <InviteField value={link} readOnly />
-                                </div>
-                                <ButtonsContainer style={{ alignSelf: 'flex-end' }}>
-                                    <CommonButton $primary={!isBtnClick} onClick={generateLink}>
-                                        링크생성
-                                    </CommonButton>
-                                    <CommonButton
-                                        $primary={isBtnClick}
-                                        onClick={() => onClickCopyLink(link)}
-                                    >
-                                        링크복사
-                                    </CommonButton>
-                                </ButtonsContainer>
-                            </div>
-                        </Box>
-                    </ModalContainer>
-                </ModalPortal>
-            )}
-            {showConfirmCopyLink && <ConfirmCopyLink />}
-        </>
-    );
-};
-
-export default InvitationModal;

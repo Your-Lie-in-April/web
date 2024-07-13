@@ -93,13 +93,7 @@ const MainPage: FC = () => {
                 }}
             />
             <MainContainer>
-                <div
-                    style={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                        gap: '20px',
-                    }}
-                >
+                <div style={{ display: 'flex', flexDirection: 'row', gap: '20px' }}>
                     <div
                         style={{
                             display: 'flex',
@@ -151,12 +145,7 @@ const MainPage: FC = () => {
                     </div>
                 </div>
             </MainContainer>
-
-            <div
-                style={{
-                    height: '300px',
-                }}
-            />
+            <div style={{ height: '300px' }} />
         </>
     );
 };

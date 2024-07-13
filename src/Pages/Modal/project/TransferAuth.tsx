@@ -1,4 +1,4 @@
-import { Http } from '#/constants/backendURL';
+import { Http } from '#/constants/urls';
 import { MemberEntity } from '#/types/memberType';
 import ModalPortal from '#/utils/ModalPotal';
 import useScrollLock from '#/utils/useScrollLock';
@@ -159,8 +159,6 @@ const TransferAuthModal: React.FC<TransferAuthModalProps> = ({ isAuthClick, onIs
                 }
 
                 const data = await response.json();
-                console.log('멤버', data.data);
-
                 const nonPrivilegedMembers = data.data.filter(
                     (member: MemberEntity) => !member.isPrivileged
                 );
