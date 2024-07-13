@@ -1,5 +1,5 @@
 import { Http } from '#/constants/backendURL';
-import { ProjectThumbnailResponse } from '#/Types/projecttype';
+import { ProjectThumbnailResponse } from '#/types/projectType';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import styled, { createGlobalStyle } from 'styled-components';
 import AfterLogin from '../Layouts/AfterLogin';

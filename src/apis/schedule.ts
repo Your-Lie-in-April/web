@@ -1,39 +1,26 @@
 import { API } from '#/constants/api';
-import getAPIResponseData from '#/utils/getAPIResponseData';
 import {
-    ScheduleAllResDto,
+    SchdeuleDeleteReqDto,
     ScheduleAllMembersResDto,
     ScheduleMemberResDto,
     SchedulePostReqDto,
     SchedulePutReqDto,
-    SchdeuleDeleteReqDto,
-} from '#/Types/scheduletype';
-
-// 시간표 전체 조회
-export const getScheduleAll = async () => {
-    return await getAPIResponseData<ScheduleAllResDto>({
-        method: 'GET',
-        url: API.SCHEDULE_ALL,
-    });
-};
+} from '#/types/scheduleType';
+import getAPIResponseData from '#/utils/getAPIResponseData';
 
 // 프로젝트 내 모든 사용자 시간표 조회
 export const getScheduleAllMember = async (projectId: number) => {
     return await getAPIResponseData<ScheduleAllMembersResDto>({
         method: 'GET',
-        url: API.SCHEDULE_PROJECT(projectId),
+        url: API.SCHEDULE_MEMBERS(projectId),
     });
 };
 
 // 특정 사용자 시간표 조회
-export const getScheduleMember = async (
-    projectId: number,
-    memberId: number,
-    condition: string
-) => {
+export const getScheduleMember = async (projectId: number, memberId: number, condition: string) => {
     return await getAPIResponseData<ScheduleMemberResDto>({
         method: 'GET',
-        url: API.SCHEDULE_MEMBER(projectId, memberId),
+        url: API.SCHEDULE_MY(projectId, memberId),
         params: { condition },
     });
 };
@@ -42,7 +29,7 @@ export const getScheduleMember = async (
 export const postSchedule = async (projectId: number) => {
     return await getAPIResponseData<SchedulePostReqDto>({
         method: 'POST',
-        url: API.SCEHDULE_CRUD(projectId),
+        url: API.SCHEDULE_POST(projectId),
     });
 };
 
@@ -50,7 +37,7 @@ export const postSchedule = async (projectId: number) => {
 export const putSchedule = async (projectId: number) => {
     return await getAPIResponseData<SchedulePutReqDto>({
         method: 'PUT',
-        url: API.SCEHDULE_CRUD(projectId),
+        url: API.SCHEDULE_PUT(projectId),
     });
 };
 
@@ -58,6 +45,6 @@ export const putSchedule = async (projectId: number) => {
 export const deleteSchedule = async (projectId: number) => {
     return await getAPIResponseData<SchdeuleDeleteReqDto>({
         method: 'DELETE',
-        url: API.SCEHDULE_CRUD(projectId),
+        url: API.SCHEDULE_DELETE(projectId),
     });
 };

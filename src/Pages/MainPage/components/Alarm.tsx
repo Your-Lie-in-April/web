@@ -1,11 +1,11 @@
-import { FC, useEffect, useState } from 'react';
-import styled from 'styled-components';
-import { EventSourcePolyfill, NativeEventSource } from 'event-source-polyfill';
-import 'react-toastify/dist/ReactToastify.css';
 import { Http } from '#/constants/backendURL';
+import DeleteAlarm from '#/Pages/Modal/project/deletealarm';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
+import { EventSourcePolyfill, NativeEventSource } from 'event-source-polyfill';
+import { FC, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import DeleteAlarm from '#/Pages/Modal/deletealarm';
+import 'react-toastify/dist/ReactToastify.css';
+import styled from 'styled-components';
 
 const AlarmDiv = styled.div`
     display: flex;
@@ -33,7 +33,7 @@ const Text = styled.div`
     white-space: nowrap;
 `;
 
-const NotificationBox = styled.div<{ isFirst: boolean }>`
+const NotificationBox = styled.div<{ $isFirst: boolean }>`
     display: flex;
     width: 275px;
     height: 59px;
@@ -41,13 +41,13 @@ const NotificationBox = styled.div<{ isFirst: boolean }>`
     flex-shrink: 0;
     background: #f5f5f5;
     border-bottom: 1px solid #7d7d7d;
-    border-top: ${(props) => (props.isFirst ? '1px solid #7d7d7d' : 'none')};
+    border-top: ${(props) => (props.$isFirst ? '1px solid #7d7d7d' : 'none')};
     flex-direction: column;
     gap: 7px;
     cursor: pointer;
 `;
 
-const ProjectTitle = styled.div<{ isIconVisible: boolean }>`
+const ProjectTitle = styled.div<{ $isIconVisible: boolean }>`
     color: #000000;
     font-family: Pretendard;
     font-size: 13px;
@@ -55,7 +55,7 @@ const ProjectTitle = styled.div<{ isIconVisible: boolean }>`
     font-weight: 400;
     line-height: normal;
     margin-top: 8px;
-    margin-left: ${(props) => (props.isIconVisible ? '4px' : '0')};
+    margin-left: ${(props) => (props.$isIconVisible ? '4px' : '0')};
 `;
 
 const CreatedAt = styled.span`
@@ -66,7 +66,7 @@ const CreatedAt = styled.span`
     font-weight: 400;
 `;
 
-const NotificationContent = styled.div<{ isIconVisible: boolean }>`
+const NotificationContent = styled.div<{ $isIconVisible: boolean }>`
     display: flex;
     align-items: center;
     color: #7d7d7d;
@@ -75,7 +75,7 @@ const NotificationContent = styled.div<{ isIconVisible: boolean }>`
     font-style: normal;
     font-weight: 400;
     line-height: normal;
-    margin-left: ${(props) => (props.isIconVisible ? '14px' : '0')};
+    margin-left: ${(props) => (props.$isIconVisible ? '14px' : '0')};
 `;
 
 const ProjectTitleContainer = styled.div`
@@ -85,26 +85,29 @@ const ProjectTitleContainer = styled.div`
     gap: 4px;
 `;
 
-const DeleteNotification = styled.div<{ isIconVisible: boolean }>`
-    display: ${(props) => (props.isIconVisible ? 'block' : 'none')};
-    position: absolute;
-    top: 50px;
-    left: 30px;
+const DeleteNotification = styled.div<{ $isIconVisible: boolean }>`
+    display: ${(props) => (props.$isIconVisible ? 'block' : 'none')};
     color: #633ae2;
     font-family: Pretendard;
     font-size: 13px;
     font-style: normal;
     font-weight: 400;
+    text-align: center;
     cursor: pointer;
 `;
 
-const StyledCheckBoxIcon = styled(CheckBoxIcon)<{ isIconVisible: boolean }>`
+const StyledCheckBoxIcon = styled(CheckBoxIcon)<{ $isIconVisible: boolean }>`
     font-size: 20px !important;
     cursor: pointer;
-    color: ${(props) => (props.isIconVisible ? '#633AE2' : '#A4A4A4')} !important;
+    color: ${(props) => (props.$isIconVisible ? '#633AE2' : '#A4A4A4')} !important;
+`;
+
+const DeleteWrapper = styled.div`
+    display: flex;
+    gap: 4px;
     position: absolute;
     left: 8px;
-    top: 48px;
+    top: 50px;
 `;
 
 function formatTimeAgo(timestamp: string): string {
@@ -132,7 +135,13 @@ function formatTimeAgo(timestamp: string): string {
 
 const Alarm: FC = () => {
     const [alarmMessages, setAlarmMessages] = useState<
-        { projectTitle: string; message: string; createdAt: string; projectId: string; notificationId: string }[]
+        {
+            projectTitle: string;
+            message: string;
+            createdAt: string;
+            projectId: string;
+            notificationId: string;
+        }[]
     >([]);
     const [isIconVisible, setIsIconVisible] = useState<boolean>(false);
     const [checkedState, setCheckedState] = useState<boolean[]>([]);
@@ -221,7 +230,6 @@ const Alarm: FC = () => {
                         projectId: item.project.projectId,
                         notificationId: item.notificationId,
                     }));
-                    console.log('메시지들', data.data);
                     setAlarmMessages(messages);
                 } else {
                     console.error('Response data is not an array:', data);
@@ -279,18 +287,25 @@ const Alarm: FC = () => {
     return (
         <AlarmDiv>
             <Text>알림</Text>
-            <StyledCheckBoxIcon onClick={toggleIconVisibility} isIconVisible={isIconVisible} />
-            <DeleteNotification isIconVisible={isIconVisible} onClick={handleDeleteNotifications}>
-                알림삭제
-            </DeleteNotification>
+            <DeleteWrapper>
+                <StyledCheckBoxIcon onClick={toggleIconVisibility} $isIconVisible={isIconVisible} />
+                <DeleteNotification
+                    $isIconVisible={isIconVisible}
+                    onClick={handleDeleteNotifications}
+                >
+                    알림삭제
+                </DeleteNotification>
+            </DeleteWrapper>
             {alarmMessages.map((alarm, index) => (
                 <NotificationBox
                     key={index}
-                    isFirst={index === 0}
+                    $isFirst={index === 0}
                     onClick={() => handleNotificationClick(alarm.projectId)}
                 >
                     <ProjectTitleContainer>
-                        <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                        <div
+                            style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}
+                        >
                             {isIconVisible && (
                                 <CheckBoxIcon
                                     onClick={(e) => {
@@ -306,11 +321,15 @@ const Alarm: FC = () => {
                                     }}
                                 />
                             )}
-                            <ProjectTitle isIconVisible={isIconVisible}>{alarm.projectTitle}</ProjectTitle>
+                            <ProjectTitle $isIconVisible={isIconVisible}>
+                                {alarm.projectTitle}
+                            </ProjectTitle>
                         </div>
                         <CreatedAt>{alarm.createdAt}</CreatedAt>
                     </ProjectTitleContainer>
-                    <NotificationContent isIconVisible={isIconVisible}>{alarm.message}</NotificationContent>
+                    <NotificationContent $isIconVisible={isIconVisible}>
+                        {alarm.message}
+                    </NotificationContent>
                 </NotificationBox>
             ))}
             {isDeleted && <DeleteAlarm />}

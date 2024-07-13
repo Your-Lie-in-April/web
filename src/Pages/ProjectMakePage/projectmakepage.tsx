@@ -6,6 +6,7 @@ import AfterLogin from '../Layouts/AfterLogin';
 import Info from './Info';
 import ProjectCalendar from './projectcalendar';
 import ProjectTime from './projecttime';
+import { accessToken } from '#/utils/token';
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -91,7 +92,6 @@ const ProjectMakePage: FC = () => {
     };
 
     const makeProject = async () => {
-        const accessToken = localStorage.getItem('access_token');
         const payload = {
             title: title,
             description: content,
@@ -104,7 +104,6 @@ const ProjectMakePage: FC = () => {
             color: color,
             coverImageId: imgId,
         };
-        console.log('payload', payload);
 
         try {
             const response = await fetch(Http + `/v1/projects`, {

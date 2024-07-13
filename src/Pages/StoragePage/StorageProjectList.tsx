@@ -1,4 +1,4 @@
-import { ProjectThumbnailResponse } from '#/Types/projecttype';
+import { ProjectThumbnailResponse } from '#/types/projectType';
 import styled from 'styled-components';
 import NoProject from '../Layouts/NoProject';
 import StorageProject from './StorageProject';

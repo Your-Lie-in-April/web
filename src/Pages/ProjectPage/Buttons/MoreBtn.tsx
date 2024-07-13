@@ -1,4 +1,4 @@
-import TransferAuthModal from '#/Pages/Modal/TransferAuth';
+import TransferAuthModal from '#/Pages/Modal/project/TransferAuth';
 import ModalPortal from '#/utils/ModalPotal';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import PersonRemoveIcon from '@mui/icons-material/PersonRemove';

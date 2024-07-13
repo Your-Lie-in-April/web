@@ -1,4 +1,4 @@
-import { MemberEntity } from '#/Types/membertype';
+import { MemberEntity } from '#/types/memberType';
 import styled from 'styled-components';
 import MoreBtn from '../Buttons/MoreBtn';
 
@@ -57,7 +57,7 @@ const LeaderProfile = ({
         <LeaderProfileBox>
             <LeaderProfileDiv>
                 <LeaderImg>
-                    <StyledImage src={member?.profileImageUrl || defaultImg} alt="Profile Image" />
+                    <StyledImage src={member?.profileImageUrl || defaultImg} alt='Profile Image' />
                 </LeaderImg>
                 <div
                     style={{
@@ -75,13 +75,15 @@ const LeaderProfile = ({
                             justifyContent: 'center',
                         }}
                     >
-                        <CommonText style={{
-                          maxWidth : '158px',
-                          fontSize : '14px',
-                          overflow : 'hidden',
-                          whiteSpace : 'nowrap',
-                          textOverflow : 'ellipsis'
-                        }}>
+                        <CommonText
+                            style={{
+                                maxWidth: '158px',
+                                fontSize: '14px',
+                                overflow: 'hidden',
+                                whiteSpace: 'nowrap',
+                                textOverflow: 'ellipsis',
+                            }}
+                        >
                             {member?.nickname}
                             {isCurrentUser ? '(본인)' : ''}
                         </CommonText>
@@ -98,7 +100,9 @@ const LeaderProfile = ({
                             {member?.state}
                         </CommonText>
                     </div>
-                    {isCurrentUser && member?.isPrivileged && <MoreBtn toggleDeleteBtn={toggleDeleteBtn} />}
+                    {isCurrentUser && member?.isPrivileged && (
+                        <MoreBtn toggleDeleteBtn={toggleDeleteBtn} />
+                    )}
                 </div>
             </LeaderProfileDiv>
         </LeaderProfileBox>

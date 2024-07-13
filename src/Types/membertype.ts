@@ -1,5 +1,3 @@
-import { ProjectEntity } from './projecttype';
-
 export type MemberEntity = {
     memberId?: number;
     email?: string;
@@ -10,34 +8,26 @@ export type MemberEntity = {
 };
 
 /**
- * GET members/all
- */
-export type MemberResDto = MemberEntity[];
-
-/**
  * GET members/${memberId}
  */
-export type MemberInfoResDto = Pick<MemberEntity, 'memberId'>;
+export type MemberGetResDto = MemberEntity;
 
 /**
  * PUT members/${status}
  */
-export type MemberStateResDto = Pick<MemberEntity, 'state'>;
+export type MemberPutStatusReqDto = null;
 
 /**
  * PUT projects/members/nickname
  */
-export type MemberNicknameReqDto = {
-    projectId: number;
-    nickname: string;
-};
+export type MemberPutNickReqDto = null;
 
 /**
  * PATCH /members/storage/${projectId}
  */
-export type ProjectStoreResDto = Pick<ProjectEntity, 'projectId'>;
+export type MemberPatchStoredReqDto = null;
 
 /**
  * PATCH /members/pin/${projectId}
  */
-export type ProjectPinResDto = Pick<ProjectEntity, 'projectId'>;
+export type MemberPatchPinReqDto = null;

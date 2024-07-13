@@ -10,7 +10,7 @@ import { useQuery } from '@tanstack/react-query';
 
 export const useProjectStoredQuery = () => {
     const { data } = useQuery({
-        queryKey: QUERY_KEY.PROJECT_STORED(),
+        queryKey: QUERY_KEY.PROJECT_STORED,
         queryFn: () => getProjectIsStored(),
     });
     return data;
