@@ -10,7 +10,7 @@ import { useQuery } from '@tanstack/react-query';
 
 const useProjectMainQuery = (memberId: number, page: number = 0, size: number = 6) => {
     return useQuery({
-        queryKey: QUERY_KEY.PROJECT_MAIN(page, size),
+        queryKey: QUERY_KEY.PROJECT_MAIN(page),
         queryFn: () => getProjectMain(memberId, page, size),
     });
 };

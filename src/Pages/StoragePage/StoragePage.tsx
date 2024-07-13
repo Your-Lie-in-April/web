@@ -1,8 +1,9 @@
-import { Http } from '#/constants/backendURL';
-import { ProjectThumbnailResponse } from '#/types/projectType';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useStoredInfiniteQuery } from '#/hooks/apis/queries/project/useStoredInfiniteQuery';
+import { useCallback, useMemo, useState } from 'react';
+import InfiniteScroll from 'react-infinite-scroller';
 import styled, { createGlobalStyle } from 'styled-components';
 import AfterLogin from '../Layouts/AfterLogin';
+import LoadingSpinner from '../Layouts/LoadingSpinner';
 import Search from '../Layouts/Search';
 import GraphicIcons from './Icon/GraphicIcons';
 import StorageProjectList from './StorageProjectList';
@@ -57,92 +58,28 @@ const Spacer = styled.div`
 `;
 
 const StoragePage = () => {
-    const [storelist, setStoreList] = useState<ProjectThumbnailResponse[]>([]);
-    const [searchResults, setSearchResults] = useState<ProjectThumbnailResponse[]>([]);
-    const [page, setPage] = useState<number>(0);
-    const [size] = useState<number>(9);
-    const [totalPages, setTotalPages] = useState<number>(0);
+    const [searchQuery, setSearchQuery] = useState<string>('');
 
-    const [hasMore, setHasMore] = useState<boolean>(true);
+    const { data, fetchNextPage, hasNextPage, isLoading, isError, error } =
+        useStoredInfiniteQuery();
 
-    const observer = useRef<IntersectionObserver | null>(null);
+    const handleSearch = useCallback((query: string) => {
+        setSearchQuery(query);
+    }, []);
 
-    const lastProjectRef = useCallback(
-        (node: HTMLDivElement | null) => {
-            if (observer.current) observer.current.disconnect();
-
-            observer.current = new IntersectionObserver(
-                (entries) => {
-                    if (entries[0].isIntersecting && hasMore) {
-                        setPage((prevPage) => {
-                            if (prevPage < totalPages - 1) {
-                                return prevPage + 1;
-                            }
-                            return prevPage;
-                        });
-                    }
-                },
-                {
-                    rootMargin: '0px 500px',
-                    threshold: 0.1,
-                }
-            );
-            if (node) observer.current.observe(node);
-        },
-        [hasMore, totalPages]
-    );
-
-    const fetchStoredProjects = async () => {
-        try {
-            const accessToken = localStorage.getItem('access_token');
-            if (accessToken) {
-                const response = await fetch(
-                    `${Http}/v1/projects/stored?page=${page}&size=${size}`,
-                    {
-                        method: 'GET',
-                        headers: {
-                            Accept: '*/*',
-                            Authorization: `Bearer ${accessToken}`,
-                        },
-                    }
-                );
-                if (!response.ok) {
-                    console.log('failed to fetch storage projects');
-                    return;
-                }
-                const data = await response.json();
-                console.log(data.data.data);
-                setTotalPages(data.data.totalPages);
-                if (page === 0) {
-                    setStoreList(data.data.data);
-                    setSearchResults(data.data.data);
-                } else {
-                    setStoreList((prevProjects) => [...prevProjects, ...data.data.data]);
-                    setSearchResults((prevProjects) => [...prevProjects, ...data.data.data]);
-                }
-            }
-        } catch (error) {
-            console.error('업데이트 실패:', error);
-        }
-    };
-
-    useEffect(() => {
-        if (hasMore) {
-            fetchStoredProjects();
-        }
-    }, [page, size, hasMore]);
-
-    useEffect(() => {
-        setHasMore(page < totalPages - 1);
-    }, [page, totalPages]);
-
-    // 검색기능
-    const handleSearch = (query: string) => {
-        const searchProjects = storelist.filter((project) =>
-            project.title.toLowerCase().includes(query.toLowerCase())
+    const filteredProjects = useMemo(() => {
+        return (
+            data?.pages.flatMap((page) =>
+                page.data.filter((project) =>
+                    project.title.toLowerCase().includes(searchQuery.toLowerCase())
+                )
+            ) || []
         );
-        setSearchResults(searchProjects);
-    };
+    }, [data, searchQuery]);
+
+    if (isLoading) return <LoadingSpinner />;
+    if (isError) return <div>Error: {error.message}</div>;
+
     return (
         <>
             <GlobalStyle />
@@ -154,7 +91,14 @@ const StoragePage = () => {
                         <Title>프로젝트 보관함</Title>
                         <Search onSearch={handleSearch} />
                     </InnerContent>
-                    <StorageProjectList projects={searchResults} lastProjectRef={lastProjectRef} />
+                    <InfiniteScroll
+                        pageStart={0}
+                        loadMore={() => fetchNextPage()}
+                        hasMore={!!hasNextPage}
+                        loader={<div key={0}>Loading...</div>}
+                    >
+                        <StorageProjectList projects={filteredProjects} />
+                    </InfiniteScroll>
                 </Content>
             </Container>
             <Spacer />

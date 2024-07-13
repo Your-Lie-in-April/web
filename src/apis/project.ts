@@ -115,9 +115,9 @@ export const deleteProjectMemberSelf = async (projectId: number) => {
 };
 
 // 보관한 프로젝트 목록 조회
-export const getProjectIsStored = async () => {
+export const getProjectIsStored = async (page: number = 0, size: number = 9) => {
     return await getAPIResponseData<ProjectsStoredResDto>({
         method: 'GET',
-        url: API.PROJECT_STORED,
+        url: API.PROJECT_STORED(page, size),
     });
 };

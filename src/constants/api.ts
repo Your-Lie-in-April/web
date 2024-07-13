@@ -21,7 +21,8 @@ export const API = {
         `${Http}/v1/projects/${projectId ?? ':projectId'}/transfer-privilege`,
     PROJECT_IN_MEMBERS: (projectId?: number) =>
         `${Http}/v1/projects/${projectId ?? ':projectId'}/members`,
-    PROJECT_STORED: `${Http}/v1/projects/stored`,
+    PROJECT_STORED: (page: number = 0, size: number = 9) =>
+        `${Http}/v1/projects/stored?page=${page}&size=${size}`,
     PROJECT_MAIN: (memberId?: number, page: number = 0, size: number = 6) =>
         `${Http}/v1/projects/members/${memberId ?? ':memberId'}?page=${page}&size=${size}`,
     PROJECT_PIN: (memberId?: number) =>

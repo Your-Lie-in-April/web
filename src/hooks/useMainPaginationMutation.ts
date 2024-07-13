@@ -19,7 +19,7 @@ export const useMainPaginationMutation = (
         const prefetchPage = async (page: number) => {
             if (page >= 0 && page < totalPages) {
                 await queryClient.prefetchQuery({
-                    queryKey: QUERY_KEY.PROJECT_MAIN(page, pageSize),
+                    queryKey: QUERY_KEY.PROJECT_MAIN(page),
                     queryFn: () => getProjectMain(memberId, page, pageSize),
                 });
             }

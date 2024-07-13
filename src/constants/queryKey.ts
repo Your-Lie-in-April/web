@@ -9,7 +9,7 @@ export const QUERY_KEY = {
     PROJECT: ['project'],
     PROJECT_ID: (projectId: number) => ['project', projectId],
     PROJECT_INFO: (projectId: number) => ['project', projectId, 'info'],
-    PROJECT_MAIN: (currentPage: number, size: number) => ['project', 'main', currentPage, size],
+    PROJECT_MAIN: (page: number) => ['project', 'main', page],
     PROJECT_AND_MEMBER: (projectId: number, memberId: number) => ['project', projectId, memberId],
     PROJECT_STORED: ['project', 'stored'],
     PROJECT_PIN: ['project', 'pin'],
