@@ -1,7 +1,6 @@
-import { DaySchedule } from '#/Types/scheduletype';
+import { DaySchedule } from '#/types/scheduleType';
 import styled from 'styled-components';
 import MemberTimeBar from './MemberTimeBar';
-
 
 const CommonText = styled.div`
     color: #000000;
@@ -24,7 +23,7 @@ const HourTextList = styled.div`
     flex-direction: row;
     gap: 7.46px;
     align-items: flex-start;
-  
+
     margin-left: 33.5px;
     margin-bottom: 7.36px;
 `;
@@ -58,9 +57,7 @@ const MemberTime: React.FC<MemberTimeProps> = ({ scheduleData }) => {
     const hours = Array.from({ length: 15 }, (_, i) => i + 9);
 
     const getScheduleForDay = (day: string) => {
-        const daySchedule = scheduleData?.find(
-            (item) => item.daysOfWeek === day
-        );
+        const daySchedule = scheduleData?.find((item) => item.daysOfWeek === day);
         return daySchedule?.schedule || [];
     };
 
@@ -69,7 +66,9 @@ const MemberTime: React.FC<MemberTimeProps> = ({ scheduleData }) => {
             <div style={{ display: 'flex', flexDirection: 'column' }}>
                 <HourTextList>
                     {HoursOfDay.slice(0, 15).map((hour, idx) => (
-                        <CommonText key={idx} style={{width : "29.8257px"}}>{hour}</CommonText>
+                        <CommonText key={idx} style={{ width: '29.8257px' }}>
+                            {hour}
+                        </CommonText>
                     ))}
                 </HourTextList>
                 <div
@@ -80,7 +79,7 @@ const MemberTime: React.FC<MemberTimeProps> = ({ scheduleData }) => {
                     }}
                 >
                     {daysOfWeek.map((day) => (
-                        <div key={day} style={{ display: 'flex', alignItems : "center" }}>
+                        <div key={day} style={{ display: 'flex', alignItems: 'center' }}>
                             <div
                                 style={{
                                     display: 'flex',
@@ -97,15 +96,12 @@ const MemberTime: React.FC<MemberTimeProps> = ({ scheduleData }) => {
                                     fontWeight: '400',
                                     fontStyle: 'normal',
                                     fontFamily: 'Pretendard',
-                                    marginRight : "3.73px"
+                                    marginRight: '3.73px',
                                 }}
                             >
                                 {daysOfWeekMap[day]}
                             </div>
-                                <MemberTimeBar
-                                    hours={hours}
-                                    schedule={getScheduleForDay(day)}
-                                />
+                            <MemberTimeBar hours={hours} schedule={getScheduleForDay(day)} />
                         </div>
                     ))}
                 </div>

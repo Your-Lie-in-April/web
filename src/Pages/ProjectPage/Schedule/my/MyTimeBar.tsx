@@ -1,4 +1,4 @@
-import { ScheduleItem } from '#/Types/scheduletype';
+import { ScheduleItem } from '#/types/scheduleType';
 import React from 'react';
 
 interface MyTimeBarProps {
@@ -66,9 +66,7 @@ const MyTimeBar: React.FC<MyTimeBarProps> = ({ hours, schedule }) => {
                                 left: '0%',
                                 width: '50%',
                                 height: '100%',
-                                backgroundColor: isScheduledFirstHalf
-                                    ? '#633AE2'
-                                    : 'transparent',
+                                backgroundColor: isScheduledFirstHalf ? '#633AE2' : 'transparent',
                                 boxSizing: 'border-box',
                                 display: 'flex',
                                 justifyContent: 'center',
@@ -108,9 +106,7 @@ const MyTimeBar: React.FC<MyTimeBarProps> = ({ hours, schedule }) => {
                                 left: '50%',
                                 width: '50%',
                                 height: '100%',
-                                backgroundColor: isScheduledSecondHalf
-                                    ? '#633AE2'
-                                    : 'transparent',
+                                backgroundColor: isScheduledSecondHalf ? '#633AE2' : 'transparent',
                                 boxSizing: 'border-box',
                                 display: 'flex',
                                 justifyContent: 'center',

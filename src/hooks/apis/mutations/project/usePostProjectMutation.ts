@@ -1,7 +1,7 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { QUERY_KEY } from '#/constants/queryKey';
 import { postNewProject } from '#/apis/project';
-import { ProjectPostReqDto } from '#/Types/projecttype';
+import { QUERY_KEY } from '#/constants/queryKey';
+import { ProjectPostReqDto } from '#/types/projectType';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 /**
  * POST /project

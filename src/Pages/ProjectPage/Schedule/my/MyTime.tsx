@@ -1,5 +1,5 @@
+import { ScheduleWeekResponse } from '#/types/scheduleType';
 import styled from 'styled-components';
-import { ScheduleWeekResponse } from '#/Types/scheduletype';
 import MyTimeSchedule from './MyTimeSchedule';
 
 const CommonText = styled.div`

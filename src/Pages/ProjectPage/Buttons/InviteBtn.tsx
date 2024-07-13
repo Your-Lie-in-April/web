@@ -1,7 +1,7 @@
-import { ProjectEntity } from '#/Types/projecttype';
+import InvitationModal from '#/Pages/Modal/project/InvitationModal';
+import { ProjectEntity } from '#/types/projectType';
 import { useState } from 'react';
 import styled from 'styled-components';
-import InvitationModal from '../../Modal/InvitationModal';
 
 const BtnContainer = styled.div`
     width: 52px;

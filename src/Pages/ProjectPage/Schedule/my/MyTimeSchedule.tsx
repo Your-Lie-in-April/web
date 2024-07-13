@@ -1,5 +1,5 @@
+import { ScheduleWeekResponse } from '#/types/scheduleType';
 import React from 'react';
-import { ScheduleWeekResponse } from '#/Types/scheduletype';
 import MyTimeBar from './MyTimeBar';
 
 interface MyTimeScheduleProps {
@@ -29,9 +29,7 @@ const MyTimeSchedule: React.FC<MyTimeScheduleProps> = ({ scheduleData }) => {
     const hours = Array.from({ length: 15 }, (_, i) => i + 9);
 
     const getScheduleForDay = (day: string) => {
-        const daySchedule = scheduleData?.schedule.find(
-            (item) => item.daysOfWeek === day
-        );
+        const daySchedule = scheduleData?.schedule.find((item) => item.daysOfWeek === day);
         return daySchedule?.schedule || [];
     };
 
@@ -55,10 +53,7 @@ const MyTimeSchedule: React.FC<MyTimeScheduleProps> = ({ scheduleData }) => {
                     </div>
                     <div style={{ width: '2px' }} />
                     <div style={{ flex: 1 }}>
-                        <MyTimeBar
-                            hours={hours}
-                            schedule={getScheduleForDay(day)}
-                        />
+                        <MyTimeBar hours={hours} schedule={getScheduleForDay(day)} />
                     </div>
                 </div>
             ))}

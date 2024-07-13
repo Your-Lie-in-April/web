@@ -1,8 +1,7 @@
-import { Http } from '#/constants/backendURL';
-import { MemberEntity } from '#/Types/membertype';
-import { useEffect, useState } from 'react';
+import { useUserContext } from '#/hooks/context/userContext';
+import { useState } from 'react';
 import styled from 'styled-components';
-import ChangeNickName from '../../Modal/ChangeNickname';
+import ChangeNickName from '../../Modal/member/ChangeNickname';
 
 const MyProfileBox = styled.div`
     width: 100%;
@@ -61,13 +60,7 @@ const EditButton = styled.button`
 `;
 
 const EditIcon: React.FC = () => (
-    <svg
-        xmlns='http://www.w3.org/2000/svg'
-        width='22'
-        height='22'
-        viewBox='0 0 22 22'
-        fill='none'
-    >
+    <svg xmlns='http://www.w3.org/2000/svg' width='22' height='22' viewBox='0 0 22 22' fill='none'>
         <svg
             xmlns='http://www.w3.org/2000/svg'
             width='22'
@@ -130,31 +123,7 @@ const CommonText = styled.div`
 const defaultImg = 'src/pics/default.png';
 const MyProfile = () => {
     const [isEditModal, setIsEditModal] = useState(false);
-    const [me, setMe] = useState<MemberEntity>();
-    const memberId = localStorage.getItem('member_id');
-
-    useEffect(() => {
-        const accessToken = localStorage.getItem('access_token');
-        const fetchMe = async () => {
-            const url = `${Http}/v1/members/${memberId}`;
-            const headers = {
-                Accept: '*/*',
-                Authorization: `Bearer ${accessToken}`,
-            };
-
-            try {
-                const response = await fetch(url, { headers });
-                if (!response.ok) {
-                    throw new Error('데이터 가져오기 실패');
-                }
-                const data = await response.json();
-                setMe(data.data);
-            } catch (error) {
-                console.error('API 요청 중 에러 발생:', error);
-            }
-        };
-        fetchMe();
-    }, [memberId]);
+    const { userData } = useUserContext();
 
     const onSetIsEditModal = () => {
         setIsEditModal((prev) => !prev);
@@ -173,7 +142,7 @@ const MyProfile = () => {
                 >
                     <ImageDiv>
                         <StyledImage
-                            src={me?.profileImageUrl || defaultImg}
+                            src={userData?.profileImageUrl || defaultImg}
                             alt='Profile Image'
                         />
                     </ImageDiv>
@@ -206,14 +175,14 @@ const MyProfile = () => {
                                         textOverflow: 'ellipsis',
                                     }}
                                 >
-                                    {me?.nickname}
+                                    {userData?.nickname}
                                 </CommonText>
                                 <EditButton onClick={onSetIsEditModal}>
                                     <EditIcon />
                                 </EditButton>
                             </div>
                         </MyProfileNick>
-                        <MyEmailText>{me?.email}</MyEmailText>
+                        <MyEmailText>{userData?.email}</MyEmailText>
                     </div>
                 </div>
                 <MyStatus
@@ -222,16 +191,13 @@ const MyProfile = () => {
                         overflow: 'hidden',
                         whiteSpace: 'nowrap',
                         textOverflow: 'ellipsis',
-                        color: me?.state ? '#000000' : '#7D7D7D',
+                        color: userData?.state ? '#000000' : '#7D7D7D',
                     }}
                 >
-                    {me?.state || '상태 메시지 등록이 되어있지 않습니다'}
+                    {userData?.state || '상태 메시지 등록이 되어있지 않습니다'}
                 </MyStatus>
             </MyProfileBox>
-            <ChangeNickName
-                onSetIsEditModal={onSetIsEditModal}
-                isEditModal={isEditModal}
-            />
+            <ChangeNickName onSetIsEditModal={onSetIsEditModal} isEditModal={isEditModal} />
         </>
     );
 };

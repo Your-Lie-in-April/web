@@ -1,7 +1,7 @@
 import { Http } from '#/constants/backendURL';
 import { DateContext } from '#/hooks/context/dateContext';
 import { ProjectContext } from '#/hooks/context/projectContext';
-import { ScheduleWeekResponse } from '#/Types/scheduletype';
+import { ScheduleWeekResponse } from '#/types/scheduleType';
 import ModalPortal from '#/utils/ModalPotal';
 import useScrollLock from '#/utils/useScrollLock';
 import React, { useContext, useState } from 'react';
@@ -139,35 +139,26 @@ const EditMySchedule: React.FC<EditMyScheduleProps> = ({
             : undefined;
 
     const endDateTime =
-        endDateString && endTimeString
-            ? new Date(`${endDateString}T${endTimeString}`)
-            : undefined;
+        endDateString && endTimeString ? new Date(`${endDateString}T${endTimeString}`) : undefined;
 
-    const projectStartTime = startDateTime
-        ? startDateTime.getHours()
-        : undefined;
+    const projectStartTime = startDateTime ? startDateTime.getHours() : undefined;
     const projectEndTime = endDateTime ? endDateTime.getHours() : undefined;
 
     const { projectId } = useParams<{ projectId: string }>();
     const { weekDates } = useContext(DateContext) || {};
-    const [selection, setSelection] = useState<{ [key: number]: SelectedSlot }>(
-        {}
-    );
+    const [selection, setSelection] = useState<{ [key: number]: SelectedSlot }>({});
 
     const postSchedule = async (scheduleData: ScheduleData) => {
         const accessToken = localStorage.getItem('access_token');
         try {
-            const response = await fetch(
-                Http + `/v1/projects/${projectId}/schedules`,
-                {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: `Bearer ${accessToken}`,
-                    },
-                    body: JSON.stringify(scheduleData),
-                }
-            );
+            const response = await fetch(Http + `/v1/projects/${projectId}/schedules`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${accessToken}`,
+                },
+                body: JSON.stringify(scheduleData),
+            });
 
             if (!response.ok) {
                 throw new Error('Failed to post the schedule');
@@ -183,17 +174,14 @@ const EditMySchedule: React.FC<EditMyScheduleProps> = ({
     const putSchedule = async (scheduleData: ScheduleData) => {
         const accessToken = localStorage.getItem('access_token');
         try {
-            const response = await fetch(
-                Http + `/v1/projects/${projectId}/schedules`,
-                {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: `Bearer ${accessToken}`,
-                    },
-                    body: JSON.stringify(scheduleData),
-                }
-            );
+            const response = await fetch(Http + `/v1/projects/${projectId}/schedules`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${accessToken}`,
+                },
+                body: JSON.stringify(scheduleData),
+            });
 
             if (!response.ok) {
                 throw new Error('Failed to update the schedule');
@@ -269,14 +257,10 @@ const EditMySchedule: React.FC<EditMyScheduleProps> = ({
                             <EditMyTime
                                 weekDates={weekDates || []}
                                 selection={selection}
-                                onSelectionChange={(newSelection) =>
-                                    setSelection(newSelection)
-                                }
+                                onSelectionChange={(newSelection) => setSelection(newSelection)}
                             />
                         </Box>
-                        <ConfirmBtn onClick={handleConfirm}>
-                            시간표 등록하기
-                        </ConfirmBtn>
+                        <ConfirmBtn onClick={handleConfirm}>시간표 등록하기</ConfirmBtn>
                     </ModalContainer>
                 </ModalPortal>
             )}

@@ -1,7 +1,7 @@
 import { Http } from '#/constants/backendURL';
 import { DateContext } from '#/hooks/context/dateContext';
-import { useUserContext } from '#/Pages/MainPage/MainPage';
-import { ScheduleWeekResponse } from '#/Types/scheduletype';
+import { useUserContext } from '#/hooks/context/userContext';
+import { ScheduleWeekResponse } from '#/types/scheduleType';
 import dayjs from 'dayjs';
 import { useCallback, useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
@@ -72,10 +72,7 @@ interface MyScheduleProps {
     setIsEditModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const MySchedule: React.FC<MyScheduleProps> = ({
-    isEditModal,
-    setIsEditModal,
-}) => {
+const MySchedule: React.FC<MyScheduleProps> = ({ isEditModal, setIsEditModal }) => {
     const onSetIsEditModal = () => {
         setIsEditModal((prevState) => !prevState);
     };
@@ -91,8 +88,7 @@ const MySchedule: React.FC<MyScheduleProps> = ({
     const date = useContext(DateContext);
     const condition = dayjs(date?.selectedDate).format('YYYY-MM-DD') ?? '';
 
-    const [scheduleData, setSchdeuleData] =
-        useState<ScheduleWeekResponse | null>(null);
+    const [scheduleData, setSchdeuleData] = useState<ScheduleWeekResponse | null>(null);
     // 스케줄 데이터 가져옴
     const fetchSchedule = useCallback(async () => {
         const accessToken = localStorage.getItem('access_token');
@@ -124,7 +120,6 @@ const MySchedule: React.FC<MyScheduleProps> = ({
         fetchSchedule();
     }, [fetchSchedule]);
 
-
     return (
         <>
             <Box>
@@ -143,9 +138,7 @@ const MySchedule: React.FC<MyScheduleProps> = ({
                     />
                     <Title>나의 시간표</Title>
                     <EditBtn onClick={onSetIsEditModal}>수정하기</EditBtn>
-                    <div
-                        style={{ justifyContent: 'flex-end', flexBasis: '1%' }}
-                    />
+                    <div style={{ justifyContent: 'flex-end', flexBasis: '1%' }} />
                 </div>
                 <MyTime scheduleData={scheduleData} />
             </Box>

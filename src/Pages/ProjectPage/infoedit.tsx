@@ -1,4 +1,4 @@
-import { ProjectEntity } from '#/Types/projecttype';
+import { ProjectEntity } from '#/types/projectType';
 import { ChangeEvent, Dispatch, FC, SetStateAction, useState } from 'react';
 import styled from 'styled-components';
 import CoverEdit from './coveredit';
@@ -189,7 +189,7 @@ const InfoEdit: FC<InfoEditPros> = ({ projectData, setEditCover }) => {
                 <TitleContainer>
                     <Title>
                         <TitleText
-                            type="text"
+                            type='text'
                             onFocus={() => {
                                 setIsTitleClicked(true);
 
@@ -209,7 +209,9 @@ const InfoEdit: FC<InfoEditPros> = ({ projectData, setEditCover }) => {
                             onChange={handleTextareaChange}
                             onFocus={() => setIsContentClicked(true)}
                             onBlur={() => setIsContentClicked(false)}
-                            placeholder={isContentClicked === true ? '' : `${projectData?.description}`}
+                            placeholder={
+                                isContentClicked === true ? '' : `${projectData?.description}`
+                            }
                         />
                     </Content>
                 </TitleContainer>

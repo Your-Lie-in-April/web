@@ -1,14 +1,7 @@
-import { ProjectEntity } from '#/Types/projecttype';
 import { Http } from '#/constants/backendURL';
+import { ProjectEntity } from '#/types/projectType';
 import AddCircleRoundedIcon from '@mui/icons-material/AddCircleRounded';
-import {
-    Dispatch,
-    FC,
-    SetStateAction,
-    useCallback,
-    useEffect,
-    useState,
-} from 'react';
+import { Dispatch, FC, SetStateAction, useCallback, useEffect, useState } from 'react';
 import { ChromePicker, ColorResult } from 'react-color';
 import styled from 'styled-components';
 
@@ -72,9 +65,9 @@ const Color = styled.button`
     border-radius: 50%;
     margin: 0;
     padding: 0;
-    display: flex; 
-    justify-content: center; 
-    align-items: center; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
     &:hover {
         cursor: pointer;
     }
@@ -110,14 +103,7 @@ const Image = styled.div`
     cursor: pointer;
 `;
 
-const colors = [
-    '#633AE2',
-    '#FFCB3B',
-    '#64AFF5',
-    '#C2D57A',
-    '#EB5757',
-    '#212121',
-];
+const colors = ['#633AE2', '#FFCB3B', '#64AFF5', '#C2D57A', '#EB5757', '#212121'];
 
 interface CoverProps {
     onColorSelect: (color: string) => void;
@@ -165,9 +151,7 @@ const CoverEdit: FC<CoverProps> = ({
 
     useEffect(() => {
         coverImg();
-        coverImg().catch((error) =>
-            console.error('Fetching URLs failed:', error)
-        );
+        coverImg().catch((error) => console.error('Fetching URLs failed:', error));
     }, []);
 
     const handleColorClick = (color: string) => {
@@ -222,17 +206,14 @@ const CoverEdit: FC<CoverProps> = ({
         console.log('전달되는것들', payload);
 
         try {
-            const response = await fetch(
-                Http + `/v1/projects/${projectData?.projectId}`,
-                {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: `Bearer ${accessToken}`,
-                    },
-                    body: JSON.stringify(payload),
-                }
-            );
+            const response = await fetch(Http + `/v1/projects/${projectData?.projectId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${accessToken}`,
+                },
+                body: JSON.stringify(payload),
+            });
 
             if (!response.ok) {
                 throw new Error('Failed to update the project');
@@ -255,9 +236,7 @@ const CoverEdit: FC<CoverProps> = ({
                     단색
                     <ColorChoose>
                         <Color onClick={toggleHex}>
-                            <AddCircleRoundedIcon
-                                sx={{ fontSize: '36px', color: '#D9D9D9' }}
-                            />
+                            <AddCircleRoundedIcon sx={{ fontSize: '36px', color: '#D9D9D9' }} />
                         </Color>
                         {colors.map((color, index) => (
                             <Color
@@ -288,9 +267,7 @@ const CoverEdit: FC<CoverProps> = ({
                                         backgroundRepeat: 'no-repeat',
                                         backgroundPosition: 'center',
                                     }}
-                                    onClick={() =>
-                                        handleImageClick(item.url, item.id)
-                                    }
+                                    onClick={() => handleImageClick(item.url, item.id)}
                                 ></Image>
                             ))
                         ) : (
@@ -313,9 +290,7 @@ const CoverEdit: FC<CoverProps> = ({
                     <ChromePicker
                         disableAlpha={false}
                         color={color}
-                        onChange={(selectedColor) =>
-                            handleColorChange(selectedColor)
-                        }
+                        onChange={(selectedColor) => handleColorChange(selectedColor)}
                         styles={{
                             default: {
                                 picker: {
