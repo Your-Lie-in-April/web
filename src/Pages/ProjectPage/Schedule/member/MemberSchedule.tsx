@@ -1,5 +1,5 @@
+import { UserSchedule } from '#/types/scheduleType';
 import styled from 'styled-components';
-import { UserSchedule } from '#/Types/scheduletype';
 import MemberTime from './MemberTime';
 
 const Box = styled.div`

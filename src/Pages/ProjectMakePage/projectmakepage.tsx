@@ -1,4 +1,5 @@
-import { Http } from '#/constants/backendURL';
+import { Http } from '#/constants/urls';
+import { accessToken } from '#/utils/token';
 import { FC, useState } from 'react';
 import { useNavigate } from 'react-router';
 import styled, { createGlobalStyle } from 'styled-components';
@@ -91,7 +92,6 @@ const ProjectMakePage: FC = () => {
     };
 
     const makeProject = async () => {
-        const accessToken = localStorage.getItem('access_token');
         const payload = {
             title: title,
             description: content,
@@ -104,7 +104,6 @@ const ProjectMakePage: FC = () => {
             color: color,
             coverImageId: imgId,
         };
-        console.log('payload', payload);
 
         try {
             const response = await fetch(Http + `/v1/projects`, {
@@ -138,7 +137,13 @@ const ProjectMakePage: FC = () => {
                     backgroundColor: '#000000',
                 }}
             />
-            <Info setContent={setContent} setTitle={setTitle} setColor={setColor} setImg={setImg} setImgId={setImgId} />
+            <Info
+                setContent={setContent}
+                setTitle={setTitle}
+                setColor={setColor}
+                setImg={setImg}
+                setImgId={setImgId}
+            />
             <div
                 style={{
                     height: '24px',

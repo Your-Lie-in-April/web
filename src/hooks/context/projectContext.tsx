@@ -1,13 +1,7 @@
-import { ProjectEntity } from '#/Types/projecttype';
-import {
-    createContext,
-    ReactNode,
-    useState,
-    useEffect,
-    useContext,
-} from 'react';
+import { Http } from '#/constants/urls';
+import { ProjectEntity } from '#/types/projectType';
+import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Http } from '#/constants/backendURL';
 
 type ProjectContextType = {
     projectData: ProjectEntity | null;
@@ -21,9 +15,7 @@ export const ProjectContext = createContext<ProjectContextType>({
     errorMessage: null,
 });
 
-export const ProjectProvider: React.FC<{ children: ReactNode }> = ({
-    children,
-}) => {
+export const ProjectProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [projectData, setProjectData] = useState<ProjectEntity | null>(null);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const { projectId } = useParams<{ projectId: string }>();
@@ -33,14 +25,11 @@ export const ProjectProvider: React.FC<{ children: ReactNode }> = ({
         const fetchProjects = async () => {
             if (projectId && accessToken) {
                 try {
-                    const response = await fetch(
-                        `${Http}/v1/projects/${projectId}`,
-                        {
-                            headers: {
-                                Authorization: `Bearer ${accessToken}`,
-                            },
-                        }
-                    );
+                    const response = await fetch(`${Http}/v1/projects/${projectId}`, {
+                        headers: {
+                            Authorization: `Bearer ${accessToken}`,
+                        },
+                    });
                     const data = await response.json();
                     setProjectData(data.data);
                     setErrorMessage(null);
@@ -55,9 +44,7 @@ export const ProjectProvider: React.FC<{ children: ReactNode }> = ({
     }, [projectId, accessToken]);
 
     return (
-        <ProjectContext.Provider
-            value={{ projectData, setProjectData, errorMessage }}
-        >
+        <ProjectContext.Provider value={{ projectData, setProjectData, errorMessage }}>
             {children}
         </ProjectContext.Provider>
     );
@@ -66,9 +53,7 @@ export const ProjectProvider: React.FC<{ children: ReactNode }> = ({
 export const useProjectContext = (): ProjectContextType => {
     const context = useContext(ProjectContext);
     if (context === undefined) {
-        throw new Error(
-            'useProjectContext must be used within a ProjectProvider'
-        );
+        throw new Error('useProjectContext must be used within a ProjectProvider');
     }
     return context;
 };

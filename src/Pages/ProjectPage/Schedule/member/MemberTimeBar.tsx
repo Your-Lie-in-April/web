@@ -1,5 +1,5 @@
+import { ScheduleItem } from '#/types/scheduleType';
 import React from 'react';
-import { ScheduleItem } from '#/Types/scheduletype';
 
 interface MemberTimeBarProps {
     hours: number[];
@@ -45,31 +45,19 @@ const MemberTimeBar: React.FC<MemberTimeBarProps> = ({ hours, schedule }) => {
                     />
                     {schedule
                         .filter((item) => {
-                            const itemStartHour = new Date(
-                                item.startTime
-                            ).getHours();
-                            const itemEndHour = new Date(
-                                item.endTime
-                            ).getHours();
+                            const itemStartHour = new Date(item.startTime).getHours();
+                            const itemEndHour = new Date(item.endTime).getHours();
                             return itemStartHour <= hour && itemEndHour >= hour;
                         })
                         .map((item, index) => {
-                            const itemStartHour = new Date(
-                                item.startTime
-                            ).getHours();
-                            const itemEndHour = new Date(
-                                item.endTime
-                            ).getHours();
+                            const itemStartHour = new Date(item.startTime).getHours();
+                            const itemEndHour = new Date(item.endTime).getHours();
                             const startMinute =
-                                itemStartHour === hour
-                                    ? new Date(item.startTime).getMinutes()
-                                    : 0;
+                                itemStartHour === hour ? new Date(item.startTime).getMinutes() : 0;
                             const endMinute =
-                                itemEndHour === hour
-                                    ? new Date(item.endTime).getMinutes()
-                                    : 60;
-                                    const startPosition = (startMinute / 60) * 37.282;
-                                    const endPosition = (endMinute / 60) * 37.282;
+                                itemEndHour === hour ? new Date(item.endTime).getMinutes() : 60;
+                            const startPosition = (startMinute / 60) * 37.282;
+                            const endPosition = (endMinute / 60) * 37.282;
                             return (
                                 <React.Fragment key={index}>
                                     <div
@@ -78,9 +66,7 @@ const MemberTimeBar: React.FC<MemberTimeBarProps> = ({ hours, schedule }) => {
                                             position: 'absolute',
                                             top: 0,
                                             left: `${startPosition}px`,
-                                            width: `${
-                                                endPosition - startPosition
-                                            }px`,
+                                            width: `${endPosition - startPosition}px`,
                                             height: '100%',
                                             backgroundColor: '#633AE2',
                                         }}
@@ -93,13 +79,12 @@ const MemberTimeBar: React.FC<MemberTimeBarProps> = ({ hours, schedule }) => {
                                                 left: '50%',
                                                 width: '0.5px',
                                                 height: '100%',
-                                                borderLeft:
-                                                    '1px dashed #ffffff',
+                                                borderLeft: '1px dashed #ffffff',
                                                 transform: 'translateX(-50%)',
                                             }}
                                         />
                                     )}
-                                 </React.Fragment>
+                                </React.Fragment>
                             );
                         })}
                 </div>

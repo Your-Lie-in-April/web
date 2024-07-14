@@ -1,4 +1,4 @@
-import { ScheduleItem } from '#/Types/scheduletype';
+import { ScheduleItem } from '#/types/scheduleType';
 import React from 'react';
 
 interface TeamTimeBarProps {
@@ -7,11 +7,7 @@ interface TeamTimeBarProps {
     memberCount: number;
 }
 
-const TeamTimeBar: React.FC<TeamTimeBarProps> = ({
-    hours,
-    schedule,
-    memberCount,
-}) => {
+const TeamTimeBar: React.FC<TeamTimeBarProps> = ({ hours, schedule, memberCount }) => {
     const totalWidth = hours.length * 40;
 
     const getColor = (count: number) => {

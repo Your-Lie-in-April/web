@@ -1,18 +1,24 @@
+import { Http } from '#/constants/urls';
 import axios, { AxiosInstance } from 'axios';
-
-const baseURL = import.meta.env.DEV
-    ? 'http://localhost:5173'
-    : 'https://timepiece.inuappcenter.kr';
+import { accessToken } from './token';
 
 const axiosInstance: AxiosInstance = axios.create({
-    baseURL: baseURL,
+    baseURL: Http,
     timeout: 5000,
+    headers: {
+        Accept: '*/*',
+        'Content-Type': 'application/json',
+    },
+    responseType: 'json',
 });
 
 // 요청 인터셉터
 axiosInstance.interceptors.request.use(
     function (config) {
-        // 요청이 전달되기 전에 작업 수행
+        const token = accessToken;
+        if (token) {
+            config.headers.Authorization = `Bearer ${token}`;
+        }
         return config;
     },
     function (error) {

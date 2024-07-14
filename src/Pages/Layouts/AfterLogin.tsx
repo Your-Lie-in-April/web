@@ -1,8 +1,8 @@
 import { FC, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import ConfirmLogout from '../Modal/ConfirmLogout';
-import MyPageModal from '../Modal/MyPageModal';
+import ConfirmLogout from '../Modal/member/ConfirmLogout';
+import MyPageModal from '../Modal/member/MyPageModal';
 
 const AfterLoginDiv = styled.div`
     width: 100%;
@@ -24,6 +24,7 @@ const Logo = styled.div`
     white-space: nowrap;
     font-weight: 700;
     font-size: 32px;
+    cursor: pointer;
 `;
 
 const MyPageDiv = styled.div`
@@ -65,17 +66,26 @@ const AfterLogin: FC = () => {
         setLogOut(true);
     };
 
+    const handleLogoClick = () => {
+        if (location.pathname !== '/') {
+            navigate('/');
+        } else {
+            window.location.reload();
+        }
+    };
+
     return (
         <>
             <AfterLoginDiv>
                 <div style={{ justifyContent: 'flex-start', flexBasis: '20%' }} />
-                <Logo onClick={() => navigate('/')} style={{ cursor: 'pointer' }}>
-                    TIME PIECE
-                </Logo>
+                <Logo onClick={handleLogoClick}>TIME PIECE</Logo>
                 <MyPageDiv>
                     <MyPageBtn onClick={onSetIsMyPageModal}>My page</MyPageBtn>
                     {isMyPageModal && (
-                        <MyPageModal onSetIsMyPageModal={onSetIsMyPageModal} onSetIsLogout={onSetIsLogout} />
+                        <MyPageModal
+                            onSetIsMyPageModal={onSetIsMyPageModal}
+                            onSetIsLogout={onSetIsLogout}
+                        />
                     )}
                 </MyPageDiv>
             </AfterLoginDiv>

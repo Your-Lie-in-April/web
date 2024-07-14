@@ -1,5 +1,5 @@
+import { useUserContext } from '#/hooks/context/userContext';
 import styled from 'styled-components';
-import { useUserContext } from '../MainPage';
 
 const LoginDiv = styled.div`
     display: flex;
@@ -77,10 +77,7 @@ const Profile: React.FC = () => {
         <LoginDiv>
             <ImageDiv>
                 {userData?.profileImageUrl ? (
-                    <StyledImage
-                        src={userData.profileImageUrl}
-                        alt='Profile Image'
-                    />
+                    <StyledImage src={userData.profileImageUrl} alt='Profile Image' />
                 ) : (
                     <DefaultImg />
                 )}

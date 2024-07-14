@@ -1,7 +1,7 @@
-import { ProjectEntity } from '#/Types/projecttype';
+import InvitationLinkModal from '#/Pages/Modal/project/InvitationLinkModal';
+import { ProjectEntity } from '#/types/projectType';
 import { useState } from 'react';
 import styled from 'styled-components';
-import InvitationModal from '../../Modal/InvitationModal';
 
 const BtnContainer = styled.div`
     width: 52px;
@@ -39,13 +39,11 @@ const InviteBtn: React.FC<InviteBtnProps> = ({ projectId, projectData }) => {
         setIsClick(!isClick);
     };
 
-    const accessToken = localStorage.getItem('access_token');
-
     return (
         <>
             <BtnContainer onClick={toggleBtn}>+초대하기</BtnContainer>
             {isClick && (
-                <InvitationModal
+                <InvitationLinkModal
                     projectId={projectId}
                     projectData={projectData}
                     toggleBtn={toggleBtn}
