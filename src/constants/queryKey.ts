@@ -13,6 +13,9 @@ export const QUERY_KEY = {
     PROJECT_AND_MEMBER: (projectId: number, memberId: number) => ['project', projectId, memberId],
     PROJECT_STORED: ['project', 'stored'],
     PROJECT_PIN: ['project', 'pin'],
+    PROJECT_INVITE: ['project', 'invite'],
+    PROJECT_INVITATION: (projectId: number) => ['project', 'invite', projectId],
+    PROJECT_IVITE_INFO: (url: string) => ['invite', 'info', url],
 
     // 스케줄 관련 쿼리키 -----------------------------------------------
     SCHEDULE: ['schedule'],

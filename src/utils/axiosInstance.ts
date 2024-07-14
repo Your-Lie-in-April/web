@@ -1,4 +1,4 @@
-import { Http } from '#/constants/backendURL';
+import { Http } from '#/constants/urls';
 import axios, { AxiosInstance } from 'axios';
 import { accessToken } from './token';
 

@@ -1,4 +1,4 @@
-import { Http } from '#/constants/backendURL';
+import { Http } from '#/constants/urls';
 import { DateContext } from '#/hooks/context/dateContext';
 import { useUserContext } from '#/hooks/context/userContext';
 import { ScheduleWeekResponse } from '#/types/scheduleType';

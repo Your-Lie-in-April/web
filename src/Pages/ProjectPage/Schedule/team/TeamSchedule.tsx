@@ -1,4 +1,4 @@
-import { Http } from '#/constants/backendURL';
+import { Http } from '#/constants/urls';
 import { DateContext } from '#/hooks/context/dateContext';
 import { ProjectContext } from '#/hooks/context/projectContext';
 import { ScheduleAllMembersResDto } from '#/types/scheduleType';

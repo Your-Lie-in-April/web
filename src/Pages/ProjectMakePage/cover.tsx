@@ -1,4 +1,4 @@
-import { Http } from '#/constants/backendURL';
+import { Http } from '#/constants/urls';
 import AddCircleRoundedIcon from '@mui/icons-material/AddCircleRounded';
 import { FC, useCallback, useEffect, useState } from 'react';
 import { ChromePicker, ColorResult } from 'react-color';
@@ -63,9 +63,9 @@ const Color = styled.button`
     border-radius: 50%;
     margin: 0;
     padding: 0;
-    display: flex; 
-    justify-content: center; 
-    align-items: center; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
     &:hover {
         cursor: pointer;
     }
@@ -101,14 +101,7 @@ const Image = styled.div`
     cursor: pointer;
 `;
 
-const colors = [
-    '#633AE2',
-    '#FFCB3B',
-    '#64AFF5',
-    '#C2D57A',
-    '#EB5757',
-    '#212121',
-];
+const colors = ['#633AE2', '#FFCB3B', '#64AFF5', '#C2D57A', '#EB5757', '#212121'];
 
 interface CoverProps {
     onColorSelect: (color: string) => void;
@@ -121,12 +114,7 @@ interface ApiResponseItem {
     url: string;
 }
 
-const Cover: FC<CoverProps> = ({
-    onColorSelect,
-    onImageSelect,
-    onHexSelect,
-    toggleCover,
-}) => {
+const Cover: FC<CoverProps> = ({ onColorSelect, onImageSelect, onHexSelect, toggleCover }) => {
     const [color, setColor] = useState('#fff');
     const [imgId, setImgId] = useState('');
     const [openHex, setOpenHex] = useState<boolean>(false);
@@ -153,9 +141,7 @@ const Cover: FC<CoverProps> = ({
 
     useEffect(() => {
         coverImg();
-        coverImg().catch((error) =>
-            console.error('Fetching URLs failed:', error)
-        );
+        coverImg().catch((error) => console.error('Fetching URLs failed:', error));
     }, []);
 
     const handleColorClick = (color: string) => {
@@ -191,9 +177,7 @@ const Cover: FC<CoverProps> = ({
                     단색
                     <ColorChoose>
                         <Color onClick={toggleHex}>
-                            <AddCircleRoundedIcon
-                                sx={{ fontSize: '36px', color: '#D9D9D9' }}
-                            />
+                            <AddCircleRoundedIcon sx={{ fontSize: '36px', color: '#D9D9D9' }} />
                         </Color>
                         {colors.map((color, index) => (
                             <Color
@@ -224,9 +208,7 @@ const Cover: FC<CoverProps> = ({
                                         backgroundRepeat: 'no-repeat',
                                         backgroundPosition: 'center',
                                     }}
-                                    onClick={() =>
-                                        handleImageClick(item.url, item.id)
-                                    }
+                                    onClick={() => handleImageClick(item.url, item.id)}
                                 ></Image>
                             ))
                         ) : (
@@ -249,9 +231,7 @@ const Cover: FC<CoverProps> = ({
                     <ChromePicker
                         disableAlpha={false}
                         color={color}
-                        onChange={(selectedColor) =>
-                            handleColorChange(selectedColor)
-                        }
+                        onChange={(selectedColor) => handleColorChange(selectedColor)}
                         styles={{
                             default: {
                                 picker: {

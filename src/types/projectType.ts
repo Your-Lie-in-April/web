@@ -68,7 +68,7 @@ export type ProjectCreateUpdateRequest = {
 export type ProjectInvitationLink = {
     projectId: number;
     title: string;
-    linkt: string;
+    link: string;
 };
 
 export type ProjectInviteMetaInfo = {

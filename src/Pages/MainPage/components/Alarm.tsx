@@ -1,4 +1,4 @@
-import { Http } from '#/constants/backendURL';
+import { Http } from '#/constants/urls';
 import DeleteAlarm from '#/Pages/Modal/project/deletealarm';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import { EventSourcePolyfill, NativeEventSource } from 'event-source-polyfill';
