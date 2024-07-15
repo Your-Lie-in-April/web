@@ -57,12 +57,13 @@ export const API = {
     TOKEN_REISSUE: `${Http}/v1/auth/reissue`,
 
     // notification-controller
-    NOTIFICATION_READ: (notificationId?: number) =>
+    NOTIFICATION_PATCH: (notificationId?: number) =>
         `${Http}/v1/projects/notifications/${notificationId ?? ':notificationId'}`,
     NOTIFICATION_SSE: `v1/sse/subscribe/`,
-    NOTIFICATION_PROJECTID: (projectId?: number) =>
-        `${Http}/v1/projects/${projectId ?? ':projectId'}/notifications/`,
-    NOTIFICATION_PREV: `v1/notifications`,
+    NOTIFICATION_PROJECTID: (projectId?: number, page: number = 0, size: number = 12) =>
+        `${Http}/v1/projects/${projectId ?? ':projectId'}/notifications?page=${page}&size=${size}`,
+    NOTIFICATION_ALL: (page: number = 0, size: number = 12) =>
+        `v1/notifications?page=${page}&size=${size}`,
     NOTIFICATION_DELETE: (notificationId?: number) =>
         `${Http}/v1/notifications/${notificationId ?? ':notificationId'}`,
 } as const;

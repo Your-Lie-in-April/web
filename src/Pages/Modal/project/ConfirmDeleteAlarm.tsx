@@ -27,7 +27,7 @@ const Container = styled.div<{ opacity: number }>`
     pointer-events: none;
 `;
 
-const DeleteAlarm = () => {
+const ConfirmDeleteAlarm = () => {
     const [opacity, setOpacity] = useState(1);
 
     useEffect(() => {
@@ -50,4 +50,4 @@ const DeleteAlarm = () => {
     return <Container opacity={opacity}>알림이 삭제되었습니다.</Container>;
 };
 
-export default DeleteAlarm;
+export default ConfirmDeleteAlarm;
