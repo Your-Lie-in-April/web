@@ -158,7 +158,8 @@ const Alarm: FC = () => {
                     </DeleteNotification>
                 </DeleteWrapper>
             )}
-            <ScrollableArea $hasMessages={alarmMessages.length > 0}>
+            <ScrollableArea>
+                {alarmMessages.length > 0 && <Divider />}
                 <InfiniteScroll
                     pageStart={0}
                     loadMore={() => fetchNextPage()}
@@ -220,13 +221,19 @@ const AlarmDiv = styled.div`
     overflow: hidden;
 `;
 
-const ScrollableArea = styled.div<{ $hasMessages: boolean }>`
+const ScrollableArea = styled.div`
     overflow-y: auto;
     flex-grow: 1;
     width: 100%;
     display: flex;
-    justify-content: center;
-    border-top: ${({ $hasMessages }) => ($hasMessages ? '1px solid #7d7d7d' : 'none')};
+    flex-direction: column;
+    align-items: center;
+`;
+
+const Divider = styled.div`
+    height: 0.8px;
+    background-color: #7d7d7d;
+    width: 275px;
 `;
 
 const Text = styled.div`
