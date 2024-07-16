@@ -31,4 +31,8 @@ export const QUERY_KEY = {
         projectId,
         scheduleDayRequst,
     ],
+
+    // 알람 관련 쿼리키
+    ALARM_ALL: ['alarm'],
+    ALARM_PROJECT: (projectId: number) => ['alarm', projectId],
 };

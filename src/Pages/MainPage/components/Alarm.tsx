@@ -1,154 +1,36 @@
 import { Http } from '#/constants/urls';
-import DeleteAlarm from '#/Pages/Modal/project/deletealarm';
+import useDeleteAlarmMutation from '#/hooks/apis/mutations/alarm/useDeleteAlarmMutation';
+import useAllAlarmQuery from '#/hooks/apis/queries/alarm/useAllAlarmQuery';
+import ConfirmDeleteAlarm from '#/Pages/Modal/project/ConfirmDeleteAlarm';
+import { AlarmEntity } from '#/types/alarmType';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import { EventSourcePolyfill, NativeEventSource } from 'event-source-polyfill';
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useMemo, useState } from 'react';
+import InfiniteScroll from 'react-infinite-scroller';
 import { useNavigate } from 'react-router-dom';
 import 'react-toastify/dist/ReactToastify.css';
 import styled from 'styled-components';
+import { formatTimeAgo } from './formatTimeAgo';
 
-const AlarmDiv = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 312px;
-    height: 918px;
-    background-color: #f5f5f5;
-    border-radius: 10px;
-    position: relative;
-`;
-
-const Text = styled.div`
-    width: 39px;
-    height: 26px;
-    font-family: 'Pretendard';
-    font-style: normal;
-    font-weight: 500;
-    font-size: 22px;
-    line-height: 26px;
-    color: #a4a4a4;
-    margin: 24px auto;
-    margin-top: 24px;
-    opacity: 0.9;
-    white-space: nowrap;
-`;
-
-const NotificationBox = styled.div<{ $isFirst: boolean }>`
-    display: flex;
-    width: 275px;
-    height: 59px;
-    padding: 8px;
-    flex-shrink: 0;
-    background: #f5f5f5;
-    border-bottom: 1px solid #7d7d7d;
-    border-top: ${(props) => (props.$isFirst ? '1px solid #7d7d7d' : 'none')};
-    flex-direction: column;
-    gap: 7px;
-    cursor: pointer;
-`;
-
-const ProjectTitle = styled.div<{ $isIconVisible: boolean }>`
-    color: #000000;
-    font-family: Pretendard;
-    font-size: 13px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: normal;
-    margin-top: 8px;
-    margin-left: ${(props) => (props.$isIconVisible ? '4px' : '0')};
-`;
-
-const CreatedAt = styled.span`
-    color: #a4a4a4;
-    font-family: Pretendard;
-    font-size: 10px;
-    font-style: normal;
-    font-weight: 400;
-`;
-
-const NotificationContent = styled.div<{ $isIconVisible: boolean }>`
-    display: flex;
-    align-items: center;
-    color: #7d7d7d;
-    font-family: Pretendard;
-    font-size: 13px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: normal;
-    margin-left: ${(props) => (props.$isIconVisible ? '14px' : '0')};
-`;
-
-const ProjectTitleContainer = styled.div`
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 4px;
-`;
-
-const DeleteNotification = styled.div<{ $isIconVisible: boolean }>`
-    display: ${(props) => (props.$isIconVisible ? 'block' : 'none')};
-    color: #633ae2;
-    font-family: Pretendard;
-    font-size: 13px;
-    font-style: normal;
-    font-weight: 400;
-    text-align: center;
-    cursor: pointer;
-`;
-
-const StyledCheckBoxIcon = styled(CheckBoxIcon)<{ $isIconVisible: boolean }>`
-    font-size: 20px !important;
-    cursor: pointer;
-    color: ${(props) => (props.$isIconVisible ? '#633AE2' : '#A4A4A4')} !important;
-`;
-
-const DeleteWrapper = styled.div`
-    display: flex;
-    gap: 4px;
-    position: absolute;
-    left: 8px;
-    top: 50px;
-`;
-
-function formatTimeAgo(timestamp: string): string {
-    const date = new Date(timestamp);
-    const now = new Date();
-
-    const diffMs = now.getTime() - date.getTime();
-    const diffSeconds = Math.floor(diffMs / 1000);
-    const diffMinutes = Math.floor(diffSeconds / 60);
-    const diffHours = Math.floor(diffMinutes / 60);
-    const diffDays = Math.floor(diffHours / 24);
-
-    if (diffSeconds < 60) {
-        return '지금';
-    } else if (diffMinutes < 60) {
-        return `${diffMinutes}분 전`;
-    } else if (diffHours < 24) {
-        return `${diffHours}시간 전`;
-    } else if (diffDays < 7) {
-        return `${diffDays}일 전`;
-    } else {
-        return date.toLocaleDateString();
-    }
-}
+type alarmMeaageType = {
+    projectTitle: string;
+    message: string;
+    createdAt: string;
+    projectId: number;
+    notificationId: number;
+};
 
 const Alarm: FC = () => {
-    const [alarmMessages, setAlarmMessages] = useState<
-        {
-            projectTitle: string;
-            message: string;
-            createdAt: string;
-            projectId: string;
-            notificationId: string;
-        }[]
-    >([]);
+    const [alarmMessages, setAlarmMessages] = useState<alarmMeaageType[]>([]);
     const [isIconVisible, setIsIconVisible] = useState<boolean>(false);
     const [checkedState, setCheckedState] = useState<boolean[]>([]);
     const [isDeleted, setIsDeleted] = useState<boolean>(false);
     const sseURL = `${Http}/v1/sse/subscribe`;
     const token = localStorage.getItem('access_token');
     const navigate = useNavigate();
+
+    const { data, fetchNextPage, hasNextPage } = useAllAlarmQuery();
+    const deleteAlarmMutation = useDeleteAlarmMutation();
 
     useEffect(() => {
         const EventSource = EventSourcePolyfill || NativeEventSource;
@@ -190,7 +72,6 @@ const Alarm: FC = () => {
             console.error('EventSource failed:', err);
             eventSource.close();
         };
-
         return () => {
             eventSource.close();
         };
@@ -205,57 +86,37 @@ const Alarm: FC = () => {
         }
     };
 
+    const flattenedAlarms = useMemo((): alarmMeaageType[] => {
+        return (
+            data?.pages.flatMap((page) =>
+                (page.data as AlarmEntity[]).map((item: AlarmEntity) => ({
+                    projectTitle: item.project.title,
+                    message: item.message,
+                    createdAt: formatTimeAgo(item.createdAt),
+                    projectId: item.project.projectId,
+                    notificationId: item.notificationId,
+                }))
+            ) || []
+        );
+    }, [data]);
+
     useEffect(() => {
-        const fetchNotifications = async () => {
-            try {
-                const accessToken = localStorage.getItem('access_token');
-                const response = await fetch(`${Http}/v1/notifications`, {
-                    method: 'GET',
-                    headers: {
-                        Accept: '*/*',
-                        Authorization: `Bearer ${accessToken}`,
-                    },
-                });
+        setAlarmMessages(flattenedAlarms);
+    }, [flattenedAlarms]);
 
-                if (!response.ok) {
-                    throw new Error('Failed to fetch notifications');
-                }
-
-                const data = await response.json();
-                if (Array.isArray(data.data.data)) {
-                    const messages = data.data.data.map((item: any) => ({
-                        projectTitle: item.project.title,
-                        message: item.message,
-                        createdAt: formatTimeAgo(item.createdAt),
-                        projectId: item.project.projectId,
-                        notificationId: item.notificationId,
-                    }));
-                    setAlarmMessages(messages);
-                } else {
-                    console.error('Response data is not an array:', data);
-                }
-            } catch (error) {
-                console.error('Failed to fetch notifications:', error);
-            }
-        };
-
-        fetchNotifications();
-    }, []);
+    useEffect(() => {
+        setIsIconVisible(alarmMessages.length > 0);
+    }, [alarmMessages]);
 
     const handleDeleteNotifications = async () => {
         const notificationsToDelete = alarmMessages.filter((_, index) => checkedState[index]);
-
+        if (notificationsToDelete.length === 0) {
+            alert('✂️삭제할 알림을 선택해주세요');
+            return;
+        }
         try {
-            const accessToken = localStorage.getItem('access_token');
-
             for (const notification of notificationsToDelete) {
-                await fetch(`${Http}/v1/notifications/${notification.notificationId}`, {
-                    method: 'DELETE',
-                    headers: {
-                        Accept: '*/*',
-                        Authorization: `Bearer ${accessToken}`,
-                    },
-                });
+                await deleteAlarmMutation.mutateAsync(notification.notificationId);
             }
             console.log('메세지 삭제 성공');
             const remainingNotifications = alarmMessages.filter((_, index) => !checkedState[index]);
@@ -271,70 +132,211 @@ const Alarm: FC = () => {
         setCheckedState(Array(alarmMessages.length).fill(false));
     }, [alarmMessages]);
 
-    const toggleIconVisibility = () => {
-        setIsIconVisible(!isIconVisible);
-    };
-
     const handleCheckBoxClick = (index: number) => {
         const updatedCheckedState = checkedState.map((item, idx) => (idx === index ? !item : item));
         setCheckedState(updatedCheckedState);
     };
 
-    const handleNotificationClick = (projectId: string) => {
+    const handleNotificationClick = (projectId: number) => {
         navigate(`/project/${projectId}`);
     };
 
     return (
         <AlarmDiv>
             <Text>알림</Text>
-            <DeleteWrapper>
-                <StyledCheckBoxIcon onClick={toggleIconVisibility} $isIconVisible={isIconVisible} />
-                <DeleteNotification
-                    $isIconVisible={isIconVisible}
-                    onClick={handleDeleteNotifications}
+            {alarmMessages.length > 0 && (
+                <DeleteWrapper>
+                    <StyledCheckBoxIcon
+                        onClick={() => setIsIconVisible(!isIconVisible)}
+                        $isIconVisible={isIconVisible}
+                    />
+                    <DeleteNotification
+                        $isIconVisible={isIconVisible}
+                        onClick={handleDeleteNotifications}
+                    >
+                        알림삭제
+                    </DeleteNotification>
+                </DeleteWrapper>
+            )}
+            <ScrollableArea>
+                {alarmMessages.length > 0 && <Divider />}
+                <InfiniteScroll
+                    pageStart={0}
+                    loadMore={() => fetchNextPage()}
+                    hasMore={!!hasNextPage}
+                    loader={<div key={0}>Loading...</div>}
+                    useWindow={false}
                 >
-                    알림삭제
-                </DeleteNotification>
-            </DeleteWrapper>
-            {alarmMessages.map((alarm, index) => (
-                <NotificationBox
-                    key={index}
-                    $isFirst={index === 0}
-                    onClick={() => handleNotificationClick(alarm.projectId)}
-                >
-                    <ProjectTitleContainer>
-                        <div
-                            style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}
+                    {alarmMessages.map((alarm, index) => (
+                        <NotificationBox
+                            key={index}
+                            onClick={() => handleNotificationClick(alarm.projectId)}
                         >
-                            {isIconVisible && (
-                                <CheckBoxIcon
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        handleCheckBoxClick(index);
-                                    }}
-                                    style={{
-                                        color: checkedState[index] ? '#633AE2' : '#A4A4A4',
-                                        marginLeft: -10,
-                                        fontSize: 20,
-                                        cursor: 'pointer',
-                                        marginBottom: -7,
-                                    }}
-                                />
-                            )}
-                            <ProjectTitle $isIconVisible={isIconVisible}>
-                                {alarm.projectTitle}
-                            </ProjectTitle>
-                        </div>
-                        <CreatedAt>{alarm.createdAt}</CreatedAt>
-                    </ProjectTitleContainer>
-                    <NotificationContent $isIconVisible={isIconVisible}>
-                        {alarm.message}
-                    </NotificationContent>
-                </NotificationBox>
-            ))}
-            {isDeleted && <DeleteAlarm />}
+                            <NotificationWrapper>
+                                {isIconVisible && (
+                                    <CheckBoxIcon
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            handleCheckBoxClick(index);
+                                        }}
+                                        style={{
+                                            color: checkedState[index] ? '#633AE2' : '#A4A4A4',
+                                            marginLeft: -10,
+                                            fontSize: 20,
+                                            cursor: 'pointer',
+                                        }}
+                                    />
+                                )}
+                                <ContentWrapper>
+                                    <ProjectTitleContainer $isIconVisible={isIconVisible}>
+                                        <ProjectTitle>{alarm.projectTitle}</ProjectTitle>
+                                        <CreatedAt>{alarm.createdAt}</CreatedAt>
+                                    </ProjectTitleContainer>
+                                    <NotificationContent>{alarm.message}</NotificationContent>
+                                </ContentWrapper>
+                            </NotificationWrapper>
+                        </NotificationBox>
+                    ))}
+                </InfiniteScroll>
+            </ScrollableArea>
+            {isDeleted && <ConfirmDeleteAlarm />}
         </AlarmDiv>
     );
 };
-
 export default Alarm;
+
+const AlarmDiv = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 312px;
+    height: 918px;
+    background-color: #f5f5f5;
+    border-radius: 10px;
+    padding: 8px;
+    padding-top: 14px;
+    gap: 8px;
+    box-sizing: border-box;
+    position: relative;
+    overflow: hidden;
+`;
+
+const ScrollableArea = styled.div`
+    overflow-y: auto;
+    flex-grow: 1;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+`;
+
+const Divider = styled.div`
+    height: 0.8px;
+    background-color: #7d7d7d;
+    width: 275px;
+`;
+
+const Text = styled.div`
+    width: 100%;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 22px;
+    color: #a4a4a4;
+    opacity: 0.9;
+    white-space: nowrap;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`;
+
+const DeleteWrapper = styled.div`
+    display: flex;
+    gap: 4px;
+    position: absolute;
+    left: 16px;
+    top: 25px;
+    justify-content: center;
+    align-items: center;
+`;
+
+const NotificationBox = styled.div`
+    display: flex;
+    width: 275px;
+    height: 60px;
+    padding: 8px;
+    box-sizing: border-box;
+    flex-shrink: 0;
+    background: #f5f5f5;
+    border-bottom: 1px solid #7d7d7d;
+    flex-direction: column;
+    gap: 7px;
+    cursor: pointer;
+    overflow-y: scroll;
+`;
+
+const NotificationWrapper = styled.div`
+    display: flex;
+    gap: 4px;
+`;
+
+const ContentWrapper = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    margin-top: 4px;
+`;
+
+const ProjectTitle = styled.div`
+    color: #000000;
+    font-size: 10px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+`;
+
+const CreatedAt = styled.span`
+    color: #a4a4a4;
+    font-size: 6px;
+    font-style: normal;
+    font-weight: 400;
+    flex-shrink: 0;
+`;
+
+const NotificationContent = styled.div`
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: #7d7d7d;
+    font-size: 10px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+`;
+
+const ProjectTitleContainer = styled.div<{ $isIconVisible: boolean }>`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: ${(props) => (props.$isIconVisible ? '245px' : '259px')};
+`;
+
+const DeleteNotification = styled.div<{ $isIconVisible: boolean }>`
+    display: ${(props) => (props.$isIconVisible ? 'block' : 'none')};
+    color: #633ae2;
+    font-size: 10px;
+    font-style: normal;
+    font-weight: 400;
+    text-align: center;
+    cursor: pointer;
+`;
+
+const StyledCheckBoxIcon = styled(CheckBoxIcon)<{ $isIconVisible: boolean }>`
+    font-size: 20px !important;
+    cursor: pointer;
+    color: ${(props) => (props.$isIconVisible ? '#633AE2' : '#A4A4A4')} !important;
+`;
