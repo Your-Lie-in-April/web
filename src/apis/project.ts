@@ -1,6 +1,5 @@
 import {
     PinProjectResDto,
-    ProjectCoverImgIdResDto,
     ProjectCoverImgResDto,
     ProjectCreateUpate,
     ProjectDeleteMemberReqDto,
@@ -140,13 +139,5 @@ export const getCoverImg = async () => {
     return await getAPIResponseData<ProjectCoverImgResDto>({
         method: 'GET',
         url: API.COVER_IMG,
-    });
-};
-
-//  커버 아이디별 이미지 조회
-export const getCoverImgId = async (projectId: number) => {
-    return await getAPIResponseData<ProjectCoverImgIdResDto>({
-        method: 'GET',
-        url: API.COVER_IMG_ID(projectId),
     });
 };

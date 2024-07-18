@@ -1,4 +1,4 @@
-import { getWeekDates } from '@Pages/ProjectPage/Schedule/weekUtils';
+import { getWeekDates } from '@pages/project/schedules/weekUtils';
 import dayjs from 'dayjs';
 import React, { createContext, useContext, useEffect, useState } from 'react';
 

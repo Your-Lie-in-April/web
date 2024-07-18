@@ -15,7 +15,6 @@ export const QUERY_KEY = {
     PROJECT_INVITATION: (projectId: number) => ['project', 'invite', projectId],
     PROJECT_IVITE_INFO: (url: string) => ['invite', 'info', url],
     COVER_IMG: ['covers'],
-    COVER_IMG_ID: (id: number) => ['covers', id],
 
     // 스케줄 관련 쿼리키 -----------------------------------------------
     SCHEDULE: ['schedule'],

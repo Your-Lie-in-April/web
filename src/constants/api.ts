@@ -39,7 +39,6 @@ export const API = {
     PROJECT_DELETE_ME: (projectId?: number) =>
         `${Http}/v1/projects/${projectId ?? ':projectId'}/me`,
     COVER_IMG: `${Http}/v1/covers?page=0&size=10`,
-    COVER_IMG_ID: (id: number) => `${Http}/cover-image/${id ?? ':id'}`,
 
     // schedule-controller
     SCHEDULE_GET: (projectId?: number) =>

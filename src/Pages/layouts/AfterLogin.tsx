@@ -1,5 +1,5 @@
-import ConfirmLogout from '@Pages/Modal/member/ConfirmLogout';
-import MyPageModal from '@Pages/Modal/member/MyPageModal';
+import ConfirmLogout from '@pages/modal/member/ConfirmLogout';
+import MyPageModal from '@pages/modal/member/MyPageModal';
 import { FC, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
