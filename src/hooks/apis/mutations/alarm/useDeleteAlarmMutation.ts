@@ -8,13 +8,16 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
  * 알림을 삭제하는 api 입니다.
  */
 
-const useDeleteAlarmMutation = () => {
+const useDeleteAlarmMutation = (projectId?: number) => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: (notificationId: string | number) => deleteAlarm(Number(notificationId)),
         onSuccess: () => {
             void queryClient.invalidateQueries({
                 queryKey: QUERY_KEY.ALARM_ALL,
+            });
+            void queryClient.invalidateQueries({
+                queryKey: QUERY_KEY.ALARM_PROJECT(projectId!),
             });
         },
     });
