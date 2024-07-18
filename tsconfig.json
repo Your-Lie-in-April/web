@@ -12,7 +12,7 @@
             "@apis/*": ["src/apis/*"],
             "@hooks/*": ["src/hooks/*"],
             "@constants/*": ["src/constants/*"],
-            "@Pages/*": ["src/Pages/*"],
+            "@pages/*": ["src/pages/*"],
             "@pics/*": ["src/pics/*"],
             "@routes/*": ["src/route/*"],
             "@styles/*": ["src/styles/*"],
