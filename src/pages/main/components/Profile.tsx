@@ -1,5 +1,4 @@
 import { useUserContext } from '@hooks/context/userContext';
-import defaultProfile from '@pics/default.png';
 import styled from 'styled-components';
 
 const Profile: React.FC = () => {
@@ -13,7 +12,7 @@ const Profile: React.FC = () => {
                 {userData?.profileImageUrl ? (
                     <StyledImage src={userData.profileImageUrl} alt='Profile Image' />
                 ) : (
-                    <StyledImage src={defaultProfile} alt='Default Image' />
+                    <StyledImage src={'../../../pics/defaultProfile.png'} alt='Default Image' />
                 )}
             </ImageDiv>
             <CommonText>{userData?.email}</CommonText>

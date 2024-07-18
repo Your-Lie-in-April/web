@@ -1,7 +1,6 @@
 import { MemberEntity } from '@/types/memberType';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import DeleteMember from '@pages/modal/project/DeleteMember';
-import defaultProfile from '@pics/default.png';
 import { useState } from 'react';
 import styled from 'styled-components';
 
@@ -28,7 +27,7 @@ const MemberProfile = ({
                 <MemberProfileDiv>
                     <MemberImg>
                         <StyledImage
-                            src={member?.profileImageUrl || defaultProfile}
+                            src={member?.profileImageUrl || '@pics/defaultProfile.png'}
                             alt='Profile Image'
                         />
                     </MemberImg>

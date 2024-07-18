@@ -1,5 +1,4 @@
 import { AllMemGetResDto, MemberEntity } from '@/types/memberType';
-import defaultProfile from '@pics/default.png';
 import styled from 'styled-components';
 import MoreBtn from '../buttons/MoreBtn';
 
@@ -18,10 +17,7 @@ const LeaderProfile = ({
         <StyledLeaderProfileBox>
             <StyledLeaderProfileDiv>
                 <LeaderImg>
-                    <StyledImage
-                        src={member?.profileImageUrl || defaultProfile}
-                        alt='Profile Image'
-                    />
+                    <StyledImage src={member?.profileImageUrl} alt='Profile Image' />
                 </LeaderImg>
                 <StyledProfileInfo>
                     <StyledProfileText>
