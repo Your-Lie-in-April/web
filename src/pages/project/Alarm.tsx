@@ -1,6 +1,7 @@
 import { AlarmEntity } from '@/types/alarmType';
 import { Http } from '@constants/urls';
 import useDeleteAlarmMutation from '@hooks/apis/mutations/alarm/useDeleteAlarmMutation';
+import usePatchAlarmMutation from '@hooks/apis/mutations/alarm/usePatchAlarmMutation';
 import useAlarmProjectQuery from '@hooks/apis/queries/alarm/useAlarmProjectQuery';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import { formatTimeAgo } from '@pages/main/components/formatTimeAgo';
@@ -31,7 +32,7 @@ const Alarm: FC = () => {
     const { projectId } = useParams();
 
     const { data, fetchNextPage, hasNextPage } = useAlarmProjectQuery(Number(projectId));
-    const deleteAlarmMutation = useDeleteAlarmMutation();
+    const deleteAlarmMutation = useDeleteAlarmMutation(Number(projectId));
 
     useEffect(() => {
         const EventSource = EventSourcePolyfill || NativeEventSource;
@@ -138,9 +139,22 @@ const Alarm: FC = () => {
         setCheckedState(updatedCheckedState);
     };
 
-    const handleNotificationClick = (projectId: number) => {
-        navigate(`/project/${projectId}`);
+    const patchAlarm = usePatchAlarmMutation(Number(projectId));
+    const handleNotificationClick = async (projectId: number) => {
+        const notificationsToPatch = alarmMessages.filter((_, index) => checkedState[index]);
+        try {
+            for (const notification of notificationsToPatch) {
+                await patchAlarm.mutateAsync(notification.notificationId);
+            }
+            const remainingNotifications = alarmMessages.filter((_, index) => !checkedState[index]);
+            setAlarmMessages(remainingNotifications);
+            setCheckedState(Array(remainingNotifications.length).fill(false));
+            navigate(`/project/${projectId}`);
+        } catch (error) {
+            console.error('Failed to delete notifications:', error);
+        }
     };
+
     return (
         <AlarmDiv>
             <TextStyle>알림</TextStyle>
