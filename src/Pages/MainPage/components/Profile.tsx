@@ -1,5 +1,41 @@
-import { useUserContext } from '#/hooks/context/userContext';
+import { useUserContext } from '@hooks/context/userContext';
 import styled from 'styled-components';
+
+const Profile: React.FC = () => {
+    const { userData } = useUserContext();
+    const isLoggedIn = !!userData;
+    const hasStatus = isLoggedIn && !!userData.state;
+
+    return (
+        <LoginDiv>
+            <ImageDiv>
+                {userData?.profileImageUrl ? (
+                    <StyledImage src={userData.profileImageUrl} alt='Profile Image' />
+                ) : (
+                    <DefaultImg />
+                )}
+            </ImageDiv>
+            <CommonText>{userData?.email}</CommonText>
+            <StatusContainer>
+                <Text
+                    $loggedIn={isLoggedIn}
+                    $hasStatus={hasStatus}
+                    style={{
+                        marginLeft: '8px',
+                        marginRight: '8px',
+                    }}
+                >
+                    {isLoggedIn
+                        ? hasStatus
+                            ? userData.state
+                            : '상태 메시지 등록이 되어있지 않습니다'
+                        : '로그인 되어 있지 않음'}
+                </Text>
+            </StatusContainer>
+        </LoginDiv>
+    );
+};
+export default Profile;
 
 const LoginDiv = styled.div`
     display: flex;
@@ -67,40 +103,3 @@ const StatusContainer = styled.div`
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
 `;
-
-const Profile: React.FC = () => {
-    const { userData } = useUserContext();
-    const isLoggedIn = !!userData;
-    const hasStatus = isLoggedIn && !!userData.state;
-
-    return (
-        <LoginDiv>
-            <ImageDiv>
-                {userData?.profileImageUrl ? (
-                    <StyledImage src={userData.profileImageUrl} alt='Profile Image' />
-                ) : (
-                    <DefaultImg />
-                )}
-            </ImageDiv>
-            <CommonText>{userData?.email}</CommonText>
-            <StatusContainer>
-                <Text
-                    $loggedIn={isLoggedIn}
-                    $hasStatus={hasStatus}
-                    style={{
-                        marginLeft: '8px',
-                        marginRight: '8px',
-                    }}
-                >
-                    {isLoggedIn
-                        ? hasStatus
-                            ? userData.state
-                            : '상태 메시지 등록이 되어있지 않습니다'
-                        : '로그인 되어 있지 않음'}
-                </Text>
-            </StatusContainer>
-        </LoginDiv>
-    );
-};
-
-export default Profile;

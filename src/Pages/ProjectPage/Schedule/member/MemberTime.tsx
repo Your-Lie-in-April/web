@@ -1,4 +1,4 @@
-import { DaySchedule } from '#/types/scheduleType';
+import { DaySchedule } from '@/types/scheduleType';
 import styled from 'styled-components';
 import MemberTimeBar from './MemberTimeBar';
 
@@ -23,7 +23,6 @@ const HourTextList = styled.div`
     flex-direction: row;
     gap: 7.46px;
     align-items: flex-start;
-
     margin-left: 33.5px;
     margin-bottom: 7.36px;
 `;

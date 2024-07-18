@@ -1,4 +1,4 @@
-import { UserSchedule } from '#/types/scheduleType';
+import { UserSchedule } from '@/types/scheduleType';
 import styled from 'styled-components';
 import MemberTime from './MemberTime';
 

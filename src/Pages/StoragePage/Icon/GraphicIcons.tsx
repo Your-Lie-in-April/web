@@ -5,26 +5,25 @@ import LightningIcon from './LightningIcon';
 import SpringIcon from './SpringIcon';
 import SummertimeSadnessIcon from './Summertime_sadness ';
 
-
 const GraphicIconsWrapper = styled.div`
-  height: 100%;
-  z-index: 0;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background-color: #000000;
+    height: 100%;
+    z-index: 0;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #000000;
 `;
 
 const GraphicIcons: React.FC = () => {
-  return (
-    <GraphicIconsWrapper>
-      <ArrowIcon />
-      <LightningIcon />
-      <SpringIcon />
-      <SummertimeSadnessIcon />
-    </GraphicIconsWrapper>
-  );
+    return (
+        <GraphicIconsWrapper>
+            <ArrowIcon />
+            <LightningIcon />
+            <SpringIcon />
+            <SummertimeSadnessIcon />
+        </GraphicIconsWrapper>
+    );
 };
 
 export default GraphicIcons;

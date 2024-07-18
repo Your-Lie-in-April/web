@@ -1,50 +1,30 @@
-import { Http } from '#/constants/urls';
-import { ProjectEntity } from '#/types/projectType';
+import useProjectInfoQuery from '@hooks/apis/queries/project/useProjectInfoQuery';
+import { ProjectEntity } from '@/types/projectType';
 import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 type ProjectContextType = {
     projectData: ProjectEntity | null;
     setProjectData: (projectData: ProjectEntity | null) => void;
-    errorMessage: string | null;
 };
 
 export const ProjectContext = createContext<ProjectContextType>({
     projectData: null,
     setProjectData: () => {},
-    errorMessage: null,
 });
 
 export const ProjectProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [projectData, setProjectData] = useState<ProjectEntity | null>(null);
-    const [errorMessage, setErrorMessage] = useState<string | null>(null);
-    const { projectId } = useParams<{ projectId: string }>();
-    const accessToken = localStorage.getItem('access_token');
-
+    const { projectId } = useParams();
+    const { data } = useProjectInfoQuery(Number(projectId));
     useEffect(() => {
-        const fetchProjects = async () => {
-            if (projectId && accessToken) {
-                try {
-                    const response = await fetch(`${Http}/v1/projects/${projectId}`, {
-                        headers: {
-                            Authorization: `Bearer ${accessToken}`,
-                        },
-                    });
-                    const data = await response.json();
-                    setProjectData(data.data);
-                    setErrorMessage(null);
-                } catch (error) {
-                    console.error('Failed to fetch project data:', error);
-                    setErrorMessage('Failed to fetch project data');
-                }
-            }
-        };
-
-        fetchProjects();
-    }, [projectId, accessToken]);
+        if (data) {
+            setProjectData(data);
+        }
+    }, [projectId, data, setProjectData]);
 
     return (
-        <ProjectContext.Provider value={{ projectData, setProjectData, errorMessage }}>
+        <ProjectContext.Provider value={{ projectData, setProjectData }}>
             {children}
         </ProjectContext.Provider>
     );

@@ -1,6 +1,6 @@
-import { getScheduleMember } from '#/apis/schedule';
-import { QUERY_KEY } from '#/constants/queryKey';
-import { useQuery } from '@tanstack/react-query';
+import { getScheduleMember } from '@apis/schedule';
+import { QUERY_KEY } from '@constants/queryKey';
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
 /**
  * GET /v1/projects/{projectId}/members/{memberId}/schedules
  *
@@ -10,6 +10,8 @@ const useScheduleMemberQuery = (projectId: number, memberId: number, condition: 
     return useQuery({
         queryKey: QUERY_KEY.SCHEDULE_MEMBER(projectId, memberId, condition),
         queryFn: () => getScheduleMember(projectId, memberId, condition),
+        gcTime: 0,
+        placeholderData: keepPreviousData,
     });
 };
 

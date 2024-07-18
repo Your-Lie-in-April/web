@@ -1,70 +1,15 @@
-import { Http } from '#/constants/urls';
-import { accessToken } from '#/utils/token';
+import usePostProjectMutation from '@hooks/apis/mutations/project/usePostProjectMutation';
+import AfterLogin from '@Pages/layouts/AfterLogin';
+import { Toast } from '@Pages/layouts/Toast';
 import { FC, useState } from 'react';
 import { useNavigate } from 'react-router';
+import 'react-toastify/dist/ReactToastify.css';
 import styled, { createGlobalStyle } from 'styled-components';
-import AfterLogin from '../Layouts/AfterLogin';
 import Info from './Info';
-import ProjectCalendar from './projectcalendar';
-import ProjectTime from './projecttime';
+import ProjectCalendar from './ProjectCalendar';
+import ProjectTime from './ProjectTime';
 
-const GlobalStyle = createGlobalStyle`
-  body {
-    width : 100%;
-    min-width : 1366px;
-    max-height : 1920px;
-    margin: 0 auto;
-    background-color: #212121;
-    -ms-overflow-style: none;
-  }
-
-  ::-webkit-scrollbar {
-    display: none;
-  }
-`;
-
-const Container = styled.div`
-    display: flex;
-    width: 100%;
-    background-color: white;
-    flex-direction: column;
-    align-items: center;
-    gap: 78px;
-    border: none;
-    box-shadow: none;
-
-    padding-top: 109px;
-    padding-bottom: 109px;
-    box-sizing: border-box;
-`;
-
-const TimeContainer = styled.div`
-    display: flex;
-    gap: 240px;
-    width: 1122px;
-`;
-
-const SButton = styled.button`
-    width: 289px;
-    height: 62px;
-    padding: 12px 44px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 60px;
-    background: #633ae2;
-    white-space: nowrap;
-`;
-
-const SButtonText = styled.span`
-    color: #fff;
-    text-align: center;
-    font-family: Pretendard;
-    font-size: 32px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: normal;
-`;
+const colors = ['#633AE2', '#FFCB3B', '#64AFF5', '#C2D57A', '#EB5757', '#212121'];
 
 const ProjectMakePage: FC = () => {
     const [startDate, setStartDate] = useState<Date | null>(new Date());
@@ -75,7 +20,7 @@ const ProjectMakePage: FC = () => {
     const [img, setImg] = useState<string>('');
     const [imgId, setImgId] = useState<string>('');
     const [starttime, setStartTime] = useState('AM 09:00');
-    const [endtime, setEndTime] = useState('AM 09:00');
+    const [endtime, setEndTime] = useState('AM 09:30');
     const [selectedDays, setSelectedDays] = useState<string[]>([]);
     const navigate = useNavigate();
 
@@ -91,39 +36,44 @@ const ProjectMakePage: FC = () => {
         return `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}:00`;
     };
 
+    const mutate = usePostProjectMutation();
     const makeProject = async () => {
+        if (!title.trim()) {
+            Toast('프로젝트 제목을 작성해주세요', 'error');
+            return;
+        }
+        if (!content.trim()) {
+            Toast('프로젝트 내용을 작성해주세요', 'error');
+            return;
+        }
+
+        if (selectedDays.length === 0) {
+            Toast('생성할 요일을 선택해주세요', 'error');
+            return;
+        }
+
+        let finalColor = color;
+        if (!color && !img) {
+            finalColor = colors[Math.floor(Math.random() * colors.length)];
+        }
         const payload = {
             title: title,
             description: content,
-            startDate: startDate?.toISOString().substring(0, 10),
-            endDate: endDate?.toISOString().substring(0, 10),
+            startDate: startDate?.toISOString().substring(0, 10) || '',
+            endDate: endDate?.toISOString().substring(0, 10) || '',
             startTime: formatTime(starttime),
             endTime: formatTime(endtime),
             daysOfWeek: selectedDays,
-            isStored: false,
-            color: color,
+            color: finalColor,
             coverImageId: imgId,
         };
 
         try {
-            const response = await fetch(Http + `/v1/projects`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${accessToken}`,
-                },
-                body: JSON.stringify(payload),
-            });
-
-            if (!response.ok) {
-                throw new Error('프로젝트 생성 실패');
-            }
-
-            const jsonResponse = await response.json();
-            console.log('Project 생성:', jsonResponse);
+            await mutate.mutateAsync(payload);
+            console.log('프로젝트가 성공적으로 생성되었습니다.');
             navigate('/');
         } catch (error) {
-            console.error('Error make project:', error);
+            console.error('프로젝트 생성 중 오류 발생:', error);
         }
     };
     return (
@@ -182,7 +132,6 @@ const ProjectMakePage: FC = () => {
                     <SButtonText>프로젝트 만들기</SButtonText>
                 </SButton>
             </Container>
-
             <div
                 style={{
                     height: '300px',
@@ -193,5 +142,62 @@ const ProjectMakePage: FC = () => {
         </>
     );
 };
-
 export default ProjectMakePage;
+
+const GlobalStyle = createGlobalStyle`
+  body {
+    width : 100%;
+    min-width : 1366px;
+    max-height : 1920px;
+    margin: 0 auto;
+    background-color: #212121;
+    -ms-overflow-style: none;
+  }
+
+  ::-webkit-scrollbar {
+    display: none;
+  }
+`;
+
+const Container = styled.div`
+    display: flex;
+    width: 100%;
+    background-color: white;
+    flex-direction: column;
+    align-items: center;
+    gap: 78px;
+    border: none;
+    box-shadow: none;
+
+    padding-top: 109px;
+    padding-bottom: 109px;
+    box-sizing: border-box;
+`;
+
+const TimeContainer = styled.div`
+    display: flex;
+    gap: 240px;
+    width: 1122px;
+`;
+
+const SButton = styled.button`
+    width: 289px;
+    height: 62px;
+    padding: 12px 44px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 60px;
+    background: #633ae2;
+    white-space: nowrap;
+`;
+
+const SButtonText = styled.span`
+    color: #fff;
+    text-align: center;
+    font-family: Pretendard;
+    font-size: 32px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+`;

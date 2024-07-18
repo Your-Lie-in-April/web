@@ -1,6 +1,6 @@
-import { getProjectIsStored } from '#/apis/project';
-import { QUERY_KEY } from '#/constants/queryKey';
-import { ProjectStoredResponse } from '#/types/projectType';
+import { getProjectIsStored } from '@apis/project';
+import { QUERY_KEY } from '@constants/queryKey';
+import { ProjectStoredResponse } from '@/types/projectType';
 import { useInfiniteQuery } from '@tanstack/react-query';
 
 /**

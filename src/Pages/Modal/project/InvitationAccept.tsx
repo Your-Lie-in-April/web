@@ -1,9 +1,9 @@
-import usePostInvitationMutation from '#/hooks/apis/mutations/project/usePostInvitationMutation copy';
-import useInviteInfoQuery from '#/hooks/apis/queries/project/useInviteInfoQuery';
-import { ProjectInviteMetaInfo } from '#/types/projectType';
-import ModalPortal from '#/utils/ModalPotal';
-import useScrollLock from '#/utils/useScrollLock';
+import usePostInvitationMutation from '@hooks/apis/mutations/project/usePostInvitationMutation copy';
+import useInviteInfoQuery from '@hooks/apis/queries/project/useInviteInfoQuery';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+import { ProjectInviteMetaInfo } from '@/types/projectType';
+import ModalPortal from '@utils/ModalPotal';
+import useScrollLock from '@utils/useScrollLock';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';

@@ -1,9 +1,69 @@
-import { useLeaveProject } from '#/hooks/useLeaveProject';
-import ModalPortal from '#/utils/ModalPotal';
-import useScrollLock from '#/utils/useScrollLock';
+import { useLeaveProject } from '@hooks/useLeaveProject';
+import ModalPortal from '@utils/ModalPotal';
+import useScrollLock from '@utils/useScrollLock';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import styled from 'styled-components';
 import { ModalBlackOut, ModalContainer } from '../ModalCommon';
+
+interface DeleteProjectProps {
+    isOpen: boolean;
+    onClose: () => void;
+    projectId: number;
+    projectTitle: string;
+}
+
+const LeaveProject: React.FC<DeleteProjectProps> = ({
+    isOpen,
+    onClose,
+    projectId,
+    projectTitle,
+}) => {
+    const { message, handleLeave, handleCancel } = useLeaveProject(projectId, isOpen);
+
+    useScrollLock(isOpen);
+
+    if (!isOpen) return null;
+
+    return (
+        <ModalPortal>
+            <ModalBlackOut onClick={onClose} />
+            <ModalContainer>
+                <Box>
+                    <div
+                        style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            gap: '12px',
+                            width: '100%',
+                            height: '100%',
+                        }}
+                    >
+                        <div
+                            style={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'center',
+                                gap: '10px',
+                                width: '100%',
+                                height: '100%',
+                            }}
+                        >
+                            <InfoCircleIcon sx={{ fontSize: '32px' }} />
+                            <PeojectName>{projectTitle}</PeojectName>
+                            <Title>{message}</Title>
+                        </div>
+                        <ButtonsContainer style={{ alignSelf: 'flex-end' }}>
+                            <ConfirmBtn onClick={() => handleLeave(onClose)}>확인</ConfirmBtn>
+                            <CancelBtn onClick={() => handleCancel(onClose)}>취소</CancelBtn>
+                        </ButtonsContainer>
+                    </div>
+                </Box>
+            </ModalContainer>
+        </ModalPortal>
+    );
+};
+export default LeaveProject;
 
 const Box = styled.div`
     width: 406px;
@@ -58,7 +118,7 @@ const Button = styled.button`
     align-items: center;
     gap: 8px;
     border-radius: 20px;
-    font-family: Pretendard;
+    font-family: 'Pretendard';
     font-size: 13px;
     font-weight: 500;
     line-height: normal;
@@ -83,50 +143,3 @@ const ButtonsContainer = styled.div`
     justify-content: flex-end;
     gap: 4px;
 `;
-
-interface DeleteProjectProps {
-    isOpen: boolean;
-    onClose: () => void;
-    projectId: number;
-    projectTitle: string;
-}
-
-const LeaveProject: React.FC<DeleteProjectProps> = ({
-    isOpen,
-    onClose,
-    projectId,
-    projectTitle,
-}) => {
-    const { message, handleLeave, handleCancel } = useLeaveProject(projectId, isOpen);
-
-    useScrollLock(isOpen);
-
-    if (!isOpen) return null;
-
-    return (
-        <ModalPortal>
-            <ModalBlackOut onClick={onClose} />
-            <ModalContainer>
-                <Box>
-                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px', width: '100%', height: '100%' }}>
-                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px', width: '100%', height: '100%' }}>
-                            <InfoCircleIcon sx={{ fontSize: '32px' }} />
-                            <PeojectName>{projectTitle}</PeojectName>
-                            <Title>{message}</Title>
-                        </div>
-                        <ButtonsContainer style={{ alignSelf: 'flex-end' }}>
-                            <ConfirmBtn onClick={() => handleLeave(onClose)}>
-                                확인
-                            </ConfirmBtn>
-                            <CancelBtn onClick={() => handleCancel(onClose)}>
-                                취소
-                            </CancelBtn>
-                        </ButtonsContainer>
-                    </div>
-                </Box>
-            </ModalContainer>
-        </ModalPortal>
-    );
-};
-
-export default LeaveProject;

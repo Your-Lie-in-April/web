@@ -1,6 +1,128 @@
 import { ChangeEvent, Dispatch, FC, SetStateAction, useState } from 'react';
 import styled from 'styled-components';
-import Cover from './cover';
+import CoverPicker from './CoverPicker';
+
+interface InfoProps {
+    setContent: Dispatch<SetStateAction<string>>;
+    setTitle: Dispatch<SetStateAction<string>>;
+    setColor: Dispatch<SetStateAction<string>>;
+    setImg: Dispatch<SetStateAction<string>>;
+    setImgId: Dispatch<SetStateAction<string>>;
+}
+const Info: FC<InfoProps> = ({ setContent, setTitle, setColor, setImg, setImgId }) => {
+    const [isTitleClicked, setIsTitleClicked] = useState<boolean>(false);
+    const [isContentClicked, setIsContentClicked] = useState<boolean>(false);
+    const [isCoverClicked, setIsCoverClicked] = useState<boolean>(false);
+    const [selectedColor, setSelectedColor] = useState<string | null>(null);
+    const [selectedImageUrl, setSelectedImageUrl] = useState<string | null>(null);
+    const [selectedHex, setSelectedHex] = useState<string | null>(null);
+
+    const handleTextareaChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+        const inputText = e.target.value;
+        const limitedText = inputText.slice(0, 58);
+        const lines = limitedText.split('\n');
+        if (lines.length <= 2) {
+            setContent(limitedText);
+        }
+    };
+
+    const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setTitle(e.target.value);
+    };
+
+    const toggleCover = () => {
+        setIsCoverClicked((prevIsCoverClicked) => !prevIsCoverClicked);
+    };
+
+    const handleColorSelect = (color: string) => {
+        setSelectedColor(color);
+        setSelectedImageUrl(null);
+        setSelectedHex(null);
+        setColor(color);
+        setImg('');
+        setImgId('');
+    };
+
+    const handleImageSelect = (url: string, id: string) => {
+        setSelectedImageUrl(url);
+        setSelectedColor(null);
+        setSelectedHex(null);
+        setImg(url);
+        setImgId(id);
+        setColor('');
+    };
+
+    const handleHexSelect = (color: string) => {
+        setSelectedColor(null);
+        setSelectedImageUrl(null);
+        setSelectedHex(color);
+        setColor(color);
+        setImg('');
+        setImgId('');
+    };
+
+    return (
+        <Container
+            style={{
+                backgroundColor: selectedColor || selectedHex || 'white',
+                backgroundImage: `url('${selectedImageUrl}')`,
+            }}
+        >
+            <MakeContainer>
+                <TitleContainer>
+                    <Title>
+                        <TitleText
+                            type='text'
+                            onFocus={() => {
+                                setIsTitleClicked(true);
+
+                                setIsCoverClicked(false);
+                            }}
+                            onBlur={() => {
+                                setIsTitleClicked(false);
+                            }}
+                            onChange={handleTitleChange}
+                            placeholder={
+                                isTitleClicked === true ? '' : '프로젝트 제목을 작성해주세요'
+                            }
+                        ></TitleText>
+                    </Title>
+                    <Content>
+                        <ContentText
+                            $focused
+                            onChange={handleTextareaChange}
+                            onFocus={() => setIsContentClicked(true)}
+                            onBlur={() => setIsContentClicked(false)}
+                            placeholder={
+                                isContentClicked === true ? '' : '프로젝트 내용을 작성해주세요'
+                            }
+                        />
+                    </Content>
+                </TitleContainer>
+                <div style={{ position: 'relative' }}>
+                    <Make onClick={toggleCover}>커버 만들기</Make>
+                    {isCoverClicked && (
+                        <div
+                            style={{
+                                position: 'absolute',
+                                right: '0px',
+                                top: '182px',
+                            }}
+                        >
+                            <CoverPicker
+                                onColorSelect={handleColorSelect}
+                                onImageSelect={handleImageSelect}
+                                onHexSelect={handleHexSelect}
+                                toggleCover={toggleCover}
+                            />
+                        </div>
+                    )}
+                </div>
+            </MakeContainer>
+        </Container>
+    );
+};
+export default Info;
 
 interface ContentTextProps {
     $focused: boolean;
@@ -15,7 +137,6 @@ const Container = styled.div`
     justify-content: center;
     background-color: #ffffff;
     border-bottom: 1px solid #000000;
-
     position: relative;
     z-index: 5;
 `;
@@ -101,7 +222,7 @@ const Make = styled.button`
     background-color: #ffffff;
     border: 1px solid #000000;
     display: flex;
-    font-family: Pretendard;
+    font-family: 'Pretendard';
     white-space: nowrap;
     font-size: 22px;
     font-style: normal;
@@ -125,120 +246,3 @@ const Make = styled.button`
         border: 1px solid #000000;
     }
 `;
-interface InfoProps {
-    setContent: Dispatch<SetStateAction<string>>;
-    setTitle: Dispatch<SetStateAction<string>>;
-    setColor: Dispatch<SetStateAction<string>>;
-    setImg: Dispatch<SetStateAction<string>>;
-    setImgId: Dispatch<SetStateAction<string>>;
-}
-const Info: FC<InfoProps> = ({ setContent, setTitle, setColor, setImg, setImgId }) => {
-    const [isTitleClicked, setIsTitleClicked] = useState<boolean>(false);
-    const [isContentClicked, setIsContentClicked] = useState<boolean>(false);
-    const [isCoverClicked, setIsCoverClicked] = useState<boolean>(false);
-    const [selectedColor, setSelectedColor] = useState<string | null>(null);
-    const [selectedImageUrl, setSelectedImageUrl] = useState<string | null>(null);
-    const [selectedHex, setSelectedHex] = useState<string | null>(null);
-
-    const handleTextareaChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
-        const inputText = e.target.value;
-        const limitedText = inputText.slice(0, 58);
-        const lines = limitedText.split('\n');
-        if (lines.length <= 2) {
-            setContent(limitedText);
-        }
-    };
-
-    const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setTitle(e.target.value);
-    };
-
-    const toggleCover = () => {
-        setIsCoverClicked((prevIsCoverClicked) => !prevIsCoverClicked);
-    };
-
-    const handleColorSelect = (color: string) => {
-        setSelectedColor(color);
-        setSelectedImageUrl(null);
-        setSelectedHex(null);
-        setColor(color);
-        setImg('');
-        setImgId('');
-    };
-
-    const handleImageSelect = (url: string, id: string) => {
-        setSelectedImageUrl(url);
-        setSelectedColor(null);
-        setSelectedHex(null);
-        setImg(url);
-        setImgId(id);
-        setColor('');
-    };
-    const handleHexSelect = (color: string) => {
-        setSelectedColor(null);
-        setSelectedImageUrl(null);
-        setSelectedHex(color);
-        setColor(color);
-        setImg('');
-        setImgId('');
-    };
-
-    return (
-        <Container
-            style={{
-                backgroundColor: selectedColor || selectedHex || 'white',
-                backgroundImage: `url('${selectedImageUrl}')`,
-            }}
-        >
-            <MakeContainer>
-                <TitleContainer>
-                    <Title>
-                        <TitleText
-                            type="text"
-                            onFocus={() => {
-                                setIsTitleClicked(true);
-
-                                setIsCoverClicked(false);
-                            }}
-                            onBlur={() => {
-                                setIsTitleClicked(false);
-                            }}
-                            onChange={handleTitleChange}
-                            placeholder={isTitleClicked === true ? '' : '프로젝트 제목을 작성해주세요'}
-                        ></TitleText>
-                    </Title>
-                    <Content>
-                        <ContentText
-                            $focused
-                            onChange={handleTextareaChange}
-                            onFocus={() => setIsContentClicked(true)}
-                            onBlur={() => setIsContentClicked(false)}
-                            placeholder={isContentClicked === true ? '' : '프로젝트 내용을 작성해주세요'}
-                        />
-                    </Content>
-                </TitleContainer>
-                <div style={{ position: 'relative' }}>
-                    <Make onClick={toggleCover}>커버 만들기</Make>
-                    {isCoverClicked && (
-                        <div
-                            style={{
-                                position: 'absolute',
-                                right: '0px',
-                                top: '182px',
-                            }}
-                        >
-                            <Cover
-                                onColorSelect={handleColorSelect}
-                                onImageSelect={handleImageSelect}
-                                onHexSelect={handleHexSelect}
-                                toggleCover={toggleCover}
-                            />
-                        </div>
-                    )}
-                </div>
-            </MakeContainer>
-        </Container>
-    );
-};
-
-export default Info;

@@ -1,14 +1,146 @@
-import { Http } from '#/constants/urls';
-import { DateContext } from '#/hooks/context/dateContext';
-import { ProjectContext } from '#/hooks/context/projectContext';
-import { ScheduleWeekResponse } from '#/types/scheduleType';
-import ModalPortal from '#/utils/ModalPotal';
-import useScrollLock from '#/utils/useScrollLock';
+import usePostScheduleMutation from '@hooks/apis/mutations/schedule/usePostScheduleMutation';
+import usePutScheduleMutation from '@hooks/apis/mutations/schedule/usePutScheduleMutation';
+import { DateContext } from '@hooks/context/dateContext';
+import { ProjectContext } from '@hooks/context/projectContext';
+import { ScheduleData, ScheduleWeekResponse } from '@/types/scheduleType';
+import ModalPortal from '@utils/ModalPotal';
+import useScrollLock from '@utils/useScrollLock';
 import React, { useContext, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { formatScheduleData } from '../../formatScheduleData';
 import EditMyTime from './EditMyTime';
+
+interface SelectedSlot {
+    date: string;
+    hour: number;
+    minute: number;
+}
+
+interface EditMyScheduleProps {
+    isEditModal: boolean;
+    onSetIsEditModal: () => void;
+    scheduleData: ScheduleWeekResponse | null;
+}
+
+const EditMySchedule: React.FC<EditMyScheduleProps> = ({
+    isEditModal,
+    onSetIsEditModal,
+    scheduleData,
+}) => {
+    const { projectData } = useContext(ProjectContext);
+    const startDateString = projectData?.startDate;
+    const endDateString = projectData?.endDate;
+    const startTimeString = projectData?.startTime;
+    const endTimeString = projectData?.endTime;
+    const dayOfWeek = projectData?.daysOfWeek;
+
+    const startDateTime =
+        startDateString && startTimeString
+            ? new Date(`${startDateString}T${startTimeString}`)
+            : undefined;
+
+    const endDateTime =
+        endDateString && endTimeString ? new Date(`${endDateString}T${endTimeString}`) : undefined;
+
+    const projectStartTime = startDateTime ? startDateTime.getHours() : undefined;
+    const projectEndTime = endDateTime ? endDateTime.getHours() : undefined;
+
+    const { projectId } = useParams<{ projectId: string }>();
+    const { weekDates } = useContext(DateContext) || {};
+    const [selection, setSelection] = useState<{ [key: number]: SelectedSlot }>({});
+
+    const postScheduleMutation = usePostScheduleMutation(Number(projectId));
+    const postSchedule = async (scheduleData: ScheduleData) => {
+        try {
+            await postScheduleMutation.mutateAsync(scheduleData);
+        } catch (error) {
+            console.error('Error posting schedule:', error);
+            throw error;
+        }
+    };
+
+    const putScheduleMutation = usePutScheduleMutation(Number(projectId));
+    const putSchedule = async (scheduleData: ScheduleData) => {
+        try {
+            await putScheduleMutation.mutateAsync(scheduleData);
+        } catch (error) {
+            console.error('Error put schedule:', error);
+            throw error;
+        }
+    };
+
+    const handleConfirm = async () => {
+        const projectStartDate = projectData?.startDate;
+        const projectEndDate = projectData?.endDate;
+
+        const projectStartDateString = projectStartDate
+            ? new Date(projectStartDate).toISOString().slice(0, 10)
+            : undefined;
+        const projectEndDateString = projectEndDate
+            ? new Date(projectEndDate).toISOString().slice(0, 10)
+            : undefined;
+
+        const newScheduleData = formatScheduleData(
+            selection,
+            projectStartTime,
+            projectEndTime,
+            dayOfWeek,
+            projectStartDateString,
+            projectEndDateString
+        );
+
+        // 선택한 스케줄이 없거나 모두 프로젝트 기간/날짜에 포함되지 않는 경우
+        if (newScheduleData.schedule.length === 0) {
+            console.log('Post/Update Schedule data empty');
+            setSelection({});
+            onSetIsEditModal();
+            alert('프로젝트 기간에 맞춰 시간표를 작성해주세요!');
+            return;
+        }
+
+        try {
+            if (scheduleData && scheduleData.schedule.length > 0) {
+                await putSchedule(newScheduleData);
+            } else {
+                await postSchedule(newScheduleData);
+            }
+            setSelection({});
+            onSetIsEditModal();
+        } catch (error) {
+            console.error('Error post/update schedule:', error);
+        }
+    };
+
+    useScrollLock(isEditModal);
+
+    const handleCloseModal = () => {
+        setSelection({});
+        onSetIsEditModal();
+    };
+
+    return (
+        <>
+            {isEditModal && (
+                <ModalPortal>
+                    <ModalBlackOut onClick={handleCloseModal} />
+                    <ModalContainer>
+                        <Box>
+                            <Title>나의 시간표</Title>
+                            <EditMyTime
+                                weekDates={weekDates || []}
+                                selection={selection}
+                                onSelectionChange={(newSelection) => setSelection(newSelection)}
+                            />
+                        </Box>
+                        <ConfirmBtn onClick={handleConfirm}>시간표 등록하기</ConfirmBtn>
+                    </ModalContainer>
+                </ModalPortal>
+            )}
+        </>
+    );
+};
+export default EditMySchedule;
 
 const ModalBlackOut = styled.div`
     width: 100%;
@@ -97,175 +229,3 @@ const ConfirmBtn = styled.button`
         outline: none;
     }
 `;
-
-interface SelectedSlot {
-    date: string;
-    hour: number;
-    minute: number;
-}
-
-interface ScheduleData {
-    schedule: {
-        schedule: {
-            startTime: string;
-            endTime: string;
-        }[];
-    }[];
-}
-
-interface EditMyScheduleProps {
-    isEditModal: boolean;
-    onSetIsEditModal: () => void;
-    scheduleData: ScheduleWeekResponse | null;
-    fetchSchedule: () => Promise<void>;
-}
-
-const EditMySchedule: React.FC<EditMyScheduleProps> = ({
-    isEditModal,
-    onSetIsEditModal,
-    scheduleData,
-    fetchSchedule,
-}) => {
-    const { projectData } = useContext(ProjectContext);
-    const startDateString = projectData?.startDate;
-    const endDateString = projectData?.endDate;
-    const startTimeString = projectData?.startTime;
-    const endTimeString = projectData?.endTime;
-    const dayOfWeek = projectData?.daysOfWeek;
-
-    const startDateTime =
-        startDateString && startTimeString
-            ? new Date(`${startDateString}T${startTimeString}`)
-            : undefined;
-
-    const endDateTime =
-        endDateString && endTimeString ? new Date(`${endDateString}T${endTimeString}`) : undefined;
-
-    const projectStartTime = startDateTime ? startDateTime.getHours() : undefined;
-    const projectEndTime = endDateTime ? endDateTime.getHours() : undefined;
-
-    const { projectId } = useParams<{ projectId: string }>();
-    const { weekDates } = useContext(DateContext) || {};
-    const [selection, setSelection] = useState<{ [key: number]: SelectedSlot }>({});
-
-    const postSchedule = async (scheduleData: ScheduleData) => {
-        const accessToken = localStorage.getItem('access_token');
-        try {
-            const response = await fetch(Http + `/v1/projects/${projectId}/schedules`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${accessToken}`,
-                },
-                body: JSON.stringify(scheduleData),
-            });
-
-            if (!response.ok) {
-                throw new Error('Failed to post the schedule');
-            }
-
-            const jsonResponse = await response.json();
-            console.log('my Schedule post:', jsonResponse);
-        } catch (error) {
-            console.error('Error posting schedule:', error);
-        }
-    };
-
-    const putSchedule = async (scheduleData: ScheduleData) => {
-        const accessToken = localStorage.getItem('access_token');
-        try {
-            const response = await fetch(Http + `/v1/projects/${projectId}/schedules`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${accessToken}`,
-                },
-                body: JSON.stringify(scheduleData),
-            });
-
-            if (!response.ok) {
-                throw new Error('Failed to update the schedule');
-            }
-
-            const jsonResponse = await response.json();
-            console.log('my Schedule updated:', jsonResponse);
-            console.log(scheduleData);
-        } catch (error) {
-            console.error('Error updating schedule:', error);
-        }
-    };
-
-    const handleConfirm = async () => {
-        const projectStartDate = projectData?.startDate;
-        const projectEndDate = projectData?.endDate;
-
-        const projectStartDateString = projectStartDate
-            ? new Date(projectStartDate).toISOString().slice(0, 10)
-            : undefined;
-        const projectEndDateString = projectEndDate
-            ? new Date(projectEndDate).toISOString().slice(0, 10)
-            : undefined;
-
-        const newScheduleData = formatScheduleData(
-            selection,
-            projectStartTime,
-            projectEndTime,
-            dayOfWeek,
-            projectStartDateString,
-            projectEndDateString
-        );
-        console.log(`schedule 수정 : ${JSON.stringify(newScheduleData)}`);
-
-        // 선택한 스케줄이 없거나 모두 프로젝트 기간/날짜에 포함되지 않는 경우
-        if (newScheduleData.schedule.length === 0) {
-            console.log('Post/Update Schedule data empty');
-            setSelection({});
-            onSetIsEditModal();
-            alert('프로젝트 기간에 맞춰 시간표를 작성해주세요!');
-            return;
-        }
-
-        try {
-            if (scheduleData && scheduleData.schedule.length > 0) {
-                await putSchedule(newScheduleData);
-            } else {
-                await postSchedule(newScheduleData);
-            }
-            setSelection({});
-            onSetIsEditModal();
-            fetchSchedule(); // 일정 등록/수정 후에 fetchSchedule 함수를 호출합니다.
-        } catch (error) {
-            console.error('Error post/update schedule:', error);
-        }
-    };
-
-    useScrollLock(isEditModal);
-
-    const handleCloseModal = () => {
-        setSelection({});
-        onSetIsEditModal();
-    };
-
-    return (
-        <>
-            {isEditModal && (
-                <ModalPortal>
-                    <ModalBlackOut onClick={handleCloseModal} />
-                    <ModalContainer>
-                        <Box>
-                            <Title>나의 시간표</Title>
-                            <EditMyTime
-                                weekDates={weekDates || []}
-                                selection={selection}
-                                onSelectionChange={(newSelection) => setSelection(newSelection)}
-                            />
-                        </Box>
-                        <ConfirmBtn onClick={handleConfirm}>시간표 등록하기</ConfirmBtn>
-                    </ModalContainer>
-                </ModalPortal>
-            )}
-        </>
-    );
-};
-
-export default EditMySchedule;

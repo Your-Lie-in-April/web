@@ -1,5 +1,5 @@
-import { getPinProject } from '#/apis/project';
-import { QUERY_KEY } from '#/constants/queryKey';
+import { getPinProject } from '@apis/project';
+import { QUERY_KEY } from '@constants/queryKey';
 import { useQuery } from '@tanstack/react-query';
 
 /**

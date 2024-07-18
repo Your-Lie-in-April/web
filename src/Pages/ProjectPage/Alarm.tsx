@@ -1,8 +1,8 @@
-import { Http } from '#/constants/urls';
-import useDeleteAlarmMutation from '#/hooks/apis/mutations/alarm/useDeleteAlarmMutation';
-import useAlarmProjectQuery from '#/hooks/apis/queries/alarm/useAlarmProjectQuery';
-import ConfirmDeleteAlarm from '#/Pages/Modal/project/ConfirmDeleteAlarm';
-import { AlarmEntity } from '#/types/alarmType';
+import { Http } from '@constants/urls';
+import useDeleteAlarmMutation from '@hooks/apis/mutations/alarm/useDeleteAlarmMutation';
+import useAlarmProjectQuery from '@hooks/apis/queries/alarm/useAlarmProjectQuery';
+import ConfirmDeleteAlarm from '@Pages/Modal/project/ConfirmDeleteAlarm';
+import { AlarmEntity } from '@/types/alarmType';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import { EventSourcePolyfill, NativeEventSource } from 'event-source-polyfill';
 import { FC, useEffect, useMemo, useState } from 'react';

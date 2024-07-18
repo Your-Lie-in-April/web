@@ -1,6 +1,6 @@
-import { getProjectMembers } from '#/apis/project';
-import { QUERY_KEY } from '#/constants/queryKey';
-import { ProjectMemberResDto } from '#/types/projectType';
+import { getProjectMembers } from '@apis/project';
+import { QUERY_KEY } from '@constants/queryKey';
+import { ProjectMemberResDto } from '@/types/projectType';
 import { QueryKey, useQuery, UseQueryOptions } from '@tanstack/react-query';
 
 /**
@@ -19,8 +19,9 @@ const useProjectMemberQuery = (
     }
 ) => {
     return useQuery<ProjectMemberResDto, Error>({
-        queryKey: QUERY_KEY.PROJECT_ID(projectId),
+        queryKey: QUERY_KEY.MEMBER_ALL_PROJECT(projectId),
         queryFn: () => getProjectMembers(projectId),
+        gcTime: 0,
         ...options,
     });
 };

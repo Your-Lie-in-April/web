@@ -1,7 +1,7 @@
-import { getAlarmAll } from '#/apis/alarm';
-import { QUERY_KEY } from '#/constants/queryKey';
-import { AlarmAllResDto } from '#/types/alarmType';
+import { getAlarmAll } from '@apis/alarm';
+import { QUERY_KEY } from '@constants/queryKey';
 import { useInfiniteQuery } from '@tanstack/react-query';
+import { AlarmAllResDto } from '@/types/alarmType';
 
 /**
  * GET /v1/notifications

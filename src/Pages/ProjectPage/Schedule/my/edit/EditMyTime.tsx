@@ -1,49 +1,8 @@
-import { ProjectContext } from '#/hooks/context/projectContext';
+import { ProjectContext } from '@hooks/context/projectContext';
 import dayjs from 'dayjs';
 import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { TimeSlotLeft, TimeSlotRight } from './EditMyTimeCircle';
-
-const CommonText = styled.div`
-    color: #000000;
-    text-align: center;
-    font-family: Pretendard;
-    font-size: 18px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: normal;
-`;
-
-const TimeTableDiv = styled.div`
-    width: 100%;
-    height: 325.17px;
-    display: flex;
-    flex-direction: column;
-`;
-
-const TimeList = styled.div`
-    width: 100%;
-    height: 325.17px;
-    display: flex;
-    justify-content: center;
-`;
-
-const DayTextList = styled.div`
-    height: 290.76px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    align-items: center;
-    margin-top: 10px;
-`;
-
-const HourTextList = styled.div`
-    display: flex;
-    gap: 14px;
-    align-items: center;
-    justify-content: flex-end;
-    margin-right: 55px;
-`;
 
 const HoursOfDay = [...Array(15).keys()].map((_, index) => index + 9);
 
@@ -61,9 +20,7 @@ const isProjectHour = (
     projectEndTime: string | undefined
 ) => {
     if (projectStartTime !== undefined && projectEndTime !== undefined) {
-        const [startHour, startMinute] = projectStartTime
-            .split(':')
-            .map(Number);
+        const [startHour, startMinute] = projectStartTime.split(':').map(Number);
         const [endHour, endMinute] = projectEndTime.split(':').map(Number);
 
         const slotDateTime = new Date(date);
@@ -75,10 +32,7 @@ const isProjectHour = (
         const projectEndDateTime = new Date(date);
         projectEndDateTime.setHours(endHour, endMinute);
 
-        return (
-            slotDateTime >= projectStartDateTime &&
-            slotDateTime < projectEndDateTime
-        );
+        return slotDateTime >= projectStartDateTime && slotDateTime < projectEndDateTime;
     }
     return false;
 };
@@ -89,11 +43,7 @@ interface EditMyTimeProps {
     onSelectionChange: (newSelection: { [key: number]: SelectedSlot }) => void;
 }
 
-const EditMyTime: React.FC<EditMyTimeProps> = ({
-    weekDates,
-    selection,
-    onSelectionChange,
-}) => {
+const EditMyTime: React.FC<EditMyTimeProps> = ({ weekDates, selection, onSelectionChange }) => {
     const { projectData } = useContext(ProjectContext);
 
     const startTimeString = projectData?.startTime?.toString();
@@ -103,17 +53,11 @@ const EditMyTime: React.FC<EditMyTimeProps> = ({
     const projectEndTime = endTimeString;
 
     const [firstClickSlot, setFirstClickSlot] = useState<number>(0);
-    const [firstClickSlotState, setFirstClickSlotState] =
-        useState<boolean>(false);
+    const [firstClickSlotState, setFirstClickSlotState] = useState<boolean>(false);
     const [isMouseDown, setIsMouseDown] = useState<boolean>(false);
 
     // 셀 마우스 클릭시
-    const handleMouseClick = (
-        id: number,
-        date: string,
-        hour: number,
-        minute: number
-    ) => {
+    const handleMouseClick = (id: number, date: string, hour: number, minute: number) => {
         const isWithinProjectTime = isProjectHour(
             date,
             hour,
@@ -141,12 +85,7 @@ const EditMyTime: React.FC<EditMyTimeProps> = ({
     };
 
     // 마우스가 셀 안에 들어올 경우 (드래그시)
-    const handleMouseEnter = (
-        id: number,
-        date: string,
-        hour: number,
-        minute: number
-    ) => {
+    const handleMouseEnter = (id: number, date: string, hour: number, minute: number) => {
         if (isMouseDown) {
             const isWithinProjectTime = isProjectHour(
                 date,
@@ -195,10 +134,7 @@ const EditMyTime: React.FC<EditMyTimeProps> = ({
                 <div style={{ display: 'flex', flexDirection: 'row' }}>
                     <DayTextList>
                         {weekDates.map((date, idx) => (
-                            <CommonText
-                                key={idx}
-                                style={{ lineHeight: '32.11px' }}
-                            >
+                            <CommonText key={idx} style={{ lineHeight: '32.11px' }}>
                                 {dayjs(date).format('ddd').toLocaleUpperCase()}
                             </CommonText>
                         ))}
@@ -230,25 +166,15 @@ const EditMyTime: React.FC<EditMyTimeProps> = ({
                                         <React.Fragment key={hourIdx}>
                                             <TimeSlotLeft
                                                 id={slotIdLeft}
-                                                projectStartTime={
-                                                    projectStartTime
-                                                }
+                                                projectStartTime={projectStartTime}
                                                 projectEndTime={projectEndTime}
                                                 onSelectSlot={handleMouseClick}
                                                 onMouseEnter={() =>
-                                                    handleMouseEnter(
-                                                        slotIdLeft,
-                                                        date,
-                                                        hour,
-                                                        0
-                                                    )
+                                                    handleMouseEnter(slotIdLeft, date, hour, 0)
                                                 }
                                                 isSelected={
-                                                    isSlotSelected(
-                                                        slotIdLeft
-                                                    ) ||
-                                                    firstClickSlot ===
-                                                        slotIdLeft
+                                                    isSlotSelected(slotIdLeft) ||
+                                                    firstClickSlot === slotIdLeft
                                                 }
                                                 date={date}
                                                 hour={hour}
@@ -256,25 +182,15 @@ const EditMyTime: React.FC<EditMyTimeProps> = ({
                                             />
                                             <TimeSlotRight
                                                 id={slotIdRight}
-                                                projectStartTime={
-                                                    projectStartTime
-                                                }
+                                                projectStartTime={projectStartTime}
                                                 projectEndTime={projectEndTime}
                                                 onSelectSlot={handleMouseClick}
                                                 onMouseEnter={() =>
-                                                    handleMouseEnter(
-                                                        slotIdRight,
-                                                        date,
-                                                        hour,
-                                                        30
-                                                    )
+                                                    handleMouseEnter(slotIdRight, date, hour, 30)
                                                 }
                                                 isSelected={
-                                                    isSlotSelected(
-                                                        slotIdRight
-                                                    ) ||
-                                                    firstClickSlot ===
-                                                        slotIdRight
+                                                    isSlotSelected(slotIdRight) ||
+                                                    firstClickSlot === slotIdRight
                                                 }
                                                 date={date}
                                                 hour={hour}
@@ -291,5 +207,45 @@ const EditMyTime: React.FC<EditMyTimeProps> = ({
         </TimeTableDiv>
     );
 };
-
 export default EditMyTime;
+
+const CommonText = styled.div`
+    color: #000000;
+    text-align: center;
+    font-family: Pretendard;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+`;
+
+const TimeTableDiv = styled.div`
+    width: 100%;
+    height: 325.17px;
+    display: flex;
+    flex-direction: column;
+`;
+
+const TimeList = styled.div`
+    width: 100%;
+    height: 325.17px;
+    display: flex;
+    justify-content: center;
+`;
+
+const DayTextList = styled.div`
+    height: 290.76px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+    margin-top: 10px;
+`;
+
+const HourTextList = styled.div`
+    display: flex;
+    gap: 14px;
+    align-items: center;
+    justify-content: flex-end;
+    margin-right: 55px;
+`;

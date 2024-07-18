@@ -1,4 +1,4 @@
-import { ScheduleAllMembersResDto, ScheduleItem } from '#/types/scheduleType';
+import { ScheduleAllMembersResDto, ScheduleItem } from '@/types/scheduleType';
 import React from 'react';
 import PinnedTimeBar from './PinnedTimeBar';
 

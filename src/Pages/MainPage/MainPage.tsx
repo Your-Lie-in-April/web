@@ -1,20 +1,21 @@
-import useProjectMainQuery from '#/hooks/apis/queries/project/useProjectMainQuery';
-import { useMainPaginationMutation } from '#/hooks/useMainPaginationMutation';
-import { ProjectThumbnailResponse } from '#/types/projectType';
-import { memberId } from '#/utils/token';
+import useProjectMainQuery from '@hooks/apis/queries/project/useProjectMainQuery';
+import { useMainPaginationMutation } from '@hooks/useMainPaginationMutation';
+import AfterLogin from '@Pages/layouts/AfterLogin';
+import BeforeLogin from '@Pages/layouts/BeforeLogin';
+import Search from '@Pages/layouts/Search';
+
+import { ProjectThumbnailResponse } from '@/types/projectType';
+import { memberId } from '@utils/token';
 import { FC, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import styled, { createGlobalStyle } from 'styled-components';
-import AfterLogin from '../Layouts/AfterLogin';
-import BeforeLogin from '../Layouts/BeforeLogin';
-import Search from '../Layouts/Search';
-import Alarm from './components/Alarm';
 import Banner from './components/Banner';
 import Pinned from './components/pinned/Pinned';
 import Profile from './components/Profile';
 import NewProject from './components/projects/NewProject';
 import Pagination from './components/projects/Pagination';
 import ProjectList from './components/projects/ProjectList';
+import Alarm from './components/Alarm';
 
 const GlobalStyle = createGlobalStyle`
   body {

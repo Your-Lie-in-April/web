@@ -1,6 +1,7 @@
+import { putSchedule } from '@apis/schedule';
+import { QUERY_KEY } from '@constants/queryKey';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { QUERY_KEY } from '#/constants/queryKey';
-import { putSchedule } from '#/apis/schedule';
+import { ScheduleData } from '@/types/scheduleType';
 
 /**
  * PUT projects/{projectId}/schedules
@@ -10,13 +11,13 @@ import { putSchedule } from '#/apis/schedule';
 const usePutScheduleMutation = (projectId: number) => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: () => putSchedule(projectId),
+        mutationFn: (scheduleData: ScheduleData) => putSchedule(projectId, scheduleData),
         onSuccess: () => {
             void queryClient.invalidateQueries({
-                queryKey: QUERY_KEY.SCHEDULE_PROJECT(projectId),
+                queryKey: QUERY_KEY.SCHEDULE,
             });
         },
     });
 };
 
-export default usePutScheduleMutation
+export default usePutScheduleMutation;

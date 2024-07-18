@@ -47,9 +47,7 @@ const ConfirmCopyLink = () => {
         }
     }, [opacity]);
 
-    return (
-        <Container opacity={opacity}>프로젝트 링크가 복사되었습니다</Container>
-    );
+    return <Container opacity={opacity}>프로젝트 링크가 복사되었습니다</Container>;
 };
 
 export default ConfirmCopyLink;

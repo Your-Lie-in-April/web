@@ -1,24 +1,19 @@
-import { baseUrl } from '#/constants/urls';
-import usePostLinkMutation from '#/hooks/apis/mutations/project/usePostLinkMutation';
-import { useInvitationContext } from '#/hooks/context/invitationContext';
-import { ProjectEntity } from '#/types/projectType';
-import ModalPortal from '#/utils/ModalPotal';
-import useScrollLock from '#/utils/useScrollLock';
+import { baseUrl } from '@constants/urls';
+import usePostLinkMutation from '@hooks/apis/mutations/project/usePostLinkMutation';
+import { useInvitationContext } from '@hooks/context/invitationContext';
+import { useProjectContext } from '@hooks/context/projectContext';
+import ModalPortal from '@utils/ModalPotal';
+import useScrollLock from '@utils/useScrollLock';
 import { useState } from 'react';
+import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import ConfirmCopyLink from './ConfirmCopyLink';
 
 interface InvitationLinkModalProps {
-    projectId: string | undefined;
-    projectData: ProjectEntity | null;
     toggleBtn: () => void;
 }
 
-const InvitationLinkModal: React.FC<InvitationLinkModalProps> = ({
-    projectData,
-    projectId,
-    toggleBtn,
-}) => {
+const InvitationLinkModal: React.FC<InvitationLinkModalProps> = ({ toggleBtn }) => {
     const { invitationLink, setInvitationLink } = useInvitationContext();
     const [link, setLink] = useState<string>('');
     const [isModalOpen, setIsModalOpen] = useState<boolean>(true);
@@ -27,6 +22,9 @@ const InvitationLinkModal: React.FC<InvitationLinkModalProps> = ({
     const [showConfirmCopyLink, setShowConfirmCopyLink] = useState<boolean>(false);
     const [isModalCompleteHidden, setIsModalCompleteHidden] = useState<boolean>(false);
 
+    const { projectData } = useProjectContext();
+
+    const { projectId } = useParams();
     const { mutate } = usePostLinkMutation(Number(projectId));
     const makeInvitation = () => {
         mutate(undefined, {

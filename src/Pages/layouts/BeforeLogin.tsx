@@ -2,6 +2,23 @@ import { FC } from 'react';
 import { useNavigate } from 'react-router';
 import styled from 'styled-components';
 
+const BeforeLogin: FC = () => {
+    const navigate = useNavigate();
+    const handleLoginClick = () => {
+        navigate('/login');
+    };
+    return (
+        <BeforeLoginDiv>
+            <div style={{ justifyContent: 'flex-start', flexBasis: '20%' }} />
+            <Logo onClick={() => navigate('/')}>TIME PIECE</Logo>
+            <LogInDiv>
+                <LogInBtn onClick={handleLoginClick}>Log in</LogInBtn>
+            </LogInDiv>
+        </BeforeLoginDiv>
+    );
+};
+export default BeforeLogin;
+
 const BeforeLoginDiv = styled.div`
     width: 100%;
     height: 100px;
@@ -49,20 +66,3 @@ const LogInBtn = styled.button`
         outline: none;
     }
 `;
-
-const BeforeLogin: FC = () => {
-    const navigate = useNavigate();
-    const handleLoginClick = () => {
-        navigate('/login');
-    };
-    return (
-        <BeforeLoginDiv>
-            <div style={{ justifyContent: 'flex-start', flexBasis: '20%' }} />
-            <Logo onClick={() => navigate('/')}>TIME PIECE</Logo>
-            <LogInDiv>
-                <LogInBtn onClick={handleLoginClick}>Log in</LogInBtn>
-            </LogInDiv>
-        </BeforeLoginDiv>
-    );
-};
-export default BeforeLogin;

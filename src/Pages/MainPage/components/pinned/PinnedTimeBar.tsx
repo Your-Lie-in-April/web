@@ -1,4 +1,4 @@
-import { ScheduleItem } from '#/types/scheduleType';
+import { ScheduleItem } from '@/types/scheduleType';
 import React from 'react';
 
 interface PinnedTimeBarProps {

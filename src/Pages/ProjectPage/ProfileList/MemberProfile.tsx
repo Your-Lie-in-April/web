@@ -1,66 +1,11 @@
-import DeleteMember from '#/Pages/Modal/project/DeleteMember';
-import { MemberEntity } from '#/types/memberType';
+import DeleteMember from '@Pages/Modal/project/DeleteMember';
+import { MemberEntity } from '@/types/memberType';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import { useState } from 'react';
 import styled from 'styled-components';
 
-const MemberProfileBox = styled.div`
-    width: 100%;
-    height: 52px;
-    padding: 3px 4px;
-    box-sizing: border-box;
-    border-radius: 40px;
-    background: #ffffff;
-`;
-
-const MemberProfileDiv = styled.div`
-    width: 254px;
-    display: flex;
-    flex-direction: row;
-    gap: 8px;
-
-    position: relative;
-`;
-
-const MemberImg = styled.div`
-    width: 46px;
-    height: 46px;
-    border-radius: 50%;
-    background: #d9d9d9;
-    box-sizing: border-box;
-    overflow: hidden;
-`;
-
-const StyledImage = styled.img`
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-`;
-
-const CommonText = styled.div`
-    color: #000000;
-    font-family: Pretendard;
-    font-size: 13px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: normal;
-`;
-
-const DeleteBtn = styled(RemoveCircleOutlineIcon)`
-    width: 24px;
-    height: 24px;
-    color: #d9d9d9;
-    align-self: center;
-
-    position: absolute;
-    right: 5px;
-
-    &:hover {
-        color: #eb5757;
-        cursor: pointer;
-    }
-`;
 const defaultImg = 'src/pics/default.png';
+
 const MemberProfile = ({
     showDeleteBtn,
     member,
@@ -89,39 +34,13 @@ const MemberProfile = ({
                         />
                     </MemberImg>
 
-                    <div
-                        style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            gap: '7px',
-                            justifyContent: 'center',
-                        }}
-                    >
-                        <CommonText
-                            style={{
-                                maxWidth: '196px',
-                                fontSize: '14px',
-                                overflow: 'hidden',
-                                whiteSpace: 'nowrap',
-                                textOverflow: 'ellipsis',
-                            }}
-                        >
+                    <TextContainer>
+                        <NicknameText>
                             {member?.nickname}
                             {isCurrentUser ? '(본인)' : ''}
-                        </CommonText>
-                        <CommonText
-                            style={{
-                                fontSize: '10px',
-                                fontWeight: '400',
-                                maxWidth: '196px',
-                                overflow: 'hidden',
-                                whiteSpace: 'nowrap',
-                                textOverflow: 'ellipsis',
-                            }}
-                        >
-                            {member?.state}
-                        </CommonText>
-                    </div>
+                        </NicknameText>
+                        <StateText>{member?.state}</StateText>
+                    </TextContainer>
                     <DeleteBtn
                         style={{
                             display: showDeleteBtn ? 'block' : 'none',
@@ -140,5 +59,83 @@ const MemberProfile = ({
         </>
     );
 };
-
 export default MemberProfile;
+
+const MemberProfileBox = styled.div`
+    width: 100%;
+    height: 52px;
+    padding: 3px 4px;
+    box-sizing: border-box;
+    border-radius: 40px;
+    background: #ffffff;
+`;
+
+const MemberProfileDiv = styled.div`
+    width: 254px;
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    position: relative;
+`;
+
+const MemberImg = styled.div`
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: #d9d9d9;
+    box-sizing: border-box;
+    overflow: hidden;
+`;
+
+const StyledImage = styled.img`
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+`;
+
+const TextContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    justify-content: center;
+`;
+
+const NicknameText = styled.div`
+    max-width: 196px;
+    color: #000000;
+    font-family: Pretendard;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+`;
+
+const StateText = styled.div`
+    max-width: 196px;
+    color: #000000;
+    font-family: Pretendard;
+    font-size: 10px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+`;
+
+const DeleteBtn = styled(RemoveCircleOutlineIcon)`
+    width: 24px;
+    height: 24px;
+    color: #d9d9d9;
+    align-self: center;
+    position: absolute;
+    right: 5px;
+
+    &:hover {
+        color: #eb5757;
+        cursor: pointer;
+    }
+`;

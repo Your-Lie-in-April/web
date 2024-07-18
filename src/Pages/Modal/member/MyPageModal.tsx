@@ -1,10 +1,97 @@
-import { useUserContext } from '#/hooks/context/userContext';
+import { useUserContext } from '@hooks/context/userContext';
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import ChangeStatus from './ChangeStatus';
+
+interface MyPageModalProps {
+    onSetIsMyPageModal: () => void;
+    onSetIsLogout: () => void;
+}
+
+const MyPageModal: React.FC<MyPageModalProps> = ({ onSetIsMyPageModal, onSetIsLogout }) => {
+    const [editStatusModal, setEditStatusModal] = useState(false);
+    const { userData } = useUserContext();
+
+    const onSetEditStatusModal = () => {
+        setEditStatusModal((prev) => !prev);
+    };
+
+    const navigate = useNavigate();
+    const handlemyproject = () => {
+        navigate('/myproject');
+    };
+
+    return (
+        <>
+            <Box>
+                <CloseButton onClick={onSetIsMyPageModal}>
+                    <StyleCloseIconBtn sx={{ fontSize: '24px' }} />
+                </CloseButton>
+                <div
+                    style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        gap: '8px',
+                    }}
+                >
+                    <MyImg>
+                        <StyledImage src={userData?.profileImageUrl} />
+                    </MyImg>
+                    <MyEmailText>{userData?.email}</MyEmailText>
+                </div>
+                <StatusBox>
+                    {userData?.state ? (
+                        <>
+                            <div
+                                style={{
+                                    justifyContent: 'flex-start',
+                                    flexBasis: '10%',
+                                }}
+                            />
+                            <StatusText>{userData.state}</StatusText>
+                        </>
+                    ) : (
+                        <>
+                            <div
+                                style={{
+                                    justifyContent: 'flex-start',
+                                    flexBasis: '0%',
+                                }}
+                            />
+                            <NoStatusText>상태 메시지 등록이 되어있지 않습니다</NoStatusText>
+                        </>
+                    )}
+                    <EditButton onClick={onSetEditStatusModal}>
+                        <EditIcon />
+                    </EditButton>
+                </StatusBox>
+                <StorageBtn onClick={handlemyproject}>프로젝트 보관함</StorageBtn>
+                <LogoutBtn onClick={onSetIsLogout}>
+                    <LogoutOutlinedIcon
+                        sx={{
+                            color: '#A4A4A4',
+                            fontSize: '10px',
+                            width: '10px',
+                            height: '10px',
+                            padding: '1px',
+                            boxSizing: 'border-box',
+                        }}
+                    />
+                    로그아웃
+                </LogoutBtn>
+            </Box>
+            <ChangeStatus
+                onSetEditStatusModal={onSetEditStatusModal}
+                editStatusModal={editStatusModal}
+            />
+        </>
+    );
+};
+export default MyPageModal;
 
 const Box = styled.div`
     width: 300px;
@@ -182,90 +269,3 @@ const LogoutBtn = styled.div`
 
     cursor: pointer;
 `;
-
-interface MyPageModalProps {
-    onSetIsMyPageModal: () => void;
-    onSetIsLogout: () => void;
-}
-
-const MyPageModal: React.FC<MyPageModalProps> = ({ onSetIsMyPageModal, onSetIsLogout }) => {
-    const [editStatusModal, setEditStatusModal] = useState(false);
-    const { userData } = useUserContext();
-
-    const onSetEditStatusModal = () => {
-        setEditStatusModal((prev) => !prev);
-    };
-
-    const navigate = useNavigate();
-    const handlemyproject = () => {
-        navigate('/myproject');
-    };
-
-    return (
-        <>
-            <Box>
-                <CloseButton onClick={onSetIsMyPageModal}>
-                    <StyleCloseIconBtn sx={{ fontSize: '24px' }} />
-                </CloseButton>
-                <div
-                    style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                        gap: '8px',
-                    }}
-                >
-                    <MyImg>
-                        <StyledImage src={userData?.profileImageUrl} />
-                    </MyImg>
-                    <MyEmailText>{userData?.email}</MyEmailText>
-                </div>
-                <StatusBox>
-                    {userData?.state ? (
-                        <>
-                            <div
-                                style={{
-                                    justifyContent: 'flex-start',
-                                    flexBasis: '10%',
-                                }}
-                            />
-                            <StatusText>{userData.state}</StatusText>
-                        </>
-                    ) : (
-                        <>
-                            <div
-                                style={{
-                                    justifyContent: 'flex-start',
-                                    flexBasis: '0%',
-                                }}
-                            />
-                            <NoStatusText>상태 메시지 등록이 되어있지 않습니다</NoStatusText>
-                        </>
-                    )}
-                    <EditButton onClick={onSetEditStatusModal}>
-                        <EditIcon />
-                    </EditButton>
-                </StatusBox>
-                <StorageBtn onClick={handlemyproject}>프로젝트 보관함</StorageBtn>
-                <LogoutBtn onClick={onSetIsLogout}>
-                    <LogoutOutlinedIcon
-                        sx={{
-                            color: '#A4A4A4',
-                            fontSize: '10px',
-                            width: '10px',
-                            height: '10px',
-                            padding: '1px',
-                            boxSizing: 'border-box',
-                        }}
-                    />
-                    로그아웃
-                </LogoutBtn>
-            </Box>
-            <ChangeStatus
-                onSetEditStatusModal={onSetEditStatusModal}
-                editStatusModal={editStatusModal}
-            />
-        </>
-    );
-};
-export default MyPageModal;

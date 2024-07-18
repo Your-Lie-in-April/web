@@ -1,12 +1,80 @@
-import { Http } from '#/constants/urls';
-import { MemberEntity } from '#/types/memberType';
-import ModalPortal from '#/utils/ModalPotal';
-import useScrollLock from '#/utils/useScrollLock';
+import useDeleteProjectMemberMutation from '@hooks/apis/mutations/project/useDeleteProjectMemberMutation';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+import { MemberEntity } from '@/types/memberType';
+import ModalPortal from '@utils/ModalPotal';
+import useScrollLock from '@utils/useScrollLock';
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { ModalBlackOut, ModalContainer } from '../ModalCommon';
+
+interface DeleteMemberProps {
+    deleteMemModal: boolean;
+    onSetDeleteMemModal: () => void;
+    member: MemberEntity;
+}
+
+const DeleteMember: React.FC<DeleteMemberProps> = ({
+    deleteMemModal,
+    onSetDeleteMemModal,
+    member,
+}) => {
+    useScrollLock(deleteMemModal);
+    const { projectId } = useParams<{ projectId: string }>();
+
+    const { mutate } = useDeleteProjectMemberMutation(Number(projectId), Number(member?.memberId));
+
+    const handleDeleteMember = () => {
+        if (member.memberId) {
+            mutate();
+        }
+        onSetDeleteMemModal();
+    };
+
+    return (
+        <>
+            {deleteMemModal && (
+                <ModalPortal>
+                    <ModalBlackOut onClick={onSetDeleteMemModal} />
+                    <ModalContainer>
+                        <Box>
+                            <div
+                                style={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'center',
+                                    gap: '12px',
+                                    width: '100%',
+                                    height: '100%',
+                                }}
+                            >
+                                <div
+                                    style={{
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        alignItems: 'center',
+                                        gap: '10px',
+                                        width: '100%',
+                                        height: '100%',
+                                    }}
+                                >
+                                    <InfoCircleIcon sx={{ fontSize: '32px' }} />
+                                    <MemberNick>{member?.nickname}</MemberNick>
+                                    <Title>프로젝트에서 내보내겠습니까?</Title>
+                                </div>
+                                <ButtonsContainer style={{ alignSelf: 'flex-end' }}>
+                                    <ConfirmBtn onClick={handleDeleteMember}>확인</ConfirmBtn>
+                                    <CancelBtn onClick={onSetDeleteMemModal}>취소</CancelBtn>
+                                </ButtonsContainer>
+                            </div>
+                        </Box>
+                    </ModalContainer>
+                </ModalPortal>
+            )}
+        </>
+    );
+};
+export default DeleteMember;
 
 const Box = styled.div`
     width: 406px;
@@ -51,8 +119,8 @@ const Button = styled.button`
     justify-content: center;
     align-items: center;
     gap: 8px;
-    border-radius: 20px;
-    font-family: Pretendard;
+    border-radius: '20px';
+    font-family: 'Pretendard';
     font-size: 13px;
     font-weight: 500;
     line-height: normal;
@@ -78,88 +146,3 @@ const ButtonsContainer = styled.div`
     justify-content: flex-end;
     gap: 4px;
 `;
-
-interface DeleteMemberProps {
-    deleteMemModal: boolean;
-    onSetDeleteMemModal: () => void;
-    member: MemberEntity;
-}
-
-const DeleteMember: React.FC<DeleteMemberProps> = ({
-    deleteMemModal,
-    onSetDeleteMemModal,
-    member,
-}) => {
-    useScrollLock(deleteMemModal);
-    const { projectId } = useParams<{ projectId: string }>();
-    const accessToken = localStorage.getItem('access_token');
-    const deleteMember = async () => {
-        try {
-            const response = await fetch(
-                `${Http}/v1/projects/${projectId}/members/${member?.memberId}`,
-                {
-                    method: 'DELETE',
-                    headers: {
-                        Accept: '*/*',
-                        Authorization: `Bearer ${accessToken}`,
-                    },
-                }
-            );
-
-            if (!response.ok) {
-                throw new Error('내보내기 실패');
-            }
-
-            const data = await response.json();
-            console.log('삭제', data.data);
-            window.location.reload();
-        } catch (error) {
-            console.error(error);
-        }
-    };
-
-    return (
-        <>
-            {deleteMemModal && (
-                <ModalPortal>
-                    <ModalBlackOut onClick={onSetDeleteMemModal} />
-                    <ModalContainer>
-                        <Box>
-                            <div
-                                style={{
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    alignItems: 'center',
-                                    gap: '12px',
-                                    width: '100%',
-                                    height: '100%',
-                                }}
-                            >
-                                <div
-                                    style={{
-                                        display: 'flex',
-                                        flexDirection: 'column',
-                                        alignItems: 'center',
-                                        gap: '10px',
-                                        width: '100%',
-                                        height: '100%',
-                                    }}
-                                >
-                                    <InfoCircleIcon sx={{ fontSize: '32px' }} />
-                                    <MemberNick>{member?.nickname}</MemberNick>
-                                    <Title>프로젝트에서 내보내겠습니까?</Title>
-                                </div>
-                                <ButtonsContainer style={{ alignSelf: 'flex-end' }}>
-                                    <ConfirmBtn onClick={deleteMember}>확인</ConfirmBtn>
-                                    <CancelBtn onClick={onSetDeleteMemModal}>취소</CancelBtn>
-                                </ButtonsContainer>
-                            </div>
-                        </Box>
-                    </ModalContainer>
-                </ModalPortal>
-            )}
-        </>
-    );
-};
-
-export default DeleteMember;

@@ -60,24 +60,15 @@ export const formatScheduleData = (
             .minute(slot.minute + 30)
             .format('YYYY-MM-DDTHH:mm:ss');
 
-        const isValidStartTime =
-            projectStartTime !== undefined && slot.hour >= projectStartTime;
-        const isValidEndTime =
-            projectEndTime !== undefined && slot.hour <= projectEndTime;
+        const isValidStartTime = projectStartTime !== undefined && slot.hour >= projectStartTime;
+        const isValidEndTime = projectEndTime !== undefined && slot.hour <= projectEndTime;
         const isValidDate =
             projectStartDate &&
             projectEndDate &&
-            dayjs(slot.date).isBetween(
-                projectStartDate,
-                projectEndDate,
-                'day',
-                '[]'
-            );
+            dayjs(slot.date).isBetween(projectStartDate, projectEndDate, 'day', '[]');
         const isValidDayOfWeek =
             projectDaysOfWeek !== undefined &&
-            projectDaysOfWeek.includes(
-                dayjs(slot.date).format('dddd').toUpperCase()
-            );
+            projectDaysOfWeek.includes(dayjs(slot.date).format('dddd').toUpperCase());
 
         if (
             isValidStartTime &&

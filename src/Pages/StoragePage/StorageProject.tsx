@@ -1,8 +1,8 @@
-import usePatchStoredMutation from '#/hooks/apis/mutations/member/usePatchStoredMutation';
-import { ProjectThumbnailResponse } from '#/types/projectType';
+import usePatchStoredMutation from '@hooks/apis/mutations/member/usePatchStoredMutation';
 import DeleteIcon from '@mui/icons-material/Delete';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
+import { ProjectThumbnailResponse } from '@/types/projectType';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
@@ -77,8 +77,6 @@ const StorageProject = ({ project }: { project: ProjectThumbnailResponse }) => {
 };
 
 export default StorageProject;
-
-
 
 interface ProjectBoxProps {
     $color?: string;

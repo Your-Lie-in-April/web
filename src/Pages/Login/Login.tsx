@@ -1,10 +1,9 @@
-import { Http } from '#/constants/urls';
+import { Http } from '@constants/urls';
+import BeforeLogin from '@Pages/layouts/BeforeLogin';
+import GraphicIcons from '@Pages/StoragePage/Icon/GraphicIcons';
+import googleLogo from '@pics/google-login.svg';
 import { FC, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
 import styled, { createGlobalStyle, keyframes } from 'styled-components';
-import googleLogo from '../../pics/google-logo-9808 1.svg';
-import BeforeLogin from '../Layouts/BeforeLogin';
-import GraphicIcons from './Icon/GraphicIcons';
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -118,14 +117,7 @@ const GoogleLogin = styled.div`
     position: relative;
 `;
 
-function useQuery() {
-    return new URLSearchParams(useLocation().search);
-}
-
 const Login: FC = () => {
-    const query = useQuery();
-    console.log('Current URL:', location.href);
-
     const oAuth = () => {
         window.location.href = Http + '/oauth2/authorization/google';
     };

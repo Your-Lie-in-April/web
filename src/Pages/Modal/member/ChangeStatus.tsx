@@ -1,10 +1,87 @@
-import { useUserContext } from '#/hooks/context/userContext';
-import usePutMemberStatus from '#/hooks/usePutMemberStatus';
-import ModalPortal from '#/utils/ModalPotal';
-import useScrollLock from '#/utils/useScrollLock';
+import usePutMemberStatusMutation from '@hooks/apis/mutations/member/usePutMemberStatusMutation';
+import { useUserContext } from '@hooks/context/userContext';
+import ModalPortal from '@utils/ModalPotal';
+import useScrollLock from '@utils/useScrollLock';
 import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { ModalBlackOut, ModalContainer } from '../ModalCommon';
+
+interface ChangeStatusProps {
+    editStatusModal: boolean;
+    onSetEditStatusModal: () => void;
+}
+
+const ChangeStatus: React.FC<ChangeStatusProps> = ({ editStatusModal, onSetEditStatusModal }) => {
+    const [newState, setNewState] = useState('');
+    const { userData, setUserData } = useUserContext();
+    const { projectId } = useParams();
+
+    const handleStatusChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.value.length <= 25) {
+            setNewState(e.target.value);
+        }
+    };
+
+    const { mutate } = usePutMemberStatusMutation(Number(userData?.memberId), Number(projectId));
+
+    const handleStatusUpdate = async (newStatus: string) => {
+        const status = newStatus.trim();
+        if (status.trim() === '') {
+            alert('상태 메세지를 입력해주세요 👀');
+            return;
+        }
+
+        try {
+            await mutate(status);
+            onSetEditStatusModal();
+        } catch (error) {
+            console.error('상태 메세지 업데이트 실패:', error);
+        }
+    };
+
+    useEffect(() => {
+        if (editStatusModal) {
+            setNewState('');
+        }
+    }, [editStatusModal]);
+
+    useScrollLock(editStatusModal);
+
+    return (
+        <>
+            {editStatusModal && (
+                <ModalPortal>
+                    <ModalBlackOut onClick={onSetEditStatusModal} />
+                    <ModalContainer>
+                        <Box>
+                            <ModalContent>
+                                <ModalHeader>
+                                    <Title>상태메시지를 작성해주세요</Title>
+                                    <InputWrapper>
+                                        <StatusField
+                                            type='text'
+                                            onChange={handleStatusChange}
+                                            maxLength={25}
+                                        />
+                                        <LimitText>{newState.length}/25</LimitText>
+                                    </InputWrapper>
+                                </ModalHeader>
+                                <ButtonsContainer>
+                                    <ConfirmBtn onClick={() => handleStatusUpdate(newState)}>
+                                        확인
+                                    </ConfirmBtn>
+                                    <CancelBtn onClick={onSetEditStatusModal}>취소</CancelBtn>
+                                </ButtonsContainer>
+                            </ModalContent>
+                        </Box>
+                    </ModalContainer>
+                </ModalPortal>
+            )}
+        </>
+    );
+};
+export default ChangeStatus;
 
 const Box = styled.div`
     width: 500px;
@@ -19,6 +96,24 @@ const Box = styled.div`
     box-sizing: border-box;
 `;
 
+const ModalContent = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 19px;
+    width: 100%;
+    height: 100%;
+`;
+
+const ModalHeader = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 31px;
+    width: 100%;
+    height: 100%;
+`;
+
 const Title = styled.span`
     color: #000000;
     font-family: Pretendard;
@@ -26,6 +121,10 @@ const Title = styled.span`
     font-style: normal;
     font-weight: 700;
     line-height: normal;
+`;
+
+const InputWrapper = styled.div`
+    position: relative;
 `;
 
 const StatusField = styled.input`
@@ -51,6 +150,7 @@ const ButtonsContainer = styled.div`
     flex-direction: row;
     justify-content: flex-end;
     gap: 4px;
+    align-self: flex-end;
 `;
 
 const CommonButton = styled.button`
@@ -93,95 +193,3 @@ const LimitText = styled.div`
     bottom: 4px;
     right: 16px;
 `;
-
-interface ChangeStatusProps {
-    editStatusModal: boolean;
-    onSetEditStatusModal: () => void;
-}
-
-const ChangeStatus: React.FC<ChangeStatusProps> = ({ editStatusModal, onSetEditStatusModal }) => {
-    const [newState, setNewState] = useState('');
-    const { userData, setUserData } = useUserContext();
-
-    const handleStatusChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.value.length <= 25) {
-            setNewState(e.target.value);
-        }
-    };
-
-    const { updateStatus } = usePutMemberStatus();
-
-    const handleStatusUpdate = async () => {
-        if (newState.trim() === '') {
-            alert('상태 메세지를 입력해주세요 👀');
-            return;
-        }
-
-        try {
-            const updatedUserData = userData ? { ...userData, state: newState } : null;
-            setUserData(updatedUserData);
-            await updateStatus(newState);
-            onSetEditStatusModal();
-        } catch (error) {
-            console.error('상태 메세지 업데이트 실패:', error);
-        }
-    };
-
-    useEffect(() => {
-        if (editStatusModal) {
-            setNewState('');
-        }
-    }, [editStatusModal]);
-
-    useScrollLock(editStatusModal);
-
-    return (
-        <>
-            {editStatusModal && (
-                <ModalPortal>
-                    <ModalBlackOut onClick={onSetEditStatusModal} />
-                    <ModalContainer>
-                        <Box>
-                            <div
-                                style={{
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    alignItems: 'center',
-                                    gap: '19px',
-                                    width: '100%',
-                                    height: '100%',
-                                }}
-                            >
-                                <div
-                                    style={{
-                                        display: 'flex',
-                                        flexDirection: 'column',
-                                        alignItems: 'center',
-                                        gap: '31px',
-                                        width: '100%',
-                                        height: '100%',
-                                    }}
-                                >
-                                    <Title>상태메시지를 작성해주세요</Title>
-                                    <div style={{ position: 'relative' }}>
-                                        <StatusField
-                                            type='text'
-                                            onChange={handleStatusChange}
-                                            maxLength={25}
-                                        />
-                                        <LimitText>{newState.length}/25</LimitText>{' '}
-                                    </div>
-                                </div>
-                                <ButtonsContainer style={{ alignSelf: 'flex-end' }}>
-                                    <ConfirmBtn onClick={handleStatusUpdate}>확인</ConfirmBtn>
-                                    <CancelBtn onClick={onSetEditStatusModal}>취소</CancelBtn>
-                                </ButtonsContainer>
-                            </div>
-                        </Box>
-                    </ModalContainer>
-                </ModalPortal>
-            )}
-        </>
-    );
-};
-export default ChangeStatus;

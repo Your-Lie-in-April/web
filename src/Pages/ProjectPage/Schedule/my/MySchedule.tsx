@@ -1,13 +1,61 @@
-import { Http } from '#/constants/urls';
-import { DateContext } from '#/hooks/context/dateContext';
-import { useUserContext } from '#/hooks/context/userContext';
-import { ScheduleWeekResponse } from '#/types/scheduleType';
+import useScheduleMemberQuery from '@hooks/apis/queries/schedule/useScheduleMemberQuery';
+import { DateContext } from '@hooks/context/dateContext';
 import dayjs from 'dayjs';
-import { useCallback, useContext, useEffect, useState } from 'react';
+import { useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import EditMySchedule from './edit/EditMySchedule';
 import MyTime from './MyTime';
+
+interface MyScheduleProps {
+    isEditModal: boolean;
+    setIsEditModal: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const MySchedule: React.FC<MyScheduleProps> = ({ isEditModal, setIsEditModal }) => {
+    const onSetIsEditModal = () => {
+        setIsEditModal((prevState) => !prevState);
+    };
+
+    const memberId = Number(localStorage.getItem('member_id'));
+    const { projectId } = useParams();
+
+    const date = useContext(DateContext);
+    const condition = dayjs(date?.selectedDate).format('YYYY-MM-DD') ?? '';
+
+    const { data: scheduleData } = useScheduleMemberQuery(Number(projectId), memberId, condition);
+
+    return (
+        <>
+            <Box>
+                <div
+                    style={{
+                        width: '100%',
+                        display: 'flex',
+                        justifyContent: 'space-evenly',
+                    }}
+                >
+                    <div
+                        style={{
+                            justifyContent: 'flex-start',
+                            flexBasis: '10%',
+                        }}
+                    />
+                    <Title>나의 시간표</Title>
+                    <EditBtn onClick={onSetIsEditModal}>수정하기</EditBtn>
+                    <div style={{ justifyContent: 'flex-end', flexBasis: '1%' }} />
+                </div>
+                <MyTime scheduleData={scheduleData ?? null} />
+            </Box>
+            <EditMySchedule
+                onSetIsEditModal={onSetIsEditModal}
+                scheduleData={scheduleData ?? null}
+                isEditModal={isEditModal}
+            />
+        </>
+    );
+};
+export default MySchedule;
 
 const Box = styled.div`
     width: 661px;
@@ -16,7 +64,6 @@ const Box = styled.div`
     border: 1px solid #000000;
     box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.25);
     box-sizing: border-box;
-
     display: flex;
     flex-direction: column;
     gap: 12px;
@@ -66,91 +113,3 @@ const EditBtn = styled.button`
         outline: none;
     }
 `;
-
-interface MyScheduleProps {
-    isEditModal: boolean;
-    setIsEditModal: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
-const MySchedule: React.FC<MyScheduleProps> = ({ isEditModal, setIsEditModal }) => {
-    const onSetIsEditModal = () => {
-        setIsEditModal((prevState) => !prevState);
-    };
-
-    // 유저데이터가져옴
-    const { userData } = useUserContext();
-    const memberId = userData?.memberId;
-
-    // 프로젝트 ID 가져옴
-    const { projectId } = useParams();
-
-    // 달력 선택 날짜 가져옴
-    const date = useContext(DateContext);
-    const condition = dayjs(date?.selectedDate).format('YYYY-MM-DD') ?? '';
-
-    const [scheduleData, setSchdeuleData] = useState<ScheduleWeekResponse | null>(null);
-    // 스케줄 데이터 가져옴
-    const fetchSchedule = useCallback(async () => {
-        const accessToken = localStorage.getItem('access_token');
-        const memberId = localStorage.getItem('member_id');
-        try {
-            const response = await fetch(
-                `${Http}/v1/projects/${projectId}/members/${memberId}/schedules?condition=${condition}`,
-                {
-                    method: 'GET',
-                    headers: {
-                        Accept: '*/*',
-                        Authorization: `Bearer ${accessToken}`,
-                    },
-                }
-            );
-
-            if (!response.ok) {
-                throw new Error('Failed to fetch projects');
-            }
-
-            const data = await response.json();
-            setSchdeuleData(data.data);
-        } catch (error) {
-            console.error(error);
-        }
-    }, [projectId, memberId, condition]);
-
-    useEffect(() => {
-        fetchSchedule();
-    }, [fetchSchedule]);
-
-    return (
-        <>
-            <Box>
-                <div
-                    style={{
-                        width: '100%',
-                        display: 'flex',
-                        justifyContent: 'space-evenly',
-                    }}
-                >
-                    <div
-                        style={{
-                            justifyContent: 'flex-start',
-                            flexBasis: '10%',
-                        }}
-                    />
-                    <Title>나의 시간표</Title>
-                    <EditBtn onClick={onSetIsEditModal}>수정하기</EditBtn>
-                    <div style={{ justifyContent: 'flex-end', flexBasis: '1%' }} />
-                </div>
-                <MyTime scheduleData={scheduleData} />
-            </Box>
-
-            <EditMySchedule
-                onSetIsEditModal={onSetIsEditModal}
-                scheduleData={scheduleData}
-                isEditModal={isEditModal}
-                fetchSchedule={fetchSchedule}
-            />
-        </>
-    );
-};
-
-export default MySchedule;

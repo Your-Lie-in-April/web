@@ -1,24 +1,21 @@
-import { useUserContext } from '#/hooks/context/userContext';
-import { MemberEntity } from '#/types/memberType';
-import { ProjectEntity } from '#/types/projectType';
+import useAllMemberInfoQuery from '@hooks/apis/queries/member/useAllMemberInfoQuery';
+import { useUserContext } from '@hooks/context/userContext';
 import { useState } from 'react';
+import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import InviteBtn from '../Buttons/InviteBtn';
 import LeaderProfile from './LeaderProfile';
 import MemberProfile from './MemberProfile';
 import MyProfile from './MyProfile';
 
-interface ProfileListProps {
-    projectId: string | undefined;
-    members: MemberEntity[];
-    projectData: ProjectEntity | null;
-}
-
-const ProfileList: React.FC<ProfileListProps> = ({ members, projectId, projectData }) => {
+const ProfileList = () => {
     const [showDeleteBtn, setShowDeleteBtn] = useState(false);
-    const privilegedMembers = members.filter((member) => member.isPrivileged);
     const { userData } = useUserContext();
     const myId = userData?.memberId;
+
+    const { projectId } = useParams();
+    const { data: membersData } = useAllMemberInfoQuery(Number(projectId));
+    const privilegedMembers = membersData?.filter((member) => member.isPrivileged) ?? [];
     const isMePrivileged = privilegedMembers.some((member) => member.memberId === myId);
 
     const toggleDeleteBtn = () => {
@@ -31,9 +28,7 @@ const ProfileList: React.FC<ProfileListProps> = ({ members, projectId, projectDa
             <MemberListBox>
                 <TextBtnWrapper>
                     <CommonText>멤버</CommonText>
-                    {isMePrivileged && (
-                        <InviteBtn projectId={projectId} projectData={projectData} />
-                    )}
+                    {isMePrivileged && <InviteBtn />}
                 </TextBtnWrapper>
                 <MemberList>
                     {privilegedMembers.map((member) => (
@@ -42,11 +37,12 @@ const ProfileList: React.FC<ProfileListProps> = ({ members, projectId, projectDa
                             member={member}
                             toggleDeleteBtn={toggleDeleteBtn}
                             isCurrentUser={member.memberId === myId}
+                            membersData={membersData}
                         />
                     ))}
-                    {members
-                        .filter((member) => !member.isPrivileged)
-                        .map((member) => (
+                    {membersData
+                        ?.filter((member) => !member.isPrivileged)
+                        ?.map((member) => (
                             <MemberProfile
                                 key={member.memberId}
                                 member={member}

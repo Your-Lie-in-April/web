@@ -1,6 +1,6 @@
-import { getProjectMain } from '#/apis/project';
-import { QUERY_KEY } from '#/constants/queryKey';
-import { ProjectThumbnailResponse } from '#/types/projectType';
+import { getProjectMain } from '@apis/project';
+import { QUERY_KEY } from '@constants/queryKey';
+import { ProjectThumbnailResponse } from '@/types/projectType';
 import { useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 

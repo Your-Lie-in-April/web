@@ -1,5 +1,5 @@
-import { patchProjectIsPinned } from '#/apis/member';
-import { QUERY_KEY } from '#/constants/queryKey';
+import { patchProjectIsPinned } from '@apis/member';
+import { QUERY_KEY } from '@constants/queryKey';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 /**
@@ -7,6 +7,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
  *
  * 프로젝트 핀 설정/해제 api 입니다.
  */
+
 const usePatchPinScheduleMutation = (projectId: number) => {
     const queryClient = useQueryClient();
     return useMutation({

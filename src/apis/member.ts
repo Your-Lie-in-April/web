@@ -1,12 +1,13 @@
-import { API } from '#/constants/api';
+import { API } from '@constants/api';
 import {
+    AllMemGetResDto,
     MemberGetResDto,
     MemberPatchPinReqDto,
     MemberPatchStoredReqDto,
     MemberPutNickReqDto,
     MemberPutStatusReqDto,
-} from '#/types/memberType';
-import getAPIResponseData from '#/utils/getAPIResponseData';
+} from '@/types/memberType';
+import getAPIResponseData from '@utils/getAPIResponseData';
 
 //멤버 정보 조회
 export const getMemberInfo = async (memberId: number) => {
@@ -17,7 +18,7 @@ export const getMemberInfo = async (memberId: number) => {
 };
 
 // 상태메세지 설정
-export const putMemberStatus = async (state: string): Promise<{ state: string } | null> => {
+export const putMemberStatus = async (state: string) => {
     return await getAPIResponseData<MemberPutStatusReqDto>({
         method: 'PUT',
         url: API.MEMBER_STATE(state),
@@ -25,10 +26,10 @@ export const putMemberStatus = async (state: string): Promise<{ state: string } 
 };
 
 // 닉네임 재설정
-export const putMemberNickname = async () => {
+export const putMemberNickname = async (projectId: number, nickname: string) => {
     return await getAPIResponseData<MemberPutNickReqDto>({
         method: 'PUT',
-        url: API.MEMBER_NICKNAME,
+        url: API.MEMBER_NICKNAME(projectId, nickname),
     });
 };
 
@@ -45,5 +46,13 @@ export const patchProjectIsPinned = async (projectId: number) => {
     return await getAPIResponseData<MemberPatchPinReqDto>({
         method: 'PATCH',
         url: API.MEMBER_PIN(projectId),
+    });
+};
+
+// 프로젝트에 속해있는 유저 전체 조회
+export const getAllMemberInfo = async (projectId: number) => {
+    return await getAPIResponseData<AllMemGetResDto>({
+        method: 'GET',
+        url: API.PROJECT_IN_MEMBERS(projectId),
     });
 };

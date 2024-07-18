@@ -1,5 +1,5 @@
-import { postProjectInviteLink } from '#/apis/project';
-import { QUERY_KEY } from '#/constants/queryKey';
+import { postProjectInviteLink } from '@apis/project';
+import { QUERY_KEY } from '@constants/queryKey';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 /**

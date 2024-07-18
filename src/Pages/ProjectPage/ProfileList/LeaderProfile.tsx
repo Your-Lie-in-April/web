@@ -1,8 +1,41 @@
-import { MemberEntity } from '#/types/memberType';
+import { AllMemGetResDto, MemberEntity } from '@/types/memberType';
 import styled from 'styled-components';
 import MoreBtn from '../Buttons/MoreBtn';
 
-const LeaderProfileBox = styled.div`
+const LeaderProfile = ({
+    toggleDeleteBtn,
+    member,
+    isCurrentUser,
+    membersData,
+}: {
+    toggleDeleteBtn: () => void;
+    member: MemberEntity;
+    isCurrentUser: boolean;
+    membersData: AllMemGetResDto | undefined;
+}) => {
+    return (
+        <StyledLeaderProfileBox>
+            <StyledLeaderProfileDiv>
+                <LeaderImg>
+                    <StyledImage src={member?.profileImageUrl || defaultImg} alt='Profile Image' />
+                </LeaderImg>
+                <StyledProfileInfo>
+                    <StyledProfileText>
+                        {member?.nickname}
+                        {isCurrentUser ? ' (본인)' : ''}
+                    </StyledProfileText>
+                    <StyledProfileSubText>{member?.state}</StyledProfileSubText>
+                </StyledProfileInfo>
+                {isCurrentUser && member?.isPrivileged && membersData && membersData.length > 1 && (
+                    <MoreBtn toggleDeleteBtn={toggleDeleteBtn} />
+                )}
+            </StyledLeaderProfileDiv>
+        </StyledLeaderProfileBox>
+    );
+};
+export default LeaderProfile;
+
+const StyledLeaderProfileBox = styled.div`
     width: 100%;
     height: 52px;
     padding: 3px 4px;
@@ -11,7 +44,7 @@ const LeaderProfileBox = styled.div`
     background: #ffffff;
 `;
 
-const LeaderProfileDiv = styled.div`
+const StyledLeaderProfileDiv = styled.div`
     width: 250px;
     display: flex;
     flex-direction: row;
@@ -34,6 +67,14 @@ const StyledImage = styled.img`
     object-fit: cover;
 `;
 
+const StyledProfileInfo = styled.div`
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    justify-content: center;
+`;
+
 const CommonText = styled.div`
     color: #000000;
     font-family: Pretendard;
@@ -42,71 +83,22 @@ const CommonText = styled.div`
     font-weight: 500;
     line-height: normal;
 `;
+
+const StyledProfileText = styled(CommonText)`
+    max-width: 158px;
+    font-size: 14px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+`;
+
+const StyledProfileSubText = styled(CommonText)`
+    font-size: 10px;
+    font-weight: 400;
+    max-width: 158px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+`;
+
 const defaultImg = 'src/pics/default.png';
-
-const LeaderProfile = ({
-    toggleDeleteBtn,
-    member,
-    isCurrentUser,
-}: {
-    toggleDeleteBtn: () => void;
-    member: MemberEntity;
-    isCurrentUser: boolean;
-}) => {
-    return (
-        <LeaderProfileBox>
-            <LeaderProfileDiv>
-                <LeaderImg>
-                    <StyledImage src={member?.profileImageUrl || defaultImg} alt='Profile Image' />
-                </LeaderImg>
-                <div
-                    style={{
-                        display: 'flex',
-                        flex: '1',
-                        alignContent: 'center',
-                        justifyContent: 'space-between',
-                    }}
-                >
-                    <div
-                        style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            gap: '7px',
-                            justifyContent: 'center',
-                        }}
-                    >
-                        <CommonText
-                            style={{
-                                maxWidth: '158px',
-                                fontSize: '14px',
-                                overflow: 'hidden',
-                                whiteSpace: 'nowrap',
-                                textOverflow: 'ellipsis',
-                            }}
-                        >
-                            {member?.nickname}
-                            {isCurrentUser ? '(본인)' : ''}
-                        </CommonText>
-                        <CommonText
-                            style={{
-                                fontSize: '10px',
-                                fontWeight: '400',
-                                maxWidth: '158px',
-                                overflow: 'hidden',
-                                whiteSpace: 'nowrap',
-                                textOverflow: 'ellipsis',
-                            }}
-                        >
-                            {member?.state}
-                        </CommonText>
-                    </div>
-                    {isCurrentUser && member?.isPrivileged && (
-                        <MoreBtn toggleDeleteBtn={toggleDeleteBtn} />
-                    )}
-                </div>
-            </LeaderProfileDiv>
-        </LeaderProfileBox>
-    );
-};
-
-export default LeaderProfile;

@@ -1,7 +1,7 @@
-import { MemberEntity } from '#/types/memberType';
-import { memberId } from '#/utils/token';
+import { MemberEntity } from '@/types/memberType';
+import useMemberInfoQuery from '@hooks/apis/queries/member/useMemberInfoQuery';
+import { memberId } from '@utils/token';
 import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
-import useMemberInfoQuery from '../apis/queries/member/useMemberInfoQuery';
 
 type UserContextType = {
     userData: MemberEntity | null;

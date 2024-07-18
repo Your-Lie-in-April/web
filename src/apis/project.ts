@@ -1,5 +1,8 @@
 import {
     PinProjectResDto,
+    ProjectCoverImgIdResDto,
+    ProjectCoverImgResDto,
+    ProjectCreateUpate,
     ProjectDeleteMemberReqDto,
     ProjectDeleteMeReqDto,
     ProjectDeleteReqDto,
@@ -13,7 +16,7 @@ import {
     ProjectsStoredResDto,
     ProjectThumbnailResDto,
     ProjectTransferPrivilegeReqDto,
-} from '#/types/projectType';
+} from '@/types/projectType';
 import { API } from '../constants/api';
 import getAPIResponseData from '../utils/getAPIResponseData';
 
@@ -67,11 +70,11 @@ export const deleteProject = async (projectId: number) => {
 };
 
 // 프로젝트 수정
-export const putProject = async (projectId: number, body: ProjectPutReqDto) => {
+export const putProject = async (projectId: number, body: Partial<ProjectCreateUpate>) => {
     return await getAPIResponseData<ProjectPutReqDto>({
         method: 'PUT',
         url: API.PROJECT_PUT(projectId),
-        data: body,
+        data: body as ProjectCreateUpate,
     });
 };
 
@@ -108,10 +111,11 @@ export const getProjectInviteInfo = async (url: string) => {
 };
 
 // 관리자 권한 양도
-export const patchPojectPrevilege = async (projectId: number) => {
+export const patchPojectPrevilege = async (projectId: number, toMemberId: number) => {
     return await getAPIResponseData<ProjectTransferPrivilegeReqDto>({
         method: 'PATCH',
         url: API.PROJECT_TRANSFER_PREVILEGE(projectId),
+        data: { toMemberId },
     });
 };
 
@@ -128,5 +132,21 @@ export const getProjectIsStored = async (page: number = 0, size: number = 9) => 
     return await getAPIResponseData<ProjectsStoredResDto>({
         method: 'GET',
         url: API.PROJECT_STORED(page, size),
+    });
+};
+
+//  커버 이미지 조회
+export const getCoverImg = async () => {
+    return await getAPIResponseData<ProjectCoverImgResDto>({
+        method: 'GET',
+        url: API.COVER_IMG,
+    });
+};
+
+//  커버 아이디별 이미지 조회
+export const getCoverImgId = async (projectId: number) => {
+    return await getAPIResponseData<ProjectCoverImgIdResDto>({
+        method: 'GET',
+        url: API.COVER_IMG_ID(projectId),
     });
 };

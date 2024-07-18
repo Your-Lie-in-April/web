@@ -1,5 +1,5 @@
-import NoProject from '#/Pages/Layouts/NoProject';
-import { ProjectThumbnailResponse } from '#/types/projectType';
+import NoProject from '@Pages/layouts/NoProject';
+import { ProjectThumbnailResponse } from '@/types/projectType';
 import styled from 'styled-components';
 import Project from './Project';
 

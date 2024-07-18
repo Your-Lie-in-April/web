@@ -1,5 +1,5 @@
-import { deleteProject } from '#/apis/project';
-import { QUERY_KEY } from '#/constants/queryKey';
+import { deleteProject } from '@apis/project';
+import { QUERY_KEY } from '@constants/queryKey';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 /**

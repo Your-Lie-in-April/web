@@ -1,10 +1,277 @@
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import '@styles/projecttime.css';
 import { ko } from 'date-fns/locale/ko';
 import { Dispatch, FC, SetStateAction, useEffect, useRef, useState } from 'react';
 import ReactDatePicker from 'react-datepicker';
 import styled from 'styled-components';
-import '/src/styles/projecttime.css';
+
+interface ProjectTimeProps {
+    startDate: Date | null;
+    endDate: Date | null;
+    onDateChange: (start: Date | null, end: Date | null) => void;
+    starttime: string;
+    setStartTime: Dispatch<SetStateAction<string>>;
+    endtime: string;
+    setEndTime: Dispatch<SetStateAction<string>>;
+    selectedDays: string[];
+    setSelectedDays: Dispatch<SetStateAction<string[]>>;
+}
+
+const ProjectTime: FC<ProjectTimeProps> = ({
+    startDate,
+    endDate,
+    onDateChange,
+    starttime,
+    setStartTime,
+    endtime,
+    setEndTime,
+    selectedDays,
+    setSelectedDays,
+}) => {
+    const [isStartOpen, setIsStartOpen] = useState<boolean>(false);
+    const [isEndOpen, setIsEndOpen] = useState<boolean>(false);
+    const startDropdownRef = useRef<HTMLDivElement>(null);
+    const endDropdownRef = useRef<HTMLDivElement>(null);
+
+    const dayNames = ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'];
+
+    type Time = {
+        value: string;
+        label: string;
+        hour: string;
+        minute: string;
+        ampm: string;
+    };
+
+    const Times: Time[] = [];
+    for (let hour = 9; hour < 24; hour++) {
+        const ampm = hour < 12 ? 'AM' : 'PM';
+        const displayHour = hour === 0 ? 12 : hour > 12 ? hour - 12 : hour;
+        for (let minute = 0; minute < 60; minute += 30) {
+            if (hour === 23 && minute > 30) continue;
+            const formattedHour = displayHour.toString().padStart(2, '0');
+            const formattedMinute = minute.toString().padStart(2, '0');
+            const time = `${ampm} ${formattedHour}:${formattedMinute}`;
+            Times.push({
+                value: `${hour.toString().padStart(2, '0')}:${formattedMinute}`,
+                label: time,
+                hour: hour.toString().padStart(2, '0'),
+                minute: formattedMinute,
+                ampm,
+            });
+        }
+    }
+
+    const filterTimes = (start: string): Time[] => {
+        const [startHour, startMinute] = start.split(':').map(Number);
+        return Times.filter(({ hour, minute }) => {
+            const currentHour = parseInt(hour, 10);
+            const currentMinute = parseInt(minute, 10);
+            return (
+                (currentHour > startHour ||
+                    (currentHour === startHour && currentMinute > startMinute)) &&
+                (currentHour < 24 || (currentHour === 0 && currentMinute === 0))
+            );
+        });
+    };
+    const [filteredEndTimes, setFilteredEndTimes] = useState<Time[]>(Times);
+    const toggleWeekend = (day: string) => {
+        console.log(`Toggling day: ${day}`);
+
+        setSelectedDays((currentDays) => {
+            if (currentDays.includes(day)) {
+                const newSelectedDays = currentDays.filter((d) => d !== day);
+                return newSelectedDays;
+            } else {
+                const newSelectedDays = [...currentDays, day];
+                return newSelectedDays;
+            }
+        });
+    };
+
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (
+                startDropdownRef.current &&
+                !startDropdownRef.current.contains(event.target as Node) &&
+                isStartOpen
+            ) {
+                setIsStartOpen(false);
+            }
+
+            if (
+                endDropdownRef.current &&
+                !endDropdownRef.current.contains(event.target as Node) &&
+                isEndOpen
+            ) {
+                setIsEndOpen(false);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [isStartOpen, isEndOpen]);
+
+    const startSelect = () => {
+        setIsStartOpen(!isStartOpen);
+        setIsEndOpen(false);
+    };
+
+    const endSelect = () => {
+        setIsEndOpen(!isEndOpen);
+        setIsStartOpen(false);
+    };
+
+    const handleStartTimeSelect = (time: Time) => {
+        setStartTime(time.label);
+        const newFilteredEndTimes = filterTimes(time.value);
+        setFilteredEndTimes(newFilteredEndTimes);
+        setIsStartOpen(false);
+
+        if (newFilteredEndTimes.length > 0) {
+            setEndTime(newFilteredEndTimes[0].label);
+        }
+    };
+
+    return (
+        <ProjectTimeContainer>
+            <div
+                style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    justifyContent: 'center',
+                }}
+            >
+                <DateContainer style={{ display: 'flex' }}>
+                    <Text>프로젝트 시작일</Text>
+                    <SDatePicker
+                        disabled
+                        locale={ko}
+                        dateFormat={'YYYY-MM-dd'}
+                        selected={startDate}
+                        selectsStart
+                        onChange={(date: Date) => {
+                            onDateChange?.(date, endDate);
+                        }}
+                        startDate={startDate}
+                    />
+                </DateContainer>
+
+                <Separator>~</Separator>
+
+                <DateContainer style={{ display: 'flex' }}>
+                    <Text>프로젝트 종료일</Text>
+                    <SDatePicker
+                        disabled
+                        locale={ko}
+                        dateFormat={'YYYY-MM-dd'}
+                        selected={endDate}
+                        onChange={(date: Date) => {
+                            onDateChange?.(startDate, date);
+                        }}
+                        selectsEnd
+                        endDate={endDate}
+                        minDate={startDate}
+                    />
+                </DateContainer>
+            </div>
+
+            <MakeWeekend>
+                <Text>생성할 요일</Text>
+                <WeekendContainer>
+                    {dayNames.map((day, index) => (
+                        <Weekend
+                            key={index}
+                            selected={selectedDays.includes(day)}
+                            onClick={() => toggleWeekend(day)}
+                        >
+                            {day.substring(0, 1)}
+                        </Weekend>
+                    ))}
+                </WeekendContainer>
+            </MakeWeekend>
+
+            <div
+                style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    justifyContent: 'center',
+                    marginTop: '40px',
+                    marginLeft: '10px',
+                }}
+            >
+                <DateContainer style={{ gap: '4px' }}>
+                    <Text>시간표 시작시간</Text>
+                    <TimePicker
+                        style={{
+                            marginTop: '4px',
+                            marginLeft: '4px',
+                            display: 'flex',
+                            gap: '12px',
+                            padding: '4px',
+                            boxSizing: 'border-box',
+                        }}
+                        onClick={startSelect}
+                    >
+                        <div style={{ width: '146px' }}>{starttime}</div>
+                        {!isStartOpen && <ExpandMoreIcon sx={{ fontSize: '22px' }} />}
+                        {isStartOpen && <ExpandLessIcon sx={{ fontSize: '22px' }} />}
+                    </TimePicker>
+
+                    {isStartOpen && (
+                        <TimePickerContainer style={{ position: 'absolute', marginTop: '4px' }}>
+                            {Times.map((time, index) => (
+                                <TimeOption key={index} onClick={() => handleStartTimeSelect(time)}>
+                                    {time.label}
+                                </TimeOption>
+                            ))}
+                        </TimePickerContainer>
+                    )}
+                </DateContainer>
+                <Separator style={{ marginLeft: '28px', marginRight: '28px' }}>~</Separator>
+
+                <DateContainer style={{ gap: '4px' }}>
+                    <Text>시간표 종료시간</Text>
+                    <TimePicker
+                        style={{
+                            marginTop: '4px',
+                            marginLeft: '4px',
+                            display: 'flex',
+                            gap: '12px',
+                            padding: '4px',
+                            boxSizing: 'border-box',
+                        }}
+                        onClick={endSelect}
+                    >
+                        <div style={{ width: '146px' }}>{endtime}</div>
+                        {!isEndOpen && <ExpandMoreIcon sx={{ fontSize: '22px' }} />}
+                        {isEndOpen && <ExpandLessIcon sx={{ fontSize: '22px' }} />}
+                    </TimePicker>
+                    {isEndOpen && (
+                        <TimePickerContainer style={{ position: 'absolute', marginTop: '4px' }}>
+                            {filteredEndTimes.map((time, index) => (
+                                <TimeOption
+                                    key={index}
+                                    onClick={() => {
+                                        setEndTime(time.label);
+                                        setIsEndOpen(false);
+                                    }}
+                                >
+                                    {time.label}
+                                </TimeOption>
+                            ))}
+                        </TimePickerContainer>
+                    )}
+                </DateContainer>
+            </div>
+        </ProjectTimeContainer>
+    );
+};
+export default ProjectTime;
 
 const ProjectTimeContainer = styled.div`
     display: flex;
@@ -106,7 +373,7 @@ const TimeOption = styled.li`
 
 const Text = styled.div`
     color: #000;
-    font-family: Pretendard;
+    font-family: 'Pretendard';
     font-size: 24px;
     font-weight: 400;
     line-height: normal;
@@ -157,254 +424,3 @@ const Weekend = styled.div<{ selected: boolean }>`
         background: #b79fff;
     }
 `;
-
-interface ProjectTimeProps {
-    startDate: Date | null;
-    endDate: Date | null;
-    onDateChange: (start: Date | null, end: Date | null) => void;
-    starttime: string;
-    setStartTime: Dispatch<SetStateAction<string>>;
-    endtime: string;
-    setEndTime: Dispatch<SetStateAction<string>>;
-    selectedDays: string[];
-    setSelectedDays: Dispatch<SetStateAction<string[]>>;
-}
-
-const ProjectTime: FC<ProjectTimeProps> = ({
-    startDate,
-    endDate,
-    onDateChange,
-    starttime,
-    setStartTime,
-    endtime,
-    setEndTime,
-    selectedDays,
-    setSelectedDays,
-}) => {
-    const [isStartOpen, setIsStartOpen] = useState<boolean>(false);
-    const [isEndOpen, setIsEndOpen] = useState<boolean>(false);
-    const startDropdownRef = useRef<HTMLDivElement>(null);
-    const endDropdownRef = useRef<HTMLDivElement>(null);
-
-    const dayNames = ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'];
-
-    type Time = {
-        value: string;
-        label: string;
-        hour: string;
-        minute: string;
-        ampm: string;
-    };
-
-    const Times: Time[] = [];
-    for (let hour = 9; hour < 24; hour++) {
-        const ampm = hour < 12 ? 'AM' : 'PM';
-        const displayHour = hour === 0 ? 12 : hour > 12 ? hour - 12 : hour;
-        for (let minute = 0; minute < 60; minute += 30) {
-            const formattedHour = displayHour.toString().padStart(2, '0');
-            const formattedMinute = minute.toString().padStart(2, '0');
-            const time = `${ampm} ${formattedHour}:${formattedMinute}`;
-            Times.push({
-                value: `${hour.toString().padStart(2, '0')}:${formattedMinute}`,
-                label: time,
-                hour: hour.toString().padStart(2, '0'),
-                minute: formattedMinute,
-                ampm,
-            });
-        }
-    }
-
-    const filterTimes = (start: string): Time[] => {
-        const [startHour, startMinute] = start.split(':').map(Number);
-        return Times.filter(({ hour, minute }) => {
-            const currentHour = parseInt(hour, 10);
-            const currentMinute = parseInt(minute, 10);
-            return currentHour > startHour || (currentHour === startHour && currentMinute > startMinute);
-        });
-    };
-    const [filteredEndTimes, setFilteredEndTimes] = useState<Time[]>(Times);
-    const toggleWeekend = (day: string) => {
-        console.log(`Toggling day: ${day}`);
-
-        setSelectedDays((currentDays) => {
-            if (currentDays.includes(day)) {
-                const newSelectedDays = currentDays.filter((d) => d !== day);
-                return newSelectedDays;
-            } else {
-                const newSelectedDays = [...currentDays, day];
-                return newSelectedDays;
-            }
-        });
-    };
-
-    useEffect(() => {
-        const handleClickOutside = (event: MouseEvent) => {
-            if (startDropdownRef.current && !startDropdownRef.current.contains(event.target as Node) && isStartOpen) {
-                setIsStartOpen(false);
-            }
-
-            if (endDropdownRef.current && !endDropdownRef.current.contains(event.target as Node) && isEndOpen) {
-                setIsEndOpen(false);
-            }
-        };
-
-        document.addEventListener('mousedown', handleClickOutside);
-
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
-    }, [isStartOpen, isEndOpen]);
-
-    const startSelect = () => {
-        setIsStartOpen(!isStartOpen);
-        setIsEndOpen(false);
-    };
-
-    const endSelect = () => {
-        setIsEndOpen(!isEndOpen);
-        setIsStartOpen(false);
-    };
-
-    const handleStartTimeSelect = (time: Time) => {
-        setStartTime(time.label);
-        const newFilteredEndTimes = filterTimes(time.value);
-        setFilteredEndTimes(newFilteredEndTimes);
-        setIsStartOpen(false);
-
-        if (newFilteredEndTimes.length > 0) {
-            setEndTime(newFilteredEndTimes[0].label);
-        }
-    };
-
-    return (
-        <ProjectTimeContainer>
-            <div
-                style={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    justifyContent: 'center',
-                }}
-            >
-                <DateContainer style={{ display: 'flex' }}>
-                    <Text>프로젝트 시작일</Text>
-                    <SDatePicker
-                        disabled
-                        locale={ko}
-                        dateFormat={'YYYY-MM-dd'}
-                        selected={startDate}
-                        selectsStart
-                        onChange={(date: Date) => {
-                            onDateChange?.(date, endDate);
-                        }}
-                        startDate={startDate}
-                    />
-                </DateContainer>
-
-                <Separator>~</Separator>
-
-                <DateContainer style={{ display: 'flex' }}>
-                    <Text>프로젝트 종료일</Text>
-                    <SDatePicker
-                        disabled
-                        locale={ko}
-                        dateFormat={'YYYY-MM-dd'}
-                        selected={endDate}
-                        onChange={(date: Date) => {
-                            onDateChange?.(startDate, date);
-                        }}
-                        selectsEnd
-                        endDate={endDate}
-                        minDate={startDate}
-                    />
-                </DateContainer>
-            </div>
-
-            <MakeWeekend>
-                <Text>생성할 요일</Text>
-                <WeekendContainer>
-                    {dayNames.map((day, index) => (
-                        <Weekend key={index} selected={selectedDays.includes(day)} onClick={() => toggleWeekend(day)}>
-                            {day.substring(0, 1)}
-                        </Weekend>
-                    ))}
-                </WeekendContainer>
-            </MakeWeekend>
-
-            <div
-                style={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    justifyContent: 'center',
-                    marginTop: '40px',
-                    marginLeft: '10px',
-                }}
-            >
-                <DateContainer style={{ gap: '4px' }}>
-                    <Text>시간표 시작시간</Text>
-                    <TimePicker
-                        style={{
-                            marginTop: '4px',
-                            marginLeft: '4px',
-                            display: 'flex',
-                            gap: '12px',
-                            padding: '4px',
-                            boxSizing: 'border-box',
-                        }}
-                        onClick={startSelect}
-                    >
-                        <div style={{ width: '146px' }}>{starttime}</div>
-                        {!isStartOpen && <ExpandMoreIcon sx={{ fontSize: '22px' }} />}
-                        {isStartOpen && <ExpandLessIcon sx={{ fontSize: '22px' }} />}
-                    </TimePicker>
-
-                    {isStartOpen && (
-                        <TimePickerContainer style={{ position: 'absolute', marginTop: '4px' }}>
-                            {Times.map((time, index) => (
-                                <TimeOption key={index} onClick={() => handleStartTimeSelect(time)}>
-                                    {time.label}
-                                </TimeOption>
-                            ))}
-                        </TimePickerContainer>
-                    )}
-                </DateContainer>
-                <Separator style={{ marginLeft: '28px', marginRight: '28px' }}>~</Separator>
-
-                <DateContainer style={{ gap: '4px' }}>
-                    <Text>시간표 종료시간</Text>
-                    <TimePicker
-                        style={{
-                            marginTop: '4px',
-                            marginLeft: '4px',
-                            display: 'flex',
-                            gap: '12px',
-                            padding: '4px',
-                            boxSizing: 'border-box',
-                        }}
-                        onClick={endSelect}
-                    >
-                        <div style={{ width: '146px' }}>{endtime}</div>
-                        {!isEndOpen && <ExpandMoreIcon sx={{ fontSize: '22px' }} />}
-                        {isEndOpen && <ExpandLessIcon sx={{ fontSize: '22px' }} />}
-                    </TimePicker>
-                    {isEndOpen && (
-                        <TimePickerContainer style={{ position: 'absolute', marginTop: '4px' }}>
-                            {filteredEndTimes.map((time, index) => (
-                                <TimeOption
-                                    key={index}
-                                    onClick={() => {
-                                        setEndTime(time.label);
-                                        setIsEndOpen(false);
-                                    }}
-                                >
-                                    {time.label}
-                                </TimeOption>
-                            ))}
-                        </TimePickerContainer>
-                    )}
-                </DateContainer>
-            </div>
-        </ProjectTimeContainer>
-    );
-};
-
-export default ProjectTime;

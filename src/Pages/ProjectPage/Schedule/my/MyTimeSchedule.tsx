@@ -1,4 +1,4 @@
-import { ScheduleWeekResponse } from '#/types/scheduleType';
+import { ScheduleWeekResponse } from '@/types/scheduleType';
 import React from 'react';
 import MyTimeBar from './MyTimeBar';
 

@@ -1,6 +1,6 @@
-import { ProjectThumbnailResponse } from '#/types/projectType';
+import NoProject from '@Pages/layouts/NoProject';
+import { ProjectThumbnailResponse } from '@/types/projectType';
 import styled from 'styled-components';
-import NoProject from '../Layouts/NoProject';
 import StorageProject from './StorageProject';
 
 const GridContainer = styled.div`

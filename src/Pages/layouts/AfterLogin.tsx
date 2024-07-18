@@ -1,8 +1,51 @@
+import ConfirmLogout from '@Pages/Modal/member/ConfirmLogout';
+import MyPageModal from '@Pages/Modal/member/MyPageModal';
 import { FC, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import ConfirmLogout from '../Modal/member/ConfirmLogout';
-import MyPageModal from '../Modal/member/MyPageModal';
+
+const AfterLogin: FC = () => {
+    const [isLogout, setLogOut] = useState<boolean>(false);
+    const [isMyPageModal, setIsMyPageModal] = useState(false);
+
+    const navigate = useNavigate();
+
+    const onSetIsMyPageModal = () => {
+        setIsMyPageModal((prev) => !prev);
+    };
+
+    const onSetIsLogout = () => {
+        setLogOut(true);
+    };
+
+    const handleLogoClick = () => {
+        if (location.pathname !== '/') {
+            navigate('/');
+        } else {
+            window.location.reload();
+        }
+    };
+
+    return (
+        <>
+            <AfterLoginDiv>
+                <div style={{ justifyContent: 'flex-start', flexBasis: '20%' }} />
+                <Logo onClick={handleLogoClick}>TIME PIECE</Logo>
+                <MyPageDiv>
+                    <MyPageBtn onClick={onSetIsMyPageModal}>My page</MyPageBtn>
+                    {isMyPageModal && (
+                        <MyPageModal
+                            onSetIsMyPageModal={onSetIsMyPageModal}
+                            onSetIsLogout={onSetIsLogout}
+                        />
+                    )}
+                </MyPageDiv>
+            </AfterLoginDiv>
+            {isLogout && <ConfirmLogout setLogOut={setLogOut} />}
+        </>
+    );
+};
+export default AfterLogin;
 
 const AfterLoginDiv = styled.div`
     width: 100%;
@@ -51,46 +94,3 @@ const MyPageBtn = styled.button`
         outline: none;
     }
 `;
-
-const AfterLogin: FC = () => {
-    const [isLogout, setLogOut] = useState<boolean>(false);
-    const [isMyPageModal, setIsMyPageModal] = useState(false);
-
-    const navigate = useNavigate();
-
-    const onSetIsMyPageModal = () => {
-        setIsMyPageModal((prev) => !prev);
-    };
-
-    const onSetIsLogout = () => {
-        setLogOut(true);
-    };
-
-    const handleLogoClick = () => {
-        if (location.pathname !== '/') {
-            navigate('/');
-        } else {
-            window.location.reload();
-        }
-    };
-
-    return (
-        <>
-            <AfterLoginDiv>
-                <div style={{ justifyContent: 'flex-start', flexBasis: '20%' }} />
-                <Logo onClick={handleLogoClick}>TIME PIECE</Logo>
-                <MyPageDiv>
-                    <MyPageBtn onClick={onSetIsMyPageModal}>My page</MyPageBtn>
-                    {isMyPageModal && (
-                        <MyPageModal
-                            onSetIsMyPageModal={onSetIsMyPageModal}
-                            onSetIsLogout={onSetIsLogout}
-                        />
-                    )}
-                </MyPageDiv>
-            </AfterLoginDiv>
-            {isLogout && <ConfirmLogout setLogOut={setLogOut} />}
-        </>
-    );
-};
-export default AfterLogin;

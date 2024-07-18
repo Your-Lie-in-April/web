@@ -1,7 +1,21 @@
-import InvitationLinkModal from '#/Pages/Modal/project/InvitationLinkModal';
-import { ProjectEntity } from '#/types/projectType';
+import InvitationLinkModal from '@Pages/Modal/project/InvitationLinkModal';
 import { useState } from 'react';
 import styled from 'styled-components';
+
+const InviteBtn = () => {
+    const [isClick, setIsClick] = useState<boolean>(false);
+    const toggleBtn = () => {
+        setIsClick(!isClick);
+    };
+
+    return (
+        <>
+            <BtnContainer onClick={toggleBtn}>+초대하기</BtnContainer>
+            {isClick && <InvitationLinkModal toggleBtn={toggleBtn} />}
+        </>
+    );
+};
+export default InviteBtn;
 
 const BtnContainer = styled.div`
     width: 52px;
@@ -28,28 +42,3 @@ const BtnContainer = styled.div`
         outline: none;
     }
 `;
-interface InviteBtnProps {
-    projectId: string | undefined;
-    projectData: ProjectEntity | null;
-}
-
-const InviteBtn: React.FC<InviteBtnProps> = ({ projectId, projectData }) => {
-    const [isClick, setIsClick] = useState<boolean>(false);
-    const toggleBtn = () => {
-        setIsClick(!isClick);
-    };
-
-    return (
-        <>
-            <BtnContainer onClick={toggleBtn}>+초대하기</BtnContainer>
-            {isClick && (
-                <InvitationLinkModal
-                    projectId={projectId}
-                    projectData={projectData}
-                    toggleBtn={toggleBtn}
-                />
-            )}
-        </>
-    );
-};
-export default InviteBtn;

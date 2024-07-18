@@ -1,14 +1,82 @@
-import usePatchPinnedMutation from '#/hooks/apis/mutations/member/usePatchPinnedMutation';
-import usePatchStoredMutation from '#/hooks/apis/mutations/member/usePatchStoredMutation';
-import LeaveProject from '#/Pages/Modal/project/LeaveProject';
+import usePatchPinnedMutation from '@hooks/apis/mutations/member/usePatchPinnedMutation';
+import usePatchStoredMutation from '@hooks/apis/mutations/member/usePatchStoredMutation';
 import CancelIcon from '@mui/icons-material/Cancel';
 import InboxOutlinedIcon from '@mui/icons-material/InboxOutlined';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import PushPinOutlinedIcon from '@mui/icons-material/PushPinOutlined';
+import LeaveProject from '@Pages/Modal/project/LeaveProject';
+import { ProjectThumbnailResponse } from '@/types/projectType';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { ProjectThumbnailResponse } from '../../../../types/projectType';
+
+interface ProjectProps {
+    project: ProjectThumbnailResponse;
+}
+
+const Project: React.FC<ProjectProps> = ({ project }) => {
+    const [showMore, setShowMore] = useState<boolean>(false);
+    const [isLeaveModalOpen, setIsLeaveModalOpen] = useState<boolean>(false);
+    const navigate = useNavigate();
+
+    const toggleMoreBtn = () => {
+        setShowMore(!showMore);
+    };
+
+    const openLeaveModal = () => {
+        setIsLeaveModalOpen(true);
+    };
+
+    const closeLeaveModal = () => {
+        setIsLeaveModalOpen(false);
+    };
+
+    const { mutate: handlePinned } = usePatchPinnedMutation(project.projectId);
+    const { mutate: handleStored } = usePatchStoredMutation(project.projectId);
+
+    return (
+        <ProjectBox
+            style={{ backgroundColor: project.color }}
+            $coverImageUrl={project.coverImageUrl}
+        >
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                <MoreDiv>
+                    {showMore && (
+                        <>
+                            <StyledButton onClick={openLeaveModal}>
+                                <CancelBtn sx={{ fontSize: 36 }} />
+                            </StyledButton>
+                            <MoreBox>
+                                <MoreItem onClick={() => handlePinned()}>
+                                    <PushPinOutlinedIcon sx={{ fontSize: 18 }} />
+                                    <MoreText>상단고정</MoreText>
+                                </MoreItem>
+                                <MoreItem onClick={() => handleStored()}>
+                                    <InboxOutlinedIcon sx={{ fontSize: 18 }} />
+                                    <MoreText>보관함이동</MoreText>
+                                </MoreItem>
+                            </MoreBox>
+                        </>
+                    )}
+                    <StyledButton onClick={toggleMoreBtn}>
+                        <StyledMoreBtn sx={{ fontSize: 32 }} />
+                    </StyledButton>
+                </MoreDiv>
+                <TextBox onClick={() => navigate(`/project/${project.projectId}`)}>
+                    <ProjectName>{project.title}</ProjectName>
+                    <DetailText>{project.description}</DetailText>
+                </TextBox>
+            </div>
+            <LeaveProject
+                projectId={project.projectId}
+                projectTitle={project.title}
+                onClose={closeLeaveModal}
+                isOpen={isLeaveModalOpen}
+            />
+        </ProjectBox>
+    );
+};
+export default Project;
 
 interface MoreTextProps extends React.HTMLAttributes<HTMLDivElement> {
     isMove?: boolean;
@@ -150,71 +218,3 @@ const CancelBtn = styled(CancelIcon)`
     width: 36px;
     height: 36px;
 `;
-
-interface ProjectProps {
-    project: ProjectThumbnailResponse;
-}
-
-const Project: React.FC<ProjectProps> = ({ project }) => {
-    const [showMore, setShowMore] = useState<boolean>(false);
-    const [isLeaveModalOpen, setIsLeaveModalOpen] = useState<boolean>(false);
-    const navigate = useNavigate();
-
-    const toggleMoreBtn = () => {
-        setShowMore(!showMore);
-    };
-
-    const openLeaveModal = () => {
-        setIsLeaveModalOpen(true);
-    };
-
-    const closeLeaveModal = () => {
-        setIsLeaveModalOpen(false);
-    };
-
-    const { mutate: handlePinned } = usePatchPinnedMutation(project.projectId);
-    const { mutate: handleStored } = usePatchStoredMutation(project.projectId);
-
-    return (
-        <ProjectBox
-            style={{ backgroundColor: project.color }}
-            $coverImageUrl={project.coverImageUrl}
-        >
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                <MoreDiv>
-                    {showMore && (
-                        <>
-                            <StyledButton onClick={openLeaveModal}>
-                                <CancelBtn sx={{ fontSize: 36 }} />
-                            </StyledButton>
-                            <MoreBox>
-                                <MoreItem onClick={() => handlePinned()}>
-                                    <PushPinOutlinedIcon sx={{ fontSize: 18 }} />
-                                    <MoreText>상단고정</MoreText>
-                                </MoreItem>
-                                <MoreItem onClick={() => handleStored()}>
-                                    <InboxOutlinedIcon sx={{ fontSize: 18 }} />
-                                    <MoreText>보관함이동</MoreText>
-                                </MoreItem>
-                            </MoreBox>
-                        </>
-                    )}
-                    <StyledButton onClick={toggleMoreBtn}>
-                        <StyledMoreBtn sx={{ fontSize: 32 }} />
-                    </StyledButton>
-                </MoreDiv>
-                <TextBox onClick={() => navigate(`/project/${project.projectId}`)}>
-                    <ProjectName>{project.title}</ProjectName>
-                    <DetailText>{project.description}</DetailText>
-                </TextBox>
-            </div>
-            <LeaveProject
-                projectId={project.projectId}
-                projectTitle={project.title}
-                onClose={closeLeaveModal}
-                isOpen={isLeaveModalOpen}
-            />
-        </ProjectBox>
-    );
-};
-export default Project;

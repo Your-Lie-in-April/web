@@ -1,11 +1,66 @@
-import { Http } from '#/constants/urls';
-import { useUserContext } from '#/hooks/context/userContext';
-import ModalPortal from '#/utils/ModalPotal';
-import useScrollLock from '#/utils/useScrollLock';
+import usePutMemberNickMutation from '@hooks/apis/mutations/member/usePutMemberNickMutation';
+import ModalPortal from '@utils/ModalPotal';
+import useScrollLock from '@utils/useScrollLock';
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { ModalBlackOut, ModalContainer } from '../ModalCommon';
+
+interface ChangeNickNameProps {
+    isEditModal: boolean;
+    onSetIsEditModal: () => void;
+}
+
+const ChangeNickName: React.FC<ChangeNickNameProps> = ({ isEditModal, onSetIsEditModal }) => {
+    const [newNick, setNewNick] = useState<string>('');
+    const { projectId } = useParams();
+    const { mutate } = usePutMemberNickMutation(Number(projectId));
+
+    const handleChangeNickname = async (newNick: string) => {
+        const nickname = newNick.trim();
+        if (nickname === '') {
+            alert('닉네임을 입력해주세요 👀');
+            return;
+        }
+        try {
+            await mutate(nickname);
+            onSetIsEditModal();
+        } catch (error) {
+            console.error('닉네임 변경 실패:', error);
+        }
+    };
+
+    const handleNickChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setNewNick(e.target.value);
+    };
+
+    useScrollLock(isEditModal);
+
+    return (
+        <>
+            {isEditModal && (
+                <ModalPortal>
+                    <ModalBlackOut onClick={onSetIsEditModal} />
+                    <ModalContainer>
+                        <Box>
+                            <ModalContentWrapper>
+                                <Title>프로젝트에서 사용할 닉네임을 작성해주세요</Title>
+                                <NickNameField type='text' onChange={handleNickChange} />
+                                <ButtonsContainer style={{ alignSelf: 'flex-end' }}>
+                                    <ConfirmBtn onClick={() => handleChangeNickname(newNick)}>
+                                        확인
+                                    </ConfirmBtn>
+                                    <CancelBtn onClick={onSetIsEditModal}>취소</CancelBtn>
+                                </ButtonsContainer>
+                            </ModalContentWrapper>
+                        </Box>
+                    </ModalContainer>
+                </ModalPortal>
+            )}
+        </>
+    );
+};
+export default ChangeNickName;
 
 const Box = styled.div`
     width: 504px;
@@ -18,6 +73,15 @@ const Box = styled.div`
     align-items: center;
     padding: 16px 20px 20px 20px;
     box-sizing: border-box;
+`;
+
+const ModalContentWrapper = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+    width: 100%;
+    height: 100%;
 `;
 
 const Title = styled.div`
@@ -78,84 +142,3 @@ const CancelBtn = styled(CommonButton)`
     background: #d9d9d9;
     color: #ffffff;
 `;
-
-interface ChangeNickNameProps {
-    isEditModal: boolean;
-    onSetIsEditModal: () => void;
-}
-
-const ChangeNickName: React.FC<ChangeNickNameProps> = ({ isEditModal, onSetIsEditModal }) => {
-    const { projectId } = useParams<{ projectId: string }>();
-    const { userData, setUserData } = useUserContext();
-    const [newNick, setNewNick] = useState('');
-    const accessToken = localStorage.getItem('access_token');
-
-    const updateMyNick = async () => {
-        try {
-            const finalNick = newNick.trim();
-            if (finalNick === '') {
-                alert('닉네임을 입력해주세요 👀');
-                return;
-            }
-            const response = await fetch(
-                `${Http}/v2/projects/members/nickname?projectId=${projectId}&nickname=${finalNick}`,
-                {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: `Bearer ${accessToken}`,
-                        credential: 'include',
-                    },
-                    body: JSON.stringify({ state: finalNick }),
-                }
-            );
-
-            if (!response.ok) throw new Error('닉네임 변경 실패');
-
-            const updatedUserData = await response.json();
-            setUserData({ ...userData, nickname: updatedUserData.nickname });
-            onSetIsEditModal();
-            window.location.reload();
-        } catch (error) {
-            console.error('업데이트 실패:', error);
-        }
-    };
-
-    const handleNickChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setNewNick(e.target.value);
-    };
-
-    useScrollLock(isEditModal);
-
-    return (
-        <>
-            {isEditModal && (
-                <ModalPortal>
-                    <ModalBlackOut onClick={onSetIsEditModal} />
-                    <ModalContainer>
-                        <Box>
-                            <div
-                                style={{
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    alignItems: 'center',
-                                    gap: '18px',
-                                    width: '100%',
-                                    height: '100%',
-                                }}
-                            >
-                                <Title>프로젝트에서 사용할 닉네임을 작성해주세요</Title>
-                                <NickNameField type='text' onChange={handleNickChange} />
-                                <ButtonsContainer style={{ alignSelf: 'flex-end' }}>
-                                    <ConfirmBtn onClick={updateMyNick}>확인</ConfirmBtn>
-                                    <CancelBtn onClick={onSetIsEditModal}>취소</CancelBtn>
-                                </ButtonsContainer>
-                            </div>
-                        </Box>
-                    </ModalContainer>
-                </ModalPortal>
-            )}
-        </>
-    );
-};
-export default ChangeNickName;

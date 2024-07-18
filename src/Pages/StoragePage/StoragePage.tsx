@@ -1,12 +1,57 @@
-import { useStoredInfiniteQuery } from '#/hooks/apis/queries/project/useStoredInfiniteQuery';
+import { useStoredInfiniteQuery } from '@hooks/apis/queries/project/useStoredInfiniteQuery';
+import AfterLogin from '@Pages/layouts/AfterLogin';
+import Search from '@Pages/layouts/Search';
 import { useCallback, useMemo, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroller';
 import styled, { createGlobalStyle } from 'styled-components';
-import AfterLogin from '../Layouts/AfterLogin';
-import LoadingSpinner from '../Layouts/LoadingSpinner';
-import Search from '../Layouts/Search';
 import GraphicIcons from './Icon/GraphicIcons';
 import StorageProjectList from './StorageProjectList';
+
+const StoragePage = () => {
+    const [searchQuery, setSearchQuery] = useState<string>('');
+
+    const { data, fetchNextPage, hasNextPage } = useStoredInfiniteQuery();
+
+    const handleSearch = useCallback((query: string) => {
+        setSearchQuery(query);
+    }, []);
+
+    const filteredProjects = useMemo(() => {
+        return (
+            data?.pages.flatMap((page) =>
+                page.data.filter((project) =>
+                    project.title.toLowerCase().includes(searchQuery.toLowerCase())
+                )
+            ) || []
+        );
+    }, [data, searchQuery]);
+
+    return (
+        <>
+            <GlobalStyle />
+            <GraphicIcons />
+            <Container>
+                <AfterLogin />
+                <Content>
+                    <InnerContent>
+                        <Title>프로젝트 보관함</Title>
+                        <Search onSearch={handleSearch} />
+                    </InnerContent>
+                    <InfiniteScroll
+                        pageStart={0}
+                        loadMore={() => fetchNextPage()}
+                        hasMore={!!hasNextPage}
+                        loader={<div key={0}>Loading...</div>}
+                    >
+                        <StorageProjectList projects={filteredProjects} />
+                    </InfiniteScroll>
+                </Content>
+            </Container>
+            <Spacer />
+        </>
+    );
+};
+export default StoragePage;
 
 const GlobalStyle = createGlobalStyle`
 body {
@@ -56,54 +101,3 @@ const Spacer = styled.div`
     width: 100vw;
     height: 172px;
 `;
-
-const StoragePage = () => {
-    const [searchQuery, setSearchQuery] = useState<string>('');
-
-    const { data, fetchNextPage, hasNextPage, isLoading, isError, error } =
-        useStoredInfiniteQuery();
-
-    const handleSearch = useCallback((query: string) => {
-        setSearchQuery(query);
-    }, []);
-
-    const filteredProjects = useMemo(() => {
-        return (
-            data?.pages.flatMap((page) =>
-                page.data.filter((project) =>
-                    project.title.toLowerCase().includes(searchQuery.toLowerCase())
-                )
-            ) || []
-        );
-    }, [data, searchQuery]);
-
-    if (isLoading) return <LoadingSpinner />;
-    if (isError) return <div>Error: {error.message}</div>;
-
-    return (
-        <>
-            <GlobalStyle />
-            <GraphicIcons />
-            <Container>
-                <AfterLogin />
-                <Content>
-                    <InnerContent>
-                        <Title>프로젝트 보관함</Title>
-                        <Search onSearch={handleSearch} />
-                    </InnerContent>
-                    <InfiniteScroll
-                        pageStart={0}
-                        loadMore={() => fetchNextPage()}
-                        hasMore={!!hasNextPage}
-                        loader={<div key={0}>Loading...</div>}
-                    >
-                        <StorageProjectList projects={filteredProjects} />
-                    </InfiniteScroll>
-                </Content>
-            </Container>
-            <Spacer />
-        </>
-    );
-};
-
-export default StoragePage;

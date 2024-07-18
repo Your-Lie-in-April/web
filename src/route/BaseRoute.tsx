@@ -1,9 +1,9 @@
-import Login from '#/Pages/Login/Login';
-import MainPage from '#/Pages/MainPage/MainPage';
-import InvitationAccept from '#/Pages/Modal/project/InvitationAccept';
-import ProjectMakePage from '#/Pages/ProjectMakePage/projectmakepage';
-import ProjectPage from '#/Pages/ProjectPage/ProjectPage';
-import StoragePage from '#/Pages/StoragePage/StoragePage';
+import Login from '@Pages/Login/Login';
+import MainPage from '@Pages/MainPage/MainPage';
+import InvitationAccept from '@Pages/Modal/project/InvitationAccept';
+import ProjectMakePage from '@Pages/ProjectMakePage/projectmakepage';
+import ProjectPage from '@Pages/ProjectPage/ProjectPage';
+import StoragePage from '@Pages/StoragePage/StoragePage';
 import { useEffect } from 'react';
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import AuthRoute from './AuthRoute';

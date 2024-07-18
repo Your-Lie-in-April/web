@@ -1,36 +1,38 @@
-import React, { createContext, useState, useEffect } from 'react';
+import { getWeekDates } from '@Pages/ProjectPage/Schedule/weekUtils';
 import dayjs from 'dayjs';
-import { useProjectContext } from './projectContext';
-import { getWeekDates } from '#/Pages/ProjectPage/Schedule/weekUtils';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 
-interface DateContextValue {
-  selectedDate: string | null;
-  setSelectedDate: React.Dispatch<React.SetStateAction<string | null>>;
-  weekDates: string[];
-}
+export type DateContextValue = {
+    selectedDate: string | null;
+    setSelectedDate: React.Dispatch<React.SetStateAction<string | null>>;
+    weekDates: string[];
+};
 
-export const DateContext = createContext<DateContextValue | undefined>(
-  undefined
-);
+export const DateContext = createContext<DateContextValue | undefined>(undefined);
 
-export const DateProvider: React.FC<{ children: React.ReactNode }> = ({
-  children,
-}) => {
-  const today = dayjs(new Date()).format('YYYY-MM-DD');
-  const { projectData } = useProjectContext();
-  const [selectedDate, setSelectedDate] = useState<string | null>(today);
-  const [weekDates, setWeekDates] = useState<string[]>([]);
+export const DateProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+    const today = dayjs(new Date()).format('YYYY-MM-DD');
+    const [selectedDate, setSelectedDate] = useState<string | null>(today);
+    const [weekDates, setWeekDates] = useState<string[]>([]);
 
-  useEffect(() => {
-    if (selectedDate) {
-      const week = getWeekDates(selectedDate);
-      setWeekDates(week);
+    useEffect(() => {
+        if (selectedDate) {
+            const week = getWeekDates(selectedDate);
+            setWeekDates(week);
+        }
+    }, [selectedDate]);
+
+    return (
+        <DateContext.Provider value={{ selectedDate, setSelectedDate, weekDates }}>
+            {children}
+        </DateContext.Provider>
+    );
+};
+
+export const useDateContext = (): DateContextValue => {
+    const context = useContext(DateContext);
+    if (context === undefined) {
+        throw new Error('useDateContext must be used within a DateProvider');
     }
-  }, [selectedDate]);
-
-  return (
-    <DateContext.Provider value={{ selectedDate, setSelectedDate, weekDates }}>
-      {children}
-    </DateContext.Provider>
-  );
+    return context;
 };

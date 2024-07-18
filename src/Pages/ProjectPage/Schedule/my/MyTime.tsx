@@ -1,4 +1,4 @@
-import { ScheduleWeekResponse } from '#/types/scheduleType';
+import { ScheduleWeekResponse } from '@/types/scheduleType';
 import styled from 'styled-components';
 import MyTimeSchedule from './MyTimeSchedule';
 
