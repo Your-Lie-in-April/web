@@ -1,5 +1,5 @@
-import { getProjectInviteInfo } from '#/apis/project';
-import { QUERY_KEY } from '#/constants/queryKey';
+import { getProjectInviteInfo } from '@apis/project';
+import { QUERY_KEY } from '@constants/queryKey';
 import { useQuery } from '@tanstack/react-query';
 
 /**
@@ -12,6 +12,7 @@ const useInviteInfoQuery = (url: string) => {
     return useQuery({
         queryKey: QUERY_KEY.PROJECT_IVITE_INFO(url),
         queryFn: () => getProjectInviteInfo(url),
+        gcTime: 0,
     });
 };
 

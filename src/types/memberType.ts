@@ -12,6 +12,12 @@ export type MemberEntity = {
  */
 export type MemberGetResDto = MemberEntity;
 
+
+/**
+ * GET projects/{projectId}/members
+ */
+export type AllMemGetResDto = MemberEntity[]
+
 /**
  * PUT members/${status}
  */

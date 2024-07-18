@@ -1,5 +1,5 @@
-import { deleteAlarm } from '#/apis/alarm';
-import { QUERY_KEY } from '#/constants/queryKey';
+import { deleteAlarm } from '@apis/alarm';
+import { QUERY_KEY } from '@constants/queryKey';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 /**

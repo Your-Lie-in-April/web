@@ -1,6 +1,6 @@
+import { postProjectInviteMember } from '@apis/project';
+import { QUERY_KEY } from '@constants/queryKey';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { QUERY_KEY } from '#/constants/queryKey';
-import { postProjectInviteMember } from '#/apis/project';
 
 /**
  * POST /project/invitation/{url}

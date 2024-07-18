@@ -1,4 +1,4 @@
-import { ProjectMemberResDto } from '#/types/projectType';
+import { ProjectMemberResDto } from '@/types/projectType';
 import { useState } from 'react';
 import useDeleteProjectLeaveMutation from './apis/mutations/project/useDeleteProjectLeaveMutation';
 import useDeleteProjectMutation from './apis/mutations/project/useDeleteProjectMutation';
@@ -14,6 +14,7 @@ export const useLeaveProject = (projectId: number, isModalOpen: boolean) => {
                 setMessage('해당 프로젝트를 삭제하시겠습니까?');
             }
         },
+        gcTime: 0,
     });
 
     const { mutate: deleteProject } = useDeleteProjectMutation(projectId);

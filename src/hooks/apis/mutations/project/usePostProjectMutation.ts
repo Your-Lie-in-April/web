@@ -1,22 +1,16 @@
-import { postNewProject } from '#/apis/project';
-import { QUERY_KEY } from '#/constants/queryKey';
-import { ProjectPostReqDto } from '#/types/projectType';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { postNewProject } from '@apis/project';
+import { useMutation } from '@tanstack/react-query';
+import { ProjectPostReqDto } from '@/types/projectType';
 
 /**
  * POST /project
  *
  * 프로젝트 생성하는 api 입니다.
  */
-const usePostProjectMutation = (body: ProjectPostReqDto) => {
-    const queryClient = useQueryClient();
+
+const usePostProjectMutation = () => {
     return useMutation({
-        mutationFn: () => postNewProject(body),
-        onSuccess: () => {
-            void queryClient.invalidateQueries({
-                queryKey: QUERY_KEY.PROJECT,
-            });
-        },
+        mutationFn: (body: ProjectPostReqDto) => postNewProject(body),
     });
 };
 

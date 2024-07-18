@@ -1,5 +1,5 @@
-import { deleteProjectMemberSelf } from '#/apis/project';
-import { QUERY_KEY } from '#/constants/queryKey';
+import { deleteProjectMemberSelf } from '@apis/project';
+import { QUERY_KEY } from '@constants/queryKey';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 /**
@@ -13,7 +13,10 @@ const useDeleteProjectLeaveMutation = (projectId: number) => {
         mutationFn: () => deleteProjectMemberSelf(projectId),
         onSuccess: () => {
             void queryClient.invalidateQueries({
-                queryKey: QUERY_KEY.PROJECT,
+                queryKey: QUERY_KEY.PROJECT_PIN,
+            });
+            void queryClient.invalidateQueries({
+                queryKey: QUERY_KEY.PROJECT_STORED,
             });
         },
     });

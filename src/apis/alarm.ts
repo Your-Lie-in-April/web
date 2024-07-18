@@ -1,11 +1,11 @@
-import { API } from '#/constants/api';
+import { API } from '@constants/api';
 import {
     AlarmAllResDto,
     AlarmDeleteReqDto,
     AlarmPatchReqDto,
     AlarmProjectResDto,
-} from '#/types/alarmType';
-import getAPIResponseData from '#/utils/getAPIResponseData';
+} from '@/types/alarmType';
+import getAPIResponseData from '@utils/getAPIResponseData';
 
 /**
  * 알림 읽음 처리

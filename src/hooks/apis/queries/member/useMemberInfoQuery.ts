@@ -1,6 +1,6 @@
-import { getMemberInfo } from '#/apis/member';
-import { QUERY_KEY } from '#/constants/queryKey';
-import { MemberGetResDto } from '#/types/memberType';
+import { getMemberInfo } from '@apis/member';
+import { QUERY_KEY } from '@constants/queryKey';
+import { MemberGetResDto } from '@/types/memberType';
 import { useQuery } from '@tanstack/react-query';
 
 /**

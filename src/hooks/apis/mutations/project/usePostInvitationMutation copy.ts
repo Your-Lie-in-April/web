@@ -1,5 +1,5 @@
-import { postProjectInviteMember } from '#/apis/project';
-import { QUERY_KEY } from '#/constants/queryKey';
+import { postProjectInviteMember } from '@apis/project';
+import { QUERY_KEY } from '@constants/queryKey';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 /**
@@ -14,7 +14,7 @@ const usePostInvitationMutation = (url: string) => {
         mutationFn: () => postProjectInviteMember(url),
         onSuccess: () => {
             queryClient.invalidateQueries({
-                queryKey: QUERY_KEY.PROJECT_INVITE,
+                queryKey: QUERY_KEY.PROJECT,
             });
         },
     });

@@ -95,6 +95,18 @@ export type ProjectPagination = {
     data: ProjectThumbnailResponse[];
 };
 
+export type ProjectCreateUpate = {
+    title: string;
+    description: string;
+    startDate: string;
+    endDate: string;
+    startTime: string;
+    endTime: string;
+    daysOfWeek: string[];
+    color: string;
+    coverImageId: string;
+};
+
 // GET /v1/projects/{projectId}
 // 특정 프로젝트의 정보 조회시 응답객체
 export type ProjectGetResDto = ProjectEntity;
@@ -122,17 +134,20 @@ export type ProjectInvitationMetaResDto = ProjectInviteMetaInfo;
 // GET /v1/covers
 export type ProjectCoverImgResDto = ProjectCoverImg;
 
+// GET /v1/covers
+export type ProjectCoverImgIdResDto = string;
+
 // PUT /v1/projects/{projectId}
-// 프로젝트 수정시 응답객체
-export type ProjectPutReqDto = null;
+// 프로젝트 수정시 요청객체
+export type ProjectPutReqDto = ProjectCreateUpate;
 
 // DELETE /v1/projects/{projectId}
 // 프로젝트 삭제시 응답객체
 export type ProjectDeleteReqDto = null;
 
 // POST /v1/projects
-// 프로젝트 생성시 응답객체
-export type ProjectPostReqDto = null;
+// 프로젝트 생성시 요청객체
+export type ProjectPostReqDto = ProjectCreateUpate;
 
 // POST projects/{projectId}/invitation
 // 회원 초대 링크 생성시 응답 객체
@@ -144,7 +159,9 @@ export type ProjectInviteMemReqDto = null;
 
 // PATCH /v1/projects/{projectId}/transfer-privilege
 // 관리자 권한 양도
-export type ProjectTransferPrivilegeReqDto = null;
+export type ProjectTransferPrivilegeReqDto = {
+    toMemberId: number;
+};
 
 // DELETE projects/{projectId}/members/{memberId}
 // 프로젝트에서 회원 강퇴시 응답 객체
