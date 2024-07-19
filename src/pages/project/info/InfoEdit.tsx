@@ -68,9 +68,9 @@ const InfoEdit: FC<InfoEditPros> = ({ setEditCover }) => {
 
     return (
         <Container
-        selectedColor={selectedColor}
-        selectedHex={selectedHex}
-        selectedImageUrl={selectedImageUrl}
+        $selectedColor={selectedColor}
+        $selectedHex={selectedHex}
+        $selectedImageUrl={selectedImageUrl}
         >
             <MakeContainer>
                 <TitleContainer>
@@ -135,9 +135,9 @@ interface ContentTextProps {
 }
 
 const Container =  styled.div<{
-    selectedColor: string | null;
-    selectedHex: string | null;
-    selectedImageUrl: string | null;
+    $selectedColor: string | null;
+    $selectedHex: string | null;
+    $selectedImageUrl: string | null;
 }>`
     width: 100%;
     height: 200px;
@@ -149,9 +149,8 @@ const Container =  styled.div<{
     border-bottom: 1px solid #000000;
     position: relative;
     z-index: 5;
-    background-color: ${(props) => props.selectedColor || props.selectedHex || 'white'};
-    background-image: url('${(props) => props.selectedImageUrl}');
-    background-size: cover;
+    background-color: ${(props) => props.$selectedColor || props.$selectedHex || 'white'};
+    background-image: url('${(props) => props.$selectedImageUrl}');    background-size: cover;
     background-position: center;
 `;
 const MakeContainer = styled.div`
