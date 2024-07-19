@@ -11,7 +11,11 @@ import { useQuery } from '@tanstack/react-query';
 const useCoverImgQuery = () => {
     return useQuery({
         queryKey: QUERY_KEY.COVER_IMG,
-        queryFn: () => getCoverImg(),
+        queryFn: async () => {
+            const page0Data = await getCoverImg(0);
+            const page1Data = await getCoverImg(1);
+            return { page0Data, page1Data };
+        },
         gcTime: 10000,
     });
 };

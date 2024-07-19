@@ -27,6 +27,7 @@ const ProjectCoverPicker: FC<CoverProps> = ({
     title,
     content,
     projectData,
+    setEditCover,
     imgId,
 }) => {
     const [color, setColor] = useState(projectData?.color || '');
@@ -38,8 +39,15 @@ const ProjectCoverPicker: FC<CoverProps> = ({
         onColorSelect(color);
     };
 
-    const handleImageClick = (url: string, id: string) => {
-        onImageSelect(url, id);
+    const handleImageClick = (page0Url: string, page0Id: string) => {
+        if (images) {
+            const page1Image = images.page1Data.data.find(
+                (_, index) => images.page0Data.data[index].id === page0Id
+            );
+            if (page1Image) {
+                onImageSelect(page1Image.url, page1Image.id);
+            }
+        }
     };
 
     const handleColorChange = useCallback(
@@ -79,14 +87,16 @@ const ProjectCoverPicker: FC<CoverProps> = ({
         }
 
         if (projectData?.startDate) {
-            payload.startDate = typeof projectData.startDate === 'string' 
-                ? projectData.startDate 
-                : new Date(projectData.startDate).toISOString();
+            payload.startDate =
+                typeof projectData.startDate === 'string'
+                    ? projectData.startDate
+                    : new Date(projectData.startDate).toISOString();
         }
         if (projectData?.endDate) {
-            payload.endDate = typeof projectData.endDate === 'string'
-                ? projectData.endDate
-                : new Date(projectData.endDate).toISOString();
+            payload.endDate =
+                typeof projectData.endDate === 'string'
+                    ? projectData.endDate
+                    : new Date(projectData.endDate).toISOString();
         }
         if (projectData?.daysOfWeek) {
             payload.daysOfWeek = projectData.daysOfWeek;
@@ -94,6 +104,9 @@ const ProjectCoverPicker: FC<CoverProps> = ({
         try {
             try {
                 await mutate.mutateAsync(payload);
+                if (setEditCover) {
+                    setEditCover(false);
+                }
             } catch (error) {
                 console.error('Error updating project:', error);
             }
@@ -134,7 +147,7 @@ const ProjectCoverPicker: FC<CoverProps> = ({
                     이미지
                     <ImageChoose>
                         {images ? (
-                            images.data.map((item) => (
+                            images.page0Data.data.map((item) => (
                                 <Image
                                     key={item.id}
                                     style={{

@@ -1,6 +1,9 @@
 import usePatchStoredMutation from '@hooks/apis/mutations/member/usePatchStoredMutation';
+import useAllMemberInfoQuery from '@hooks/apis/queries/member/useAllMemberInfoQuery';
 import { useProjectContext } from '@hooks/context/projectContext';
+import { useUserContext } from '@hooks/context/userContext';
 import InboxOutlinedIcon from '@mui/icons-material/InboxOutlined';
+import { Toast } from '@pages/layouts/Toast';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -13,6 +16,22 @@ const ProjectInfoDetail: React.FC<ProjectInfoDetailProps> = ({ onClick }) => {
     const { projectId } = useParams();
     const { mutate: handleStored } = usePatchStoredMutation(Number(projectId));
 
+    const { userData } = useUserContext();
+    const { data: membersData } = useAllMemberInfoQuery(Number(projectId));
+    const privilegedMembers = membersData?.filter((member) => member.isPrivileged) ?? [];
+    const isMePrivileged = privilegedMembers.some(
+        (member) => member.memberId === userData?.memberId
+    );
+
+    const handleOnEditClick = () => {
+        isMePrivileged ? onClick() : Toast('관리자만 수정할 수 있습니다', 'warning');
+    };
+
+    const hanldeSotredClick = () => {
+        handleStored();
+        window.location.reload();
+    };
+
     return (
         <StyledContainer color={projectData?.color} $imageUrl={projectData?.coverImageUrl}>
             <StyledProjectInfoDiv>
@@ -24,11 +43,11 @@ const ProjectInfoDetail: React.FC<ProjectInfoDetailProps> = ({ onClick }) => {
                     <StyledFlexItem />
                     <StyledFlexItem>
                         <StyledSettingDiv>
-                            <StyledSettingBtn onClick={onClick}>
+                            <StyledSettingBtn onClick={handleOnEditClick}>
                                 <EditIcon />
                                 커버 수정
                             </StyledSettingBtn>
-                            <StyledSettingBtn onClick={() => handleStored()}>
+                            <StyledSettingBtn onClick={hanldeSotredClick}>
                                 <InboxOutlinedIcon style={{ fontSize: '18px' }} />
                                 프로젝트 보관
                             </StyledSettingBtn>
@@ -68,7 +87,7 @@ const StyledProjectInfoDiv = styled.div`
 const StyledCommonText = styled.div`
     color: #000000;
     text-align: center;
-    font-family: Pretendard;
+    font-family: 'Pretendard';
     font-size: 28px;
     font-style: normal;
     font-weight: 400;
@@ -98,7 +117,7 @@ const StyledSettingDiv = styled.div`
     border-radius: 20px;
     background: #633ae2;
     box-sizing: border-box;
-
+    cursor: pointer;
     &:focus {
         outline: none;
     }
@@ -130,10 +149,10 @@ const StyledSvg = styled.svg`
     display: inline-block;
 `;
 
-const StyledSettingBtn = styled.button`
+const StyledSettingBtn = styled.div`
     color: #ffffff;
     text-align: center;
-    font-family: Pretendard;
+    font-family: 'Pretendard';
     font-size: 14px;
     font-style: normal;
     font-weight: 500;

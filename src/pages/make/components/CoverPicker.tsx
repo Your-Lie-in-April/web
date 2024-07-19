@@ -28,8 +28,15 @@ const CoverPicker: FC<CoverPickerProps> = ({
         onColorSelect(color);
     };
 
-    const handleImageClick = (url: string, id: string) => {
-        onImageSelect(url, id);
+    const handleImageClick = (page0Url: string, page0Id: string) => {
+        if (images) {
+            const page1Image = images.page1Data.data.find(
+                (_, index) => images.page0Data.data[index].id === page0Id
+            );
+            if (page1Image) {
+                onImageSelect(page1Image.url, page1Image.id);
+            }
+        }
     };
 
     const handleColorChange = useCallback(
@@ -78,8 +85,8 @@ const CoverPicker: FC<CoverPickerProps> = ({
                 <ImageContainer>
                     이미지
                     <ImageChoose>
-                        {images ? (
-                            images.data.map((item) => (
+                    {images ? (
+                            images.page0Data.data.map((item) => (
                                 <Image
                                     key={item.id}
                                     style={{
