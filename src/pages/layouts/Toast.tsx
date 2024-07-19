@@ -1,12 +1,12 @@
-import '@styles/toast.css';
 import { toast, ToastOptions } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import '@styles/toast.css';
 
 type ToastType = 'error' | 'warning' | 'success';
 
 const defaultOptions: ToastOptions = {
     position: 'top-left',
-    autoClose: 2500,
+    autoClose: 2000,
     hideProgressBar: true,
     closeOnClick: true,
     pauseOnHover: true,
