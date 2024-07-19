@@ -1,4 +1,3 @@
-import { UserProvider } from '@hooks/context/userContext';
 import BaseRoute from '@routes/BaseRoute';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
@@ -12,12 +11,10 @@ function App() {
     return (
         <QueryClientProvider client={queryClient}>
             <ToastContainer />
-            <UserProvider>
-                <Router>
-                    <ScrollToTop />
-                    <BaseRoute />
-                </Router>
-            </UserProvider>
+            <Router>
+                <ScrollToTop />
+                <BaseRoute />
+            </Router>
             <ReactQueryDevtools />
         </QueryClientProvider>
     );

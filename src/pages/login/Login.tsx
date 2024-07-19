@@ -1,7 +1,7 @@
 import { Http } from '@constants/urls';
 import BeforeLogin from '@pages/layouts/BeforeLogin';
 import googleLogo from '@pics/google-login.svg';
-import { FC, useEffect } from 'react';
+import { FC } from 'react';
 import styled, { createGlobalStyle, keyframes } from 'styled-components';
 import GraphicIcons from './icons/GraphicIcons';
 
@@ -121,14 +121,6 @@ const Login: FC = () => {
     const oAuth = () => {
         window.location.href = Http + '/oauth2/authorization/google';
     };
-
-    useEffect(() => {
-        const accessToken = localStorage.getItem('access_token');
-        const memberId = localStorage.getItem('member_id');
-
-        console.log(accessToken);
-        console.log(memberId);
-    }, [location.search]);
 
     return (
         <>
