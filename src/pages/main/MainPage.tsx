@@ -4,7 +4,6 @@ import { useMainPaginationMutation } from '@hooks/useMainPaginationMutation';
 import AfterLogin from '@pages/layouts/AfterLogin';
 import BeforeLogin from '@pages/layouts/BeforeLogin';
 import Search from '@pages/layouts/Search';
-import { memberId } from '@utils/token';
 import { FC, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import styled, { createGlobalStyle } from 'styled-components';
@@ -65,9 +64,14 @@ const MainPage: FC = () => {
         }
     }, []);
 
+    const memberId = localStorage.getItem('member_id');
     const { currentPage, totalPages, projects, handlePageChange, updatePaginationData } =
-        useMainPaginationMutation(memberId);
-    const { data: getProjectMainPagination } = useProjectMainQuery(memberId, currentPage, 6);
+        useMainPaginationMutation(Number(memberId));
+    const { data: getProjectMainPagination } = useProjectMainQuery(
+        Number(memberId),
+        currentPage,
+        6
+    );
     useEffect(() => {
         if (getProjectMainPagination) {
             updatePaginationData(getProjectMainPagination);
