@@ -10,7 +10,7 @@ function App() {
     const queryClient = new QueryClient();
     return (
         <QueryClientProvider client={queryClient}>
-            <ToastContainer />
+            <ToastContainer limit={1}/>
             <Router>
                 <ScrollToTop />
                 <BaseRoute />
