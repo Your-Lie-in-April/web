@@ -108,8 +108,7 @@ const EditMySchedule: React.FC<EditMyScheduleProps> = ({
 
         // 선택한 스케줄이 없거나 모두 프로젝트 기간/날짜에 포함되지 않는 경우
         if (newScheduleData.schedule.length === 0) {
-            console.log('Post/Update Schedule data empty');
-            Toast(`프로젝트 기간에 맞춰 시간표를 작성해주세요!`, 'warning');
+            Toast(`${getDateText()}\n프로젝트 기간에 맞춰 시간표를 작성해주세요!`, 'warning');
             setSelection({});
             onSetIsEditModal();
             return;
