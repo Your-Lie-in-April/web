@@ -107,6 +107,7 @@ export type ProjectCreateUpate = {
     coverImageId: string;
 };
 
+
 // GET /v1/projects/{projectId}
 // 특정 프로젝트의 정보 조회시 응답객체
 export type ProjectGetResDto = ProjectEntity;

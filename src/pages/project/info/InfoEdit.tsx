@@ -1,5 +1,6 @@
+import useCoverImgQuery from '@hooks/apis/queries/project/useCoverImgQuery';
 import { useProjectContext } from '@hooks/context/projectContext';
-import { ChangeEvent, Dispatch, FC, SetStateAction, useState } from 'react';
+import { ChangeEvent, Dispatch, FC, SetStateAction, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import ProjectCoverPicker from './ProjectCoverPicker';
 
@@ -19,6 +20,18 @@ const InfoEdit: FC<InfoEditPros> = ({ setEditCover }) => {
     const [selectedImgId, setSelectedImageId] = useState<string>('');
 
     const { projectData } = useProjectContext();
+    const { data } = useCoverImgQuery();
+    const coverImg = data?.find((item) => item.page0.url === projectData?.coverImageUrl);
+
+    useEffect(() => {
+        if (projectData) {
+            setTitle(projectData.title);
+            setContent(projectData.description);
+            setSelectedColor(projectData.color || null);
+            setSelectedImageUrl(coverImg?.page1.url || projectData.coverImageUrl || null);
+            setSelectedImageId(projectData.coverImageId || '');
+        }
+    }, [projectData]);
 
     const handleTextareaChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
         const inputText = e.target.value;
@@ -43,11 +56,11 @@ const InfoEdit: FC<InfoEditPros> = ({ setEditCover }) => {
         setSelectedHex(null);
     };
 
-    const handleImageSelect = (url: string, id: string) => {
-        setSelectedImageUrl(url);
+    const handleImageSelect = (page0Url: string, page0Id: string, page1Url: string) => {
+        setSelectedImageUrl(page1Url);
         setSelectedColor(null);
         setSelectedHex(null);
-        setSelectedImageId(id);
+        setSelectedImageId(page0Id);
     };
 
     const handleHexSelect = (color: string) => {
@@ -58,10 +71,9 @@ const InfoEdit: FC<InfoEditPros> = ({ setEditCover }) => {
 
     return (
         <Container
-            style={{
-                backgroundColor: selectedColor || selectedHex || 'white',
-                backgroundImage: `url('${selectedImageUrl}')`,
-            }}
+            $selectedColor={selectedColor}
+            $selectedHex={selectedHex}
+            $selectedImageUrl={selectedImageUrl}
         >
             <MakeContainer>
                 <TitleContainer>
@@ -70,7 +82,6 @@ const InfoEdit: FC<InfoEditPros> = ({ setEditCover }) => {
                             type='text'
                             onFocus={() => {
                                 setIsTitleClicked(true);
-
                                 setIsCoverClicked(false);
                             }}
                             onBlur={() => {
@@ -100,7 +111,7 @@ const InfoEdit: FC<InfoEditPros> = ({ setEditCover }) => {
                             style={{
                                 position: 'absolute',
                                 right: '0px',
-                                top: '182px',
+                                top: '182.5px',
                             }}
                         >
                             <ProjectCoverPicker
@@ -126,7 +137,11 @@ interface ContentTextProps {
     $focused: boolean;
 }
 
-const Container = styled.div`
+const Container = styled.div<{
+    $selectedColor: string | null;
+    $selectedHex: string | null;
+    $selectedImageUrl: string | null;
+}>`
     width: 100%;
     height: 200px;
     display: flex;
@@ -135,9 +150,12 @@ const Container = styled.div`
     justify-content: center;
     background-color: #ffffff;
     border-bottom: 1px solid #000000;
-
     position: relative;
     z-index: 5;
+    background-color: ${(props) => props.$selectedColor || props.$selectedHex || 'white'};
+    background-image: url('${(props) => props.$selectedImageUrl}');
+    background-size: cover;
+    background-position: center;
 `;
 const MakeContainer = styled.div`
     width: 1043px;
@@ -196,7 +214,7 @@ const ContentText = styled.textarea<ContentTextProps>`
     color: ${({ $focused }) => ($focused ? '#000000' : '#7d7d7d')};
     color: #7d7d7d;
     text-align: center;
-    font-family: Pretendard;
+    font-family: 'Pretendard';
     font-size: 28px;
     font-style: normal;
     width: 1500px;

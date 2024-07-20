@@ -10,8 +10,9 @@ const useScheduleMemberQuery = (projectId: number, memberId: number, condition: 
     return useQuery({
         queryKey: QUERY_KEY.SCHEDULE_MEMBER(projectId, memberId, condition),
         queryFn: () => getScheduleMember(projectId, memberId, condition),
-        gcTime: 0,
         placeholderData: keepPreviousData,
+        staleTime: 60000 * 10,
+        gcTime: 0,
     });
 };
 

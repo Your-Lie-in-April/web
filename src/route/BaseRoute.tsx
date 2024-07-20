@@ -1,3 +1,4 @@
+import { UserProvider } from '@hooks/context/userContext';
 import Login from '@pages/login/Login';
 import MainPage from '@pages/main/MainPage';
 import ProjectMakePage from '@pages/make/MakePage';
@@ -40,9 +41,11 @@ export default function BaseRoute() {
                 <Route
                     path='/'
                     element={
-                        <PrivateRoute>
-                            <AuthRoute />
-                        </PrivateRoute>
+                        <UserProvider>
+                            <PrivateRoute>
+                                <AuthRoute />
+                            </PrivateRoute>
+                        </UserProvider>
                     }
                 >
                     <Route index element={<MainPage />} />

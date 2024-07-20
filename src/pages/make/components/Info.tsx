@@ -43,12 +43,12 @@ const Info: FC<InfoProps> = ({ setContent, setTitle, setColor, setImg, setImgId 
         setImgId('');
     };
 
-    const handleImageSelect = (url: string, id: string) => {
-        setSelectedImageUrl(url);
+    const handleImageSelect = (page0Url: string, page0Id: string, page1Url: string) => {
+        setSelectedImageUrl(page1Url);
         setSelectedColor(null);
         setSelectedHex(null);
-        setImg(url);
-        setImgId(id);
+        setImg(page0Url);
+        setImgId(page0Id);
         setColor('');
     };
 
@@ -63,10 +63,9 @@ const Info: FC<InfoProps> = ({ setContent, setTitle, setColor, setImg, setImgId 
 
     return (
         <Container
-            style={{
-                backgroundColor: selectedColor || selectedHex || 'white',
-                backgroundImage: `url('${selectedImageUrl}')`,
-            }}
+            $selectedColor={selectedColor}
+            $selectedHex={selectedHex}
+            $selectedImageUrl={selectedImageUrl}
         >
             <MakeContainer>
                 <TitleContainer>
@@ -75,7 +74,6 @@ const Info: FC<InfoProps> = ({ setContent, setTitle, setColor, setImg, setImgId 
                             type='text'
                             onFocus={() => {
                                 setIsTitleClicked(true);
-
                                 setIsCoverClicked(false);
                             }}
                             onBlur={() => {
@@ -111,7 +109,9 @@ const Info: FC<InfoProps> = ({ setContent, setTitle, setColor, setImg, setImgId 
                         >
                             <CoverPicker
                                 onColorSelect={handleColorSelect}
-                                onImageSelect={handleImageSelect}
+                                onImageSelect={(page0Url, page0Id, page1Url) =>
+                                    handleImageSelect(page0Url, page0Id, page1Url)
+                                }
                                 onHexSelect={handleHexSelect}
                                 toggleCover={toggleCover}
                             />
@@ -128,7 +128,11 @@ interface ContentTextProps {
     $focused: boolean;
 }
 
-const Container = styled.div`
+const Container = styled.div<{
+    $selectedColor: string | null;
+    $selectedHex: string | null;
+    $selectedImageUrl: string | null;
+}>`
     width: 100%;
     height: 200px;
     display: flex;
@@ -139,6 +143,10 @@ const Container = styled.div`
     border-bottom: 1px solid #000000;
     position: relative;
     z-index: 5;
+    background-color: ${(props) => props.$selectedColor || props.$selectedHex || 'white'};
+    background-image: url('${(props) => props.$selectedImageUrl}');
+    background-size: cover;
+    background-position: center;
 `;
 const MakeContainer = styled.div`
     width: 1043px;

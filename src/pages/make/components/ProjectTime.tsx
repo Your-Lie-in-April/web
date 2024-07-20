@@ -77,8 +77,6 @@ const ProjectTime: FC<ProjectTimeProps> = ({
     };
     const [filteredEndTimes, setFilteredEndTimes] = useState<Time[]>(Times);
     const toggleWeekend = (day: string) => {
-        console.log(`Toggling day: ${day}`);
-
         setSelectedDays((currentDays) => {
             if (currentDays.includes(day)) {
                 const newSelectedDays = currentDays.filter((d) => d !== day);

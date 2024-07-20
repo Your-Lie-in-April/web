@@ -135,9 +135,9 @@ export const getProjectIsStored = async (page: number = 0, size: number = 9) => 
 };
 
 //  커버 이미지 조회
-export const getCoverImg = async () => {
+export const getCoverImg = async (page: number = 0) => {
     return await getAPIResponseData<ProjectCoverImgResDto>({
         method: 'GET',
-        url: API.COVER_IMG,
+        url: API.COVER_IMG(page),
     });
 };

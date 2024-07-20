@@ -12,6 +12,7 @@ const useProjectPinnedQuery = (memberId: number) => {
     return useQuery({
         queryKey: QUERY_KEY.PROJECT_PIN,
         queryFn: () => getPinProject(memberId),
+        staleTime: 60000 * 10,
     });
 };
 

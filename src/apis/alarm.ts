@@ -1,10 +1,11 @@
-import { API } from '@constants/api';
 import {
     AlarmAllResDto,
     AlarmDeleteReqDto,
+    AlarmEventEntity,
     AlarmPatchReqDto,
     AlarmProjectResDto,
 } from '@/types/alarmType';
+import { API } from '@constants/api';
 import getAPIResponseData from '@utils/getAPIResponseData';
 
 /**
@@ -19,24 +20,35 @@ export const patchAlarm = async (notificationId: number) => {
 };
 
 /**
+ * 이전 알림 조회
+ * GET /v1/notifications
+ * |
  * (프로젝트 내) 이전 알림 조회
  * GET /v1/projects/{projectId}/notifications
  */
-export const getAlarmProjectId = async (projectId: number, page: number = 0, size: number = 12) => {
-    return await getAPIResponseData<AlarmProjectResDto>({
+export const getAlarmAll = async (
+    cursor: string,
+    isChecked: boolean
+): Promise<AlarmEventEntity> => {
+    return await getAPIResponseData<AlarmAllResDto>({
         method: 'GET',
-        url: API.NOTIFICATION_PROJECTID(projectId, page, size),
+        url: API.NOTIFICATION_ALL(cursor, isChecked),
     });
 };
 
-/**
- * 이전 알림 조회
- * GET /v1/notifications
+/*
+ * (프로젝트 내) 이전 알림 조회
+ * GET /v1/projects/{projectId}/notifications
  */
-export const getAlarmAll = async (page: number = 0, size: number = 12) => {
-    return await getAPIResponseData<AlarmAllResDto>({
+export const getAlarmProject = async (
+    projectId: number,
+    cursor: string,
+    isChecked: boolean,
+    size: number = 5
+): Promise<AlarmEventEntity> => {
+    return await getAPIResponseData<AlarmProjectResDto>({
         method: 'GET',
-        url: API.NOTIFICATION_ALL(page, size),
+        url: API.NOTIFICATION_PROJECTID(projectId, cursor, isChecked, size),
     });
 };
 

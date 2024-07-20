@@ -9,11 +9,12 @@ import { useQuery } from '@tanstack/react-query';
  * @param memberId
  * @returns
  */
-const useMemberInfoQuery = (memberId: number) => {
-    return useQuery<MemberGetResDto>({
-        queryKey: QUERY_KEY.MEMBER_ID(memberId),
-        queryFn: () => getMemberInfo(memberId),
+const useMemberInfoQuery = (memberId: number| null) => {
+    return useQuery<MemberGetResDto| null>({
+        queryKey: QUERY_KEY.MEMBER_ID(memberId!),
+        queryFn: () => getMemberInfo(memberId!),
         enabled: !!memberId,
+        staleTime : 60000 * 15
     });
 };
 

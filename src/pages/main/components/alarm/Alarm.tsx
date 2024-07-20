@@ -1,12 +1,14 @@
 import { AlarmEntity } from '@/types/alarmType';
+import { QUERY_KEY } from '@constants/queryKey';
 import useDeleteAlarmMutation from '@hooks/apis/mutations/alarm/useDeleteAlarmMutation';
 import usePatchAlarmMutation from '@hooks/apis/mutations/alarm/usePatchAlarmMutation';
 import useAlarmsQuery from '@hooks/apis/queries/alarm/useAlarmsQuery';
+import { AlarmMessageType } from '@hooks/useSSE';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
-import { Toast } from '@pages/layouts/Toast';
 import ConfirmDeleteAlarm from '@pages/modal/project/ConfirmDeleteAlarm';
+import { useQuery } from '@tanstack/react-query';
 import { FC, useCallback, useRef, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import 'react-toastify/dist/ReactToastify.css';
 import styled from 'styled-components';
 
@@ -15,11 +17,11 @@ const Alarm: FC = () => {
     const [checkedState, setCheckedState] = useState<Record<number, boolean>>({});
     const [isDeleted, setIsDeleted] = useState<boolean>(false);
     const navigate = useNavigate();
-    const { projectId } = useParams();
 
-    const { uncheckedQuery, checkedQuery, isUncheckedComplete } = useAlarmsQuery(
-        projectId ? Number(projectId) : undefined
-    );
+    const { uncheckedQuery, checkedQuery, isUncheckedComplete } = useAlarmsQuery();
+    const { data: realTimeAlarms } = useQuery<AlarmMessageType[]>({
+        queryKey: QUERY_KEY.ALARM_SSE,
+    });
 
     const intObserver = useRef<IntersectionObserver | null>(null);
     const lastAlarmRef = useCallback(
@@ -46,7 +48,7 @@ const Alarm: FC = () => {
         ...(isUncheckedComplete ? checkedQuery.data?.pages.flatMap((page) => page.data) || [] : []),
     ];
 
-    // 알람 삭제
+    // 알림 삭제
     const deleteAlarmMutation = useDeleteAlarmMutation();
     const handleDeleteNotifications = async () => {
         const notificationsToDelete = Object.entries(checkedState)
@@ -76,12 +78,12 @@ const Alarm: FC = () => {
         }));
     };
 
-    // 알람 읽음
+    // 알림 읽음 처리
     const patchAlarm = usePatchAlarmMutation();
     const handleNotificationClick = async (projectId: number, notificationId: number) => {
         try {
             await patchAlarm.mutateAsync(notificationId);
-            Toast('알림을 확인했습니다', 'success');
+            navigate(`/project/${projectId}`);
         } catch (error) {
             console.error('Failed to patch notification:', error);
         }
@@ -89,7 +91,7 @@ const Alarm: FC = () => {
 
     return (
         <AlarmDiv>
-            <TextStyle>알림</TextStyle>
+            <Text>알림</Text>
             {allAlarms.length > 0 && (
                 <DeleteWrapper>
                     <StyledCheckBoxIcon
@@ -104,7 +106,46 @@ const Alarm: FC = () => {
                     </DeleteNotification>
                 </DeleteWrapper>
             )}
-            <ScrollableArea $hasMessages={allAlarms.length > 0}>
+            <ScrollableArea>
+                {allAlarms.length > 0 && <Divider />}
+                {realTimeAlarms && realTimeAlarms.length > 0 && (
+                    <>
+                        {realTimeAlarms.map((alarm) => (
+                            <NotificationBox
+                                key={alarm.notificationId}
+                                onClick={() =>
+                                    handleNotificationClick(alarm.projectId, alarm.notificationId)
+                                }
+                            >
+                                <NotificationWrapper>
+                                    {isIconVisible && (
+                                        <CheckBoxIcon
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                handleCheckBoxClick(alarm.notificationId);
+                                            }}
+                                            style={{
+                                                color: checkedState[alarm.notificationId]
+                                                    ? '#633AE2'
+                                                    : '#A4A4A4',
+                                                marginLeft: -10,
+                                                fontSize: 20,
+                                                cursor: 'pointer',
+                                            }}
+                                        />
+                                    )}
+                                    <ContentWrapper>
+                                        <ProjectTitleContainer $isIconVisible={isIconVisible}>
+                                            <ProjectTitle>{alarm.projectTitle}</ProjectTitle>
+                                            <CreatedAt>{alarm.createdAt.slice(0, 10)}</CreatedAt>
+                                        </ProjectTitleContainer>
+                                        <NotificationContent>{alarm.message}</NotificationContent>
+                                    </ContentWrapper>
+                                </NotificationWrapper>
+                            </NotificationBox>
+                        ))}
+                    </>
+                )}
                 {allAlarms.map((alarm, index) => (
                     <NotificationBox
                         key={alarm.notificationId}
@@ -145,42 +186,46 @@ const Alarm: FC = () => {
         </AlarmDiv>
     );
 };
+
 export default Alarm;
 
 const AlarmDiv = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 291px;
-    height: 294px;
+    width: 312px;
+    height: 918px;
     background-color: #f5f5f5;
-    border-radius: 20px;
+    border-radius: 10px;
     padding: 8px;
-    padding-top: 20px;
+    padding-top: 14px;
     gap: 8px;
     box-sizing: border-box;
-    box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.25);
     position: relative;
     overflow: hidden;
 `;
 
-const ScrollableArea = styled.div<{ $hasMessages: boolean }>`
+const ScrollableArea = styled.div`
     overflow-y: auto;
     flex-grow: 1;
     width: 100%;
     display: flex;
     flex-direction: column;
-    border-top: ${({ $hasMessages }) => ($hasMessages ? '1px solid #7d7d7d' : 'none')};
+    align-items: center;
 `;
 
-const TextStyle = styled.div`
-    color: #c4c4c4;
-    font-size: 22px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: normal;
+const Divider = styled.div`
+    height: 0.8px;
+    background-color: #7d7d7d;
+    width: 275px;
+`;
+
+const Text = styled.div`
     width: 100%;
     font-style: normal;
+    font-weight: 500;
+    font-size: 22px;
+    color: #a4a4a4;
     opacity: 0.9;
     white-space: nowrap;
     display: flex;
@@ -192,8 +237,8 @@ const DeleteWrapper = styled.div`
     display: flex;
     gap: 4px;
     position: absolute;
-    left: 7px;
-    top: 34px;
+    left: 16px;
+    top: 25px;
     justify-content: center;
     align-items: center;
 `;
@@ -209,8 +254,8 @@ const NotificationBox = styled.div`
     border-bottom: 1px solid #7d7d7d;
     flex-direction: column;
     gap: 7px;
-    overflow-y: scroll;
     cursor: pointer;
+    overflow-y: scroll;
 `;
 
 const NotificationWrapper = styled.div`
@@ -255,7 +300,6 @@ const NotificationContent = styled.div`
     font-style: normal;
     font-weight: 400;
     line-height: normal;
-    overflow: hidden;
 `;
 
 const ProjectTitleContainer = styled.div<{ $isIconVisible: boolean }>`

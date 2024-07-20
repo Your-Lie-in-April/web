@@ -91,7 +91,7 @@ const StyledCalendarWrapper = styled.div`
         border-radius: 10px;
         background: #fbfbfb;
         box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.25);
-        font-family: Pretendard;
+        font-family: 'Pretendard';
         color: #000000;
         line-height: normal;
         padding: 7px;

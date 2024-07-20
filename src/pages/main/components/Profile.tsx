@@ -8,7 +8,7 @@ const Profile: React.FC = () => {
     const hasStatus = isLoggedIn && !!userData.state;
 
     return (
-        <LoginDiv>
+        <Layout>
             <ImageDiv>
                 {userData?.profileImageUrl ? (
                     <StyledImage
@@ -36,20 +36,21 @@ const Profile: React.FC = () => {
                         : '로그인 되어 있지 않음'}
                 </Text>
             </StatusContainer>
-        </LoginDiv>
+        </Layout>
     );
 };
 export default Profile;
 
-const LoginDiv = styled.div`
+const Layout = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 100%;
+    width: 312px;
     height: 218px;
     border-radius: 10px;
     background-color: #ffffff;
     text-align: center;
+    box-sizing: border-box;
 `;
 
 const ImageDiv = styled.div`

@@ -1,9 +1,8 @@
 import { ProjectPinResponse } from '@/types/projectType';
+import { ScheduleAllMembersResDto } from '@/types/scheduleType';
 import usePatchPinnedMutation from '@hooks/apis/mutations/member/usePatchPinnedMutation';
 import useProjectPinnedQuery from '@hooks/apis/queries/project/useProjectPinnedQuery';
 import PushPinOutlinedIcon from '@mui/icons-material/PushPinOutlined';
-import { ScheduleAllMembersResDto } from '@/types/scheduleType';
-import { memberId } from '@utils/token';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -16,8 +15,8 @@ const Pinned: React.FC = () => {
     const [pinSchedule, setPinSchedule] = useState<ScheduleAllMembersResDto | null>(
         pinnedProjects?.schedule ?? null
     );
-
-    const { data: getPinProject } = useProjectPinnedQuery(memberId);
+    const memberId = localStorage.getItem('member_id');
+    const { data: getPinProject } = useProjectPinnedQuery(Number(memberId));
     useEffect(() => {
         if (getPinProject && getPinProject.length > 0) {
             setPinnedProjects(getPinProject[0]);

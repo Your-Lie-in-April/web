@@ -8,7 +8,7 @@ const colors = ['#633AE2', '#FFCB3B', '#64AFF5', '#C2D57A', '#EB5757', '#212121'
 
 interface CoverPickerProps {
     onColorSelect: (color: string) => void;
-    onImageSelect: (url: string, id: string) => void;
+    onImageSelect: (page0Url: string, page0Id: string, page1Url: string) => void; // 여기를 수정
     onHexSelect: (color: string) => void;
     toggleCover: () => void;
 }
@@ -28,8 +28,8 @@ const CoverPicker: FC<CoverPickerProps> = ({
         onColorSelect(color);
     };
 
-    const handleImageClick = (url: string, id: string) => {
-        onImageSelect(url, id);
+    const handleImageClick = (page0Url: string, page0Id: string, page1Url: string) => {
+        onImageSelect(page0Url, page0Id, page1Url);
     };
 
     const handleColorChange = useCallback(
@@ -79,17 +79,23 @@ const CoverPicker: FC<CoverPickerProps> = ({
                     이미지
                     <ImageChoose>
                         {images ? (
-                            images.data.map((item) => (
+                            images.map((item) => (
                                 <Image
-                                    key={item.id}
+                                    key={item.page0.id}
                                     style={{
-                                        backgroundImage: `url('${item.url}')`,
+                                        backgroundImage: `url('${item.page0.url}')`,
                                         backgroundSize: 'cover',
                                         backgroundRepeat: 'no-repeat',
                                         backgroundPosition: 'center',
                                     }}
-                                    onClick={() => handleImageClick(item.url, item.id)}
-                                ></Image>
+                                    onClick={() =>
+                                        handleImageClick(
+                                            item.page0.url,
+                                            item.page0.id,
+                                            item.page1.url
+                                        )
+                                    }
+                                />
                             ))
                         ) : (
                             <p>Loading...</p>

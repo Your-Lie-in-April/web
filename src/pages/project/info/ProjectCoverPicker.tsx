@@ -11,7 +11,7 @@ const colors = ['#633AE2', '#FFCB3B', '#64AFF5', '#C2D57A', '#EB5757', '#212121'
 
 interface CoverProps {
     onColorSelect: (color: string) => void;
-    onImageSelect: (url: string, id: string) => void;
+    onImageSelect: (page0Url: string, page0Id: string, page1Url: string) => void; // 여기를 수정
     onHexSelect: (color: string) => void;
     title?: string;
     content?: string;
@@ -27,6 +27,7 @@ const ProjectCoverPicker: FC<CoverProps> = ({
     title,
     content,
     projectData,
+    setEditCover,
     imgId,
 }) => {
     const [color, setColor] = useState(projectData?.color || '');
@@ -38,8 +39,8 @@ const ProjectCoverPicker: FC<CoverProps> = ({
         onColorSelect(color);
     };
 
-    const handleImageClick = (url: string, id: string) => {
-        onImageSelect(url, id);
+    const handleImageClick = (page0Url: string, page0Id: string, page1Url: string) => {
+        onImageSelect(page0Url, page0Id, page1Url);
     };
 
     const handleColorChange = useCallback(
@@ -65,35 +66,65 @@ const ProjectCoverPicker: FC<CoverProps> = ({
         const effectiveTitle = title || projectData?.title;
         const effectiveDescription = content || projectData?.description;
 
+        const formatDate = (date: Date | string | undefined) => {
+            if (!date) return undefined;
+            if (date instanceof Date) {
+                return date.toISOString().split('T')[0];
+            }
+            return date;
+        };
+
+        const formatTime = (time: Date | string | undefined) => {
+            if (!time) return undefined;
+            if (time instanceof Date) {
+                return time.toTimeString().split(' ')[0];
+            }
+            return time;
+        };
+
         const payload: Partial<ProjectCreateUpate> = {
             title: effectiveTitle,
             description: effectiveDescription,
+            startDate: formatDate(projectData?.startDate),
+            endDate: formatDate(projectData?.endDate),
+            startTime: formatTime(projectData?.startTime),
+            endTime: formatTime(projectData?.endTime),
+            daysOfWeek: projectData?.daysOfWeek,
         };
 
         if (color && color !== projectData?.color) {
             payload.color = color;
             payload.coverImageId = '';
         } else if (imgId && imgId !== projectData?.coverImageId) {
-            payload.coverImageId = imgId;
+            payload.coverImageId = String(imgId);
             payload.color = '';
+        } else {
+            payload.color = projectData?.color || '';
+            payload.coverImageId = projectData?.coverImageId || '';
         }
 
         if (projectData?.startDate) {
-            payload.startDate = typeof projectData.startDate === 'string' 
-                ? projectData.startDate 
-                : new Date(projectData.startDate).toISOString();
+            payload.startDate =
+                typeof projectData.startDate === 'string'
+                    ? projectData.startDate
+                    : new Date(projectData.startDate).toISOString();
         }
         if (projectData?.endDate) {
-            payload.endDate = typeof projectData.endDate === 'string'
-                ? projectData.endDate
-                : new Date(projectData.endDate).toISOString();
+            payload.endDate =
+                typeof projectData.endDate === 'string'
+                    ? projectData.endDate
+                    : new Date(projectData.endDate).toISOString();
         }
         if (projectData?.daysOfWeek) {
             payload.daysOfWeek = projectData.daysOfWeek;
         }
         try {
             try {
-                await mutate.mutateAsync(payload);
+                console.log(payload);
+                // await mutate.mutateAsync(payload);
+                if (setEditCover) {
+                    setEditCover(false);
+                }
             } catch (error) {
                 console.error('Error updating project:', error);
             }
@@ -134,16 +165,22 @@ const ProjectCoverPicker: FC<CoverProps> = ({
                     이미지
                     <ImageChoose>
                         {images ? (
-                            images.data.map((item) => (
+                            images.map((item) => (
                                 <Image
-                                    key={item.id}
+                                    key={item.page0.id}
                                     style={{
-                                        backgroundImage: `url('${item.url}')`,
+                                        backgroundImage: `url('${item.page0.url}')`,
                                         backgroundSize: 'cover',
                                         backgroundRepeat: 'no-repeat',
                                         backgroundPosition: 'center',
                                     }}
-                                    onClick={() => handleImageClick(item.url, item.id)}
+                                    onClick={() =>
+                                        handleImageClick(
+                                            item.page0.url,
+                                            item.page0.id,
+                                            item.page1.url
+                                        )
+                                    }
                                 ></Image>
                             ))
                         ) : (
@@ -203,7 +240,7 @@ const ConverInnerContainer = styled.div`
     gap: 13px;
 `;
 
-const Register = styled.button`
+const Register = styled.div`
     display: flex;
     width: 82px;
     padding: 8px;
@@ -214,6 +251,8 @@ const Register = styled.button`
     background: #633ae2;
     white-space: nowrap;
     color: white;
+    box-sizing: border-box;
+    cursor: pointer;
 
     &:focus {
         outline: none;
