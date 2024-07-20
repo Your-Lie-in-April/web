@@ -120,8 +120,7 @@ const ProjectCoverPicker: FC<CoverProps> = ({
         }
         try {
             try {
-                console.log(payload);
-                // await mutate.mutateAsync(payload);
+                await mutate.mutateAsync(payload);
                 if (setEditCover) {
                     setEditCover(false);
                 }
