@@ -1,164 +1,96 @@
 import { AlarmEntity } from '@/types/alarmType';
-import { Http } from '@constants/urls';
 import useDeleteAlarmMutation from '@hooks/apis/mutations/alarm/useDeleteAlarmMutation';
 import usePatchAlarmMutation from '@hooks/apis/mutations/alarm/usePatchAlarmMutation';
-import useAlarmProjectQuery from '@hooks/apis/queries/alarm/useAlarmProjectQuery';
+import useAlarmsQuery from '@hooks/apis/queries/alarm/useAlarmsQuery';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
-import { formatTimeAgo } from '@pages/main/components/formatTimeAgo';
+import { Toast } from '@pages/layouts/Toast';
 import ConfirmDeleteAlarm from '@pages/modal/project/ConfirmDeleteAlarm';
-import { EventSourcePolyfill, NativeEventSource } from 'event-source-polyfill';
-import { FC, useEffect, useMemo, useState } from 'react';
-import InfiniteScroll from 'react-infinite-scroller';
+import { FC, useCallback, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import 'react-toastify/dist/ReactToastify.css';
 import styled from 'styled-components';
 
-type alarmMeaageType = {
-    projectTitle: string;
-    message: string;
-    createdAt: string;
-    projectId: number;
-    notificationId: number;
-};
-
 const Alarm: FC = () => {
-    const [alarmMessages, setAlarmMessages] = useState<alarmMeaageType[]>([]);
     const [isIconVisible, setIsIconVisible] = useState<boolean>(false);
-    const [checkedState, setCheckedState] = useState<boolean[]>([]);
+    const [checkedState, setCheckedState] = useState<Record<number, boolean>>({});
     const [isDeleted, setIsDeleted] = useState<boolean>(false);
-    const sseURL = `${Http}/v1/sse/subscribe`;
-    const token = localStorage.getItem('access_token');
     const navigate = useNavigate();
     const { projectId } = useParams();
 
-    const { data, fetchNextPage, hasNextPage } = useAlarmProjectQuery(Number(projectId));
-    const deleteAlarmMutation = useDeleteAlarmMutation(Number(projectId));
+    const { uncheckedQuery, checkedQuery, isUncheckedComplete } = useAlarmsQuery(
+        projectId ? Number(projectId) : undefined
+    );
 
-    useEffect(() => {
-        const EventSource = EventSourcePolyfill || NativeEventSource;
-        const eventSource = new EventSource(sseURL, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-                Connection: 'keep-alive',
-                Accept: 'text/event-stream',
-            },
-            heartbeatTimeout: 86400000,
-        });
+    const intObserver = useRef<IntersectionObserver | null>(null);
+    const lastAlarmRef = useCallback(
+        (alarm: HTMLDivElement) => {
+            if (intObserver.current) intObserver.current.disconnect();
 
-        eventSource.addEventListener('notification', (event: any) => {
-            console.log('Notification event received');
-        });
-
-        eventSource.addEventListener('message', (event: any) => {
-            const { data } = event;
-            try {
-                if (isValidJSON(data)) {
-                    const parsedData = JSON.parse(data);
-                    const messages = parsedData.data.map((item: any) => ({
-                        projectTitle: item.project.title,
-                        message: item.message,
-                        createdAt: formatTimeAgo(item.createdAt),
-                        projectId: item.project.projectId,
-                        notificationId: item.notificationId,
-                    }));
-                    setAlarmMessages(messages);
-                } else {
-                    console.warn('Received data is not valid JSON:', data);
+            intObserver.current = new IntersectionObserver((entries) => {
+                if (entries[0].isIntersecting) {
+                    if (!isUncheckedComplete && uncheckedQuery.hasNextPage) {
+                        uncheckedQuery.fetchNextPage();
+                    } else if (isUncheckedComplete && checkedQuery.hasNextPage) {
+                        checkedQuery.fetchNextPage();
+                    }
                 }
-            } catch (error) {
-                console.error('Failed to parse JSON data:', data, error);
-            }
-        });
+            });
 
-        eventSource.onerror = (err) => {
-            console.error('EventSource failed:', err);
-            eventSource.close();
-        };
-        return () => {
-            eventSource.close();
-        };
-    }, [sseURL, token]);
+            if (alarm) intObserver.current.observe(alarm);
+        },
+        [uncheckedQuery, checkedQuery, isUncheckedComplete]
+    );
 
-    const isValidJSON = (data: string) => {
-        try {
-            JSON.parse(data);
-            return true;
-        } catch {
-            return false;
-        }
-    };
+    const allAlarms: AlarmEntity[] = [
+        ...(uncheckedQuery.data?.pages.flatMap((page) => page.data) || []),
+        ...(isUncheckedComplete ? checkedQuery.data?.pages.flatMap((page) => page.data) || [] : []),
+    ];
 
-    const flattenedAlarms = useMemo((): alarmMeaageType[] => {
-        return (
-            data?.pages.flatMap((page) =>
-                (page.data as AlarmEntity[]).map((item: AlarmEntity) => ({
-                    projectTitle: item.project.title,
-                    message: item.message,
-                    createdAt: formatTimeAgo(item.createdAt),
-                    projectId: item.project.projectId,
-                    notificationId: item.notificationId,
-                }))
-            ) || []
-        );
-    }, [data]);
-
-    useEffect(() => {
-        setAlarmMessages(flattenedAlarms);
-    }, [flattenedAlarms]);
-
-    useEffect(() => {
-        setIsIconVisible(alarmMessages.length > 0);
-    }, [alarmMessages]);
-
+    // 알람 삭제
+    const deleteAlarmMutation = useDeleteAlarmMutation();
     const handleDeleteNotifications = async () => {
-        const notificationsToDelete = alarmMessages.filter((_, index) => checkedState[index]);
+        const notificationsToDelete = Object.entries(checkedState)
+            .filter(([_, isChecked]) => isChecked)
+            .map(([notificationId]) => parseInt(notificationId));
+
         if (notificationsToDelete.length === 0) {
             alert('✂️삭제할 알림을 선택해주세요');
             return;
         }
+
         try {
-            for (const notification of notificationsToDelete) {
-                await deleteAlarmMutation.mutateAsync(notification.notificationId);
-            }
-            console.log('메세지 삭제 성공');
-            const remainingNotifications = alarmMessages.filter((_, index) => !checkedState[index]);
-            setAlarmMessages(remainingNotifications);
-            setCheckedState(Array(remainingNotifications.length).fill(false));
+            await Promise.all(
+                notificationsToDelete.map((id) => deleteAlarmMutation.mutateAsync(id))
+            );
+            setCheckedState({});
             setIsDeleted(true);
         } catch (error) {
             console.error('Failed to delete notifications:', error);
         }
     };
 
-    useEffect(() => {
-        setCheckedState(Array(alarmMessages.length).fill(false));
-    }, [alarmMessages]);
-
-    const handleCheckBoxClick = (index: number) => {
-        const updatedCheckedState = checkedState.map((item, idx) => (idx === index ? !item : item));
-        setCheckedState(updatedCheckedState);
+    const handleCheckBoxClick = (notificationId: number) => {
+        setCheckedState((prev) => ({
+            ...prev,
+            [notificationId]: !prev[notificationId],
+        }));
     };
 
-    const patchAlarm = usePatchAlarmMutation(Number(projectId));
-    const handleNotificationClick = async (projectId: number) => {
-        const notificationsToPatch = alarmMessages.filter((_, index) => checkedState[index]);
+    // 알람 읽음
+    const patchAlarm = usePatchAlarmMutation();
+    const handleNotificationClick = async (projectId: number, notificationId: number) => {
         try {
-            for (const notification of notificationsToPatch) {
-                await patchAlarm.mutateAsync(notification.notificationId);
-            }
-            const remainingNotifications = alarmMessages.filter((_, index) => !checkedState[index]);
-            setAlarmMessages(remainingNotifications);
-            setCheckedState(Array(remainingNotifications.length).fill(false));
-            navigate(`/project/${projectId}`);
+            await patchAlarm.mutateAsync(notificationId);
+            Toast('알림을 확인했습니다', 'success');
         } catch (error) {
-            console.error('Failed to delete notifications:', error);
+            console.error('Failed to patch notification:', error);
         }
     };
 
     return (
         <AlarmDiv>
             <TextStyle>알림</TextStyle>
-            {alarmMessages.length > 0 && (
+            {allAlarms.length > 0 && (
                 <DeleteWrapper>
                     <StyledCheckBoxIcon
                         onClick={() => setIsIconVisible(!isIconVisible)}
@@ -172,45 +104,42 @@ const Alarm: FC = () => {
                     </DeleteNotification>
                 </DeleteWrapper>
             )}
-            <ScrollableArea $hasMessages={alarmMessages.length > 0}>
-                <InfiniteScroll
-                    pageStart={0}
-                    loadMore={() => fetchNextPage()}
-                    hasMore={!!hasNextPage}
-                    loader={<div key={0}>Loading...</div>}
-                    useWindow={false}
-                >
-                    {alarmMessages.map((alarm, index) => (
-                        <NotificationBox
-                            key={index}
-                            onClick={() => handleNotificationClick(alarm.projectId)}
-                        >
-                            <NotificationWrapper>
-                                {isIconVisible && (
-                                    <CheckBoxIcon
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-                                            handleCheckBoxClick(index);
-                                        }}
-                                        style={{
-                                            color: checkedState[index] ? '#633AE2' : '#A4A4A4',
-                                            marginLeft: -10,
-                                            fontSize: 20,
-                                            cursor: 'pointer',
-                                        }}
-                                    />
-                                )}
-                                <ContentWrapper>
-                                    <ProjectTitleContainer $isIconVisible={isIconVisible}>
-                                        <ProjectTitle>{alarm.projectTitle}</ProjectTitle>
-                                        <CreatedAt>{alarm.createdAt}</CreatedAt>
-                                    </ProjectTitleContainer>
-                                    <NotificationContent>{alarm.message}</NotificationContent>
-                                </ContentWrapper>
-                            </NotificationWrapper>
-                        </NotificationBox>
-                    ))}
-                </InfiniteScroll>
+            <ScrollableArea $hasMessages={allAlarms.length > 0}>
+                {allAlarms.map((alarm, index) => (
+                    <NotificationBox
+                        key={alarm.notificationId}
+                        onClick={() =>
+                            handleNotificationClick(alarm.project.projectId, alarm.notificationId)
+                        }
+                        ref={index === allAlarms.length - 1 ? lastAlarmRef : null}
+                    >
+                        <NotificationWrapper>
+                            {isIconVisible && (
+                                <CheckBoxIcon
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleCheckBoxClick(alarm.notificationId);
+                                    }}
+                                    style={{
+                                        color: checkedState[alarm.notificationId]
+                                            ? '#633AE2'
+                                            : '#A4A4A4',
+                                        marginLeft: -10,
+                                        fontSize: 20,
+                                        cursor: 'pointer',
+                                    }}
+                                />
+                            )}
+                            <ContentWrapper>
+                                <ProjectTitleContainer $isIconVisible={isIconVisible}>
+                                    <ProjectTitle>{alarm.project.title}</ProjectTitle>
+                                    <CreatedAt>{alarm.createdAt.slice(0, 10)}</CreatedAt>
+                                </ProjectTitleContainer>
+                                <NotificationContent>{alarm.message}</NotificationContent>
+                            </ContentWrapper>
+                        </NotificationWrapper>
+                    </NotificationBox>
+                ))}
             </ScrollableArea>
             {isDeleted && <ConfirmDeleteAlarm />}
         </AlarmDiv>
@@ -240,7 +169,7 @@ const ScrollableArea = styled.div<{ $hasMessages: boolean }>`
     flex-grow: 1;
     width: 100%;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     border-top: ${({ $hasMessages }) => ($hasMessages ? '1px solid #7d7d7d' : 'none')};
 `;
 
@@ -281,6 +210,7 @@ const NotificationBox = styled.div`
     flex-direction: column;
     gap: 7px;
     overflow-y: scroll;
+    cursor: pointer;
 `;
 
 const NotificationWrapper = styled.div`

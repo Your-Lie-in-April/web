@@ -38,7 +38,7 @@ export const API = {
         `${Http}/v1/projects/${projectId ?? ':projectId'}/members/${memberId ?? ':memberId'}`,
     PROJECT_DELETE_ME: (projectId?: number) =>
         `${Http}/v1/projects/${projectId ?? ':projectId'}/me`,
-    COVER_IMG: `${Http}/v1/covers?page=0&size=10`,
+    COVER_IMG: (page: number) => `${Http}/v1/covers?page=${page}&size=10`,
 
     // schedule-controller
     SCHEDULE_GET: (projectId?: number) =>
@@ -64,11 +64,16 @@ export const API = {
     // notification-controller
     NOTIFICATION_PATCH: (notificationId?: number) =>
         `${Http}/v1/projects/notifications/${notificationId ?? ':notificationId'}`,
-    NOTIFICATION_SSE: `v1/sse/subscribe/`,
-    NOTIFICATION_PROJECTID: (projectId?: number, page: number = 0, size: number = 12) =>
-        `${Http}/v1/projects/${projectId ?? ':projectId'}/notifications?page=${page}&size=${size}`,
-    NOTIFICATION_ALL: (page: number = 0, size: number = 12) =>
-        `v1/notifications?page=${page}&size=${size}`,
+    NOTIFICATION_SSE: `${Http}/v1/sse/subscribe/`,
+    NOTIFICATION_PROJECTID: (
+        projectId: number,
+        cursor: string,
+        isChecked: boolean = true,
+        size: number = 16
+    ) =>
+        `${Http}/v1/projects/${projectId}/notifications?cursor=${cursor}&isChecked=${isChecked}&size=${size}`,
+    NOTIFICATION_ALL: (cursor: string, isChecked: boolean = true, size: number = 16) =>
+        `v1/notifications?cursor=${cursor}&isChecked=${isChecked}&size=${size}`,
     NOTIFICATION_DELETE: (notificationId?: number) =>
         `${Http}/v1/notifications/${notificationId ?? ':notificationId'}`,
 } as const;

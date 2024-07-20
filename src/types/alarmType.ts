@@ -18,11 +18,10 @@ export type AlarmEntity = {
     createdAt: string;
 };
 
-export type AlarmInfiniteEntity = {
-    currentPage: number;
+export type AlarmEventEntity = {
     pageSize: number;
-    totalCount: number;
-    totalPages: number;
+    nextCursor: string | null;
+    hasMore: boolean;
     data: AlarmEntity[];
 };
 
@@ -36,13 +35,13 @@ export type AlarmPatchReqDto = null;
  * (프로젝트 내) 이전 알림 조회
  * GET /v1/projects/{projectId}/notifications
  */
-export type AlarmProjectResDto = AlarmInfiniteEntity;
+export type AlarmProjectResDto = AlarmEventEntity;
 
 /**
  * 이전 알림 조회
  * GET /v1/notifications
  */
-export type AlarmAllResDto = AlarmInfiniteEntity;
+export type AlarmAllResDto = AlarmEventEntity;
 
 /**
  * 알림 삭제

@@ -14,7 +14,7 @@ const usePatchAlarmMutation = (projectId?: number) => {
         mutationFn: (notificationId: string | number) => patchAlarm(Number(notificationId)),
         onSuccess: () => {
             void queryClient.invalidateQueries({
-                queryKey: QUERY_KEY.ALARM_ALL,
+                queryKey: QUERY_KEY.ALARM_ALL(),
             });
             void queryClient.invalidateQueries({
                 queryKey: QUERY_KEY.ALARM_PROJECT(projectId!),
