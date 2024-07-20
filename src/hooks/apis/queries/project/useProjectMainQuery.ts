@@ -12,6 +12,7 @@ const useProjectMainQuery = (memberId: number, page: number = 0, size: number = 
     return useQuery({
         queryKey: QUERY_KEY.PROJECT_MAIN(page),
         queryFn: () => getProjectMain(memberId, page, size),
+        staleTime: 60000 * 10,
     });
 };
 

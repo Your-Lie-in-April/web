@@ -11,8 +11,9 @@ const useScheduleAllMemberQuery = (projectId: number, condition: string) => {
         queryKey: QUERY_KEY.SCHEDULE_MEMBER_ALL(projectId, condition),
         queryFn: () => getScheduleAllMember(projectId, condition),
         enabled: !!condition,
-        gcTime: 0,
         placeholderData: keepPreviousData,
+        staleTime: 60000 * 10,
+        gcTime: 0,
     });
 };
 

@@ -10,8 +10,9 @@ const useScheduleTeamQuery = (projectId: number, condition: string) => {
     return useQuery({
         queryKey: QUERY_KEY.SCHEDULE_TEAM(projectId, condition),
         queryFn: () => getScheduleTeam(projectId, condition),
-        gcTime: 0,
         placeholderData: keepPreviousData,
+        staleTime: 60000 * 10,
+        gcTime: 0,
     });
 };
 

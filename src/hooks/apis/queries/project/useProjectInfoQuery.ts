@@ -12,7 +12,8 @@ const useProjectInfoQuery = (projectId: number) => {
     return useQuery({
         queryKey: QUERY_KEY.PROJECT_INFO(projectId),
         queryFn: () => getProjectInfo(projectId),
-        gcTime: 0,
+        staleTime: 60000 * 10,
+        gcTime: 60000 * 2,
     });
 };
 
