@@ -1,3 +1,4 @@
+import useCoverImgQuery from '@hooks/apis/queries/project/useCoverImgQuery';
 import { useProjectContext } from '@hooks/context/projectContext';
 import { ChangeEvent, Dispatch, FC, SetStateAction, useEffect, useState } from 'react';
 import styled from 'styled-components';
@@ -19,13 +20,15 @@ const InfoEdit: FC<InfoEditPros> = ({ setEditCover }) => {
     const [selectedImgId, setSelectedImageId] = useState<string>('');
 
     const { projectData } = useProjectContext();
+    const { data } = useCoverImgQuery();
+    const coverImg = data?.find((item) => item.page0.url === projectData?.coverImageUrl);
 
     useEffect(() => {
         if (projectData) {
             setTitle(projectData.title);
             setContent(projectData.description);
             setSelectedColor(projectData.color || null);
-            setSelectedImageUrl(projectData.coverImageUrl || null);
+            setSelectedImageUrl(coverImg?.page1.url || projectData.coverImageUrl || null);
             setSelectedImageId(projectData.coverImageId || '');
         }
     }, [projectData]);
@@ -53,11 +56,11 @@ const InfoEdit: FC<InfoEditPros> = ({ setEditCover }) => {
         setSelectedHex(null);
     };
 
-    const handleImageSelect = (url: string, id: string) => {
-        setSelectedImageUrl(url);
+    const handleImageSelect = (page0Url: string, page0Id: string, page1Url: string) => {
+        setSelectedImageUrl(page1Url);
         setSelectedColor(null);
         setSelectedHex(null);
-        setSelectedImageId(id);
+        setSelectedImageId(page0Id);
     };
 
     const handleHexSelect = (color: string) => {
@@ -68,9 +71,9 @@ const InfoEdit: FC<InfoEditPros> = ({ setEditCover }) => {
 
     return (
         <Container
-        $selectedColor={selectedColor}
-        $selectedHex={selectedHex}
-        $selectedImageUrl={selectedImageUrl}
+            $selectedColor={selectedColor}
+            $selectedHex={selectedHex}
+            $selectedImageUrl={selectedImageUrl}
         >
             <MakeContainer>
                 <TitleContainer>
@@ -134,7 +137,7 @@ interface ContentTextProps {
     $focused: boolean;
 }
 
-const Container =  styled.div<{
+const Container = styled.div<{
     $selectedColor: string | null;
     $selectedHex: string | null;
     $selectedImageUrl: string | null;
@@ -150,7 +153,8 @@ const Container =  styled.div<{
     position: relative;
     z-index: 5;
     background-color: ${(props) => props.$selectedColor || props.$selectedHex || 'white'};
-    background-image: url('${(props) => props.$selectedImageUrl}');    background-size: cover;
+    background-image: url('${(props) => props.$selectedImageUrl}');
+    background-size: cover;
     background-position: center;
 `;
 const MakeContainer = styled.div`
@@ -210,7 +214,7 @@ const ContentText = styled.textarea<ContentTextProps>`
     color: ${({ $focused }) => ($focused ? '#000000' : '#7d7d7d')};
     color: #7d7d7d;
     text-align: center;
-    font-family: Pretendard;
+    font-family: 'Pretendard';
     font-size: 28px;
     font-style: normal;
     width: 1500px;

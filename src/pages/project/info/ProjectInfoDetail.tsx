@@ -1,5 +1,6 @@
 import usePatchStoredMutation from '@hooks/apis/mutations/member/usePatchStoredMutation';
 import useAllMemberInfoQuery from '@hooks/apis/queries/member/useAllMemberInfoQuery';
+import useCoverImgQuery from '@hooks/apis/queries/project/useCoverImgQuery';
 import { useProjectContext } from '@hooks/context/projectContext';
 import { useUserContext } from '@hooks/context/userContext';
 import InboxOutlinedIcon from '@mui/icons-material/InboxOutlined';
@@ -23,6 +24,10 @@ const ProjectInfoDetail: React.FC<ProjectInfoDetailProps> = ({ onClick }) => {
         (member) => member.memberId === userData?.memberId
     );
 
+    const { data } = useCoverImgQuery();
+    const coverImg = data?.find((item) => item.page0.url === projectData?.coverImageUrl);
+
+    
     const handleOnEditClick = () => {
         isMePrivileged ? onClick() : Toast('관리자만 수정할 수 있습니다', 'warning');
     };
@@ -33,27 +38,40 @@ const ProjectInfoDetail: React.FC<ProjectInfoDetailProps> = ({ onClick }) => {
     };
 
     return (
-        <StyledContainer color={projectData?.color} $imageUrl={projectData?.coverImageUrl}>
+        <StyledContainer color={projectData?.color} $imageUrl={coverImg?.page1.url}>
             <StyledProjectInfoDiv>
-                <StyledCommonText style={{ fontSize: '42px', fontWeight: '700' }}>
+                <StyledCommonText
+                    style={{
+                        fontSize: '42px',
+                        fontWeight: '700',
+                        textOverflow: 'ellipsis',
+                        overflow: 'hidden',
+                        whiteSpace: 'nowrap',
+                        flexShrink: 0,
+                    }}
+                >
                     {projectData?.title}
                 </StyledCommonText>
-                <StyledCommonText>{projectData?.description}</StyledCommonText>
-                <StyledFlexContainer>
-                    <StyledFlexItem />
-                    <StyledFlexItem>
-                        <StyledSettingDiv>
-                            <StyledSettingBtn onClick={handleOnEditClick}>
-                                <EditIcon />
-                                커버 수정
-                            </StyledSettingBtn>
-                            <StyledSettingBtn onClick={hanldeSotredClick}>
-                                <InboxOutlinedIcon style={{ fontSize: '18px' }} />
-                                프로젝트 보관
-                            </StyledSettingBtn>
-                        </StyledSettingDiv>
-                    </StyledFlexItem>
-                </StyledFlexContainer>
+                <StyledCommonText
+                    style={{
+                        textOverflow: 'ellipsis',
+                        overflow: 'hidden',
+                        whiteSpace: 'nowrap',
+                        flexShrink: 0,
+                    }}
+                >
+                    {projectData?.description}
+                </StyledCommonText>{' '}
+                <StyledSettingDiv>
+                    <StyledSettingBtn onClick={handleOnEditClick}>
+                        <EditIcon />
+                        커버 수정
+                    </StyledSettingBtn>
+                    <StyledSettingBtn onClick={hanldeSotredClick}>
+                        <InboxOutlinedIcon style={{ fontSize: '18px' }} />
+                        프로젝트 보관
+                    </StyledSettingBtn>
+                </StyledSettingDiv>
             </StyledProjectInfoDiv>
         </StyledContainer>
     );
@@ -62,7 +80,6 @@ const ProjectInfoDetail: React.FC<ProjectInfoDetailProps> = ({ onClick }) => {
 export default ProjectInfoDetail;
 
 const StyledContainer = styled.div<{ color?: string; $imageUrl?: string | null }>`
-    position: relative;
     width: 100%;
     height: 200px;
     background: ${(props) =>
@@ -74,7 +91,8 @@ const StyledContainer = styled.div<{ color?: string; $imageUrl?: string | null }
 `;
 
 const StyledProjectInfoDiv = styled.div`
-    min-width: 900px;
+    position: relative;
+    width: 1043px;
     height: 172px;
     display: flex;
     flex-direction: column;
@@ -85,6 +103,7 @@ const StyledProjectInfoDiv = styled.div`
 `;
 
 const StyledCommonText = styled.div`
+    width: 100%;
     color: #000000;
     text-align: center;
     font-family: 'Pretendard';
@@ -94,19 +113,9 @@ const StyledCommonText = styled.div`
     line-height: normal;
 `;
 
-const StyledFlexContainer = styled.div`
-    width: 100%;
-    display: flex;
-`;
-
-const StyledFlexItem = styled.div`
-    flex: 1;
-    display: flex;
-    justify-content: center;
-`;
-
 const StyledSettingDiv = styled.div`
     position: absolute;
+    right: -110px;
     bottom: 16px;
     width: 221px;
     height: 34px;

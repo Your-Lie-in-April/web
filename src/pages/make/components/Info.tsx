@@ -43,12 +43,12 @@ const Info: FC<InfoProps> = ({ setContent, setTitle, setColor, setImg, setImgId 
         setImgId('');
     };
 
-    const handleImageSelect = (url: string, id: string) => {
-        setSelectedImageUrl(url);
+    const handleImageSelect = (page0Url: string, page0Id: string, page1Url: string) => {
+        setSelectedImageUrl(page1Url);
         setSelectedColor(null);
         setSelectedHex(null);
-        setImg(url);
-        setImgId(id);
+        setImg(page0Url);
+        setImgId(page0Id);
         setColor('');
     };
 
@@ -63,9 +63,9 @@ const Info: FC<InfoProps> = ({ setContent, setTitle, setColor, setImg, setImgId 
 
     return (
         <Container
-        $selectedColor={selectedColor}
-        $selectedHex={selectedHex}
-        $selectedImageUrl={selectedImageUrl}
+            $selectedColor={selectedColor}
+            $selectedHex={selectedHex}
+            $selectedImageUrl={selectedImageUrl}
         >
             <MakeContainer>
                 <TitleContainer>
@@ -74,7 +74,6 @@ const Info: FC<InfoProps> = ({ setContent, setTitle, setColor, setImg, setImgId 
                             type='text'
                             onFocus={() => {
                                 setIsTitleClicked(true);
-
                                 setIsCoverClicked(false);
                             }}
                             onBlur={() => {
@@ -110,7 +109,9 @@ const Info: FC<InfoProps> = ({ setContent, setTitle, setColor, setImg, setImgId 
                         >
                             <CoverPicker
                                 onColorSelect={handleColorSelect}
-                                onImageSelect={handleImageSelect}
+                                onImageSelect={(page0Url, page0Id, page1Url) =>
+                                    handleImageSelect(page0Url, page0Id, page1Url)
+                                }
                                 onHexSelect={handleHexSelect}
                                 toggleCover={toggleCover}
                             />

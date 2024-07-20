@@ -14,9 +14,14 @@ const useCoverImgQuery = () => {
         queryFn: async () => {
             const page0Data = await getCoverImg(0);
             const page1Data = await getCoverImg(1);
-            return { page0Data, page1Data };
+
+            return page0Data.data.map((item, index) => ({
+                page0: item,
+                page1: page1Data.data[index],
+            }));
         },
-        gcTime: 10000,
+        staleTime: 60000 * 10,
+        gcTime: 60000 * 2,
     });
 };
 

@@ -65,15 +65,14 @@ const ProjectMakePage: FC = () => {
             endTime: formatTime(endtime),
             daysOfWeek: selectedDays,
             color: finalColor,
-            coverImageId: imgId,
+            coverImageId: String(imgId),
         };
 
         try {
             await mutate.mutateAsync(payload);
-            console.log('프로젝트가 성공적으로 생성되었습니다.');
             navigate('/');
         } catch (error) {
-            console.error('프로젝트 생성 중 오류 발생:', error);
+            Toast('다시 시도해주세요', 'error');
         }
     };
     return (
