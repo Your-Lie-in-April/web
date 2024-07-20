@@ -1,6 +1,6 @@
 import { getAlarmAll, getAlarmProject } from '@apis/alarm';
 import { QUERY_KEY } from '@constants/queryKey';
-import { getCurrentTimestamp } from '@pages/main/components/getCurrentTimestamp';
+import { getCurrentTimestamp } from '@pages/main/components/alarm/getCurrentTimestamp';
 import { useInfiniteQuery } from '@tanstack/react-query';
 
 const useCheckedAlarmsQuery = (projectId?: number) => {

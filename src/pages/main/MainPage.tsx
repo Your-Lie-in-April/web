@@ -7,7 +7,7 @@ import Search from '@pages/layouts/Search';
 import { FC, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import styled, { createGlobalStyle } from 'styled-components';
-import Alarm from './components/Alarm';
+import Alarm from './components/alarm/Alarm';
 import Banner from './components/Banner';
 import Pinned from './components/pinned/Pinned';
 import Profile from './components/Profile';

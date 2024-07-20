@@ -38,6 +38,7 @@ export const QUERY_KEY = {
     ],
 
     // 알람 관련 쿼리키
+    ALARM_SSE: ['alarm', 'sse'],
     ALARM_ALL: (isChecked?: boolean) => ['alarm', isChecked],
     ALARM_PROJECT: (projectId: number, isChecked?: boolean) => [
         'project',
