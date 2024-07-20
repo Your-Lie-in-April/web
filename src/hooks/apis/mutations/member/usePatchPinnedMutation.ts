@@ -1,5 +1,5 @@
-import { patchProjectIsPinned } from '#/apis/member';
-import { QUERY_KEY } from '#/constants/queryKey';
+import { patchProjectIsPinned } from '@apis/member';
+import { QUERY_KEY } from '@constants/queryKey';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 /**

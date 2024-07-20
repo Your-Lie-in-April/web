@@ -1,0 +1,29 @@
+.custom-toast-container {
+}
+
+.custom-toast {
+    background-color: white;
+    color: black;
+    border-radius: 8px;
+    white-space: pre-wrap;
+}
+
+.custom-toast-success {
+    background-color: #edf7ed;
+    color: #1e4620;
+}
+
+.custom-toast-error {
+    background-color: #fdeded;
+    color: #5f2120;
+}
+
+.custom-toast-warning {
+    background-color: #fff4e5;
+    color: #734b13;
+}
+
+.custom-toast-info {
+    background-color: #e5f6fd;
+    color: #014361;
+}

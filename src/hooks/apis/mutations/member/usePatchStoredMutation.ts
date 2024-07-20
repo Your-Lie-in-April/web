@@ -1,5 +1,5 @@
-import { patchProjectIsStored } from '#/apis/member';
-import { QUERY_KEY } from '#/constants/queryKey';
+import { patchProjectIsStored } from '@apis/member';
+import { QUERY_KEY } from '@constants/queryKey';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 /**
@@ -12,9 +12,6 @@ const usePatchStoredMutation = (projectId: number) => {
     return useMutation({
         mutationFn: () => patchProjectIsStored(projectId),
         onSuccess: () => {
-            void queryClient.invalidateQueries({
-                queryKey: QUERY_KEY.PROJECT_STORED,
-            });
             void queryClient.invalidateQueries({
                 queryKey: QUERY_KEY.PROJECT,
             });

@@ -1,5 +1,5 @@
-import { getPinProject } from '#/apis/project';
-import { QUERY_KEY } from '#/constants/queryKey';
+import { getPinProject } from '@apis/project';
+import { QUERY_KEY } from '@constants/queryKey';
 import { useQuery } from '@tanstack/react-query';
 
 /**
@@ -12,6 +12,7 @@ const useProjectPinnedQuery = (memberId: number) => {
     return useQuery({
         queryKey: QUERY_KEY.PROJECT_PIN,
         queryFn: () => getPinProject(memberId),
+        staleTime: 60000 * 10,
     });
 };
 

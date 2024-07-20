@@ -3,7 +3,9 @@ import { Http } from './urls';
 export const API = {
     // member-controller
     MEMBER_GET: (memberId?: number) => `${Http}/v1/members/${memberId ?? ':memberId'}`,
-    MEMBER_NICKNAME: `${Http}/v2/projects/members/nickname`,
+    MEMBER_NICKNAME: (projectId?: number, nickname?: string) =>
+        `${Http}/v2/projects/members/nickname?projectId=${projectId}&nickname=${nickname}`,
+
     MEMBER_STATE: (state?: string) => `${Http}/v1/members/${state ?? ':state'}`,
     MEMBER_STORAGE: (projectId?: number) =>
         `${Http}/v1/members/storage/${projectId ?? ':projectId'}`,
@@ -36,6 +38,7 @@ export const API = {
         `${Http}/v1/projects/${projectId ?? ':projectId'}/members/${memberId ?? ':memberId'}`,
     PROJECT_DELETE_ME: (projectId?: number) =>
         `${Http}/v1/projects/${projectId ?? ':projectId'}/me`,
+    COVER_IMG: (page: number) => `${Http}/v1/covers?page=${page}&size=10`,
 
     // schedule-controller
     SCHEDULE_GET: (projectId?: number) =>
@@ -46,23 +49,31 @@ export const API = {
         `${Http}/v1/projects/${projectId ?? ':projectId'}/schedules`,
     SCHEDULE_DELETE: (projectId?: number) =>
         `${Http}/v1/projects/${projectId ?? ':projectId'}/schedules`,
-    SCHEDULE_MEMBERS: (projectId?: number) =>
-        `${Http}/v2/projects/${projectId ?? ':projectId'}/schedules`,
-    SCHEDULE_MY: (projectId?: number, memberId?: number) =>
+    SCHEDULE_MEMBERS: (projectId?: number, condition?: string) =>
+        `${Http}/v2/projects/${projectId ?? ':projectId'}/schedules?condition=${condition}`,
+    SCHEDULE_MY: (projectId?: number, memberId?: number, condition?: string) =>
         `${Http}/v1/projects/${projectId ?? ':projectId'}/members/${
             memberId ?? ':memberId'
-        }/schedules`,
+        }/schedules?condition=${condition ?? ':condition'}`,
+    SCHEDULE_TEAM: (projectId?: number, condition?: string) =>
+        `${Http}/v1/projects/${projectId ?? ':projectId'}/schedules?condition=${condition}`,
 
     // auth-controller
     TOKEN_REISSUE: `${Http}/v1/auth/reissue`,
 
     // notification-controller
-    NOTIFICATION_READ: (notificationId?: number) =>
+    NOTIFICATION_PATCH: (notificationId?: number) =>
         `${Http}/v1/projects/notifications/${notificationId ?? ':notificationId'}`,
-    NOTIFICATION_SSE: `v1/sse/subscribe/`,
-    NOTIFICATION_PROJECTID: (projectId?: number) =>
-        `${Http}/v1/projects/${projectId ?? ':projectId'}/notifications/`,
-    NOTIFICATION_PREV: `v1/notifications`,
+    NOTIFICATION_SSE: `${Http}/v1/sse/subscribe/`,
+    NOTIFICATION_PROJECTID: (
+        projectId: number,
+        cursor: string,
+        isChecked: boolean = true,
+        size: number = 16
+    ) =>
+        `${Http}/v1/projects/${projectId}/notifications?cursor=${cursor}&isChecked=${isChecked}&size=${size}`,
+    NOTIFICATION_ALL: (cursor: string, isChecked: boolean = true, size: number = 16) =>
+        `v1/notifications?cursor=${cursor}&isChecked=${isChecked}&size=${size}`,
     NOTIFICATION_DELETE: (notificationId?: number) =>
         `${Http}/v1/notifications/${notificationId ?? ':notificationId'}`,
 } as const;

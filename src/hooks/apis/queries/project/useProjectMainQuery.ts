@@ -1,5 +1,5 @@
-import { getProjectMain } from '#/apis/project';
-import { QUERY_KEY } from '#/constants/queryKey';
+import { getProjectMain } from '@apis/project';
+import { QUERY_KEY } from '@constants/queryKey';
 import { useQuery } from '@tanstack/react-query';
 
 /**
@@ -12,6 +12,7 @@ const useProjectMainQuery = (memberId: number, page: number = 0, size: number = 
     return useQuery({
         queryKey: QUERY_KEY.PROJECT_MAIN(page),
         queryFn: () => getProjectMain(memberId, page, size),
+        staleTime: 60000 * 10,
     });
 };
 

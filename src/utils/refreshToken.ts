@@ -1,25 +1,24 @@
-import { Http } from '#/constants/urls';
+import { Http } from '@constants/urls';
+import axios from 'axios';
 
-export async function refreshToken() {
+export async function getRefreshToken() {
     const refreshToken = localStorage.getItem('refresh_token');
+    if (!refreshToken) {
+        throw new Error('No refresh token');
+    }
     try {
-        const response = await fetch(`${Http}/v1/auth/reissue`, {
-            method: 'POST',
-            headers: {
-                Accept: '*/*',
-                Authorization: `Bearer ${refreshToken}`,
-            },
-        });
-
-        if (!response.ok) {
-            console.error('Failed to refresh token:', response.statusText);
-            throw new Error('Failed to refresh token');
-        }
-
-        const data = await response.json();
-        localStorage.setItem('access_token', data.data.accessToken);
-        localStorage.setItem('refresh_token', data.data.refreshToken);
-        return data.accessToken;
+        const response = await axios.post(
+            `${Http}/v1/auth/reissue`,
+            {},
+            {
+                headers: {
+                    Authorization: `Bearer ${refreshToken}`,
+                },
+            }
+        );
+        const { data } = response;
+        localStorage.setItem('access_token', data.accessToken);
+        localStorage.setItem('refresh_token', data.refreshToken);
     } catch (error) {
         console.error('Error refreshing token:', error);
         throw error;
@@ -34,11 +33,10 @@ export function removeTokens() {
 
 export async function handleTokenRefresh() {
     try {
-        const newToken = await refreshToken();
-        return newToken;
+        await getRefreshToken();
     } catch (error) {
         console.error('Failed to refresh token:', error);
         removeTokens();
-        return;
+        throw error;
     }
 }

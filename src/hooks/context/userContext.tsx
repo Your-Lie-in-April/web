@@ -1,26 +1,39 @@
-import { MemberEntity } from '#/types/memberType';
-import { memberId } from '#/utils/token';
+import { MemberEntity } from '@/types/memberType';
+import useMemberInfoQuery from '@hooks/apis/queries/member/useMemberInfoQuery';
 import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
-import useMemberInfoQuery from '../apis/queries/member/useMemberInfoQuery';
 
 type UserContextType = {
     userData: MemberEntity | null;
     setUserData: (userData: MemberEntity | null) => void;
+    isLoading : boolean
 };
 
 export const UserContext = createContext<UserContextType | null>(null);
 
 export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [userData, setUserData] = useState<MemberEntity | null>(null);
-    const { data } = useMemberInfoQuery(memberId);
+    const [isLoading, setIsLoading] = useState(true);
+    const memberId = localStorage.getItem('member_id')
+        ? Number(localStorage.getItem('member_id'))
+        : null;
+    const { data: userInfoQuery, isLoading: isUserInfoLoading } = useMemberInfoQuery(memberId);
+
     useEffect(() => {
-        if (data) {
-            setUserData(data);
+        if (memberId === null) {
+            setIsLoading(false);
+            return;
         }
-    }, [data, setUserData]);
+
+        if (userInfoQuery) {
+            setUserData(userInfoQuery);
+        }
+        setIsLoading(isUserInfoLoading);
+    }, [memberId, userInfoQuery, isUserInfoLoading]);
 
     return (
-        <UserContext.Provider value={{ userData, setUserData }}>{children}</UserContext.Provider>
+        <UserContext.Provider value={{ userData, setUserData, isLoading }}>
+            {children}
+        </UserContext.Provider>
     );
 };
 

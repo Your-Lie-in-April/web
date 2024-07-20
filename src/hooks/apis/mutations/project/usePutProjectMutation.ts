@@ -1,6 +1,6 @@
-import { putProject } from '#/apis/project';
-import { QUERY_KEY } from '#/constants/queryKey';
-import { ProjectPutReqDto } from '#/types/projectType';
+import { ProjectCreateUpate } from '@/types/projectType';
+import { putProject } from '@apis/project';
+import { QUERY_KEY } from '@constants/queryKey';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 /**
@@ -8,16 +8,16 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
  *
  * 프로젝트를 수정하는 api 입니다.
  */
-const usePutProjectMutation = (projectId: number, body: ProjectPutReqDto) => {
+
+const usePutProjectMutation = (projectId: number) => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: () => putProject(projectId, body),
+        mutationFn: (body: Partial<ProjectCreateUpate>) => putProject(projectId, body),
         onSuccess: () => {
             void queryClient.invalidateQueries({
-                queryKey: QUERY_KEY.PROJECT_ID(projectId),
+                queryKey: QUERY_KEY.PROJECT_INFO(projectId),
             });
         },
     });
 };
-
 export default usePutProjectMutation;

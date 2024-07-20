@@ -1,6 +1,6 @@
-import { getProjectIsStored } from '#/apis/project';
-import { QUERY_KEY } from '#/constants/queryKey';
-import { ProjectStoredResponse } from '#/types/projectType';
+import { ProjectStoredResponse } from '@/types/projectType';
+import { getProjectIsStored } from '@apis/project';
+import { QUERY_KEY } from '@constants/queryKey';
 import { useInfiniteQuery } from '@tanstack/react-query';
 
 /**
@@ -20,5 +20,6 @@ export const useStoredInfiniteQuery = (size: number = 9) => {
             return undefined;
         },
         initialPageParam: 0,
+        staleTime: 60000 * 10,
     });
 };

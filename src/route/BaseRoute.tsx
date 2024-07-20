@@ -1,9 +1,10 @@
-import Login from '#/Pages/Login/Login';
-import MainPage from '#/Pages/MainPage/MainPage';
-import InvitationAccept from '#/Pages/Modal/project/InvitationAccept';
-import ProjectMakePage from '#/Pages/ProjectMakePage/projectmakepage';
-import ProjectPage from '#/Pages/ProjectPage/ProjectPage';
-import StoragePage from '#/Pages/StoragePage/StoragePage';
+import { UserProvider } from '@hooks/context/userContext';
+import Login from '@pages/login/Login';
+import MainPage from '@pages/main/MainPage';
+import ProjectMakePage from '@pages/make/MakePage';
+import InvitationAccept from '@pages/modal/project/InvitationAccept';
+import ProjectPage from '@pages/project/ProjectPage';
+import StoragePage from '@pages/storage/StoragePage';
 import { useEffect } from 'react';
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import AuthRoute from './AuthRoute';
@@ -40,9 +41,11 @@ export default function BaseRoute() {
                 <Route
                     path='/'
                     element={
-                        <PrivateRoute>
-                            <AuthRoute />
-                        </PrivateRoute>
+                        <UserProvider>
+                            <PrivateRoute>
+                                <AuthRoute />
+                            </PrivateRoute>
+                        </UserProvider>
                     }
                 >
                     <Route index element={<MainPage />} />
