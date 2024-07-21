@@ -3,7 +3,7 @@ import { QUERY_KEY } from '@constants/queryKey';
 import useDeleteAlarmMutation from '@hooks/apis/mutations/alarm/useDeleteAlarmMutation';
 import usePatchAlarmMutation from '@hooks/apis/mutations/alarm/usePatchAlarmMutation';
 import useAlarmsQuery from '@hooks/apis/queries/alarm/useAlarmsQuery';
-import { AlarmMessageType } from '@hooks/useSSE';
+import { AlarmMessageType, useSSE } from '@hooks/useSSE';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import ConfirmDeleteAlarm from '@pages/modal/project/ConfirmDeleteAlarm';
 import { useQuery } from '@tanstack/react-query';
@@ -19,8 +19,11 @@ const Alarm: FC = () => {
     const navigate = useNavigate();
 
     const { uncheckedQuery, checkedQuery, isUncheckedComplete } = useAlarmsQuery();
+
+    const fetchSSEData = useSSE();
     const { data: realTimeAlarms } = useQuery<AlarmMessageType[]>({
         queryKey: QUERY_KEY.ALARM_SSE,
+        queryFn: fetchSSEData,
     });
 
     const intObserver = useRef<IntersectionObserver | null>(null);
