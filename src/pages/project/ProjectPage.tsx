@@ -3,7 +3,7 @@ import { DateProvider } from '@hooks/context/dateContext';
 import { ProjectProvider } from '@hooks/context/projectContext';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
-import AfterLogin from '@pages/layouts/AfterLogin';
+import Layout from '@pages/layouts/Layout';
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import styled, { createGlobalStyle } from 'styled-components';
@@ -30,19 +30,9 @@ const ProjectPage: React.FC = () => {
         <ProjectProvider>
             <DateProvider>
                 <GlobalStyle />
-                <div
-                    style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: '32px',
-                        width: '100%',
-                    }}
-                >
-                    <div>
-                        <AfterLogin />
-                        <Divider />
-                        <ProjectInfo />
-                    </div>
+                <Layout>
+                    <Divider />
+                    <ProjectInfo />
                     <Box>
                         <div
                             style={{
@@ -93,8 +83,8 @@ const ProjectPage: React.FC = () => {
                             )}
                         </div>
                     </Box>
-                </div>
-                <div style={{ height: '400px' }}></div>
+                    <div style={{ height: '400px' }}></div>
+                </Layout>
             </DateProvider>
         </ProjectProvider>
     );
@@ -124,6 +114,7 @@ const Box = styled.div`
     flex-direction: column;
     margin: 0 auto;
     box-sizing: border-box;
+    margin-top: 32px;
 `;
 
 const MainBox = styled.div`

@@ -1,8 +1,7 @@
 import { ProjectThumbnailResponse } from '@/types/projectType';
 import useProjectMainQuery from '@hooks/apis/queries/project/useProjectMainQuery';
 import { useMainPaginationMutation } from '@hooks/useMainPaginationMutation';
-import AfterLogin from '@pages/layouts/AfterLogin';
-import BeforeLogin from '@pages/layouts/BeforeLogin';
+import Layout from '@pages/layouts/Layout';
 import Search from '@pages/layouts/Search';
 import { FC, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
@@ -36,6 +35,7 @@ const MainContainer = styled.div`
     margin: 0 auto;
     max-width: 1284px;
     box-sizing: border-box;
+    margin-top: 126px;
 `;
 
 function useQuery() {
@@ -89,67 +89,64 @@ const MainPage: FC = () => {
     return (
         <>
             <GlobalStyle />
-            {isLoggedIn ? <AfterLogin /> : <BeforeLogin />}
-            <Banner />
-            <div
-                style={{
-                    height: '126px',
-                }}
-            />
-            <MainContainer>
-                <div style={{ display: 'flex', flexDirection: 'row', gap: '20px' }}>
-                    <div
-                        style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'flex-start',
-                            gap: '14px',
-                        }}
-                    >
-                        <Profile />
-                        <Alarm />
-                    </div>
-                    <div
-                        style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'flex-start',
-                            gap: '24px',
-                        }}
-                    >
+            <Layout>
+                <Banner />
+
+                <MainContainer>
+                    <div style={{ display: 'flex', flexDirection: 'row', gap: '20px' }}>
                         <div
                             style={{
                                 display: 'flex',
                                 flexDirection: 'column',
                                 alignItems: 'flex-start',
-                                gap: '21px',
+                                gap: '14px',
+                            }}
+                        >
+                            <Profile />
+                            <Alarm />
+                        </div>
+                        <div
+                            style={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'flex-start',
+                                gap: '24px',
                             }}
                         >
                             <div
                                 style={{
                                     display: 'flex',
-                                    flexDirection: 'row',
+                                    flexDirection: 'column',
                                     alignItems: 'flex-start',
-                                    gap: '8px',
+                                    gap: '21px',
                                 }}
                             >
-                                <Search onSearch={handleSearch} />
-                                <NewProject />
+                                <div
+                                    style={{
+                                        display: 'flex',
+                                        flexDirection: 'row',
+                                        alignItems: 'flex-start',
+                                        gap: '8px',
+                                    }}
+                                >
+                                    <Search onSearch={handleSearch} />
+                                    <NewProject />
+                                </div>
+                                <Pinned />
                             </div>
-                            <Pinned />
+                            <ProjectList projects={searchResults} />
+                            {isLoggedIn && (
+                                <Pagination
+                                    currentPage={currentPage}
+                                    totalPages={totalPages}
+                                    onPageChange={handlePageChange}
+                                />
+                            )}
                         </div>
-                        <ProjectList projects={searchResults} />
-                        {isLoggedIn && (
-                            <Pagination
-                                currentPage={currentPage}
-                                totalPages={totalPages}
-                                onPageChange={handlePageChange}
-                            />
-                        )}
                     </div>
-                </div>
-            </MainContainer>
-            <div style={{ height: '300px' }} />
+                </MainContainer>
+                <div style={{ height: '300px' }} />
+            </Layout>
         </>
     );
 };
