@@ -1,7 +1,7 @@
 import getIsLogin from '@utils/getIsLogin';
 import React from 'react';
-import AfterLogin from './AfterLogin';
-import BeforeLogin from './BeforeLogin';
+import AfterLogin from './header/AfterLogin';
+import BeforeLogin from './header/BeforeLogin';
 
 const Layout = (props: { children: React.ReactNode }) => {
     return (

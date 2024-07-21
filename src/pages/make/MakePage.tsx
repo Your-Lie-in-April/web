@@ -1,5 +1,5 @@
 import usePostProjectMutation from '@hooks/apis/mutations/project/usePostProjectMutation';
-import AfterLogin from '@pages/layouts/AfterLogin';
+import Layout from '@pages/layouts/Layout';
 import { Toast } from '@pages/layouts/Toast';
 import { FC, useState } from 'react';
 import { useNavigate } from 'react-router';
@@ -78,66 +78,67 @@ const ProjectMakePage: FC = () => {
     return (
         <>
             <GlobalStyle />
-            <AfterLogin />
-            <div
-                style={{
-                    height: '16px',
-                    width: '100%',
-                    backgroundColor: '#000000',
-                }}
-            />
-            <Info
-                setContent={setContent}
-                setTitle={setTitle}
-                setColor={setColor}
-                setImg={setImg}
-                setImgId={setImgId}
-            />
-            <div
-                style={{
-                    height: '24px',
-                    width: '100%',
-                    backgroundColor: '#000000',
-                }}
-            />
+            <Layout>
+                <div
+                    style={{
+                        height: '16px',
+                        width: '100%',
+                        backgroundColor: '#000000',
+                    }}
+                />
+                <Info
+                    setContent={setContent}
+                    setTitle={setTitle}
+                    setColor={setColor}
+                    setImg={setImg}
+                    setImgId={setImgId}
+                />
+                <div
+                    style={{
+                        height: '24px',
+                        width: '100%',
+                        backgroundColor: '#000000',
+                    }}
+                />
 
-            <Container>
-                <TimeContainer>
-                    <ProjectCalendar
-                        selectRange={true}
-                        startDate={startDate}
-                        endDate={endDate}
-                        onDateChange={(start, end) => {
-                            setStartDate(start || new Date());
-                            setEndDate(end || new Date());
-                        }}
-                    />
-                    <ProjectTime
-                        startDate={startDate}
-                        endDate={endDate}
-                        onDateChange={(start, end) => {
-                            setStartDate(start || new Date());
-                            setEndDate(end || new Date());
-                        }}
-                        starttime={starttime}
-                        setStartTime={setStartTime}
-                        endtime={endtime}
-                        setEndTime={setEndTime}
-                        selectedDays={selectedDays}
-                        setSelectedDays={setSelectedDays}
-                    />
-                </TimeContainer>
-                <SButton onClick={makeProject}>
-                    <SButtonText>프로젝트 만들기</SButtonText>
-                </SButton>
-            </Container>
-            <div
-                style={{
-                    height: '300px',
-                    width: '100%',
-                    backgroundColor: '#000000',
-                }}
-            />
+                <Container>
+                    <TimeContainer>
+                        <ProjectCalendar
+                            selectRange={true}
+                            startDate={startDate}
+                            endDate={endDate}
+                            onDateChange={(start, end) => {
+                                setStartDate(start || new Date());
+                                setEndDate(end || new Date());
+                            }}
+                        />
+                        <ProjectTime
+                            startDate={startDate}
+                            endDate={endDate}
+                            onDateChange={(start, end) => {
+                                setStartDate(start || new Date());
+                                setEndDate(end || new Date());
+                            }}
+                            starttime={starttime}
+                            setStartTime={setStartTime}
+                            endtime={endtime}
+                            setEndTime={setEndTime}
+                            selectedDays={selectedDays}
+                            setSelectedDays={setSelectedDays}
+                        />
+                    </TimeContainer>
+                    <SButton onClick={makeProject}>
+                        <SButtonText>프로젝트 만들기</SButtonText>
+                    </SButton>
+                </Container>
+                <div
+                    style={{
+                        height: '300px',
+                        width: '100%',
+                        backgroundColor: '#000000',
+                    }}
+                />
+            </Layout>
         </>
     );
 };
