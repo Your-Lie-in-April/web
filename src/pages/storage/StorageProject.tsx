@@ -24,10 +24,7 @@ const StorageProject = ({ project }: { project: ProjectThumbnailResponse }) => {
 
     return (
         <>
-            <ProjectBox
-                style={{ backgroundColor: project.color }}
-                $coverImageUrl={project.coverImageUrl}
-            >
+            <ProjectBox $color={project.color} $coverImageUrl={project.coverImageUrl}>
                 {showMore && (
                     <MoreBox>
                         <div
@@ -78,31 +75,26 @@ const StorageProject = ({ project }: { project: ProjectThumbnailResponse }) => {
 
 export default StorageProject;
 
-interface ProjectBoxProps {
-    $color?: string;
-    $coverImageUrl?: string | null;
-}
+const isValidValue = (value: string | null | undefined): boolean => {
+    return value !== null && value !== undefined && value !== '';
+};
 
-const ProjectBox = styled.div<ProjectBoxProps>`
-    position: relative;
+const ProjectBox = styled.div<{ $color: string | null; $coverImageUrl: string | null }>`
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
     width: 300px;
     height: 300px;
-
-    border-radius: 16px;
-    display: flex;
-    color: #ffffff;
-
     background: ${(props) =>
-        props.$coverImageUrl
+        isValidValue(props.$coverImageUrl)
             ? `url(${props.$coverImageUrl}) no-repeat center/cover`
-            : props.$color
-            ? `#${props.$color}`
+            : isValidValue(props.$color)
+            ? `${props.$color}`
             : '#b79fff'};
     background-size: cover;
     background-position: center;
+    border-radius: 16px;
+    color: #ffffff;
     position: relative;
 `;
 
