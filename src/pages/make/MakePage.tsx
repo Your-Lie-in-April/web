@@ -9,8 +9,6 @@ import Info from './components/Info';
 import ProjectCalendar from './components/ProjectCalendar';
 import ProjectTime from './components/ProjectTime';
 
-const colors = ['#633AE2', '#FFCB3B', '#64AFF5', '#C2D57A', '#EB5757', '#212121'];
-
 const ProjectMakePage: FC = () => {
     const [startDate, setStartDate] = useState<Date | null>(new Date());
     const [endDate, setEndDate] = useState<Date | null>(new Date());
@@ -52,10 +50,6 @@ const ProjectMakePage: FC = () => {
             return;
         }
 
-        let finalColor = color;
-        if (!color && !img) {
-            finalColor = colors[Math.floor(Math.random() * colors.length)];
-        }
         const payload = {
             title: title,
             description: content,
@@ -64,7 +58,7 @@ const ProjectMakePage: FC = () => {
             startTime: formatTime(starttime),
             endTime: formatTime(endtime),
             daysOfWeek: selectedDays,
-            color: finalColor,
+            color: color,
             coverImageId: String(imgId),
         };
 
