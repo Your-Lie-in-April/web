@@ -6,6 +6,7 @@ import {
     Container,
     ErrorContainer,
     ErrorTitle,
+    GlobalStyle,
     MainButton,
     SvgIcon,
 } from './ErrorStyles';
@@ -35,6 +36,8 @@ export function ErrorFallback({ error, resetErrorBoundary }: ErrorFallbackProps)
     };
 
     return (
+        <>
+        <GlobalStyle />
         <Container>
             <SvgIcon xmlns='http://www.w3.org/2000/svg' viewBox='0 0 160 160'>
                 <path
@@ -68,5 +71,6 @@ export function ErrorFallback({ error, resetErrorBoundary }: ErrorFallbackProps)
                 </BackButton>
             </ButtonContainer>
         </Container>
+        </>
     );
 }
