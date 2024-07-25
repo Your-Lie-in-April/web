@@ -1,4 +1,4 @@
-import { Http } from '@constants/urls';
+import { Http } from '@constants/api';
 import axios from 'axios';
 
 export async function getRefreshToken() {

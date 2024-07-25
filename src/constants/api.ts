@@ -1,4 +1,4 @@
-import { Http } from './urls';
+export const Http = import.meta.env.VITE_API_URL;
 
 export const API = {
     // member-controller

@@ -1,4 +1,4 @@
-import { Http } from '@constants/urls';
+import { Http } from '@constants/api';
 import BeforeLogin from '@pages/layouts/header/BeforeLogin';
 import googleLogo from '@pics/google-login.svg';
 import { FC } from 'react';
