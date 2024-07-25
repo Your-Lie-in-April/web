@@ -1,5 +1,5 @@
 import { Http } from '@constants/urls';
-import BeforeLogin from '@pages/layouts/BeforeLogin';
+import BeforeLogin from '@pages/layouts/header/BeforeLogin';
 import googleLogo from '@pics/google-login.svg';
 import { FC } from 'react';
 import styled, { createGlobalStyle, keyframes } from 'styled-components';

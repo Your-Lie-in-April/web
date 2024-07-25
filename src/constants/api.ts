@@ -64,7 +64,7 @@ export const API = {
     // notification-controller
     NOTIFICATION_PATCH: (notificationId?: number) =>
         `${Http}/v1/projects/notifications/${notificationId ?? ':notificationId'}`,
-    NOTIFICATION_SSE: `${Http}/v1/sse/subscribe/`,
+    NOTIFICATION_SSE: `${Http}/v1/sse/subscribe`,
     NOTIFICATION_PROJECTID: (
         projectId: number,
         cursor: string,

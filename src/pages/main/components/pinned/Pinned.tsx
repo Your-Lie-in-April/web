@@ -37,7 +37,7 @@ const Pinned: React.FC = () => {
 
     return pinnedProjects ? (
         <PinnedBox onClick={handleNavigation}>
-            <div style={{ display: 'flex', flexDirection: 'column' }}>
+            <FlexColumn>
                 <StyledButton>
                     <PushPinOutlinedIcon
                         sx={{ fontSize: 36 }}
@@ -45,7 +45,7 @@ const Pinned: React.FC = () => {
                             e.stopPropagation();
                             handlePinButtonClick();
                         }}
-                    />{' '}
+                    />
                 </StyledButton>
                 <ProjectBox>
                     <TextDiv>
@@ -60,10 +60,13 @@ const Pinned: React.FC = () => {
                     </TextDiv>
                     <PinnedSchedule scheduleData={pinSchedule} />
                 </ProjectBox>
-            </div>
+            </FlexColumn>
         </PinnedBox>
     ) : (
-        <PinnedBox style={{ cursor: 'default' }} />
+        <EmptyPinnedBox>
+            <EmptyTitle>고정된 프로젝트가 없습니다</EmptyTitle>
+            <EmptySubtitle>프로젝트 중 주요한 프로젝트의 경우 핀으로 고정해 보세요</EmptySubtitle>
+        </EmptyPinnedBox>
     );
 };
 export default Pinned;
@@ -77,6 +80,11 @@ const PinnedBox = styled.div`
     padding: 16px;
     box-sizing: border-box;
     cursor: pointer;
+`;
+
+const FlexColumn = styled.div`
+    display: flex;
+    flex-direction: column;
 `;
 
 const ProjectBox = styled.div`
@@ -131,4 +139,25 @@ const DetailText = styled.span`
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+`;
+
+const EmptyPinnedBox = styled(PinnedBox)`
+    cursor: default;
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    justify-content: center;
+    text-align: center;
+    gap: 60px;
+    color: #d9d9d9;
+`;
+
+const EmptyTitle = styled.div`
+    font-size: 24px;
+    font-weight: 800;
+`;
+
+const EmptySubtitle = styled.div`
+    font-size: 20px;
+    font-weight: 500;
 `;

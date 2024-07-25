@@ -35,10 +35,7 @@ const Project: React.FC<ProjectProps> = ({ project }) => {
     const { mutate: handleStored } = usePatchStoredMutation(project.projectId);
 
     return (
-        <ProjectBox
-            style={{ backgroundColor: project.color }}
-            $coverImageUrl={project.coverImageUrl}
-        >
+        <ProjectBox $color={project.color} $coverImageUrl={project.coverImageUrl}>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
                 <MoreDiv>
                     {showMore && (
@@ -82,22 +79,21 @@ interface MoreTextProps extends React.HTMLAttributes<HTMLDivElement> {
     isMove?: boolean;
 }
 
-interface ProjectBoxProps {
-    $color?: string;
-    $coverImageUrl?: string | null;
-}
+const isValidValue = (value: string | null | undefined): boolean => {
+    return value !== null && value !== undefined && value !== "";
+  };
 
-const ProjectBox = styled.div<ProjectBoxProps>`
+const ProjectBox = styled.div<{ $color: string | null; $coverImageUrl: string | null }>`
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
     width: 300px;
     height: 300px;
     background: ${(props) =>
-        props.$coverImageUrl
+        isValidValue(props.$coverImageUrl)
             ? `url(${props.$coverImageUrl}) no-repeat center/cover`
-            : props.$color
-            ? `#${props.$color}`
+            : isValidValue(props.$color)
+            ? `${props.$color}`
             : '#b79fff'};
     background-size: cover;
     background-position: center;
@@ -118,7 +114,6 @@ const TextBox = styled.div`
     box-sizing: border-box;
     align-items: flex-start;
     gap: 8px;
-
     color: #000000;
     font-family: 'Pretendard';
     font-style: normal;

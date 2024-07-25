@@ -1,11 +1,11 @@
 import { useStoredInfiniteQuery } from '@hooks/apis/queries/project/useStoredInfiniteQuery';
-import AfterLogin from '@pages/layouts/AfterLogin';
+import Layout from '@pages/layouts/Layout';
 import Search from '@pages/layouts/Search';
 import { useCallback, useMemo, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroller';
 import styled, { createGlobalStyle } from 'styled-components';
-import GraphicIcons from './icons/GraphicIcons';
 import StorageProjectList from './StorageProjectList';
+import GraphicIcons from './icons/GraphicIcons';
 
 const StoragePage = () => {
     const [searchQuery, setSearchQuery] = useState<string>('');
@@ -29,25 +29,26 @@ const StoragePage = () => {
     return (
         <>
             <GlobalStyle />
-            <GraphicIcons />
-            <Container>
-                <AfterLogin />
-                <Content>
-                    <InnerContent>
-                        <Title>프로젝트 보관함</Title>
-                        <Search onSearch={handleSearch} />
-                    </InnerContent>
-                    <InfiniteScroll
-                        pageStart={0}
-                        loadMore={() => fetchNextPage()}
-                        hasMore={!!hasNextPage}
-                        loader={<div key={0}>Loading...</div>}
-                    >
-                        <StorageProjectList projects={filteredProjects} />
-                    </InfiniteScroll>
-                </Content>
-            </Container>
-            <Spacer />
+            <Layout>
+                <GraphicIcons />
+                <Container>
+                    <Content>
+                        <InnerContent>
+                            <Title>프로젝트 보관함</Title>
+                            <Search onSearch={handleSearch} />
+                        </InnerContent>
+                        <InfiniteScroll
+                            pageStart={0}
+                            loadMore={() => fetchNextPage()}
+                            hasMore={!!hasNextPage}
+                            loader={<div key={0}>Loading...</div>}
+                        >
+                            <StorageProjectList projects={filteredProjects} />
+                        </InfiniteScroll>
+                    </Content>
+                </Container>
+                <Spacer />
+            </Layout>
         </>
     );
 };
@@ -72,7 +73,6 @@ const Title = styled.div`
     color: #ffffff;
     text-align: center;
     font-size: 42px;
-
     font-weight: 700;
     line-height: normal;
 `;
@@ -81,6 +81,7 @@ const Container = styled.div`
     display: flex;
     flex-direction: column;
     gap: 130px;
+    margin-top: 130px;
 `;
 
 const Content = styled.div`

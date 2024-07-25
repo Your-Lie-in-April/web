@@ -32,11 +32,10 @@ const MemberProfile = ({
                             alt='Profile Image'
                         />
                     </MemberImg>
-
                     <TextContainer>
                         <NicknameText>
-                            {member?.nickname}
-                            {isCurrentUser ? '(본인)' : ''}
+                            <CommonText> {member?.nickname}</CommonText>
+                            <IsMeText>{isCurrentUser && '(본인)'}</IsMeText>
                         </NicknameText>
                         <StateText>{member?.state}</StateText>
                     </TextContainer>
@@ -93,17 +92,17 @@ const StyledImage = styled.img`
 `;
 
 const TextContainer = styled.div`
+    flex: 1;
     display: flex;
     flex-direction: column;
     gap: 7px;
     justify-content: center;
 `;
 
-const NicknameText = styled.div`
-    max-width: 196px;
+const CommonText = styled.div`
     color: #000000;
-    font-family: Pretendard;
-    font-size: 14px;
+    font-family: 'Pretendard';
+    font-size: 13px;
     font-style: normal;
     font-weight: 500;
     line-height: normal;
@@ -112,10 +111,24 @@ const NicknameText = styled.div`
     text-overflow: ellipsis;
 `;
 
-const StateText = styled.div`
-    max-width: 196px;
+const IsMeText = styled(CommonText)`
+    flex-shrink: 0;
+    flex-grow: 1;
+`;
+
+const NicknameText = styled(CommonText)`
+    max-width: 158px;
     color: #000000;
-    font-family: Pretendard;
+    display: flex;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+`;
+
+const StateText = styled.div`
+    max-width: 158px;
+    color: #000000;
+    font-family: 'Pretendard';
     font-size: 10px;
     font-style: normal;
     font-weight: 400;
