@@ -6,7 +6,7 @@ import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import { Toast } from '@pages/layouts/Toast';
 import ConfirmDeleteAlarm from '@pages/modal/project/ConfirmDeleteAlarm';
 import { FC, useCallback, useRef, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import 'react-toastify/dist/ReactToastify.css';
 import styled from 'styled-components';
 
@@ -14,7 +14,6 @@ const Alarm: FC = () => {
     const [isIconVisible, setIsIconVisible] = useState<boolean>(false);
     const [checkedState, setCheckedState] = useState<Record<number, boolean>>({});
     const [isDeleted, setIsDeleted] = useState<boolean>(false);
-    const navigate = useNavigate();
     const { projectId } = useParams();
 
     const { uncheckedQuery, checkedQuery, isUncheckedComplete } = useAlarmsQuery(
@@ -54,7 +53,7 @@ const Alarm: FC = () => {
             .map(([notificationId]) => parseInt(notificationId));
 
         if (notificationsToDelete.length === 0) {
-            alert('✂️삭제할 알림을 선택해주세요');
+            Toast('삭제할 알림을 선택해주세요', 'warning');
             return;
         }
 
@@ -104,43 +103,49 @@ const Alarm: FC = () => {
                     </DeleteNotification>
                 </DeleteWrapper>
             )}
-            <ScrollableArea $hasMessages={allAlarms.length > 0}>
-                {allAlarms.map((alarm, index) => (
-                    <NotificationBox
-                        key={alarm.notificationId}
-                        onClick={() =>
-                            handleNotificationClick(alarm.project.projectId, alarm.notificationId)
-                        }
-                        ref={index === allAlarms.length - 1 ? lastAlarmRef : null}
-                    >
-                        <NotificationWrapper>
-                            {isIconVisible && (
-                                <CheckBoxIcon
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        handleCheckBoxClick(alarm.notificationId);
-                                    }}
-                                    style={{
-                                        color: checkedState[alarm.notificationId]
-                                            ? '#633AE2'
-                                            : '#A4A4A4',
-                                        marginLeft: -10,
-                                        fontSize: 20,
-                                        cursor: 'pointer',
-                                    }}
-                                />
-                            )}
-                            <ContentWrapper>
-                                <ProjectTitleContainer $isIconVisible={isIconVisible}>
-                                    <ProjectTitle>{alarm.project.title}</ProjectTitle>
-                                    <CreatedAt>{alarm.createdAt.slice(0, 10)}</CreatedAt>
-                                </ProjectTitleContainer>
-                                <NotificationContent>{alarm.message}</NotificationContent>
-                            </ContentWrapper>
-                        </NotificationWrapper>
-                    </NotificationBox>
-                ))}
-            </ScrollableArea>
+            {allAlarms.length > 0 && (
+                <ScrollableArea $hasMessages={allAlarms.length > 0}>
+                    {allAlarms.map((alarm, index) => (
+                        <NotificationBox
+                            key={alarm.notificationId}
+                            onClick={() =>
+                                handleNotificationClick(
+                                    alarm.project.projectId,
+                                    alarm.notificationId
+                                )
+                            }
+                            ref={index === allAlarms.length - 1 ? lastAlarmRef : null}
+                        >
+                            <NotificationWrapper>
+                                {isIconVisible && (
+                                    <CheckBoxIcon
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            handleCheckBoxClick(alarm.notificationId);
+                                        }}
+                                        style={{
+                                            color: checkedState[alarm.notificationId]
+                                                ? '#633AE2'
+                                                : '#A4A4A4',
+                                            marginLeft: -10,
+                                            fontSize: 20,
+                                            cursor: 'pointer',
+                                        }}
+                                    />
+                                )}
+                                <ContentWrapper>
+                                    <ProjectTitleContainer $isIconVisible={isIconVisible}>
+                                        <ProjectTitle>{alarm.project.title}</ProjectTitle>
+                                        <CreatedAt>{alarm.createdAt.slice(0, 10)}</CreatedAt>
+                                    </ProjectTitleContainer>
+                                    <NotificationContent>{alarm.message}</NotificationContent>
+                                </ContentWrapper>
+                            </NotificationWrapper>
+                        </NotificationBox>
+                    ))}
+                </ScrollableArea>
+            )}
+            {allAlarms.length === 0 && <EmptyAlarmMessage>알림이 비었습니다</EmptyAlarmMessage>}
             {isDeleted && <ConfirmDeleteAlarm />}
         </AlarmDiv>
     );
@@ -162,6 +167,16 @@ const AlarmDiv = styled.div`
     box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.25);
     position: relative;
     overflow: hidden;
+`;
+
+const EmptyAlarmMessage = styled.div`
+    font-weight: 500;
+    color: #a4a4a4;
+    font-size: 18px;
+    display: flex;
+    justify-content: center;
+    position: absolute;
+    top: calc(48%);
 `;
 
 const ScrollableArea = styled.div<{ $hasMessages: boolean }>`

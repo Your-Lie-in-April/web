@@ -162,12 +162,16 @@ const StyledSvg = styled.svg`
 `;
 
 const StyledEmailText = styled.div`
+    width: 168px;
     color: #fff;
-    font-family: Pretendard;
+    font-family: 'Pretendard';
     font-size: 13px;
     font-style: normal;
     font-weight: 500;
     line-height: normal;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 `;
 
 const StyledStatusText = styled.div<{ $hasData: boolean }>`
@@ -186,4 +190,7 @@ const StyledStatusText = styled.div<{ $hasData: boolean }>`
     font-style: normal;
     font-weight: 500;
     line-height: normal;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
 `;
