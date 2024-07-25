@@ -5,6 +5,7 @@ import usePatchAlarmMutation from '@hooks/apis/mutations/alarm/usePatchAlarmMuta
 import useAlarmsQuery from '@hooks/apis/queries/alarm/useAlarmsQuery';
 import { AlarmMessageType, useSSE } from '@hooks/useSSE';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
+import { Toast } from '@pages/layouts/Toast';
 import ConfirmDeleteAlarm from '@pages/modal/project/ConfirmDeleteAlarm';
 import { useQuery } from '@tanstack/react-query';
 import { FC, useCallback, useRef, useState } from 'react';
@@ -59,7 +60,7 @@ const Alarm: FC = () => {
             .map(([notificationId]) => parseInt(notificationId));
 
         if (notificationsToDelete.length === 0) {
-            alert('✂️삭제할 알림을 선택해주세요');
+            Toast('삭제할 알림을 선택해주세요', 'warning');
             return;
         }
 
@@ -110,6 +111,9 @@ const Alarm: FC = () => {
                 </DeleteWrapper>
             )}
             <ScrollableArea>
+                {realTimeAlarms?.length == 0 && allAlarms.length == 0 && (
+                    <EmptyAlarmMessage>알림이 비었습니다</EmptyAlarmMessage>
+                )}
                 {allAlarms.length > 0 && <Divider />}
                 {realTimeAlarms && realTimeAlarms.length > 0 && (
                     <>
@@ -189,7 +193,6 @@ const Alarm: FC = () => {
         </AlarmDiv>
     );
 };
-
 export default Alarm;
 
 const AlarmDiv = styled.div`
@@ -221,6 +224,16 @@ const Divider = styled.div`
     height: 0.8px;
     background-color: #7d7d7d;
     width: 275px;
+`;
+
+const EmptyAlarmMessage = styled.div`
+    font-weight: 500;
+    color: #a4a4a4;
+    font-size: 20px;
+    display: flex;
+    justify-content: center;
+    position: absolute;
+    top: calc(48%);
 `;
 
 const Text = styled.div`
