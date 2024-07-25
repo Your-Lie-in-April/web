@@ -33,6 +33,15 @@ const InfoEdit: FC<InfoEditPros> = ({ setEditCover }) => {
         }
     }, [projectData]);
 
+    const handleBackgroundClick = (e: React.MouseEvent<HTMLDivElement>) => {
+        if (e.target === e.currentTarget) {
+            setEditCover(false);
+            setIsTitleClicked(false);
+            setIsContentClicked(false);
+            setIsCoverClicked(false);
+        }
+    };
+
     const handleTextareaChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
         const inputText = e.target.value;
         const limitedText = inputText.slice(0, 58);
@@ -74,13 +83,15 @@ const InfoEdit: FC<InfoEditPros> = ({ setEditCover }) => {
             $selectedColor={selectedColor}
             $selectedHex={selectedHex}
             $selectedImageUrl={selectedImageUrl}
+            onClick={handleBackgroundClick}
         >
-            <MakeContainer>
+            <MakeContainer onClick={handleBackgroundClick}>
                 <TitleContainer>
                     <Title>
                         <TitleText
                             type='text'
-                            onFocus={() => {
+                            onFocus={(e) => {
+                                e.stopPropagation();
                                 setIsTitleClicked(true);
                                 setIsCoverClicked(false);
                             }}
@@ -104,8 +115,15 @@ const InfoEdit: FC<InfoEditPros> = ({ setEditCover }) => {
                         />
                     </Content>
                 </TitleContainer>
-                <div style={{ position: 'relative' }}>
-                    <Make onClick={toggleCover}>커버 만들기</Make>
+                <BtnWrapper onClick={handleBackgroundClick}>
+                    <MakeBtn
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            toggleCover();
+                        }}
+                    >
+                        커버 만들기
+                    </MakeBtn>
                     {isCoverClicked && (
                         <div
                             style={{
@@ -126,7 +144,7 @@ const InfoEdit: FC<InfoEditPros> = ({ setEditCover }) => {
                             />
                         </div>
                     )}
-                </div>
+                </BtnWrapper>
             </MakeContainer>
         </Container>
     );
@@ -187,7 +205,7 @@ const TitleText = styled.input`
     padding: 8px;
     font-weight: bold;
     font-size: 32px;
-    font-family: Pretendard;
+    font-family: 'Pretendard';
     justify-content: center;
     align-items: center;
     gap: 8px;
@@ -233,7 +251,15 @@ const ContentText = styled.textarea<ContentTextProps>`
     position: relative;
 `;
 
-const Make = styled.button`
+const BtnWrapper = styled.div`
+    position: relative;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+`;
+
+const MakeBtn = styled.div`
     width: 145px;
     height: 35px;
     border-radius: 40px;
@@ -249,8 +275,10 @@ const Make = styled.button`
     text-align: center;
     align-items: center;
     justify-content: center;
-    margin-top: 130px;
+    align-self: flex-end;
+
     color: #000000;
+    cursor: pointer;
 
     &:hover {
         border-color: black;
