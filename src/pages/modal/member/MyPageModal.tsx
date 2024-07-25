@@ -150,8 +150,10 @@ const MyEmailText = styled.div`
     line-height: normal;
     white-space: nowrap;
     overflow: hidden;
-    text-overflow : ellipsis;
-    width:  260px;
+    text-overflow: ellipsis;
+    width: 100%;
+    max-width: 260px;
+    text-align: center;
 `;
 
 const StatusBox = styled.div`
