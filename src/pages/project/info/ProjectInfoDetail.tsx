@@ -1,6 +1,5 @@
 import usePatchStoredMutation from '@hooks/apis/mutations/member/usePatchStoredMutation';
 import useAllMemberInfoQuery from '@hooks/apis/queries/member/useAllMemberInfoQuery';
-import useCoverImgQuery from '@hooks/apis/queries/project/useCoverImgQuery';
 import { useProjectContext } from '@hooks/context/projectContext';
 import { useUserContext } from '@hooks/context/userContext';
 import InboxOutlinedIcon from '@mui/icons-material/InboxOutlined';
@@ -24,10 +23,6 @@ const ProjectInfoDetail: React.FC<ProjectInfoDetailProps> = ({ onClick }) => {
         (member) => member.memberId === userData?.memberId
     );
 
-    const { data } = useCoverImgQuery();
-    const coverImg = data?.find((item) => item.page0.url === projectData?.coverImageUrl);
-
-    
     const handleOnEditClick = () => {
         isMePrivileged ? onClick() : Toast('관리자만 수정할 수 있습니다', 'warning');
     };
@@ -38,30 +33,10 @@ const ProjectInfoDetail: React.FC<ProjectInfoDetailProps> = ({ onClick }) => {
     };
 
     return (
-        <StyledContainer color={projectData?.color} $imageUrl={coverImg?.page1.url}>
+        <StyledContainer color={projectData?.color} $imageUrl={projectData?.coverImageUrl}>
             <StyledProjectInfoDiv>
-                <StyledCommonText
-                    style={{
-                        fontSize: '42px',
-                        fontWeight: '700',
-                        textOverflow: 'ellipsis',
-                        overflow: 'hidden',
-                        whiteSpace: 'nowrap',
-                        flexShrink: 0,
-                    }}
-                >
-                    {projectData?.title}
-                </StyledCommonText>
-                <StyledCommonText
-                    style={{
-                        textOverflow: 'ellipsis',
-                        overflow: 'hidden',
-                        whiteSpace: 'nowrap',
-                        flexShrink: 0,
-                    }}
-                >
-                    {projectData?.description}
-                </StyledCommonText>{' '}
+                <StyledTitle>{projectData?.title}</StyledTitle>
+                <StyledDescription>{projectData?.description}</StyledDescription>
                 <StyledSettingDiv>
                     <StyledSettingBtn onClick={handleOnEditClick}>
                         <EditIcon />
@@ -111,6 +86,18 @@ const StyledCommonText = styled.div`
     font-style: normal;
     font-weight: 400;
     line-height: normal;
+`;
+
+const StyledDescription = styled(StyledCommonText)`
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    flex-shrink: 0;
+`;
+
+const StyledTitle = styled(StyledDescription)`
+    font-size: 42px;
+    font-weight: 700;
 `;
 
 const StyledSettingDiv = styled.div`
