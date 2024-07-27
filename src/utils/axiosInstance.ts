@@ -1,4 +1,4 @@
-import { Http } from '@constants/urls';
+import { Http } from '@constants/api';
 import { Toast } from '@pages/layouts/Toast';
 import axios, { AxiosInstance } from 'axios';
 import { handleTokenRefresh, removeTokens } from './refreshToken';

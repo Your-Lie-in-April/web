@@ -19,7 +19,7 @@ const CoverPicker: FC<CoverPickerProps> = ({
     onHexSelect,
     toggleCover,
 }) => {
-    const [color, setColor] = useState('#fff');
+    const [color, setColor] = useState('#ffffff');
     const [openHex, setOpenHex] = useState<boolean>(false);
     const { data: images } = useCoverImgQuery();
 
@@ -153,7 +153,7 @@ const ConverInnerContainer = styled.div`
     gap: 13px;
 `;
 
-const Register = styled.button`
+const Register = styled.div`
     display: flex;
     width: 82px;
     padding: 8px;
@@ -164,6 +164,8 @@ const Register = styled.button`
     background: #633ae2;
     white-space: nowrap;
     color: white;
+    cursor: pointer;
+    box-sizing: border-box;
 
     &:focus {
         outline: none;

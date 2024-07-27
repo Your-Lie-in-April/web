@@ -25,8 +25,8 @@ const LeaderProfile = ({
                 </LeaderImg>
                 <StyledProfileInfo>
                     <StyledProfileText>
-                        {member?.nickname}
-                        {isCurrentUser ? ' (본인)' : ''}
+                        <CommonText> {member?.nickname}</CommonText>
+                        <IsMeText>{isCurrentUser && '(본인)'}</IsMeText>
                     </StyledProfileText>
                     <StyledProfileSubText>{member?.state}</StyledProfileSubText>
                 </StyledProfileInfo>
@@ -81,14 +81,23 @@ const StyledProfileInfo = styled.div`
 
 const CommonText = styled.div`
     color: #000000;
-    font-family: Pretendard;
+    font-family: 'Pretendard';
     font-size: 13px;
     font-style: normal;
     font-weight: 500;
     line-height: normal;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+`;
+
+const IsMeText = styled(CommonText)`
+    flex-shrink: 0;
+    flex-grow: 1;
 `;
 
 const StyledProfileText = styled(CommonText)`
+    display: flex;
     max-width: 158px;
     font-size: 14px;
     overflow: hidden;

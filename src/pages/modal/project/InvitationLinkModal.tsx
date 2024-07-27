@@ -1,7 +1,7 @@
-import { baseUrl } from '@constants/urls';
 import usePostLinkMutation from '@hooks/apis/mutations/project/usePostLinkMutation';
 import { useInvitationContext } from '@hooks/context/invitationContext';
 import { useProjectContext } from '@hooks/context/projectContext';
+import { Toast } from '@pages/layouts/Toast';
 import ModalPortal from '@utils/ModalPotal';
 import useScrollLock from '@utils/useScrollLock';
 import { useState } from 'react';
@@ -23,6 +23,11 @@ const InvitationLinkModal: React.FC<InvitationLinkModalProps> = ({ toggleBtn }) 
     const [isModalCompleteHidden, setIsModalCompleteHidden] = useState<boolean>(false);
 
     const { projectData } = useProjectContext();
+
+    const baseUrl =
+        process.env.NODE_ENV === 'development'
+            ? 'http://localhost:5173'
+            : 'https://timepiece.inuappcenter.kr';
 
     const { projectId } = useParams();
     const { mutate } = usePostLinkMutation(Number(projectId));
@@ -62,7 +67,7 @@ const InvitationLinkModal: React.FC<InvitationLinkModalProps> = ({ toggleBtn }) 
             setIsBtnClick(true);
             closeModal();
         } catch (e) {
-            alert('초대코드 복사에 실패했습니다😭');
+            Toast('초대코드 복사에 실패했습니다😭', 'error');
         }
     };
 

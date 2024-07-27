@@ -2,7 +2,7 @@ import { API } from '@constants/api';
 import { QUERY_KEY } from '@constants/queryKey';
 import { useQueryClient } from '@tanstack/react-query';
 import { EventSourcePolyfill } from 'event-source-polyfill';
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 
 export type AlarmMessageType = {
     projectTitle: string;
@@ -16,6 +16,12 @@ export type AlarmMessageType = {
 export const useSSE = () => {
     const queryClient = useQueryClient();
     const accessToken = localStorage.getItem('access_token');
+
+    const fetchSSEData = useCallback(() => {
+        return new Promise<AlarmMessageType[]>((resolve) => {
+            resolve([]);
+        });
+    }, []);
 
     useEffect(() => {
         const connect = () => {
@@ -44,7 +50,7 @@ export const useSSE = () => {
                 };
 
                 queryClient.setQueryData<AlarmMessageType[]>(QUERY_KEY.ALARM_SSE, (oldData = []) =>
-                    [newAlarm, ...(oldData || [])].slice(0, 5)
+                    [newAlarm, ...oldData].slice(0, 5)
                 );
             };
 
@@ -63,4 +69,6 @@ export const useSSE = () => {
 
         return connect();
     }, [queryClient, accessToken]);
+
+    return fetchSSEData;
 };

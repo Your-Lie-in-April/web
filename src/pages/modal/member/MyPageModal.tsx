@@ -143,11 +143,17 @@ const StyledImage = styled.img`
 
 const MyEmailText = styled.div`
     color: #ffffff;
-    font-family: Pretendard;
+    font-family: 'Pretendard';
     font-size: 14px;
     font-style: normal;
     font-weight: 500;
     line-height: normal;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+    max-width: 260px;
+    text-align: center;
 `;
 
 const StatusBox = styled.div`

@@ -6,7 +6,6 @@ import SpringIcon from './SpringIcon';
 import SummertimeSadnessIcon from './Summertime_sadness ';
 
 const GraphicIconsWrapper = styled.div`
-    height: 100%;
     z-index: 0;
     position: fixed;
     bottom: 0;
