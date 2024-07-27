@@ -1,6 +1,7 @@
-import { postNewProject } from '@apis/project';
-import { useMutation } from '@tanstack/react-query';
 import { ProjectPostReqDto } from '@/types/projectType';
+import { postNewProject } from '@apis/project';
+import { QUERY_KEY } from '@constants/queryKey';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 /**
  * POST /project
@@ -9,8 +10,14 @@ import { ProjectPostReqDto } from '@/types/projectType';
  */
 
 const usePostProjectMutation = () => {
+    const queryClient = useQueryClient();
     return useMutation({
         mutationFn: (body: ProjectPostReqDto) => postNewProject(body),
+        onSuccess: () => {
+            void queryClient.invalidateQueries({
+                queryKey: QUERY_KEY.PROJECT_MAIN(0),
+            });
+        },
     });
 };
 
