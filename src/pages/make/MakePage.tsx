@@ -59,7 +59,7 @@ const ProjectMakePage: FC = () => {
             endTime: formatTime(endtime),
             daysOfWeek: selectedDays,
             color: color,
-            coverImageId: String(imgId),
+            coverImageId: imgId,
         };
 
         try {
@@ -69,17 +69,12 @@ const ProjectMakePage: FC = () => {
             Toast('다시 시도해주세요', 'error');
         }
     };
+
     return (
         <>
             <GlobalStyle />
             <Layout>
-                <div
-                    style={{
-                        height: '16px',
-                        width: '100%',
-                        backgroundColor: '#000000',
-                    }}
-                />
+                <Divider height='16px' />
                 <Info
                     setContent={setContent}
                     setTitle={setTitle}
@@ -87,13 +82,7 @@ const ProjectMakePage: FC = () => {
                     setImg={setImg}
                     setImgId={setImgId}
                 />
-                <div
-                    style={{
-                        height: '24px',
-                        width: '100%',
-                        backgroundColor: '#000000',
-                    }}
-                />
+                <Divider height='24px' />
 
                 <Container>
                     <TimeContainer>
@@ -125,17 +114,12 @@ const ProjectMakePage: FC = () => {
                         <SButtonText>프로젝트 만들기</SButtonText>
                     </SButton>
                 </Container>
-                <div
-                    style={{
-                        height: '300px',
-                        width: '100%',
-                        backgroundColor: '#000000',
-                    }}
-                />
+                <Divider height='300px' />
             </Layout>
         </>
     );
 };
+
 export default ProjectMakePage;
 
 const GlobalStyle = createGlobalStyle`
@@ -153,6 +137,12 @@ const GlobalStyle = createGlobalStyle`
   }
 `;
 
+const Divider = styled.div<{ height: string }>`
+    height: ${(props) => props.height};
+    width: 100%;
+    background-color: #000000;
+`;
+
 const Container = styled.div`
     display: flex;
     width: 100%;
@@ -162,7 +152,6 @@ const Container = styled.div`
     gap: 78px;
     border: none;
     box-shadow: none;
-
     padding-top: 109px;
     padding-bottom: 109px;
     box-sizing: border-box;

@@ -8,7 +8,7 @@ const colors = ['#633AE2', '#FFCB3B', '#64AFF5', '#C2D57A', '#EB5757', '#212121'
 
 interface CoverPickerProps {
     onColorSelect: (color: string) => void;
-    onImageSelect: (page0Url: string, page0Id: string, page1Url: string) => void; // 여기를 수정
+    onImageSelect: (id: string, coverImageUrl: string) => void;
     onHexSelect: (color: string) => void;
     toggleCover: () => void;
 }
@@ -28,8 +28,8 @@ const CoverPicker: FC<CoverPickerProps> = ({
         onColorSelect(color);
     };
 
-    const handleImageClick = (page0Url: string, page0Id: string, page1Url: string) => {
-        onImageSelect(page0Url, page0Id, page1Url);
+    const handleImageClick = (id: string, coverImageUrl: string) => {
+        onImageSelect(id, coverImageUrl);
     };
 
     const handleColorChange = useCallback(
@@ -47,10 +47,11 @@ const CoverPicker: FC<CoverPickerProps> = ({
     const toggleHex = () => {
         setOpenHex((prev) => !prev);
     };
+
     return (
         <CoverContainer>
             <ConverInnerContainer>
-                <Register style={{ fontSize: '18px' }} onClick={toggleCover}>
+                <Register onClick={toggleCover}>
                     커버등록
                 </Register>
                 <ColorContainer>
@@ -64,7 +65,7 @@ const CoverPicker: FC<CoverPickerProps> = ({
                                 key={index}
                                 style={{ background: color }}
                                 onClick={() => handleColorClick(color)}
-                            ></Color>
+                            />
                         ))}
                         <Color
                             style={{
@@ -79,22 +80,16 @@ const CoverPicker: FC<CoverPickerProps> = ({
                     이미지
                     <ImageChoose>
                         {images ? (
-                            images.map((item) => (
+                            images.data.map((item) => (
                                 <Image
-                                    key={item.page0.id}
+                                    key={item.id}
                                     style={{
-                                        backgroundImage: `url('${item.page0.url}')`,
+                                        backgroundImage: `url('${item.thumbnailUrl}')`,
                                         backgroundSize: 'cover',
                                         backgroundRepeat: 'no-repeat',
                                         backgroundPosition: 'center',
                                     }}
-                                    onClick={() =>
-                                        handleImageClick(
-                                            item.page0.url,
-                                            item.page0.id,
-                                            item.page1.url
-                                        )
-                                    }
+                                    onClick={() => handleImageClick(item.id, item.coverImageUrl)}
                                 />
                             ))
                         ) : (
@@ -103,7 +98,7 @@ const CoverPicker: FC<CoverPickerProps> = ({
                     </ImageChoose>
                 </ImageContainer>
             </ConverInnerContainer>
-            {openHex ? (
+            {openHex && (
                 <div
                     style={{
                         display: 'flex',
@@ -127,10 +122,11 @@ const CoverPicker: FC<CoverPickerProps> = ({
                         }}
                     />
                 </div>
-            ) : null}
+            )}
         </CoverContainer>
     );
 };
+
 export default CoverPicker;
 
 const CoverContainer = styled.div`
@@ -166,6 +162,7 @@ const Register = styled.div`
     color: white;
     cursor: pointer;
     box-sizing: border-box;
+    font-size: 18px;
 
     &:focus {
         outline: none;
@@ -181,6 +178,7 @@ const ColorContainer = styled.div`
     gap: 8px;
     font-size: 20px;
 `;
+
 const ColorChoose = styled.div`
     width: 268px;
     height: 30px;
@@ -188,6 +186,7 @@ const ColorChoose = styled.div`
     align-items: flex-start;
     gap: 4px;
 `;
+
 const Color = styled.button`
     width: 30px;
     height: 30px;
@@ -211,6 +210,7 @@ const ImageContainer = styled.div`
     gap: 8px;
     font-size: 20px;
 `;
+
 const ImageChoose = styled.div`
     width: 272px;
     height: 116px;
@@ -221,6 +221,7 @@ const ImageChoose = styled.div`
     flex-wrap: wrap;
     row-gap: 8px;
 `;
+
 const Image = styled.div`
     width: 50px;
     height: 50px;

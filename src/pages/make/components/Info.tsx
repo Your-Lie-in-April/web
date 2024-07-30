@@ -9,6 +9,7 @@ interface InfoProps {
     setImg: Dispatch<SetStateAction<string>>;
     setImgId: Dispatch<SetStateAction<string>>;
 }
+
 const Info: FC<InfoProps> = ({ setContent, setTitle, setColor, setImg, setImgId }) => {
     const [isTitleClicked, setIsTitleClicked] = useState<boolean>(false);
     const [isContentClicked, setIsContentClicked] = useState<boolean>(false);
@@ -43,12 +44,12 @@ const Info: FC<InfoProps> = ({ setContent, setTitle, setColor, setImg, setImgId 
         setImgId('');
     };
 
-    const handleImageSelect = (page0Url: string, page0Id: string, page1Url: string) => {
-        setSelectedImageUrl(page1Url);
+    const handleImageSelect = (id: string, coverImageUrl: string) => {
+        setSelectedImageUrl(coverImageUrl);
         setSelectedColor(null);
         setSelectedHex(null);
-        setImg(page0Url);
-        setImgId(page0Id);
+        setImg(coverImageUrl);
+        setImgId(id);
         setColor('');
     };
 
@@ -81,18 +82,18 @@ const Info: FC<InfoProps> = ({ setContent, setTitle, setColor, setImg, setImgId 
                             }}
                             onChange={handleTitleChange}
                             placeholder={
-                                isTitleClicked === true ? '' : '프로젝트 제목을 작성해주세요'
+                                isTitleClicked ? '' : '프로젝트 제목을 작성해주세요'
                             }
-                        ></TitleText>
+                        />
                     </Title>
                     <Content>
                         <ContentText
-                            $focused
+                            $focused={isContentClicked}
                             onChange={handleTextareaChange}
                             onFocus={() => setIsContentClicked(true)}
                             onBlur={() => setIsContentClicked(false)}
                             placeholder={
-                                isContentClicked === true ? '' : '프로젝트 내용을 작성해주세요'
+                                isContentClicked ? '' : '프로젝트 내용을 작성해주세요'
                             }
                         />
                     </Content>
@@ -109,9 +110,7 @@ const Info: FC<InfoProps> = ({ setContent, setTitle, setColor, setImg, setImgId 
                         >
                             <CoverPicker
                                 onColorSelect={handleColorSelect}
-                                onImageSelect={(page0Url, page0Id, page1Url) =>
-                                    handleImageSelect(page0Url, page0Id, page1Url)
-                                }
+                                onImageSelect={handleImageSelect}
                                 onHexSelect={handleHexSelect}
                                 toggleCover={toggleCover}
                             />
@@ -122,17 +121,16 @@ const Info: FC<InfoProps> = ({ setContent, setTitle, setColor, setImg, setImgId 
         </Container>
     );
 };
+
 export default Info;
 
-interface ContentTextProps {
-    $focused: boolean;
-}
-
-const Container = styled.div<{
+interface ContainerProps {
     $selectedColor: string | null;
     $selectedHex: string | null;
     $selectedImageUrl: string | null;
-}>`
+}
+
+const Container = styled.div<ContainerProps>`
     width: 100%;
     height: 200px;
     display: flex;
@@ -148,6 +146,7 @@ const Container = styled.div<{
     background-size: cover;
     background-position: center;
 `;
+
 const MakeContainer = styled.div`
     width: 1043px;
     height: 164px;
@@ -155,10 +154,12 @@ const MakeContainer = styled.div`
     justify-content: space-between;
     margin-left: 200px;
 `;
+
 const TitleContainer = styled.div`
     width: 820px;
     height: 136px;
 `;
+
 const Title = styled.div`
     width: 820px;
     height: 70px;
@@ -167,11 +168,9 @@ const Title = styled.div`
     justify-content: center;
     border: 1px solid #000000;
     border-radius: 70px;
-    ::placeholder {
-        color: black;
-    }
     background-color: white;
 `;
+
 const TitleText = styled.input`
     display: flex;
     width: 730px;
@@ -201,9 +200,8 @@ const Content = styled.div`
     gap: 8px;
 `;
 
-const ContentText = styled.textarea<ContentTextProps>`
+const ContentText = styled.textarea<{ $focused: boolean }>`
     color: ${({ $focused }) => ($focused ? '#000000' : '#7d7d7d')};
-    color: #7d7d7d;
     text-align: center;
     font-family: Pretendard;
     font-size: 28px;
