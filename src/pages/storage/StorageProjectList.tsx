@@ -1,4 +1,4 @@
-import { ProjectThumbnailResponse } from '@/types/projectType';
+import { ProjectThumbnailInfo } from '@/types/projectType';
 import NoProject from '@pages/layouts/NoProject';
 import styled from 'styled-components';
 import StorageProject from './StorageProject';
@@ -12,7 +12,7 @@ const GridContainer = styled.div`
 `;
 
 interface StorageProjectListProps {
-    projects: ProjectThumbnailResponse[];
+    projects: ProjectThumbnailInfo[];
 }
 
 const StorageProjectList: React.FC<StorageProjectListProps> = ({ projects }) => {
