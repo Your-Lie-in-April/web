@@ -7,7 +7,7 @@ import { FC, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import styled, { createGlobalStyle } from 'styled-components';
 import Alarm from './components/alarm/Alarm';
-import Banner from './components/Banner';
+import { BannerDown, BannerTop } from './components/Banner';
 import Pinned from './components/pinned/Pinned';
 import Profile from './components/Profile';
 import NewProject from './components/projects/NewProject';
@@ -90,8 +90,10 @@ const MainPage: FC = () => {
         <>
             <GlobalStyle />
             <Layout>
-                <Banner />
-
+                <div>
+                    <BannerTop />
+                    <BannerDown />
+                </div>
                 <MainContainer>
                     <div style={{ display: 'flex', flexDirection: 'row', gap: '20px' }}>
                         <div
