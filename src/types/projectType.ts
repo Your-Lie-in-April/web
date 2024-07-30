@@ -11,9 +11,12 @@ export type ProjectEntity = {
     endTime?: Date | undefined;
     daysOfWeek?: string[];
     isStored?: boolean;
-    coverImageUrl: string | null;
+    coverInfo: {
+        id: number;
+        thumbnailUrl: string;
+        coverImageUrl: string;
+    };
     color: string;
-    coverImageId?: string;
 };
 
 export type ProjectThumbnailResponse = {
@@ -24,12 +27,20 @@ export type ProjectThumbnailResponse = {
     coverImageUrl: string | null;
 };
 
+export type ProjectThumbnailInfo = {
+    projectId: number;
+    title: string;
+    description: string;
+    color: string | null;
+    thumbnailUrl: string | null;
+};
+
 export type ProjectStoredResponse = {
     currentPage: number;
     pageSize: number;
     totalCount: number;
     totalPages: number;
-    data: ProjectThumbnailResponse[];
+    data: ProjectThumbnailInfo[];
 };
 
 export type ProjectPinResponse = {
@@ -81,9 +92,11 @@ export type ProjectCoverImg = {
     currentPage: number;
     pageSize: number;
     totalCount: number;
+    totalPages: number;
     data: {
         id: string;
-        url: string;
+        thumbnailUrl: string;
+        coverImageUrl: string;
     }[];
 };
 
@@ -92,7 +105,7 @@ export type ProjectPagination = {
     pageSize: number;
     totalCount: number;
     totalPages: number;
-    data: ProjectThumbnailResponse[];
+    data: ProjectThumbnailInfo[];
 };
 
 export type ProjectCreateUpate = {
@@ -106,7 +119,6 @@ export type ProjectCreateUpate = {
     color: string;
     coverImageId: string;
 };
-
 
 // GET /v1/projects/{projectId}
 // 특정 프로젝트의 정보 조회시 응답객체
