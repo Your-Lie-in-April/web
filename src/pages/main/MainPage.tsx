@@ -1,8 +1,4 @@
-import { ProjectThumbnailResponse } from '@/types/projectType';
-import useProjectMainQuery from '@hooks/apis/queries/project/useProjectMainQuery';
-import { useMainPaginationMutation } from '@hooks/useMainPaginationMutation';
 import Layout from '@pages/layouts/Layout';
-import Search from '@pages/layouts/Search';
 import { FC, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import styled, { createGlobalStyle } from 'styled-components';
@@ -10,9 +6,8 @@ import Alarm from './components/alarm/Alarm';
 import { BannerDown, BannerTop } from './components/Banner';
 import Pinned from './components/pinned/Pinned';
 import Profile from './components/Profile';
+import MainPagination from './components/projects/MainPagination';
 import NewProject from './components/projects/NewProject';
-import Pagination from './components/projects/Pagination';
-import ProjectList from './components/projects/ProjectList';
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -46,7 +41,6 @@ function useQuery() {
 const MainPage: FC = () => {
     const query = useQuery();
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
-    const [searchResults, setSearchResults] = useState<ProjectThumbnailResponse[]>([]);
 
     useEffect(() => {
         const accessToken = query.get('access_token') || localStorage.getItem('access_token');
@@ -63,28 +57,6 @@ const MainPage: FC = () => {
             setIsLoggedIn(false);
         }
     }, []);
-
-    const memberId = localStorage.getItem('member_id');
-    const { currentPage, totalPages, projects, handlePageChange, updatePaginationData } =
-        useMainPaginationMutation(Number(memberId));
-    const { data: getProjectMainPagination } = useProjectMainQuery(
-        Number(memberId),
-        currentPage,
-        6
-    );
-    useEffect(() => {
-        if (getProjectMainPagination) {
-            updatePaginationData(getProjectMainPagination);
-            setSearchResults(getProjectMainPagination.data);
-        }
-    }, [getProjectMainPagination]);
-
-    const handleSearch = (query: string) => {
-        const searchProjects = projects.filter((project) =>
-            project.title.toLowerCase().includes(query.toLowerCase())
-        );
-        setSearchResults(searchProjects);
-    };
 
     return (
         <>
@@ -131,19 +103,12 @@ const MainPage: FC = () => {
                                         gap: '8px',
                                     }}
                                 >
-                                    <Search onSearch={handleSearch} />
+                                    {/* <Search onSearch={handleSearch} /> */}
                                     <NewProject />
                                 </div>
                                 <Pinned />
                             </div>
-                            <ProjectList projects={searchResults} />
-                            {isLoggedIn && (
-                                <Pagination
-                                    currentPage={currentPage}
-                                    totalPages={totalPages}
-                                    onPageChange={handlePageChange}
-                                />
-                            )}
+                            <MainPagination />
                         </div>
                     </div>
                 </MainContainer>
