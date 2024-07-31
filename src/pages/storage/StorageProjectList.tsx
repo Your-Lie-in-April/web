@@ -16,7 +16,11 @@ interface StorageProjectListProps {
 }
 
 const StorageProjectList: React.FC<StorageProjectListProps> = ({ projects }) => {
-    return projects.length > 0 ? (
+    if (!projects || projects.length === 0) {
+        return <NoProject />;
+    }
+
+    return (
         <GridContainer>
             {projects.map((project, index) => (
                 <div key={`${project.projectId}-${index}`}>
@@ -24,8 +28,6 @@ const StorageProjectList: React.FC<StorageProjectListProps> = ({ projects }) => 
                 </div>
             ))}
         </GridContainer>
-    ) : (
-        <NoProject />
     );
 };
 
