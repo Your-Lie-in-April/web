@@ -1,6 +1,6 @@
 import { getProjectInfo } from '@apis/project';
 import { QUERY_KEY } from '@constants/queryKey';
-import { useQuery } from '@tanstack/react-query';
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
 
 /**
  * GET /projects/{projectId}
@@ -12,6 +12,7 @@ const useProjectInfoQuery = (projectId: number) => {
     return useQuery({
         queryKey: QUERY_KEY.PROJECT_INFO(projectId),
         queryFn: () => getProjectInfo(projectId),
+        placeholderData: keepPreviousData,
         staleTime: 60000 * 10,
         gcTime: 60000 * 2,
     });
