@@ -1,4 +1,6 @@
+import { SearchProvider } from '@hooks/context/searchContext';
 import Layout from '@pages/layouts/Layout';
+import Search from '@pages/layouts/Search';
 import { FC, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import styled, { createGlobalStyle } from 'styled-components';
@@ -66,53 +68,55 @@ const MainPage: FC = () => {
                     <BannerTop />
                     <BannerDown />
                 </div>
-                <MainContainer>
-                    <div style={{ display: 'flex', flexDirection: 'row', gap: '20px' }}>
-                        <div
-                            style={{
-                                display: 'flex',
-                                flexDirection: 'column',
-                                alignItems: 'flex-start',
-                                gap: '14px',
-                            }}
-                        >
-                            <Profile />
-                            <Alarm />
-                        </div>
-                        <div
-                            style={{
-                                display: 'flex',
-                                flexDirection: 'column',
-                                alignItems: 'flex-start',
-                                gap: '24px',
-                            }}
-                        >
+                <SearchProvider>
+                    <MainContainer>
+                        <div style={{ display: 'flex', flexDirection: 'row', gap: '20px' }}>
                             <div
                                 style={{
                                     display: 'flex',
                                     flexDirection: 'column',
                                     alignItems: 'flex-start',
-                                    gap: '21px',
+                                    gap: '14px',
+                                }}
+                            >
+                                <Profile />
+                                <Alarm />
+                            </div>
+                            <div
+                                style={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'flex-start',
+                                    gap: '24px',
                                 }}
                             >
                                 <div
                                     style={{
                                         display: 'flex',
-                                        flexDirection: 'row',
+                                        flexDirection: 'column',
                                         alignItems: 'flex-start',
-                                        gap: '8px',
+                                        gap: '21px',
                                     }}
                                 >
-                                    {/* <Search onSearch={handleSearch} /> */}
-                                    <NewProject />
+                                    <div
+                                        style={{
+                                            display: 'flex',
+                                            flexDirection: 'row',
+                                            alignItems: 'flex-start',
+                                            gap: '8px',
+                                        }}
+                                    >
+                                        <Search />
+                                        <NewProject />
+                                    </div>
+                                    <Pinned />
                                 </div>
-                                <Pinned />
+                                <MainPagination />
                             </div>
-                            <MainPagination />
                         </div>
-                    </div>
-                </MainContainer>
-                <div style={{ height: '300px' }} />
+                    </MainContainer>
+                    <div style={{ height: '300px' }} />
+                </SearchProvider>
             </Layout>
         </>
     );

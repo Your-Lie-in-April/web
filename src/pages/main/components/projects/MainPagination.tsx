@@ -1,4 +1,5 @@
 import useProjectMainQuery from '@hooks/apis/queries/project/useProjectMainQuery';
+import { useSearch } from '@hooks/context/searchContext';
 import { useMainPaginationMutation } from '@hooks/useMainPaginationMutation';
 import { useEffect } from 'react';
 import styled from 'styled-components';
@@ -7,36 +8,52 @@ import ProjectList from './ProjectList';
 
 const MainPagination = () => {
     const memberId = Number(localStorage.getItem('member_id'));
+    const { keyword, searchData, isSearching, currentPage, setCurrentPage, totalPages } =
+        useSearch();
+
     const {
-        currentPage,
-        totalPages,
-        projects,
-        totalCount,
-        handlePageChange,
+        currentPage: mainCurrentPage,
+        totalPages: mainTotalPages,
+        projects: mainProjects,
+        totalCount: mainTotalCount,
+        handlePageChange: handleMainPageChange,
         updatePaginationData,
     } = useMainPaginationMutation(memberId);
 
-    const { data: projectsData } = useProjectMainQuery(memberId, currentPage);
+    const { data: projectsData } = useProjectMainQuery(memberId, mainCurrentPage);
 
     useEffect(() => {
-        if (projectsData) {
+        if (projectsData && !keyword) {
             updatePaginationData(projectsData);
 
-            if (projectsData.data.length === 0 && currentPage > 0) {
-                handlePageChange(currentPage - 1);
+            if (projectsData.data.length === 0 && mainCurrentPage > 0) {
+                handleMainPageChange(mainCurrentPage - 1);
             }
         }
-    }, [projectsData, updatePaginationData, currentPage, handlePageChange]);
+    }, [projectsData, updatePaginationData, mainCurrentPage, handleMainPageChange, keyword]);
+
+    const handlePageChange = (newPage: number) => {
+        if (keyword) {
+            setCurrentPage(newPage);
+        } else {
+            handleMainPageChange(newPage);
+        }
+    };
+
+    const displayProjects = keyword ? searchData : mainProjects;
+    const displayTotalPages = keyword ? totalPages : mainTotalPages;
+    const displayTotalCount = keyword ? searchData?.length || 0 : mainTotalCount;
+    const displayCurrentPage = keyword ? currentPage : mainCurrentPage;
 
     return (
         <PaginationBox>
-            <ProjectList projects={projects} />
-            {totalCount !== 0 && (
+            <ProjectList projects={displayProjects} isSearching={isSearching}/>
+            {displayTotalCount !== 0 && (
                 <Paging
-                    currentPage={currentPage + 1}
+                    currentPage={displayCurrentPage + 1}
                     pageSize={6}
-                    totalCount={totalCount}
-                    totalPages={totalPages}
+                    totalCount={displayTotalCount}
+                    totalPages={displayTotalPages}
                     onPageChange={handlePageChange}
                 />
             )}
