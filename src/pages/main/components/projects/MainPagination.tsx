@@ -8,7 +8,7 @@ import ProjectList from './ProjectList';
 
 const MainPagination = () => {
     const memberId = Number(localStorage.getItem('member_id'));
-    const { keyword, searchData, isSearching, currentPage, setCurrentPage, totalPages } =
+    const { keyword, searchData, isSearching, page, setPage, setSize, setIsStored, totalPages } =
         useSearch();
 
     const {
@@ -23,6 +23,13 @@ const MainPagination = () => {
     const { data: projectsData } = useProjectMainQuery(memberId, mainCurrentPage);
 
     useEffect(() => {
+        if (projectsData && projectsData.totalCount !== undefined) {
+            setSize(Number(projectsData.totalCount));
+            setIsStored(false);
+        }
+    }, [projectsData, setSize, setIsStored]);
+
+    useEffect(() => {
         if (projectsData && !keyword) {
             updatePaginationData(projectsData);
 
@@ -30,11 +37,11 @@ const MainPagination = () => {
                 handleMainPageChange(mainCurrentPage - 1);
             }
         }
-    }, [projectsData, updatePaginationData, mainCurrentPage, handleMainPageChange, keyword]);
+    }, [projectsData, keyword, mainCurrentPage, updatePaginationData, handleMainPageChange]);
 
     const handlePageChange = (newPage: number) => {
         if (keyword) {
-            setCurrentPage(newPage);
+            setPage(newPage);
         } else {
             handleMainPageChange(newPage);
         }
@@ -43,11 +50,11 @@ const MainPagination = () => {
     const displayProjects = keyword ? searchData : mainProjects;
     const displayTotalPages = keyword ? totalPages : mainTotalPages;
     const displayTotalCount = keyword ? searchData?.length || 0 : mainTotalCount;
-    const displayCurrentPage = keyword ? currentPage : mainCurrentPage;
+    const displayCurrentPage = keyword ? page : mainCurrentPage;
 
     return (
         <PaginationBox>
-            <ProjectList projects={displayProjects} isSearching={isSearching}/>
+            <ProjectList projects={displayProjects} isSearching={isSearching} />
             {displayTotalCount !== 0 && (
                 <Paging
                     currentPage={displayCurrentPage + 1}

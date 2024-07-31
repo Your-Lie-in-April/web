@@ -39,8 +39,8 @@ export const API = {
     PROJECT_DELETE_ME: (projectId?: number) =>
         `${Http}/v1/projects/${projectId ?? ':projectId'}/me`,
     COVER_IMG: (page: number) => `${Http}/v1/covers?page=${page}&size=10`,
-    SEARCH: (memberId: number, keyword: string, size: number, isStored: boolean) =>
-        `${Http}/v1/projects/members/${memberId}/${encodeURIComponent(keyword)}?page=0&size=${9}&isStored=${isStored}`,
+    SEARCH: (memberId: number, keyword: string, page: number, size: number, isStored: boolean) =>
+        `${Http}/v1/projects/members/${memberId}/${encodeURIComponent(keyword)}?page=${page}&size=${size}&isStored=${isStored}`,
 
     // schedule-controller
     SCHEDULE_GET: (projectId?: number) =>

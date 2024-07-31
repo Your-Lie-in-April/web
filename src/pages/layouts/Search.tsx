@@ -26,19 +26,19 @@ const SearchInput = styled.input`
 `;
 
 const Search: FC = () => {
-    const { setKeyword, setCurrentPage } = useSearch();
+    const { setKeyword, setPage } = useSearch();
     const [searchTerm, setSearchTerm] = useState('');
 
     useEffect(() => {
         const timer = setTimeout(() => {
             setKeyword(searchTerm);
-            setCurrentPage(0);
+            setPage(0);
         }, 500);
 
         return () => {
             clearTimeout(timer);
         };
-    }, [searchTerm, setKeyword, setCurrentPage]);
+    }, [searchTerm, setKeyword, setPage]);
 
     return (
         <SearchDiv>

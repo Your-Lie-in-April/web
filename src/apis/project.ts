@@ -146,11 +146,12 @@ export const getCoverImg = async (page: number = 0) => {
 export const getProjectSearch = async (
     memberId: number,
     keyword: string,
-    size: number = 1000,
+    page : number = 0,
+    size: number = 30,
     isStored: boolean = false
 ) => {
     return await getAPIResponseData<ProjectThumbnailResDto>({
         method: 'GET',
-        url: API.SEARCH(memberId, keyword, size, isStored),
+        url: API.SEARCH(memberId, keyword, page, size, isStored),
     });
 };

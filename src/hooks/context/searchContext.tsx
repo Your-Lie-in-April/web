@@ -6,22 +6,30 @@ interface SearchContextType {
     setKeyword: (keyword: string) => void;
     searchData: any | null;
     isSearching: boolean;
-    currentPage: number;
-    setCurrentPage: (page: number) => void;
+    page: number;
+    setPage: (page: number) => void;
     totalPages: number;
+    size: number;
+    setSize: (size: number) => void;
+    isStored: boolean;
+    setIsStored: (isStored: boolean) => void;
 }
 
 const SearchContext = createContext<SearchContextType | undefined>(undefined);
 
 export const SearchProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [keyword, setKeyword] = useState('');
-    const [currentPage, setCurrentPage] = useState(0);
+    const [page, setPage] = useState(0);
+    const [size, setSize] = useState(9);
+    const [isStored, setIsStored] = useState(false);
     const memberId = Number(localStorage.getItem('member_id'));
 
     const { data: searchData, isLoading: isSearching } = useSearchQuery(
         memberId,
         keyword,
-        currentPage
+        page,
+        size,
+        isStored
     );
 
     const totalPages = searchData?.totalPages || 0;
@@ -33,9 +41,13 @@ export const SearchProvider: React.FC<{ children: ReactNode }> = ({ children }) 
                 setKeyword,
                 searchData: keyword ? searchData?.data : null,
                 isSearching,
-                currentPage,
-                setCurrentPage,
+                page,
+                setPage,
                 totalPages,
+                size,
+                setSize,
+                isStored,
+                setIsStored,
             }}
         >
             {children}
