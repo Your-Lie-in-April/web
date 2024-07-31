@@ -11,7 +11,7 @@ const colors = ['#633AE2', '#FFCB3B', '#64AFF5', '#C2D57A', '#EB5757', '#212121'
 
 interface CoverProps {
     onColorSelect: (color: string) => void;
-    onImageSelect: (page0Url: string, page0Id: string, page1Url: string) => void; // 여기를 수정
+    onImageSelect: (id: string, coverImageUrl: string) => void;
     onHexSelect: (color: string) => void;
     title?: string;
     content?: string;
@@ -39,8 +39,8 @@ const ProjectCoverPicker: FC<CoverProps> = ({
         onColorSelect(color);
     };
 
-    const handleImageClick = (page0Url: string, page0Id: string, page1Url: string) => {
-        onImageSelect(page0Url, page0Id, page1Url);
+    const handleImageClick = (id: string, coverImageUrl: string) => {
+        onImageSelect(id, coverImageUrl);
     };
 
     const handleColorChange = useCallback(
@@ -95,12 +95,12 @@ const ProjectCoverPicker: FC<CoverProps> = ({
         if (color && color !== projectData?.color) {
             payload.color = color;
             payload.coverImageId = '';
-        } else if (imgId && imgId !== projectData?.coverImageId) {
+        } else if (imgId && imgId !== projectData?.coverInfo.coverImageUrl) {
             payload.coverImageId = String(imgId);
             payload.color = '';
         } else {
             payload.color = projectData?.color || '';
-            payload.coverImageId = projectData?.coverImageId || '';
+            payload.coverImageId = projectData?.coverInfo.coverImageUrl || '';
         }
 
         if (projectData?.startDate) {
@@ -164,22 +164,16 @@ const ProjectCoverPicker: FC<CoverProps> = ({
                     이미지
                     <ImageChoose>
                         {images ? (
-                            images.map((item) => (
+                            images.data.map((item) => (
                                 <Image
-                                    key={item.page0.id}
+                                    key={item.id}
                                     style={{
-                                        backgroundImage: `url('${item.page0.url}')`,
+                                        backgroundImage: `url('${item.thumbnailUrl}')`,
                                         backgroundSize: 'cover',
                                         backgroundRepeat: 'no-repeat',
                                         backgroundPosition: 'center',
                                     }}
-                                    onClick={() =>
-                                        handleImageClick(
-                                            item.page0.url,
-                                            item.page0.id,
-                                            item.page1.url
-                                        )
-                                    }
+                                    onClick={() => handleImageClick(item.id, item.coverImageUrl)}
                                 ></Image>
                             ))
                         ) : (

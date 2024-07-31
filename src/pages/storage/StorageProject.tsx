@@ -1,4 +1,4 @@
-import { ProjectThumbnailResponse } from '@/types/projectType';
+import { ProjectThumbnailInfo } from '@/types/projectType';
 import usePatchStoredMutation from '@hooks/apis/mutations/member/usePatchStoredMutation';
 import DeleteIcon from '@mui/icons-material/Delete';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import DeleteProject from '../modal/project/DeleteProject';
 
-const StorageProject = ({ project }: { project: ProjectThumbnailResponse }) => {
+const StorageProject = ({ project }: { project: ProjectThumbnailInfo }) => {
     const [showMore, setShowMore] = useState<boolean>(false);
     const [isClick, setIsClick] = useState<boolean>(false);
     const navigate = useNavigate();
@@ -24,7 +24,7 @@ const StorageProject = ({ project }: { project: ProjectThumbnailResponse }) => {
 
     return (
         <>
-            <ProjectBox $color={project.color} $coverImageUrl={project.coverImageUrl}>
+            <ProjectBox $color={project.color} $coverImageUrl={project.thumbnailUrl}>
                 {showMore && (
                     <MoreBox>
                         <div

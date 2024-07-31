@@ -12,7 +12,7 @@
 |Frontend|Frontend|
 |:-:|:-:|
 |<img src="https://avatars.githubusercontent.com/u/121279571?v=4" width=400px alt="고쟁"/>|<img src="https://avatars.githubusercontent.com/u/115553490?v=4" width=400px alt="두둥"/>|
-|[gojaeng](https://github.com/gojaeng)|[ekkk1126](https://github.com/ekkk1126)|
+|[gojaeng](https://github.com/gojaeng)|[ekkkabi](https://github.com/ekkkabi)|
 
 ## 팀 문화 🏠
 

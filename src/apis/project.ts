@@ -141,3 +141,17 @@ export const getCoverImg = async (page: number = 0) => {
         url: API.COVER_IMG(page),
     });
 };
+
+// 프로젝트 검색
+export const getProjectSearch = async (
+    memberId: number,
+    keyword: string,
+    page : number = 0,
+    size: number = 30,
+    isStored: boolean = false
+) => {
+    return await getAPIResponseData<ProjectThumbnailResDto>({
+        method: 'GET',
+        url: API.SEARCH(memberId, keyword, page, size, isStored),
+    });
+};

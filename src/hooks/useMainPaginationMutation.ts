@@ -1,6 +1,6 @@
+import { ProjectPagination, ProjectThumbnailInfo } from '@/types/projectType';
 import { getProjectMain } from '@apis/project';
 import { QUERY_KEY } from '@constants/queryKey';
-import { ProjectThumbnailResponse } from '@/types/projectType';
 import { useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 
@@ -11,7 +11,8 @@ export const useMainPaginationMutation = (
 ) => {
     const [currentPage, setCurrentPage] = useState<number>(initialPage);
     const [totalPages, setTotalPages] = useState<number>(0);
-    const [projects, setProjects] = useState<ProjectThumbnailResponse[]>([]);
+    const [totalCount, setTotalCount] = useState<number>(0);
+    const [projects, setProjects] = useState<ProjectThumbnailInfo[]>([]);
 
     const queryClient = useQueryClient();
 
@@ -29,12 +30,13 @@ export const useMainPaginationMutation = (
     }, [currentPage, totalPages, queryClient, memberId, pageSize]);
 
     const handlePageChange = (page: number) => {
-        setCurrentPage(page);
+        setCurrentPage(page - 1);
     };
 
-    const updatePaginationData = (data: any) => {
+    const updatePaginationData = (data: ProjectPagination) => {
         if (data) {
             setTotalPages(Number(data.totalPages));
+            setTotalCount(Number(data.totalCount));
             setProjects(data.data);
         }
     };
@@ -42,6 +44,7 @@ export const useMainPaginationMutation = (
     return {
         currentPage,
         totalPages,
+        totalCount,
         projects,
         handlePageChange,
         updatePaginationData,

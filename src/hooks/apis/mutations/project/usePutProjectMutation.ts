@@ -17,6 +17,9 @@ const usePutProjectMutation = (projectId: number) => {
             void queryClient.invalidateQueries({
                 queryKey: QUERY_KEY.PROJECT_INFO(projectId),
             });
+            void queryClient.invalidateQueries({
+                queryKey: QUERY_KEY.PROJECT_MAIN(0),
+            });
         },
     });
 };

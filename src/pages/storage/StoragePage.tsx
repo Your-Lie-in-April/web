@@ -1,52 +1,27 @@
-import { useStoredInfiniteQuery } from '@hooks/apis/queries/project/useStoredInfiniteQuery';
+import { SearchProvider } from '@hooks/context/searchContext';
 import Layout from '@pages/layouts/Layout';
 import Search from '@pages/layouts/Search';
-import { useCallback, useMemo, useState } from 'react';
-import InfiniteScroll from 'react-infinite-scroller';
 import styled, { createGlobalStyle } from 'styled-components';
-import StorageProjectList from './StorageProjectList';
 import GraphicIcons from './icons/GraphicIcons';
+import StorageInfinite from './StorageInfinite';
 
 const StoragePage = () => {
-    const [searchQuery, setSearchQuery] = useState<string>('');
-
-    const { data, fetchNextPage, hasNextPage } = useStoredInfiniteQuery();
-
-    const handleSearch = useCallback((query: string) => {
-        setSearchQuery(query);
-    }, []);
-
-    const filteredProjects = useMemo(() => {
-        return (
-            data?.pages.flatMap((page) =>
-                page.data.filter((project) =>
-                    project.title.toLowerCase().includes(searchQuery.toLowerCase())
-                )
-            ) || []
-        );
-    }, [data, searchQuery]);
-
     return (
         <>
             <GlobalStyle />
             <Layout>
                 <GraphicIcons />
-                <Container>
-                    <Content>
-                        <InnerContent>
-                            <Title>프로젝트 보관함</Title>
-                            <Search onSearch={handleSearch} />
-                        </InnerContent>
-                        <InfiniteScroll
-                            pageStart={0}
-                            loadMore={() => fetchNextPage()}
-                            hasMore={!!hasNextPage}
-                            loader={<div key={0}>Loading...</div>}
-                        >
-                            <StorageProjectList projects={filteredProjects} />
-                        </InfiniteScroll>
-                    </Content>
-                </Container>
+                <SearchProvider>
+                    <Container>
+                        <Content>
+                            <InnerContent>
+                                <Title>프로젝트 보관함</Title>
+                                <Search />
+                            </InnerContent>
+                            <StorageInfinite />
+                        </Content>
+                    </Container>
+                </SearchProvider>
                 <Spacer />
             </Layout>
         </>

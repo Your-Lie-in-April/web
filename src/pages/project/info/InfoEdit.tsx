@@ -1,4 +1,3 @@
-import useCoverImgQuery from '@hooks/apis/queries/project/useCoverImgQuery';
 import { useProjectContext } from '@hooks/context/projectContext';
 import { ChangeEvent, Dispatch, FC, SetStateAction, useEffect, useState } from 'react';
 import styled from 'styled-components';
@@ -20,27 +19,16 @@ const InfoEdit: FC<InfoEditPros> = ({ setEditCover }) => {
     const [selectedImgId, setSelectedImageId] = useState<string>('');
 
     const { projectData } = useProjectContext();
-    const { data } = useCoverImgQuery();
-    const coverImg = data?.find((item) => item.page0.url === projectData?.coverImageUrl);
 
     useEffect(() => {
         if (projectData) {
             setTitle(projectData.title);
             setContent(projectData.description);
             setSelectedColor(projectData.color || null);
-            setSelectedImageUrl(coverImg?.page1.url || projectData.coverImageUrl || null);
-            setSelectedImageId(projectData.coverImageId || '');
+            setSelectedImageUrl(projectData.coverInfo.coverImageUrl || null);
+            setSelectedImageId(String(projectData.coverInfo.id) || '');
         }
     }, [projectData]);
-
-    const handleBackgroundClick = (e: React.MouseEvent<HTMLDivElement>) => {
-        if (e.target === e.currentTarget) {
-            setEditCover(false);
-            setIsTitleClicked(false);
-            setIsContentClicked(false);
-            setIsCoverClicked(false);
-        }
-    };
 
     const handleTextareaChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
         const inputText = e.target.value;
@@ -65,11 +53,11 @@ const InfoEdit: FC<InfoEditPros> = ({ setEditCover }) => {
         setSelectedHex(null);
     };
 
-    const handleImageSelect = (page0Url: string, page0Id: string, page1Url: string) => {
-        setSelectedImageUrl(page1Url);
+    const handleImageSelect = (id: string, coverImageUrl: string) => {
+        setSelectedImageUrl(coverImageUrl);
         setSelectedColor(null);
         setSelectedHex(null);
-        setSelectedImageId(page0Id);
+        setSelectedImageId(id);
     };
 
     const handleHexSelect = (color: string) => {
@@ -83,9 +71,8 @@ const InfoEdit: FC<InfoEditPros> = ({ setEditCover }) => {
             $selectedColor={selectedColor}
             $selectedHex={selectedHex}
             $selectedImageUrl={selectedImageUrl}
-            onClick={handleBackgroundClick}
         >
-            <MakeContainer onClick={handleBackgroundClick}>
+            <MakeContainer>
                 <TitleContainer>
                     <Title>
                         <TitleText
@@ -115,7 +102,7 @@ const InfoEdit: FC<InfoEditPros> = ({ setEditCover }) => {
                         />
                     </Content>
                 </TitleContainer>
-                <BtnWrapper onClick={handleBackgroundClick}>
+                <BtnWrapper>
                     <MakeBtn
                         onClick={(e) => {
                             e.stopPropagation();

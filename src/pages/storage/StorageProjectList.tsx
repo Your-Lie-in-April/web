@@ -1,4 +1,4 @@
-import { ProjectThumbnailResponse } from '@/types/projectType';
+import { ProjectThumbnailInfo } from '@/types/projectType';
 import NoProject from '@pages/layouts/NoProject';
 import styled from 'styled-components';
 import StorageProject from './StorageProject';
@@ -12,11 +12,15 @@ const GridContainer = styled.div`
 `;
 
 interface StorageProjectListProps {
-    projects: ProjectThumbnailResponse[];
+    projects: ProjectThumbnailInfo[];
 }
 
 const StorageProjectList: React.FC<StorageProjectListProps> = ({ projects }) => {
-    return projects.length > 0 ? (
+    if (!projects || projects.length === 0) {
+        return <NoProject />;
+    }
+
+    return (
         <GridContainer>
             {projects.map((project, index) => (
                 <div key={`${project.projectId}-${index}`}>
@@ -24,8 +28,6 @@ const StorageProjectList: React.FC<StorageProjectListProps> = ({ projects }) => 
                 </div>
             ))}
         </GridContainer>
-    ) : (
-        <NoProject />
     );
 };
 

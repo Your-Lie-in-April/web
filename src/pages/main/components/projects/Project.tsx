@@ -1,4 +1,4 @@
-import { ProjectThumbnailResponse } from '@/types/projectType';
+import { ProjectThumbnailInfo } from '@/types/projectType';
 import usePatchPinnedMutation from '@hooks/apis/mutations/member/usePatchPinnedMutation';
 import usePatchStoredMutation from '@hooks/apis/mutations/member/usePatchStoredMutation';
 import CancelIcon from '@mui/icons-material/Cancel';
@@ -11,7 +11,7 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 interface ProjectProps {
-    project: ProjectThumbnailResponse;
+    project: ProjectThumbnailInfo;
 }
 
 const Project: React.FC<ProjectProps> = ({ project }) => {
@@ -35,7 +35,7 @@ const Project: React.FC<ProjectProps> = ({ project }) => {
     const { mutate: handleStored } = usePatchStoredMutation(project.projectId);
 
     return (
-        <ProjectBox $color={project.color} $coverImageUrl={project.coverImageUrl}>
+        <ProjectBox $color={project.color} $coverImageUrl={project.thumbnailUrl}>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
                 <MoreDiv>
                     {showMore && (
@@ -80,8 +80,8 @@ interface MoreTextProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 const isValidValue = (value: string | null | undefined): boolean => {
-    return value !== null && value !== undefined && value !== "";
-  };
+    return value !== null && value !== undefined && value !== '';
+};
 
 const ProjectBox = styled.div<{ $color: string | null; $coverImageUrl: string | null }>`
     display: flex;
