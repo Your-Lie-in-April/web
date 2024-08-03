@@ -35,7 +35,7 @@ const ProjectInfoDetail: React.FC<ProjectInfoDetailProps> = ({ onClick }) => {
     return (
         <StyledContainer
             color={projectData?.color}
-            $imageUrl={projectData?.coverInfo.coverImageUrl}
+            $imageUrl={projectData?.coverInfo?.coverImageUrl}
         >
             <StyledProjectInfoDiv>
                 <StyledTitle>{projectData?.title}</StyledTitle>
