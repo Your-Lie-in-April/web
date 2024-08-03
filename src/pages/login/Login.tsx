@@ -1,6 +1,6 @@
 import { Http } from '@constants/api';
+import { BannerDown, BannerTop } from '@pages/layouts/Banner';
 import BeforeLogin from '@pages/layouts/header/BeforeLogin';
-import { BannerDown, BannerTop } from '@pages/main/components/Banner';
 import googleLogo from '@pics/google-login.svg';
 import { FC } from 'react';
 import styled, { createGlobalStyle } from 'styled-components';
