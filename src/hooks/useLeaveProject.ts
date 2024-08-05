@@ -1,4 +1,5 @@
 import { ProjectMemberResDto } from '@/types/projectType';
+import { Toast } from '@pages/layouts/Toast';
 import { useState } from 'react';
 import useDeleteProjectLeaveMutation from './apis/mutations/project/useDeleteProjectLeaveMutation';
 import useDeleteProjectMutation from './apis/mutations/project/useDeleteProjectMutation';
@@ -34,7 +35,7 @@ export const useLeaveProject = (projectId: number, isModalOpen: boolean) => {
         } catch (error) {
             console.error('useLeaveProject Error:', error);
             if (error instanceof Error && error.message.includes('400')) {
-                window.alert('📣관리자는 나갈 수 없습니다.');
+                Toast('📣관리자는 나갈 수 없습니다', 'error');
             }
         }
         onClose();
