@@ -13,6 +13,9 @@ const useDeleteProjectLeaveMutation = (projectId: number) => {
         mutationFn: () => deleteProjectMemberSelf(projectId),
         onSuccess: () => {
             void queryClient.invalidateQueries({
+                queryKey: QUERY_KEY.PROJECT,
+            });
+            void queryClient.invalidateQueries({
                 queryKey: QUERY_KEY.PROJECT_PIN,
             });
             void queryClient.invalidateQueries({

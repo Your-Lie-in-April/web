@@ -18,6 +18,8 @@ interface CoverProps {
     projectData?: ProjectEntity | null;
     setEditCover?: Dispatch<SetStateAction<boolean>>;
     imgId?: string;
+    setEditMode: Dispatch<SetStateAction<boolean>>;
+    onEditComplete: () => void;
 }
 
 const ProjectCoverPicker: FC<CoverProps> = ({
@@ -29,6 +31,8 @@ const ProjectCoverPicker: FC<CoverProps> = ({
     projectData,
     setEditCover,
     imgId,
+    setEditMode,
+    onEditComplete,
 }) => {
     const [color, setColor] = useState(projectData?.color || '');
     const [openHex, setOpenHex] = useState<boolean>(false);
@@ -95,12 +99,12 @@ const ProjectCoverPicker: FC<CoverProps> = ({
         if (color && color !== projectData?.color) {
             payload.color = color;
             payload.coverImageId = '';
-        } else if (imgId && imgId !== projectData?.coverInfo.coverImageUrl) {
+        } else if (imgId && imgId !== projectData?.coverInfo?.coverImageUrl) {
             payload.coverImageId = String(imgId);
             payload.color = '';
         } else {
             payload.color = projectData?.color || '';
-            payload.coverImageId = projectData?.coverInfo.coverImageUrl || '';
+            payload.coverImageId = projectData?.coverInfo?.coverImageUrl || '';
         }
 
         if (projectData?.startDate) {
@@ -124,6 +128,8 @@ const ProjectCoverPicker: FC<CoverProps> = ({
                 if (setEditCover) {
                     setEditCover(false);
                 }
+                setEditMode(false);
+                onEditComplete();
             } catch (error) {
                 console.error('Error updating project:', error);
             }
