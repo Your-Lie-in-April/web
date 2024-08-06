@@ -3,11 +3,12 @@ import { ChangeEvent, Dispatch, FC, SetStateAction, useEffect, useState } from '
 import styled from 'styled-components';
 import ProjectCoverPicker from './ProjectCoverPicker';
 
-interface InfoEditPros {
-    setEditCover: Dispatch<SetStateAction<boolean>>;
+interface InfoEditProps {
+    setEditMode: Dispatch<SetStateAction<boolean>>;
+    onEditComplete: () => void;
 }
 
-const InfoEdit: FC<InfoEditPros> = ({ setEditCover }) => {
+const InfoEdit: FC<InfoEditProps> = ({ setEditMode, onEditComplete }) => {
     const [content, setContent] = useState<string>('');
     const [title, setTitle] = useState<string>('');
     const [isTitleClicked, setIsTitleClicked] = useState<boolean>(false);
@@ -24,9 +25,9 @@ const InfoEdit: FC<InfoEditPros> = ({ setEditCover }) => {
         if (projectData) {
             setTitle(projectData.title);
             setContent(projectData.description);
-            setSelectedColor(projectData.color || null);
-            setSelectedImageUrl(projectData.coverInfo.coverImageUrl || null);
-            setSelectedImageId(String(projectData.coverInfo.id) || '');
+            setSelectedColor(projectData.color || '');
+            setSelectedImageUrl(projectData?.coverInfo?.coverImageUrl || '');
+            setSelectedImageId(String(projectData?.coverInfo?.id) || '');
         }
     }, [projectData]);
 
@@ -73,7 +74,7 @@ const InfoEdit: FC<InfoEditPros> = ({ setEditCover }) => {
             $selectedImageUrl={selectedImageUrl}
         >
             <MakeContainer>
-                <TitleContainer>
+                <TextContainer>
                     <Title>
                         <TitleText
                             type='text'
@@ -91,17 +92,22 @@ const InfoEdit: FC<InfoEditPros> = ({ setEditCover }) => {
                     </Title>
                     <Content>
                         <ContentText
-                            value={content}
-                            $focused
+                            value={isContentClicked ? content : ''}
+                            $focused={isContentClicked}
                             onChange={handleTextareaChange}
-                            onFocus={() => setIsContentClicked(true)}
+                            onFocus={(e) => {
+                                e.stopPropagation();
+                                setIsContentClicked(true);
+                                setIsCoverClicked(false);
+                                setContent('');
+                            }}
                             onBlur={() => setIsContentClicked(false)}
                             placeholder={
                                 isContentClicked === true ? '' : `${projectData?.description}`
                             }
                         />
                     </Content>
-                </TitleContainer>
+                </TextContainer>
                 <BtnWrapper>
                     <MakeBtn
                         onClick={(e) => {
@@ -120,7 +126,7 @@ const InfoEdit: FC<InfoEditPros> = ({ setEditCover }) => {
                             }}
                         >
                             <ProjectCoverPicker
-                                setEditCover={setEditCover}
+                                setEditMode={setEditMode}
                                 projectData={projectData}
                                 title={title}
                                 content={content}
@@ -128,6 +134,7 @@ const InfoEdit: FC<InfoEditPros> = ({ setEditCover }) => {
                                 onImageSelect={handleImageSelect}
                                 onHexSelect={handleHexSelect}
                                 imgId={selectedImgId}
+                                onEditComplete={onEditComplete}
                             />
                         </div>
                     )}
@@ -136,6 +143,7 @@ const InfoEdit: FC<InfoEditPros> = ({ setEditCover }) => {
         </Container>
     );
 };
+
 export default InfoEdit;
 
 interface ContentTextProps {
@@ -169,7 +177,7 @@ const MakeContainer = styled.div`
     justify-content: space-between;
     margin-left: 200px;
 `;
-const TitleContainer = styled.div`
+const TextContainer = styled.div`
     width: 820px;
     height: 136px;
 `;
