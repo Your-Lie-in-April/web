@@ -1,4 +1,5 @@
-import { ChangeEvent, Dispatch, FC, SetStateAction, useState } from 'react';
+import useClickOutside from '@hooks/useClickOutside';
+import { ChangeEvent, Dispatch, FC, SetStateAction, useRef, useState } from 'react';
 import styled from 'styled-components';
 import CoverPicker from './CoverPicker';
 
@@ -17,6 +18,14 @@ const Info: FC<InfoProps> = ({ setContent, setTitle, setColor, setImg, setImgId 
     const [selectedColor, setSelectedColor] = useState<string | null>(null);
     const [selectedImageUrl, setSelectedImageUrl] = useState<string | null>(null);
     const [selectedHex, setSelectedHex] = useState<string | null>(null);
+
+    const coverPickerRef = useRef<HTMLDivElement>(null);
+
+    useClickOutside(coverPickerRef, () => {
+        if (isCoverClicked) {
+            setIsCoverClicked(false);
+        }
+    });
 
     const handleTextareaChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
         const inputText = e.target.value;
@@ -81,9 +90,7 @@ const Info: FC<InfoProps> = ({ setContent, setTitle, setColor, setImg, setImgId 
                                 setIsTitleClicked(false);
                             }}
                             onChange={handleTitleChange}
-                            placeholder={
-                                isTitleClicked ? '' : '프로젝트 제목을 작성해주세요'
-                            }
+                            placeholder={isTitleClicked ? '' : '프로젝트 제목을 작성해주세요'}
                         />
                     </Title>
                     <Content>
@@ -92,9 +99,7 @@ const Info: FC<InfoProps> = ({ setContent, setTitle, setColor, setImg, setImgId 
                             onChange={handleTextareaChange}
                             onFocus={() => setIsContentClicked(true)}
                             onBlur={() => setIsContentClicked(false)}
-                            placeholder={
-                                isContentClicked ? '' : '프로젝트 내용을 작성해주세요'
-                            }
+                            placeholder={isContentClicked ? '' : '프로젝트 내용을 작성해주세요'}
                         />
                     </Content>
                 </TitleContainer>
@@ -102,6 +107,7 @@ const Info: FC<InfoProps> = ({ setContent, setTitle, setColor, setImg, setImgId 
                     <Make onClick={toggleCover}>커버 만들기</Make>
                     {isCoverClicked && (
                         <div
+                            ref={coverPickerRef}
                             style={{
                                 position: 'absolute',
                                 right: '0px',
