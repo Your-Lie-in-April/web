@@ -106,21 +106,14 @@ const Info: FC<InfoProps> = ({ setContent, setTitle, setColor, setImg, setImgId 
                 <div style={{ position: 'relative' }}>
                     <Make onClick={toggleCover}>커버 만들기</Make>
                     {isCoverClicked && (
-                        <div
-                            ref={coverPickerRef}
-                            style={{
-                                position: 'absolute',
-                                right: '0px',
-                                top: '182px',
-                            }}
-                        >
+                        <PickerWrapper ref={coverPickerRef}>
                             <CoverPicker
                                 onColorSelect={handleColorSelect}
                                 onImageSelect={handleImageSelect}
                                 onHexSelect={handleHexSelect}
                                 toggleCover={toggleCover}
                             />
-                        </div>
+                        </PickerWrapper>
                     )}
                 </div>
             </MakeContainer>
@@ -183,7 +176,7 @@ const TitleText = styled.input`
     padding: 8px;
     font-weight: bold;
     font-size: 32px;
-    font-family: Pretendard;
+    font-family: 'Pretendard';
     justify-content: center;
     align-items: center;
     gap: 8px;
@@ -209,7 +202,7 @@ const Content = styled.div`
 const ContentText = styled.textarea<{ $focused: boolean }>`
     color: ${({ $focused }) => ($focused ? '#000000' : '#7d7d7d')};
     text-align: center;
-    font-family: Pretendard;
+    font-family: 'Pretendard';
     font-size: 28px;
     font-style: normal;
     width: 1500px;
@@ -257,4 +250,10 @@ const Make = styled.button`
     &:active {
         border: 1px solid #000000;
     }
+`;
+
+const PickerWrapper = styled.div`
+    position: absolute;
+    right: 0px;
+    top: 182px;
 `;

@@ -85,7 +85,6 @@ const InviteDiv = styled.div`
     align-items: center;
     padding: 16px 20px 8px 20px;
     box-sizing: border-box;
-
     display: flex;
     flex-direction: column;
     align-items: center;

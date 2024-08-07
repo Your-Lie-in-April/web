@@ -30,7 +30,7 @@ const BtnContainer = styled.div`
     box-sizing: border-box;
     color: #ffffff;
     text-align: center;
-    font-family: Pretendard;
+    font-family: 'Pretendard';
     font-size: 10px;
     font-style: normal;
     font-weight: 500;

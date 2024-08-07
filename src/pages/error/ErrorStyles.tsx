@@ -21,7 +21,8 @@ export const Container = styled.div`
     align-items: center;
     text-align: center;
     width: 500px;
-    margin: 160px auto;
+    margin: 0 auto;
+    top: 160px;
 `;
 
 export const SvgIcon = styled.svg`

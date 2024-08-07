@@ -29,7 +29,7 @@ const AfterLogin: FC = () => {
     return (
         <>
             <AfterLoginDiv>
-                <div style={{ justifyContent: 'flex-start', flexBasis: '20%' }} />
+                <BlankBox />
                 <Logo onClick={handleLogoClick}>TIME PIECE</Logo>
                 <MyPageDiv>
                     <MyPageBtn onClick={onSetIsMyPageModal}>My page</MyPageBtn>
@@ -57,6 +57,10 @@ const AfterLoginDiv = styled.div`
     z-index: 2;
     color: #000000;
     font-style: normal;
+`;
+
+const BlankBox = styled.div`
+    flex-basis: 20%;
 `;
 
 const Logo = styled.div`

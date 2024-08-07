@@ -118,13 +118,7 @@ const InfoEdit: FC<InfoEditProps> = ({ setEditMode, onEditComplete }) => {
                         커버 만들기
                     </MakeBtn>
                     {isCoverClicked && (
-                        <div
-                            style={{
-                                position: 'absolute',
-                                right: '0px',
-                                top: '182.5px',
-                            }}
-                        >
+                        <PickerWrapper>
                             <ProjectCoverPicker
                                 setEditMode={setEditMode}
                                 projectData={projectData}
@@ -136,7 +130,7 @@ const InfoEdit: FC<InfoEditProps> = ({ setEditMode, onEditComplete }) => {
                                 imgId={selectedImgId}
                                 onEditComplete={onEditComplete}
                             />
-                        </div>
+                        </PickerWrapper>
                     )}
                 </BtnWrapper>
             </MakeContainer>
@@ -286,4 +280,10 @@ const MakeBtn = styled.div`
     &:active {
         border: 1px solid #000000;
     }
+`;
+
+const PickerWrapper = styled.div`
+    position: absolute;
+    right: 0px;
+    top: 182.5px;
 `;

@@ -7,13 +7,13 @@ import Layout from '@pages/layouts/Layout';
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import styled, { createGlobalStyle } from 'styled-components';
-import Alarm from './Alarm';
-import ProjectInfo from './info/ProjectInfo';
-import ProfileList from './profiles/ProfileList';
-import MemberScheduleGrid from './schedules/member/MemberScheduleGrid';
-import MySchedule from './schedules/my/MySchedule';
-import ScheduleCalendar from './schedules/ScheduleCalendar';
-import TeamSchedule from './schedules/team/TeamSchedule';
+import Alarm from './components/alarm/Alarm';
+import ProjectInfo from './components/info/ProjectInfo';
+import ProfileList from './components/profiles/ProfileList';
+import MemberScheduleGrid from './components/schedules/member/MemberScheduleGrid';
+import MySchedule from './components/schedules/my/MySchedule';
+import ScheduleCalendar from './components/schedules/ScheduleCalendar';
+import TeamSchedule from './components/schedules/team/TeamSchedule';
 
 const ProjectPage: React.FC = () => {
     const [seeMemTime, setSeeMemTime] = useState(true);
@@ -34,39 +34,20 @@ const ProjectPage: React.FC = () => {
                     <Divider />
                     <ProjectInfo />
                     <Box>
-                        <div
-                            style={{
-                                display: 'flex',
-                                flexDirection: 'column',
-                                gap: '24px',
-                                alignItems: 'center',
-                            }}
-                        >
+                        <OuterColumn>
                             <MainBox>
                                 <ProfileList />
-                                <div
-                                    style={{
-                                        display: 'flex',
-                                        flexDirection: 'column',
-                                        gap: '12px',
-                                    }}
-                                >
+                                <InnerColumn>
                                     <TeamSchedule />
                                     <MySchedule
                                         isEditModal={isEditModal}
                                         setIsEditModal={setIsEditModal}
                                     />
-                                </div>
-                                <div
-                                    style={{
-                                        display: 'flex',
-                                        flexDirection: 'column',
-                                        gap: '12px',
-                                    }}
-                                >
+                                </InnerColumn>
+                                <InnerColumn>
                                     <ScheduleCalendar />
                                     <Alarm />
-                                </div>
+                                </InnerColumn>
                             </MainBox>
                             {membersData && membersData.length > 1 && (
                                 <>
@@ -81,9 +62,9 @@ const ProjectPage: React.FC = () => {
                                     {seeMemTime && <MemberScheduleGrid />}
                                 </>
                             )}
-                        </div>
+                        </OuterColumn>
                     </Box>
-                    <div style={{ height: '400px' }}></div>
+                    <div style={{ height: '400px' }} />
                 </Layout>
             </DateProvider>
         </ProjectProvider>
@@ -117,6 +98,19 @@ const Box = styled.div`
     margin-top: 32px;
 `;
 
+const OuterColumn = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    align-items: center;
+`;
+
+const InnerColumn = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+`;
+
 const MainBox = styled.div`
     display: flex;
     gap: 22px;
@@ -130,11 +124,10 @@ const MemTimeBtn = styled.button`
     align-items: center;
     justify-content: center;
     gap: 2px;
-
     border-radius: 30px;
     background: #212121;
     color: #ffffff;
-    font-family: Pretendard;
+    font-family: 'Pretendard';
     font-size: 20px;
     font-style: normal;
     font-weight: 500;

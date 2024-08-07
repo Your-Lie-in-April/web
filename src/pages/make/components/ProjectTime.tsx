@@ -137,13 +137,7 @@ const ProjectTime: FC<ProjectTimeProps> = ({
 
     return (
         <ProjectTimeContainer>
-            <div
-                style={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    justifyContent: 'center',
-                }}
-            >
+            <DateWrapper>
                 <DateContainer style={{ display: 'flex' }}>
                     <Text>프로젝트 시작일</Text>
                     <SDatePicker
@@ -158,9 +152,7 @@ const ProjectTime: FC<ProjectTimeProps> = ({
                         startDate={startDate}
                     />
                 </DateContainer>
-
                 <Separator>~</Separator>
-
                 <DateContainer style={{ display: 'flex' }}>
                     <Text>프로젝트 종료일</Text>
                     <SDatePicker
@@ -176,8 +168,7 @@ const ProjectTime: FC<ProjectTimeProps> = ({
                         minDate={startDate}
                     />
                 </DateContainer>
-            </div>
-
+            </DateWrapper>
             <MakeWeekend>
                 <Text>생성할 요일</Text>
                 <WeekendContainer>
@@ -193,28 +184,10 @@ const ProjectTime: FC<ProjectTimeProps> = ({
                 </WeekendContainer>
             </MakeWeekend>
 
-            <div
-                style={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    justifyContent: 'center',
-                    marginTop: '40px',
-                    marginLeft: '10px',
-                }}
-            >
+            <TimeWrapper>
                 <DateContainer style={{ gap: '4px' }}>
                     <Text>시간표 시작시간</Text>
-                    <TimePicker
-                        style={{
-                            marginTop: '4px',
-                            marginLeft: '4px',
-                            display: 'flex',
-                            gap: '12px',
-                            padding: '4px',
-                            boxSizing: 'border-box',
-                        }}
-                        onClick={startSelect}
-                    >
+                    <TimePicker onClick={startSelect}>
                         <div style={{ width: '146px' }}>{starttime}</div>
                         {!isStartOpen && <ExpandMoreIcon sx={{ fontSize: '22px' }} />}
                         {isStartOpen && <ExpandLessIcon sx={{ fontSize: '22px' }} />}
@@ -231,26 +204,15 @@ const ProjectTime: FC<ProjectTimeProps> = ({
                     )}
                 </DateContainer>
                 <Separator style={{ marginLeft: '28px', marginRight: '28px' }}>~</Separator>
-
                 <DateContainer style={{ gap: '4px' }}>
                     <Text>시간표 종료시간</Text>
-                    <TimePicker
-                        style={{
-                            marginTop: '4px',
-                            marginLeft: '4px',
-                            display: 'flex',
-                            gap: '12px',
-                            padding: '4px',
-                            boxSizing: 'border-box',
-                        }}
-                        onClick={endSelect}
-                    >
+                    <TimePicker onClick={endSelect}>
                         <div style={{ width: '146px' }}>{endtime}</div>
                         {!isEndOpen && <ExpandMoreIcon sx={{ fontSize: '22px' }} />}
                         {isEndOpen && <ExpandLessIcon sx={{ fontSize: '22px' }} />}
                     </TimePicker>
                     {isEndOpen && (
-                        <TimePickerContainer style={{ position: 'absolute', marginTop: '4px' }}>
+                        <TimePickerContainer>
                             {filteredEndTimes.map((time, index) => (
                                 <TimeOption
                                     key={index}
@@ -265,7 +227,7 @@ const ProjectTime: FC<ProjectTimeProps> = ({
                         </TimePickerContainer>
                     )}
                 </DateContainer>
-            </div>
+            </TimeWrapper>
         </ProjectTimeContainer>
     );
 };
@@ -275,6 +237,20 @@ const ProjectTimeContainer = styled.div`
     display: flex;
     flex-direction: column;
     background: #fff;
+`;
+
+const DateWrapper = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+`;
+
+const TimeWrapper = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-top: 40px;
+    margin-left: 10px;
 `;
 
 const DateContainer = styled.div`
@@ -295,20 +271,17 @@ const SDatePicker = styled(ReactDatePicker)`
     background: #f5f5f5;
     text-align: center;
     display: flex;
-
     box-sizing: border-box;
-
-    &:hover {
-        cursor: pointer;
-    }
-
     color: #000000;
     text-align: center;
-    font-family: Pretendard;
+    font-family: 'Pretendard';
     font-size: 28px;
     font-style: normal;
     font-weight: 400;
     line-height: normal;
+    &:hover {
+        cursor: pointer;
+    }
 `;
 
 const TimePicker = styled.div`
@@ -325,14 +298,18 @@ const TimePicker = styled.div`
     margin: auto;
     cursor: pointer;
     border: none;
-
     color: #000000;
     text-align: center;
-    font-family: Pretendard;
+    font-family: 'Pretendard';
     font-size: 28px;
     font-style: normal;
     font-weight: 400;
     line-height: normal;
+    margin-top: 4px;
+    margin-left: 4px;
+    gap: 12px;
+    padding: 4px;
+    box-sizing: border-box;
 `;
 
 const TimePickerContainer = styled.ul`
@@ -349,6 +326,8 @@ const TimePickerContainer = styled.ul`
     list-style-type: none;
     margin: auto;
     overflow-y: auto;
+    position: absolute;
+    margin-top: 4px;
 `;
 
 const TimeOption = styled.li`

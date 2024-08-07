@@ -11,30 +11,6 @@ import Profile from './components/Profile';
 import MainPagination from './components/projects/MainPagination';
 import NewProject from './components/projects/NewProject';
 
-const GlobalStyle = createGlobalStyle`
-  body {
-    width : 100%;
-    min-width : 1366px;
-    margin: 0 auto;
-    background-color: #212121;
-    -ms-overflow-style: none;
-  }
-
-  ::-webkit-scrollbar {
-    display: none;
-  }
-`;
-
-const MainContainer = styled.div`
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    margin: 0 auto;
-    max-width: 1284px;
-    box-sizing: border-box;
-    margin-top: 126px;
-`;
-
 function useQuery() {
     const location = useLocation();
     return new URLSearchParams(location.search);
@@ -64,58 +40,26 @@ const MainPage: FC = () => {
         <>
             <GlobalStyle />
             <Layout>
-                <div>
-                    <BannerTop />
-                    <BannerDown />
-                </div>
+                <BannerTop />
+                <BannerDown />
                 <SearchProvider>
                     <MainContainer>
-                        <div style={{ display: 'flex', flexDirection: 'row', gap: '20px' }}>
-                            <div
-                                style={{
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    alignItems: 'flex-start',
-                                    gap: '14px',
-                                }}
-                            >
-                                <Profile />
-                                <Alarm />
-                            </div>
-                            <div
-                                style={{
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    alignItems: 'flex-start',
-                                    gap: '24px',
-                                }}
-                            >
-                                <div
-                                    style={{
-                                        display: 'flex',
-                                        flexDirection: 'column',
-                                        alignItems: 'flex-start',
-                                        gap: '21px',
-                                    }}
-                                >
-                                    <div
-                                        style={{
-                                            display: 'flex',
-                                            flexDirection: 'row',
-                                            alignItems: 'flex-start',
-                                            gap: '8px',
-                                        }}
-                                    >
-                                        <Search />
-                                        <NewProject />
-                                    </div>
-                                    <Pinned />
-                                </div>
-                                <MainPagination />
-                            </div>
-                        </div>
+                        <Lefts>
+                            <Profile />
+                            <Alarm />
+                        </Lefts>
+                        <Rights>
+                            <RightMid>
+                                <RightTop>
+                                    <Search />
+                                    <NewProject />
+                                </RightTop>
+                                <Pinned />
+                            </RightMid>
+                            <MainPagination />
+                        </Rights>
                     </MainContainer>
-                    <div style={{ height: '300px' }} />
+                    <Spacer />
                 </SearchProvider>
             </Layout>
         </>
@@ -123,3 +67,59 @@ const MainPage: FC = () => {
 };
 
 export default MainPage;
+
+const GlobalStyle = createGlobalStyle`
+  body {
+    width : 100%;
+    min-width : 1366px;
+    margin: 0 auto;
+    background-color: #212121;
+    -ms-overflow-style: none;
+  }
+
+  ::-webkit-scrollbar {
+    display: none;
+  }
+`;
+
+const MainContainer = styled.div`
+    position: relative;
+    display: flex;
+    gap: 20px;
+    margin: 0 auto;
+    max-width: 1284px;
+    box-sizing: border-box;
+    margin-top: 126px;
+`;
+
+const RightTop = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 8px;
+`;
+
+const RightMid = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 21px;
+`;
+
+const Rights = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 24px;
+`;
+
+const Lefts = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+`;
+
+const Spacer = styled.div`
+    height: 300px;
+`;

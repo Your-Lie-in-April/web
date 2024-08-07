@@ -1,15 +1,49 @@
 import { Http } from '@constants/api';
 import { BannerDown, BannerTop } from '@pages/layouts/Banner';
-import BeforeLogin from '@pages/layouts/header/BeforeLogin';
+import Layout from '@pages/layouts/Layout';
 import googleLogo from '@pics/google-login.svg';
 import { FC } from 'react';
 import styled, { createGlobalStyle } from 'styled-components';
 import GraphicIcons from './icons/GraphicIcons';
 
+const Login: FC = () => {
+    const oAuth = () => {
+        window.location.href = Http + '/oauth2/authorization/google';
+    };
+
+    return (
+        <>
+            <GlobalStyle />
+            <Layout>
+                <Container>
+                    <GraphicIcons />
+                    <Content>
+                        <BannerTop />
+                        <Spacer height='104px' />
+                        <LoginBanner>
+                            <Title>Sign up</Title>
+                            <Google onClick={oAuth}>
+                                <GoogleLogin>
+                                    <img src={googleLogo} alt='Google Logo' />
+                                    구글로그인
+                                </GoogleLogin>
+                            </Google>
+                        </LoginBanner>
+                        <Spacer height='391px' />
+                        <BannerDown />
+                    </Content>
+                </Container>
+            </Layout>
+        </>
+    );
+};
+
+export default Login;
+
 const GlobalStyle = createGlobalStyle`
   body {
-    width : 100%;
-    min-width : 1366px;
+    width: 100%;
+    min-width: 1366px;
     min-height: 1366px;
     margin: 0 auto;
     background-color: #212121;
@@ -21,6 +55,23 @@ const GlobalStyle = createGlobalStyle`
   }
 `;
 
+const Container = styled.div`
+    position: relative;
+    overflow-x: clip;
+    background-color: #212121;
+    min-height: 100vh;
+`;
+
+const Content = styled.div`
+    position: relative;
+    z-index: 2;
+`;
+
+const Spacer = styled.div<{ height: string }>`
+    height: ${({ height }) => height};
+    width: 100%;
+`;
+
 const LoginBanner = styled.div`
     width: 100%;
     height: 100%;
@@ -29,6 +80,13 @@ const LoginBanner = styled.div`
     align-items: center;
     gap: 102px;
     margin: auto;
+`;
+
+const Title = styled.span`
+    color: #fff;
+    text-align: center;
+    font-size: 32px;
+    font-weight: 700;
 `;
 
 const Google = styled.button`
@@ -55,52 +113,3 @@ const GoogleLogin = styled.div`
     gap: 86px;
     position: relative;
 `;
-
-const Login: FC = () => {
-    const oAuth = () => {
-        window.location.href = Http + '/oauth2/authorization/google';
-    };
-
-    return (
-        <>
-            <GlobalStyle />
-            <div
-                style={{
-                    position: 'relative',
-                    overflowX: 'clip',
-                    backgroundColor: '#212121',
-                    minHeight: '100vh',
-                }}
-            >
-                <GraphicIcons />
-                <div style={{ position: 'relative', zIndex: 2 }}>
-                    <BeforeLogin />
-                    <BannerTop />
-                    <div style={{ height: '104px', width: '100%' }} />
-                    <LoginBanner>
-                        <span
-                            style={{
-                                color: '#fff',
-                                textAlign: 'center',
-                                fontSize: '32px',
-                                fontWeight: '700',
-                            }}
-                        >
-                            Sign up
-                        </span>
-                        <Google onClick={oAuth}>
-                            <GoogleLogin>
-                                <img src={googleLogo} alt='Google Logo' />
-                                구글로그인
-                            </GoogleLogin>
-                        </Google>
-                    </LoginBanner>
-                    <div style={{ height: '391px', width: '100%' }} />
-                    <BannerDown />
-                </div>
-            </div>
-        </>
-    );
-};
-
-export default Login;

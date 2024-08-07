@@ -1,6 +1,6 @@
+import { MemberEntity } from '@/types/memberType';
 import useDeleteProjectMemberMutation from '@hooks/apis/mutations/project/useDeleteProjectMemberMutation';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
-import { MemberEntity } from '@/types/memberType';
 import ModalPortal from '@utils/ModalPotal';
 import useScrollLock from '@utils/useScrollLock';
 import React from 'react';
@@ -38,35 +38,17 @@ const DeleteMember: React.FC<DeleteMemberProps> = ({
                     <ModalBlackOut onClick={onSetDeleteMemModal} />
                     <ModalContainer>
                         <Box>
-                            <div
-                                style={{
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    alignItems: 'center',
-                                    gap: '12px',
-                                    width: '100%',
-                                    height: '100%',
-                                }}
-                            >
-                                <div
-                                    style={{
-                                        display: 'flex',
-                                        flexDirection: 'column',
-                                        alignItems: 'center',
-                                        gap: '10px',
-                                        width: '100%',
-                                        height: '100%',
-                                    }}
-                                >
+                            <OuterColumn>
+                                <InnerColumn>
                                     <InfoCircleIcon sx={{ fontSize: '32px' }} />
                                     <MemberNick>{member?.nickname}</MemberNick>
                                     <Title>프로젝트에서 내보내겠습니까?</Title>
-                                </div>
+                                </InnerColumn>
                                 <ButtonsContainer style={{ alignSelf: 'flex-end' }}>
                                     <ConfirmBtn onClick={handleDeleteMember}>확인</ConfirmBtn>
                                     <CancelBtn onClick={onSetDeleteMemModal}>취소</CancelBtn>
                                 </ButtonsContainer>
-                            </div>
+                            </OuterColumn>
                         </Box>
                     </ModalContainer>
                 </ModalPortal>
@@ -87,6 +69,24 @@ const Box = styled.div`
     align-items: center;
     padding: 16px 20px 8px 20px;
     box-sizing: border-box;
+`;
+
+const OuterColumn = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    height: 100%;
+`;
+
+const InnerColumn = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    height: 100%;
 `;
 
 const InfoCircleIcon = styled(InfoOutlinedIcon)`

@@ -3,10 +3,10 @@ import usePatchStoredMutation from '@hooks/apis/mutations/member/usePatchStoredM
 import DeleteIcon from '@mui/icons-material/Delete';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
+import DeleteProject from '@pages/modal/project/DeleteProject';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import DeleteProject from '../modal/project/DeleteProject';
 
 const StorageProject = ({ project }: { project: ProjectThumbnailInfo }) => {
     const [showMore, setShowMore] = useState<boolean>(false);

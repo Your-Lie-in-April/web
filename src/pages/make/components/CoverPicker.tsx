@@ -51,9 +51,7 @@ const CoverPicker: FC<CoverPickerProps> = ({
     return (
         <CoverContainer>
             <ConverInnerContainer>
-                <Register onClick={toggleCover}>
-                    커버등록
-                </Register>
+                <Register onClick={toggleCover}>커버등록</Register>
                 <ColorContainer>
                     단색
                     <ColorChoose>
@@ -99,16 +97,7 @@ const CoverPicker: FC<CoverPickerProps> = ({
                 </ImageContainer>
             </ConverInnerContainer>
             {openHex && (
-                <div
-                    style={{
-                        display: 'flex',
-                        justifyContent: 'center',
-                        height: '252px',
-                        position: 'absolute',
-                        right: 'calc(100% + 8px)',
-                        bottom: '0',
-                    }}
-                >
+                <PickerWrapper>
                     <ChromePicker
                         disableAlpha={false}
                         color={color}
@@ -121,7 +110,7 @@ const CoverPicker: FC<CoverPickerProps> = ({
                             },
                         }}
                     />
-                </div>
+                </PickerWrapper>
             )}
         </CoverContainer>
     );
@@ -155,6 +144,7 @@ const Register = styled.div`
     padding: 8px;
     justify-content: center;
     align-items: center;
+    font-size: 18px;
     gap: 8px;
     border-radius: 40px;
     background: #633ae2;
@@ -231,4 +221,13 @@ const Image = styled.div`
     background-repeat: no-repeat;
     background-position: center;
     cursor: pointer;
+`;
+
+const PickerWrapper = styled.div`
+    display: flex;
+    justify-content: center;
+    height: 252px;
+    position: absolute;
+    right: calc(100% + 8px);
+    bottom: 0;
 `;
