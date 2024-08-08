@@ -29,7 +29,7 @@ const ProjectMakePage: FC = () => {
         if (ampm === 'PM' && hour !== 12) {
             hour += 12;
         } else if (ampm === 'AM' && hour === 12) {
-            hour = 0;
+            hour = 24;
         }
         return `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}:00`;
     };
@@ -62,12 +62,8 @@ const ProjectMakePage: FC = () => {
             coverImageId: imgId,
         };
 
-        try {
-            await mutate.mutateAsync(payload);
-            navigate('/');
-        } catch (error) {
-            Toast('다시 시도해주세요', 'error');
-        }
+        await mutate.mutateAsync(payload);
+        navigate('/');
     };
 
     return (

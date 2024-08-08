@@ -3,10 +3,10 @@ import usePatchStoredMutation from '@hooks/apis/mutations/member/usePatchStoredM
 import DeleteIcon from '@mui/icons-material/Delete';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
+import DeleteProject from '@pages/modal/project/DeleteProject';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import DeleteProject from '../modal/project/DeleteProject';
 
 const StorageProject = ({ project }: { project: ProjectThumbnailInfo }) => {
     const [showMore, setShowMore] = useState<boolean>(false);
@@ -22,46 +22,57 @@ const StorageProject = ({ project }: { project: ProjectThumbnailInfo }) => {
     };
     const { mutate: handleStored } = usePatchStoredMutation(project.projectId);
 
+    const onProjectClick = () => {
+        navigate(`/project/${project.projectId}`);
+    };
+
     return (
         <>
-            <ProjectBox $color={project.color} $coverImageUrl={project.thumbnailUrl}>
+            <ProjectBox
+                onClick={onProjectClick}
+                $color={project.color}
+                $coverImageUrl={project.thumbnailUrl}
+            >
                 {showMore && (
                     <MoreBox>
-                        <div
-                            style={{
-                                display: 'flex',
-                                gap: '30px',
-                                justifyContent: 'center',
-                            }}
-                        >
-                            <MoreItem onClick={() => handleStored()}>
+                        <MoreWrapper>
+                            <MoreItem
+                                onClick={(event) => {
+                                    handleStored();
+                                    event.stopPropagation();
+                                }}
+                            >
                                 <RestartAltIcon sx={{ fontSize: 48, color: '#F1F1F1' }} />
                                 <MoreText>보관 취소</MoreText>
                             </MoreItem>
-                            <MoreItem onClick={onClickItem}>
+                            <MoreItem
+                                onClick={(event) => {
+                                    onClickItem();
+                                    event.stopPropagation();
+                                }}
+                            >
                                 <DeleteIcon sx={{ fontSize: 48, color: '#F1F1F1' }} />
                                 <MoreText>삭제하기</MoreText>
                             </MoreItem>
-                        </div>
+                        </MoreWrapper>
                     </MoreBox>
                 )}
-                <div
-                    style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: '4px',
-                    }}
-                >
+                <DetailBox>
                     <MoreDiv>
-                        <MoreButton>
-                            <StyledMoreBtn sx={{ fontSize: 32 }} onClick={toggleMoreBtn} />
+                        <MoreButton
+                            onClick={(event) => {
+                                event.stopPropagation();
+                                toggleMoreBtn();
+                            }}
+                        >
+                            <StyledMoreBtn sx={{ fontSize: 32 }} />
                         </MoreButton>
                     </MoreDiv>
-                    <TextBox onClick={() => navigate(`/project/${project.projectId}`)}>
+                    <TextBox>
                         <ProjectName>{project.title}</ProjectName>
                         <DetailText>{project.description}</DetailText>
                     </TextBox>
-                </div>
+                </DetailBox>
             </ProjectBox>
             <DeleteProject
                 onClose={onClickItem}
@@ -96,6 +107,13 @@ const ProjectBox = styled.div<{ $color: string | null; $coverImageUrl: string | 
     border-radius: 16px;
     color: #ffffff;
     position: relative;
+    cursor: pointer;
+`;
+
+const DetailBox = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
 `;
 
 const TextBox = styled.div`
@@ -110,12 +128,10 @@ const TextBox = styled.div`
     box-sizing: border-box;
     align-items: flex-start;
     gap: 8px;
-
     color: #000000;
     font-style: normal;
     line-height: normal;
     text-transform: uppercase;
-    cursor: pointer;
 `;
 
 const ProjectName = styled.div`
@@ -139,7 +155,7 @@ const DetailText = styled.div`
     word-break: break-word;
 `;
 
-const MoreButton = styled.button`
+const MoreButton = styled.button.attrs({ type: 'button' })`
     background: none;
     border: none;
     padding: 0;
@@ -178,7 +194,13 @@ const MoreBox = styled.div`
     background: rgba(0, 0, 0, 0.3);
 `;
 
-const MoreItem = styled.button`
+const MoreWrapper = styled.div`
+    display: flex;
+    gap: 30px;
+    justify-content: center;
+`;
+
+const MoreItem = styled.button.attrs({ type: 'button' })`
     display: flex;
     flex-direction: column;
     gap: 4px;

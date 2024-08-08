@@ -39,9 +39,11 @@ axiosInstance.interceptors.response.use(
         // 2xx 외의 범위에 있는 상태 코드는 이 함수를 트리거 합니다.
         // 응답 오류가 있는 작업 수행
         const statusCode = error.response?.status;
+        const errorData = error.response?.data;
 
+        // 400 오류
         if (statusCode === 400) {
-            //
+            Toast(errorData.data, 'error');
         }
 
         // 401 : 토큰 오류
@@ -64,7 +66,7 @@ axiosInstance.interceptors.response.use(
 
         // 403 : 권한 오류
         if (statusCode === 403) {
-            Toast('권한이 없습니다', 'warning');
+            Toast(errorData.data, 'error');
             window.location.href = '/';
         }
 

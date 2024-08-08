@@ -222,7 +222,7 @@ const Title = styled(CommonText)`
     box-sizing: border-box;
 `;
 
-const ConfirmBtn = styled.div`
+const ConfirmBtn = styled.button.attrs({ type: 'button' })`
     width: 297px;
     height: 64px;
     border-radius: 60px;
@@ -230,7 +230,7 @@ const ConfirmBtn = styled.div`
     box-sizing: border-box;
     color: #ffffff;
     text-align: center;
-    font-family: Pretendard;
+    font-family: 'Pretendard';
     font-size: 32px;
     font-style: normal;
     font-weight: 700;

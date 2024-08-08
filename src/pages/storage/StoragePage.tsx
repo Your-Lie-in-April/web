@@ -2,8 +2,8 @@ import { SearchProvider } from '@hooks/context/searchContext';
 import Layout from '@pages/layouts/Layout';
 import Search from '@pages/layouts/Search';
 import styled, { createGlobalStyle } from 'styled-components';
-import GraphicIcons from './icons/GraphicIcons';
-import StorageInfinite from './StorageInfinite';
+import GraphicIcons from './components/icons/GraphicIcons';
+import StorageInfinite from './components/project/StorageInfinite';
 
 const StoragePage = () => {
     return (

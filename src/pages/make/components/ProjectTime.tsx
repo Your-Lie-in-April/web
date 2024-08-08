@@ -45,7 +45,7 @@ const ProjectTime: FC<ProjectTimeProps> = ({
     };
 
     const Times: Time[] = [];
-    for (let hour = 9; hour < 24; hour++) {
+    for (let hour = 9; hour <= 23; hour++) {
         const ampm = hour < 12 ? 'AM' : 'PM';
         const displayHour = hour === 0 ? 12 : hour > 12 ? hour - 12 : hour;
         for (let minute = 0; minute < 60; minute += 30) {
@@ -63,15 +63,23 @@ const ProjectTime: FC<ProjectTimeProps> = ({
         }
     }
 
+    Times.push({
+        value: '24:00',
+        label: 'AM 12:00',
+        hour: '24',
+        minute: '00',
+        ampm: 'AM',
+    });
+
     const filterTimes = (start: string): Time[] => {
         const [startHour, startMinute] = start.split(':').map(Number);
         return Times.filter(({ hour, minute }) => {
             const currentHour = parseInt(hour, 10);
             const currentMinute = parseInt(minute, 10);
             return (
-                (currentHour > startHour ||
-                    (currentHour === startHour && currentMinute > startMinute)) &&
-                (currentHour < 24 || (currentHour === 0 && currentMinute === 0))
+                currentHour > startHour ||
+                (currentHour === startHour && currentMinute >= startMinute) ||
+                (currentHour === 0 && currentMinute === 0)
             );
         });
     };
@@ -131,19 +139,25 @@ const ProjectTime: FC<ProjectTimeProps> = ({
         setIsStartOpen(false);
 
         if (newFilteredEndTimes.length > 0) {
-            setEndTime(newFilteredEndTimes[0].label);
+            const selectedStartIndex = Times.findIndex((t) => t.value === time.value);
+            const selectedEndIndex = selectedStartIndex + 1;
+            if (selectedEndIndex < Times.length) {
+                const endTime = Times[selectedEndIndex];
+                if (endTime.hour === '24' && endTime.minute === '00') {
+                    setEndTime('24:00');
+                } else {
+                    setEndTime(endTime.label);
+                }
+            }
         }
     };
 
+    const startTimes = Times.slice(0, Times.length - 1);
+    const endTimes = filteredEndTimes.slice(1);
+
     return (
         <ProjectTimeContainer>
-            <div
-                style={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    justifyContent: 'center',
-                }}
-            >
+            <DateWrapper>
                 <DateContainer style={{ display: 'flex' }}>
                     <Text>프로젝트 시작일</Text>
                     <SDatePicker
@@ -158,9 +172,7 @@ const ProjectTime: FC<ProjectTimeProps> = ({
                         startDate={startDate}
                     />
                 </DateContainer>
-
                 <Separator>~</Separator>
-
                 <DateContainer style={{ display: 'flex' }}>
                     <Text>프로젝트 종료일</Text>
                     <SDatePicker
@@ -176,8 +188,7 @@ const ProjectTime: FC<ProjectTimeProps> = ({
                         minDate={startDate}
                     />
                 </DateContainer>
-            </div>
-
+            </DateWrapper>
             <MakeWeekend>
                 <Text>생성할 요일</Text>
                 <WeekendContainer>
@@ -193,36 +204,17 @@ const ProjectTime: FC<ProjectTimeProps> = ({
                 </WeekendContainer>
             </MakeWeekend>
 
-            <div
-                style={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    justifyContent: 'center',
-                    marginTop: '40px',
-                    marginLeft: '10px',
-                }}
-            >
+            <TimeWrapper>
                 <DateContainer style={{ gap: '4px' }}>
                     <Text>시간표 시작시간</Text>
-                    <TimePicker
-                        style={{
-                            marginTop: '4px',
-                            marginLeft: '4px',
-                            display: 'flex',
-                            gap: '12px',
-                            padding: '4px',
-                            boxSizing: 'border-box',
-                        }}
-                        onClick={startSelect}
-                    >
-                        <div style={{ width: '146px' }}>{starttime}</div>
+                    <TimePicker onClick={startSelect}>
+                        <TimeText>{starttime}</TimeText>
                         {!isStartOpen && <ExpandMoreIcon sx={{ fontSize: '22px' }} />}
                         {isStartOpen && <ExpandLessIcon sx={{ fontSize: '22px' }} />}
                     </TimePicker>
-
                     {isStartOpen && (
                         <TimePickerContainer style={{ position: 'absolute', marginTop: '4px' }}>
-                            {Times.map((time, index) => (
+                            {startTimes.map((time, index) => (
                                 <TimeOption key={index} onClick={() => handleStartTimeSelect(time)}>
                                     {time.label}
                                 </TimeOption>
@@ -231,27 +223,16 @@ const ProjectTime: FC<ProjectTimeProps> = ({
                     )}
                 </DateContainer>
                 <Separator style={{ marginLeft: '28px', marginRight: '28px' }}>~</Separator>
-
                 <DateContainer style={{ gap: '4px' }}>
                     <Text>시간표 종료시간</Text>
-                    <TimePicker
-                        style={{
-                            marginTop: '4px',
-                            marginLeft: '4px',
-                            display: 'flex',
-                            gap: '12px',
-                            padding: '4px',
-                            boxSizing: 'border-box',
-                        }}
-                        onClick={endSelect}
-                    >
-                        <div style={{ width: '146px' }}>{endtime}</div>
+                    <TimePicker onClick={endSelect}>
+                        <TimeText>{endtime}</TimeText>
                         {!isEndOpen && <ExpandMoreIcon sx={{ fontSize: '22px' }} />}
                         {isEndOpen && <ExpandLessIcon sx={{ fontSize: '22px' }} />}
                     </TimePicker>
                     {isEndOpen && (
-                        <TimePickerContainer style={{ position: 'absolute', marginTop: '4px' }}>
-                            {filteredEndTimes.map((time, index) => (
+                        <TimePickerContainer>
+                            {endTimes.map((time, index) => (
                                 <TimeOption
                                     key={index}
                                     onClick={() => {
@@ -265,7 +246,7 @@ const ProjectTime: FC<ProjectTimeProps> = ({
                         </TimePickerContainer>
                     )}
                 </DateContainer>
-            </div>
+            </TimeWrapper>
         </ProjectTimeContainer>
     );
 };
@@ -275,6 +256,20 @@ const ProjectTimeContainer = styled.div`
     display: flex;
     flex-direction: column;
     background: #fff;
+`;
+
+const DateWrapper = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+`;
+
+const TimeWrapper = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-top: 40px;
+    margin-left: 10px;
 `;
 
 const DateContainer = styled.div`
@@ -295,20 +290,17 @@ const SDatePicker = styled(ReactDatePicker)`
     background: #f5f5f5;
     text-align: center;
     display: flex;
-
     box-sizing: border-box;
-
-    &:hover {
-        cursor: pointer;
-    }
-
     color: #000000;
     text-align: center;
-    font-family: Pretendard;
+    font-family: 'Pretendard';
     font-size: 28px;
     font-style: normal;
     font-weight: 400;
     line-height: normal;
+    &:hover {
+        cursor: pointer;
+    }
 `;
 
 const TimePicker = styled.div`
@@ -325,19 +317,23 @@ const TimePicker = styled.div`
     margin: auto;
     cursor: pointer;
     border: none;
-
     color: #000000;
     text-align: center;
-    font-family: Pretendard;
+    font-family: 'Pretendard';
     font-size: 28px;
     font-style: normal;
     font-weight: 400;
     line-height: normal;
+    margin-top: 4px;
+    margin-left: 4px;
+    gap: 12px;
+    padding: 4px;
+    box-sizing: border-box;
 `;
 
 const TimePickerContainer = styled.ul`
     width: 208px;
-    height: 124px;
+    max-height: 124px;
     font-size: 28px;
     border-radius: 5px;
     background: #f5f5f5;
@@ -349,6 +345,8 @@ const TimePickerContainer = styled.ul`
     list-style-type: none;
     margin: auto;
     overflow-y: auto;
+    position: absolute;
+    margin-top: 4px;
 `;
 
 const TimeOption = styled.li`
@@ -367,6 +365,10 @@ const TimeOption = styled.li`
     font-style: normal;
     font-weight: 300;
     line-height: 28px;
+`;
+
+const TimeText = styled.div`
+    width: 146px;
 `;
 
 const Text = styled.div`

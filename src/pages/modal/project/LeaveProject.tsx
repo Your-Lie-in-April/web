@@ -1,7 +1,7 @@
 import { useLeaveProject } from '@hooks/useLeaveProject';
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import ModalPortal from '@utils/ModalPotal';
 import useScrollLock from '@utils/useScrollLock';
-import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import styled from 'styled-components';
 import { ModalBlackOut, ModalContainer } from '../ModalCommon';
 
@@ -29,35 +29,17 @@ const LeaveProject: React.FC<DeleteProjectProps> = ({
             <ModalBlackOut onClick={onClose} />
             <ModalContainer>
                 <Box>
-                    <div
-                        style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'center',
-                            gap: '12px',
-                            width: '100%',
-                            height: '100%',
-                        }}
-                    >
-                        <div
-                            style={{
-                                display: 'flex',
-                                flexDirection: 'column',
-                                alignItems: 'center',
-                                gap: '10px',
-                                width: '100%',
-                                height: '100%',
-                            }}
-                        >
+                    <OuterColumn>
+                        <InnerColumn>
                             <InfoCircleIcon sx={{ fontSize: '32px' }} />
                             <PeojectName>{projectTitle}</PeojectName>
                             <Title>{message}</Title>
-                        </div>
+                        </InnerColumn>
                         <ButtonsContainer style={{ alignSelf: 'flex-end' }}>
                             <ConfirmBtn onClick={() => handleLeave(onClose)}>확인</ConfirmBtn>
                             <CancelBtn onClick={() => handleCancel(onClose)}>취소</CancelBtn>
                         </ButtonsContainer>
-                    </div>
+                    </OuterColumn>
                 </Box>
             </ModalContainer>
         </ModalPortal>
@@ -78,6 +60,24 @@ const Box = styled.div`
     box-sizing: border-box;
 `;
 
+const OuterColumn = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    height: 100%;
+`;
+
+const InnerColumn = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    height: 100%;
+`;
+
 const InfoCircleIcon = styled(InfoOutlinedIcon)`
     width: 32px;
     height: 32px;
@@ -87,7 +87,7 @@ const InfoCircleIcon = styled(InfoOutlinedIcon)`
 const CommonText = styled.span`
     color: #000000;
     text-align: center;
-    font-family: Pretendard;
+    font-family: 'Pretendard';
     line-height: normal;
 `;
 
@@ -110,7 +110,7 @@ const Title = styled(CommonText)`
     display: block;
 `;
 
-const Button = styled.button`
+const Button = styled.button.attrs({ type: 'button' })`
     display: flex;
     width: 60px;
     padding: 8px 12px;

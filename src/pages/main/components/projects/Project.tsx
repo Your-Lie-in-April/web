@@ -34,43 +34,73 @@ const Project: React.FC<ProjectProps> = ({ project }) => {
     const { mutate: handlePinned } = usePatchPinnedMutation(project.projectId);
     const { mutate: handleStored } = usePatchStoredMutation(project.projectId);
 
+    const onProjectClick = () => {
+        navigate(`/project/${project.projectId}`);
+    };
+
     return (
-        <ProjectBox $color={project.color} $coverImageUrl={project.thumbnailUrl}>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                <MoreDiv>
-                    {showMore && (
-                        <>
-                            <StyledButton onClick={openLeaveModal}>
-                                <CancelBtn sx={{ fontSize: 36 }} />
-                            </StyledButton>
-                            <MoreBox>
-                                <MoreItem onClick={() => handlePinned()}>
-                                    <PushPinOutlinedIcon sx={{ fontSize: 18 }} />
-                                    <MoreText>상단고정</MoreText>
-                                </MoreItem>
-                                <MoreItem onClick={() => handleStored()}>
-                                    <InboxOutlinedIcon sx={{ fontSize: 18 }} />
-                                    <MoreText>보관함이동</MoreText>
-                                </MoreItem>
-                            </MoreBox>
-                        </>
-                    )}
-                    <StyledButton onClick={toggleMoreBtn}>
-                        <StyledMoreBtn sx={{ fontSize: 32 }} />
-                    </StyledButton>
-                </MoreDiv>
-                <TextBox onClick={() => navigate(`/project/${project.projectId}`)}>
-                    <ProjectName>{project.title}</ProjectName>
-                    <DetailText>{project.description}</DetailText>
-                </TextBox>
-            </div>
+        <>
+            <ProjectBox
+                onClick={onProjectClick}
+                $color={project.color}
+                $coverImageUrl={project.thumbnailUrl}
+            >
+                <ProjectWrapper>
+                    <MoreDiv>
+                        {showMore && (
+                            <>
+                                <StyledButton
+                                    onClick={(event) => {
+                                        openLeaveModal();
+                                        event.stopPropagation();
+                                    }}
+                                >
+                                    <CancelBtn sx={{ fontSize: 36 }} />
+                                </StyledButton>
+                                <MoreBox>
+                                    <MoreItem
+                                        onClick={(event) => {
+                                            event.stopPropagation();
+                                            handlePinned();
+                                        }}
+                                    >
+                                        <PushPinOutlinedIcon sx={{ fontSize: 18 }} />
+                                        <MoreText>상단고정</MoreText>
+                                    </MoreItem>
+                                    <MoreItem
+                                        onClick={(event) => {
+                                            event.stopPropagation();
+                                            handleStored();
+                                        }}
+                                    >
+                                        <InboxOutlinedIcon sx={{ fontSize: 18 }} />
+                                        <MoreText>보관함이동</MoreText>
+                                    </MoreItem>
+                                </MoreBox>
+                            </>
+                        )}
+                        <StyledButton
+                            onClick={(event) => {
+                                event.stopPropagation();
+                                toggleMoreBtn();
+                            }}
+                        >
+                            <StyledMoreBtn sx={{ fontSize: 32 }} />
+                        </StyledButton>
+                    </MoreDiv>
+                    <TextBox>
+                        <ProjectName>{project.title}</ProjectName>
+                        <DetailText>{project.description}</DetailText>
+                    </TextBox>
+                </ProjectWrapper>
+            </ProjectBox>
             <LeaveProject
                 projectId={project.projectId}
                 projectTitle={project.title}
                 onClose={closeLeaveModal}
                 isOpen={isLeaveModalOpen}
             />
-        </ProjectBox>
+        </>
     );
 };
 export default Project;
@@ -100,6 +130,13 @@ const ProjectBox = styled.div<{ $color: string | null; $coverImageUrl: string | 
     border-radius: 16px;
     color: #ffffff;
     position: relative;
+    cursor: pointer;
+`;
+
+const ProjectWrapper = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
 `;
 
 const TextBox = styled.div`
@@ -119,7 +156,6 @@ const TextBox = styled.div`
     font-style: normal;
     line-height: normal;
     text-transform: uppercase;
-    cursor: pointer;
 `;
 
 const ProjectName = styled.div`
@@ -143,7 +179,9 @@ const DetailText = styled.div`
     word-break: break-word;
 `;
 
-const StyledButton = styled.button`
+const StyledButton = styled.button.attrs({
+    type: 'button',
+})`
     background: none;
     border: none;
     padding: 0;

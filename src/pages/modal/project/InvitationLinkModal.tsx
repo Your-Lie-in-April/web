@@ -80,29 +80,11 @@ const InvitationLinkModal: React.FC<InvitationLinkModalProps> = ({ toggleBtn }) 
                     <ModalBlackOut $isVisible={isVisible} onClick={toggleBtn} />
                     <ModalContainer $isVisible={isVisible}>
                         <Box>
-                            <div
-                                style={{
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    alignItems: 'center',
-                                    gap: '18px',
-                                    width: '100%',
-                                    height: '100%',
-                                }}
-                            >
-                                <div
-                                    style={{
-                                        display: 'flex',
-                                        flexDirection: 'column',
-                                        alignItems: 'center',
-                                        gap: '18px',
-                                        width: '100%',
-                                        height: '100%',
-                                    }}
-                                >
+                            <ColumnWrapper>
+                                <ColumnWrapper>
                                     <Title>{projectData?.title}</Title>
                                     <InviteField value={link} readOnly />
-                                </div>
+                                </ColumnWrapper>
                                 <ButtonsContainer style={{ alignSelf: 'flex-end' }}>
                                     <CommonButton $primary={!isBtnClick} onClick={generateLink}>
                                         링크생성
@@ -114,7 +96,7 @@ const InvitationLinkModal: React.FC<InvitationLinkModalProps> = ({ toggleBtn }) 
                                         링크복사
                                     </CommonButton>
                                 </ButtonsContainer>
-                            </div>
+                            </ColumnWrapper>
                         </Box>
                     </ModalContainer>
                 </ModalPortal>
@@ -165,9 +147,18 @@ const Box = styled.div`
     box-sizing: border-box;
 `;
 
+const ColumnWrapper = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+    width: 100%;
+    height: 100%;
+`;
+
 const Title = styled.div`
     color: #000000;
-    font-family: Pretendard;
+    font-family: 'Pretendard';
     font-size: 20px;
     font-style: normal;
     font-weight: 700;
@@ -200,7 +191,7 @@ const ButtonsContainer = styled.div`
     gap: 4px;
 `;
 
-const CommonButton = styled.button<CommonButtonProps>`
+const CommonButton = styled.button.attrs({ type: 'button' })<CommonButtonProps>`
     display: flex;
     width: 72px;
     padding: 8px 12px;
@@ -208,7 +199,7 @@ const CommonButton = styled.button<CommonButtonProps>`
     align-items: center;
     gap: 8px;
     border-radius: 20px;
-    font-family: Pretendard;
+    font-family: 'Pretendard';
     font-size: 13px;
     font-weight: 500;
     line-height: normal;

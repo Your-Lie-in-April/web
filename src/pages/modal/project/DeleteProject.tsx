@@ -29,35 +29,17 @@ const DeleteProject: React.FC<DeleteProjectProps> = ({ projectId, title, isClick
                     <ModalBlackOut onClick={onClose} />
                     <ModalContainer>
                         <Box>
-                            <div
-                                style={{
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    alignItems: 'center',
-                                    gap: '12px',
-                                    width: '100%',
-                                    height: '100%',
-                                }}
-                            >
-                                <div
-                                    style={{
-                                        display: 'flex',
-                                        flexDirection: 'column',
-                                        alignItems: 'center',
-                                        gap: '10px',
-                                        width: '100%',
-                                        height: '100%',
-                                    }}
-                                >
+                            <OuterColumn>
+                                <InnerColumn>
                                     <InfoCircleIcon sx={{ fontSize: '32px' }} />
                                     <PeojectName>{title}</PeojectName>
                                     <Title>해당 프로젝트를 삭제하겠습니까?</Title>
-                                </div>
+                                </InnerColumn>
                                 <ButtonsContainer style={{ alignSelf: 'flex-end' }}>
                                     <ConfirmBtn onClick={handleDeleteProject}>확인</ConfirmBtn>
                                     <CancelBtn onClick={onClose}>취소</CancelBtn>
                                 </ButtonsContainer>
-                            </div>
+                            </OuterColumn>
                         </Box>
                     </ModalContainer>
                 </ModalPortal>
@@ -80,6 +62,24 @@ const Box = styled.div`
     box-sizing: border-box;
 `;
 
+const OuterColumn = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    height: 100%;
+`;
+
+const InnerColumn = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    height: 100%;
+`;
+
 const InfoCircleIcon = styled(InfoOutlinedIcon)`
     width: 32px;
     height: 32px;
@@ -89,14 +89,13 @@ const InfoCircleIcon = styled(InfoOutlinedIcon)`
 const CommonText = styled.span`
     color: #000000;
     text-align: center;
-    font-family: Pretendard;
+    font-family: 'Pretendard';
     line-height: normal;
 `;
 
 const PeojectName = styled(CommonText)`
     font-size: 28px;
     font-weight: 700;
-
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;

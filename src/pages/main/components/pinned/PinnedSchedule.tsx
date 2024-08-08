@@ -12,14 +12,12 @@ const PinnedSchedule: React.FC<PinScheduleProps> = ({ scheduleData }) => {
     return (
         <Box>
             <TimeTableDiv>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                    <HourTextList>
-                        {HoursOfDay.slice(0, 15).map((hour, idx) => (
-                            <CommonText key={idx}>{hour}</CommonText>
-                        ))}
-                    </HourTextList>
-                    <PinnedTimeSchedule scheduleData={scheduleData} />
-                </div>
+                <HourTextList>
+                    {HoursOfDay.slice(0, 15).map((hour, idx) => (
+                        <CommonText key={idx}>{hour}</CommonText>
+                    ))}
+                </HourTextList>
+                <PinnedTimeSchedule scheduleData={scheduleData} />
             </TimeTableDiv>
         </Box>
     );
@@ -31,7 +29,6 @@ const Box = styled.div`
     height: 300px;
     border-radius: 20px;
     background: #fff;
-
     display: flex;
     flex-direction: column;
     gap: 18px;
@@ -56,6 +53,8 @@ const CommonText = styled.div`
 const TimeTableDiv = styled.div`
     width: 100%;
     display: flex;
+    flex-direction: column;
+    gap: 8px;
 `;
 
 const HourTextList = styled.div`

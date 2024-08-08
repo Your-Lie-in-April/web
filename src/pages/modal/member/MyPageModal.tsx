@@ -30,38 +30,21 @@ const MyPageModal: React.FC<MyPageModalProps> = ({ onSetIsMyPageModal, onSetIsLo
                 <CloseButton onClick={onSetIsMyPageModal}>
                     <StyleCloseIconBtn sx={{ fontSize: '24px' }} />
                 </CloseButton>
-                <div
-                    style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                        gap: '8px',
-                    }}
-                >
+                <CenteredColumn>
                     <MyImg>
                         <StyledImage src={userData?.profileImageUrl} />
                     </MyImg>
                     <MyEmailText>{userData?.email}</MyEmailText>
-                </div>
+                </CenteredColumn>
                 <StatusBox>
                     {userData?.state ? (
                         <>
-                            <div
-                                style={{
-                                    justifyContent: 'flex-start',
-                                    flexBasis: '10%',
-                                }}
-                            />
+                            <FlexStartDivTen />
                             <StatusText>{userData.state}</StatusText>
                         </>
                     ) : (
                         <>
-                            <div
-                                style={{
-                                    justifyContent: 'flex-start',
-                                    flexBasis: '0%',
-                                }}
-                            />
+                            <FlexStartDivZero />
                             <NoStatusText>상태 메시지 등록이 되어있지 않습니다</NoStatusText>
                         </>
                     )}
@@ -101,7 +84,6 @@ const Box = styled.div`
     position: absolute;
     top: 100%;
     left: -205px;
-
     display: inline-flex;
     padding: 12px 8px;
     flex-direction: column;
@@ -110,11 +92,17 @@ const Box = styled.div`
     gap: 22px;
     box-sizing: border-box;
     z-index: 80;
-
     margin-top: 1.3rem;
 `;
 
-const CloseButton = styled.button`
+const CenteredColumn = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+`;
+
+const CloseButton = styled.button.attrs({ type: 'button' })`
     background: none;
     border: none;
     padding: 0;
@@ -168,10 +156,20 @@ const StatusBox = styled.div`
     align-items: center;
 `;
 
+const FlexStartDivZero = styled.div`
+    justify-content: flex-start;
+    flex-basis: 0%;
+`;
+
+const FlexStartDivTen = styled.div`
+    justify-content: flex-start;
+    flex-basis: 10%;
+`;
+
 const StatusText = styled.div`
     color: #000000;
     text-align: center;
-    font-family: Pretendard;
+    font-family: 'Pretendard';
     font-size: 14px;
     font-style: normal;
     font-weight: 500;
@@ -185,18 +183,17 @@ const StatusText = styled.div`
 const NoStatusText = styled.div`
     color: #7d7d7d;
     text-align: center;
-    font-family: Pretendard;
+    font-family: 'Pretendard';
     font-size: 14px;
     font-style: normal;
     font-weight: 500;
     line-height: normal;
     flex-grow: 1;
-
     overflow: hidden;
     text-overflow: ellipsis;
 `;
 
-const EditButton = styled.button`
+const EditButton = styled.button.attrs({ type: 'button' })`
     background: none;
     border: none;
     padding: 0;
@@ -230,7 +227,7 @@ const EditIcon: React.FC = () => (
     </svg>
 );
 
-const StorageBtn = styled.button`
+const StorageBtn = styled.button.attrs({ type: 'button' })`
     display: flex;
     width: 120px;
     height: 30px;
@@ -239,10 +236,9 @@ const StorageBtn = styled.button`
     align-items: center;
     border-radius: 20px;
     background: #633ae2;
-
     color: #ffffff;
     text-align: center;
-    font-family: Pretendard;
+    font-family: 'Pretendard';
     font-size: 13px;
     font-style: normal;
     font-weight: 500;
@@ -261,17 +257,14 @@ const LogoutBtn = styled.div`
     text-align: center;
     align-items: center;
     justify-content: center;
-
     position: absolute;
     right: 16px;
     bottom: 12px;
-
     color: #a4a4a4;
-    font-family: Pretendard;
+    font-family: 'Pretendard';
     font-size: 10px;
     font-style: normal;
     font-weight: 500;
     line-height: normal;
-
     cursor: pointer;
 `;

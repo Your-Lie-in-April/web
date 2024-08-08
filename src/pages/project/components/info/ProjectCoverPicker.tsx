@@ -141,9 +141,7 @@ const ProjectCoverPicker: FC<CoverProps> = ({
     return (
         <CoverContainer>
             <ConverInnerContainer>
-                <Register style={{ fontSize: '18px' }} onClick={updateProject}>
-                    커버등록
-                </Register>
+                <Register onClick={updateProject}>커버등록</Register>
                 <ColorContainer>
                     단색
                     <ColorChoose>
@@ -189,16 +187,7 @@ const ProjectCoverPicker: FC<CoverProps> = ({
                 </ImageContainer>
             </ConverInnerContainer>
             {openHex ? (
-                <div
-                    style={{
-                        display: 'flex',
-                        justifyContent: 'center',
-                        height: '252px',
-                        position: 'absolute',
-                        right: 'calc(100% + 8px)',
-                        bottom: '0',
-                    }}
-                >
+                <PickerWrapper>
                     <ChromePicker
                         disableAlpha={false}
                         color={color}
@@ -211,7 +200,7 @@ const ProjectCoverPicker: FC<CoverProps> = ({
                             },
                         }}
                     />
-                </div>
+                </PickerWrapper>
             ) : null}
         </CoverContainer>
     );
@@ -239,12 +228,13 @@ const ConverInnerContainer = styled.div`
     gap: 13px;
 `;
 
-const Register = styled.div`
+const Register = styled.button.attrs({ type: 'button' })`
     display: flex;
     width: 82px;
     padding: 8px;
     justify-content: center;
     align-items: center;
+    font-size: 18px;
     gap: 8px;
     border-radius: 40px;
     background: #633ae2;
@@ -274,7 +264,7 @@ const ColorChoose = styled.div`
     align-items: flex-start;
     gap: 4px;
 `;
-const Color = styled.button`
+const Color = styled.button.attrs({ type: 'button' })`
     width: 30px;
     height: 30px;
     border-radius: 50%;
@@ -316,4 +306,13 @@ const Image = styled.div`
     background-repeat: no-repeat;
     background-position: center;
     cursor: pointer;
+`;
+
+const PickerWrapper = styled.div`
+    display: flex;
+    justify-content: center;
+    height: 252px;
+    position: absolute;
+    right: calc(100% + 8px);
+    bottom: 0;
 `;

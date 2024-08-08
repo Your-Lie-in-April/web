@@ -1,8 +1,8 @@
-import TransferAuthModal from '@pages/modal/project/TransferAuth';
-import ModalPortal from '@utils/ModalPotal';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
 import SyncAltIcon from '@mui/icons-material/SyncAlt';
+import TransferAuthModal from '@pages/modal/project/TransferAuth';
+import ModalPortal from '@utils/ModalPotal';
 import { useLayoutEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
@@ -43,30 +43,14 @@ const MoreBtn = ({ toggleDeleteBtn }: { toggleDeleteBtn: () => void }) => {
             {isMoreClick && (
                 <ModalPortal>
                     <MoreDetailDiv style={{ top: position.top, left: position.left }}>
-                        <div
-                            onClick={toggleDeleteBtn}
-                            style={{
-                                display: 'flex',
-                                flexDirection: 'column',
-                                alignItems: 'center',
-                                cursor: 'pointer',
-                            }}
-                        >
+                        <ContentDiv onClick={toggleDeleteBtn}>
                             <PersonRemoveIcon sx={{ fontSize: 18 }} />
                             <CommonText>멤버수정</CommonText>
-                        </div>
-                        <div
-                            onClick={onIsAuthClick}
-                            style={{
-                                display: 'flex',
-                                flexDirection: 'column',
-                                alignItems: 'center',
-                                cursor: 'pointer',
-                            }}
-                        >
+                        </ContentDiv>
+                        <ContentDiv onClick={onIsAuthClick}>
                             <SyncAltIcon sx={{ fontSize: 18 }} />
                             <CommonText>권한양도</CommonText>
-                        </div>
+                        </ContentDiv>
                     </MoreDetailDiv>
                 </ModalPortal>
             )}
@@ -76,17 +60,18 @@ const MoreBtn = ({ toggleDeleteBtn }: { toggleDeleteBtn: () => void }) => {
 };
 export default MoreBtn;
 
-const EditMemberBtn = styled.button`
+const EditMemberBtn = styled.button.attrs({ type: 'button' })`
     background: none;
     color: #000000;
     border: none;
     padding: 0;
-    cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
     flex-shrink: 0;
+    box-sizing: border-box;
+    cursor: pointer;
     &:focus {
         outline: none;
     }
@@ -94,7 +79,7 @@ const EditMemberBtn = styled.button`
 
 const CommonText = styled.div`
     color: #7d7d7d;
-    font-family: Pretendard;
+    font-family: 'Pretendard';
     font-size: 10px;
     font-style: normal;
     font-weight: 400;
@@ -118,4 +103,11 @@ const MoreDetailDiv = styled.div`
     position: absolute;
     top: calc(100% + 8px);
     right: -55px;
+`;
+
+const ContentDiv = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
 `;

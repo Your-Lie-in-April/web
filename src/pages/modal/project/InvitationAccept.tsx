@@ -85,7 +85,6 @@ const InviteDiv = styled.div`
     align-items: center;
     padding: 16px 20px 8px 20px;
     box-sizing: border-box;
-
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -106,7 +105,7 @@ const TextDiv = styled.div`
 const CommonText = styled.span`
     color: #000000;
     text-align: center;
-    font-family: Pretendard;
+    font-family: 'Pretendard';
     font-size: 20px;
     font-style: normal;
     font-weight: 500;
@@ -134,7 +133,7 @@ const Button = styled.button`
     align-items: center;
     gap: 8px;
     border-radius: 20px;
-    font-family: Pretendard;
+    font-family: 'Pretendard';
     font-size: 13px;
     font-weight: 500;
     line-height: normal;

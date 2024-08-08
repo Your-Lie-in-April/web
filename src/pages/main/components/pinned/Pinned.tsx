@@ -95,7 +95,9 @@ const ProjectBox = styled.div`
     align-items: flex-start;
 `;
 
-const StyledButton = styled.button`
+const StyledButton = styled.button.attrs({
+    type: 'button',
+})`
     width: 36px;
     height: 36px;
 
