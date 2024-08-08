@@ -45,7 +45,7 @@ const ProjectTime: FC<ProjectTimeProps> = ({
     };
 
     const Times: Time[] = [];
-    for (let hour = 9; hour < 24; hour++) {
+    for (let hour = 9; hour <= 23; hour++) {
         const ampm = hour < 12 ? 'AM' : 'PM';
         const displayHour = hour === 0 ? 12 : hour > 12 ? hour - 12 : hour;
         for (let minute = 0; minute < 60; minute += 30) {
@@ -63,15 +63,23 @@ const ProjectTime: FC<ProjectTimeProps> = ({
         }
     }
 
+    Times.push({
+        value: '24:00',
+        label: 'AM 12:00',
+        hour: '24',
+        minute: '00',
+        ampm: 'AM',
+    });
+
     const filterTimes = (start: string): Time[] => {
         const [startHour, startMinute] = start.split(':').map(Number);
         return Times.filter(({ hour, minute }) => {
             const currentHour = parseInt(hour, 10);
             const currentMinute = parseInt(minute, 10);
             return (
-                (currentHour > startHour ||
-                    (currentHour === startHour && currentMinute > startMinute)) &&
-                (currentHour < 24 || (currentHour === 0 && currentMinute === 0))
+                currentHour > startHour ||
+                (currentHour === startHour && currentMinute >= startMinute) ||
+                (currentHour === 0 && currentMinute === 0)
             );
         });
     };
@@ -131,9 +139,21 @@ const ProjectTime: FC<ProjectTimeProps> = ({
         setIsStartOpen(false);
 
         if (newFilteredEndTimes.length > 0) {
-            setEndTime(newFilteredEndTimes[0].label);
+            const selectedStartIndex = Times.findIndex((t) => t.value === time.value);
+            const selectedEndIndex = selectedStartIndex + 1;
+            if (selectedEndIndex < Times.length) {
+                const endTime = Times[selectedEndIndex];
+                if (endTime.hour === '24' && endTime.minute === '00') {
+                    setEndTime('24:00');
+                } else {
+                    setEndTime(endTime.label);
+                }
+            }
         }
     };
+
+    const startTimes = Times.slice(0, Times.length - 1);
+    const endTimes = filteredEndTimes.slice(1);
 
     return (
         <ProjectTimeContainer>
@@ -188,14 +208,13 @@ const ProjectTime: FC<ProjectTimeProps> = ({
                 <DateContainer style={{ gap: '4px' }}>
                     <Text>시간표 시작시간</Text>
                     <TimePicker onClick={startSelect}>
-                        <div style={{ width: '146px' }}>{starttime}</div>
+                        <TimeText>{starttime}</TimeText>
                         {!isStartOpen && <ExpandMoreIcon sx={{ fontSize: '22px' }} />}
                         {isStartOpen && <ExpandLessIcon sx={{ fontSize: '22px' }} />}
                     </TimePicker>
-
                     {isStartOpen && (
                         <TimePickerContainer style={{ position: 'absolute', marginTop: '4px' }}>
-                            {Times.map((time, index) => (
+                            {startTimes.map((time, index) => (
                                 <TimeOption key={index} onClick={() => handleStartTimeSelect(time)}>
                                     {time.label}
                                 </TimeOption>
@@ -207,13 +226,13 @@ const ProjectTime: FC<ProjectTimeProps> = ({
                 <DateContainer style={{ gap: '4px' }}>
                     <Text>시간표 종료시간</Text>
                     <TimePicker onClick={endSelect}>
-                        <div style={{ width: '146px' }}>{endtime}</div>
+                        <TimeText>{endtime}</TimeText>
                         {!isEndOpen && <ExpandMoreIcon sx={{ fontSize: '22px' }} />}
                         {isEndOpen && <ExpandLessIcon sx={{ fontSize: '22px' }} />}
                     </TimePicker>
                     {isEndOpen && (
                         <TimePickerContainer>
-                            {filteredEndTimes.map((time, index) => (
+                            {endTimes.map((time, index) => (
                                 <TimeOption
                                     key={index}
                                     onClick={() => {
@@ -314,7 +333,7 @@ const TimePicker = styled.div`
 
 const TimePickerContainer = styled.ul`
     width: 208px;
-    height: 124px;
+    max-height: 124px;
     font-size: 28px;
     border-radius: 5px;
     background: #f5f5f5;
@@ -346,6 +365,10 @@ const TimeOption = styled.li`
     font-style: normal;
     font-weight: 300;
     line-height: 28px;
+`;
+
+const TimeText = styled.div`
+    width: 146px;
 `;
 
 const Text = styled.div`
