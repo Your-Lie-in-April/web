@@ -17,16 +17,16 @@ interface TransferAuthModalProps {
 }
 const TransferAuthModal: React.FC<TransferAuthModalProps> = ({ isAuthClick, onIsAuthClick }) => {
     const { projectId } = useParams<{ projectId: string }>();
-    const [selectMem, setSelectMem] = useState<string>('');
+    const [selectMem, setSelectMem] = useState<string>();
     const [selectId, setSelectId] = useState<number>();
     const [isOpen, setIsOpen] = useState<boolean>(false);
 
     const { data: members } = useAllMemberInfoQuery(Number(projectId));
+    const nonPrivilegedMembers = members?.filter((member) => !member.isPrivileged);
     useEffect(() => {
         if (members) {
-            const nonPrivilegedMembers = members.filter((member) => !member.isPrivileged);
-            if (nonPrivilegedMembers.length > 0) {
-                if (nonPrivilegedMembers.length > 0 && nonPrivilegedMembers[0].nickname) {
+            if (nonPrivilegedMembers && nonPrivilegedMembers.length > 0) {
+                if (nonPrivilegedMembers[0].nickname) {
                     setSelectMem(nonPrivilegedMembers[0].nickname);
                 }
                 setSelectId(nonPrivilegedMembers[0].memberId);
@@ -52,15 +52,10 @@ const TransferAuthModal: React.FC<TransferAuthModalProps> = ({ isAuthClick, onIs
     };
 
     const { mutate } = usePatchPojectPrevilegeMutation(Number(projectId));
-
     const handleConfirm = async () => {
-        try {
-            if (selectId) {
-                mutate(selectId);
-                handleClose();
-            }
-        } catch (error) {
-            console.error('업데이트 실패:', error);
+        if (selectId) {
+            mutate(selectId);
+            handleClose();
         }
     };
 
@@ -79,7 +74,7 @@ const TransferAuthModal: React.FC<TransferAuthModalProps> = ({ isAuthClick, onIs
                                     <MemPickDiv onClick={handleSetIsOpen}>
                                         <UlWrapper>
                                             <UlStyled onClick={handleSetIsOpen}>
-                                                <li>{selectMem}</li>
+                                                <li style={{width : '100%'}}>{selectMem}</li>
                                             </UlStyled>
                                             {isOpen ? (
                                                 <StyledExpandLessIcon />
@@ -87,12 +82,13 @@ const TransferAuthModal: React.FC<TransferAuthModalProps> = ({ isAuthClick, onIs
                                                 <StyledExpandMoreIcon />
                                             )}
                                         </UlWrapper>
-                                        {isOpen && members && (
+                                        {isOpen && nonPrivilegedMembers && (
                                             <MemDropdown>
-                                                {members.map((mem) => (
+                                                {nonPrivilegedMembers.map((mem) => (
                                                     <li
                                                         key={mem.memberId}
                                                         onClick={() => handleSetSelectMem(mem)}
+                                                        style={{ cursor: 'pointer' }}
                                                     >
                                                         {mem.nickname}
                                                     </li>
@@ -164,8 +160,14 @@ const UlWrapper = styled.div`
 `;
 
 const UlStyled = styled.ul`
-    width: 100%;
+    max-width: 160px;
     list-style: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 `;
 
 const StyledExpandLessIcon = styled(ExpandLessIcon)`
@@ -262,7 +264,6 @@ const Button = styled.button.attrs({ type: 'button' })`
     font-weight: 500;
     line-height: normal;
     border: none;
-
     &:focus {
         outline: none;
     }
