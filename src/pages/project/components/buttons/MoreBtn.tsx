@@ -60,7 +60,7 @@ const MoreBtn = ({ toggleDeleteBtn }: { toggleDeleteBtn: () => void }) => {
 };
 export default MoreBtn;
 
-const EditMemberBtn = styled.button`
+const EditMemberBtn = styled.button.attrs({ type: 'button' })`
     background: none;
     color: #000000;
     border: none;

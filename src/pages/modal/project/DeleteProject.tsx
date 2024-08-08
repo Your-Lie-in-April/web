@@ -89,14 +89,13 @@ const InfoCircleIcon = styled(InfoOutlinedIcon)`
 const CommonText = styled.span`
     color: #000000;
     text-align: center;
-    font-family: Pretendard;
+    font-family: 'Pretendard';
     line-height: normal;
 `;
 
 const PeojectName = styled(CommonText)`
     font-size: 28px;
     font-weight: 700;
-
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;

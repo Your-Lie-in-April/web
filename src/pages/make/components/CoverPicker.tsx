@@ -138,7 +138,7 @@ const ConverInnerContainer = styled.div`
     gap: 13px;
 `;
 
-const Register = styled.div`
+const Register = styled.button.attrs({ type: 'button' })`
     display: flex;
     width: 82px;
     padding: 8px;
@@ -177,7 +177,7 @@ const ColorChoose = styled.div`
     gap: 4px;
 `;
 
-const Color = styled.button`
+const Color = styled.button.attrs({ type: 'button' })`
     width: 30px;
     height: 30px;
     border-radius: 50%;

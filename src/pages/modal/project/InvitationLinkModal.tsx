@@ -191,7 +191,7 @@ const ButtonsContainer = styled.div`
     gap: 4px;
 `;
 
-const CommonButton = styled.button<CommonButtonProps>`
+const CommonButton = styled.button.attrs({ type: 'button' })<CommonButtonProps>`
     display: flex;
     width: 72px;
     padding: 8px 12px;
@@ -199,7 +199,7 @@ const CommonButton = styled.button<CommonButtonProps>`
     align-items: center;
     gap: 8px;
     border-radius: 20px;
-    font-family: Pretendard;
+    font-family: 'Pretendard';
     font-size: 13px;
     font-weight: 500;
     line-height: normal;

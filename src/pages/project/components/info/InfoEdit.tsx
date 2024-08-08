@@ -248,7 +248,7 @@ const BtnWrapper = styled.div`
     justify-content: flex-end;
 `;
 
-const MakeBtn = styled.div`
+const MakeBtn = styled.button.attrs({ type: 'button' })`
     width: 145px;
     height: 35px;
     border-radius: 40px;

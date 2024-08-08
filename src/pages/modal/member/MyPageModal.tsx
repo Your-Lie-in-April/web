@@ -102,7 +102,7 @@ const CenteredColumn = styled.div`
     gap: 8px;
 `;
 
-const CloseButton = styled.button`
+const CloseButton = styled.button.attrs({ type: 'button' })`
     background: none;
     border: none;
     padding: 0;
@@ -183,18 +183,17 @@ const StatusText = styled.div`
 const NoStatusText = styled.div`
     color: #7d7d7d;
     text-align: center;
-    font-family: Pretendard;
+    font-family: 'Pretendard';
     font-size: 14px;
     font-style: normal;
     font-weight: 500;
     line-height: normal;
     flex-grow: 1;
-
     overflow: hidden;
     text-overflow: ellipsis;
 `;
 
-const EditButton = styled.button`
+const EditButton = styled.button.attrs({ type: 'button' })`
     background: none;
     border: none;
     padding: 0;
@@ -228,7 +227,7 @@ const EditIcon: React.FC = () => (
     </svg>
 );
 
-const StorageBtn = styled.button`
+const StorageBtn = styled.button.attrs({ type: 'button' })`
     display: flex;
     width: 120px;
     height: 30px;

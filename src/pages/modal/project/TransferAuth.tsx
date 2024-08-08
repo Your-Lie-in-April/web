@@ -236,12 +236,11 @@ const MemDropdown = styled.div`
 const CommonText = styled.text`
     color: #000000;
     text-align: center;
-    font-family: Pretendard;
+    font-family: 'Pretendard';
     font-size: 24px;
     font-style: normal;
     font-weight: 400;
     line-height: normal;
-
     display: flex;
     align-items: center;
 `;
@@ -250,7 +249,7 @@ const MemberNick = styled(CommonText)`
     font-size: 20px;
 `;
 
-const Button = styled.button`
+const Button = styled.button.attrs({ type: 'button' })`
     display: flex;
     width: 60px;
     padding: 8px 12px;

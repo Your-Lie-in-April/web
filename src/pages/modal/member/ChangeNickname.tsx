@@ -86,7 +86,7 @@ const ModalContentWrapper = styled.div`
 
 const Title = styled.div`
     color: #000000;
-    font-family: Pretendard;
+    font-family: 'Pretendard';
     line-height: normal;
     font-size: 20px;
     font-weight: 700;
@@ -122,7 +122,7 @@ const CommonButton = styled.button`
     align-items: center;
     gap: 8px;
     border-radius: 20px;
-    font-family: Pretendard;
+    font-family: 'Pretendard';
     font-size: 13px;
     font-weight: 500;
     line-height: normal;

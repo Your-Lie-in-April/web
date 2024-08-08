@@ -87,7 +87,7 @@ const TextBtnWrapper = styled.div`
 
 const CommonText = styled.div`
     color: #ffffff;
-    font-family: Pretendard;
+    font-family: 'Pretendard';
     font-size: 13px;
     font-style: normal;
     font-weight: 500;

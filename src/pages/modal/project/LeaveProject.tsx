@@ -87,7 +87,7 @@ const InfoCircleIcon = styled(InfoOutlinedIcon)`
 const CommonText = styled.span`
     color: #000000;
     text-align: center;
-    font-family: Pretendard;
+    font-family: 'Pretendard';
     line-height: normal;
 `;
 
@@ -110,7 +110,7 @@ const Title = styled(CommonText)`
     display: block;
 `;
 
-const Button = styled.button`
+const Button = styled.button.attrs({ type: 'button' })`
     display: flex;
     width: 60px;
     padding: 8px 12px;

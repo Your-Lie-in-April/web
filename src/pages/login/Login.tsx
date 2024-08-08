@@ -89,7 +89,9 @@ const Title = styled.span`
     font-weight: 700;
 `;
 
-const Google = styled.button`
+const Google = styled.button.attrs({
+    type: 'button',
+})`
     width: 440px;
     height: 88px;
     border-radius: 60px;

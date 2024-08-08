@@ -220,7 +220,7 @@ const ContentText = styled.textarea<{ $focused: boolean }>`
     position: relative;
 `;
 
-const Make = styled.button`
+const Make = styled.button.attrs({ type: 'button' })`
     width: 145px;
     height: 35px;
     border-radius: 40px;

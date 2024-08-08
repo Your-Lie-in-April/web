@@ -27,13 +27,7 @@ const StorageProject = ({ project }: { project: ProjectThumbnailInfo }) => {
             <ProjectBox $color={project.color} $coverImageUrl={project.thumbnailUrl}>
                 {showMore && (
                     <MoreBox>
-                        <div
-                            style={{
-                                display: 'flex',
-                                gap: '30px',
-                                justifyContent: 'center',
-                            }}
-                        >
+                        <MoreWrapper>
                             <MoreItem onClick={() => handleStored()}>
                                 <RestartAltIcon sx={{ fontSize: 48, color: '#F1F1F1' }} />
                                 <MoreText>보관 취소</MoreText>
@@ -42,16 +36,10 @@ const StorageProject = ({ project }: { project: ProjectThumbnailInfo }) => {
                                 <DeleteIcon sx={{ fontSize: 48, color: '#F1F1F1' }} />
                                 <MoreText>삭제하기</MoreText>
                             </MoreItem>
-                        </div>
+                        </MoreWrapper>
                     </MoreBox>
                 )}
-                <div
-                    style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: '4px',
-                    }}
-                >
+                <DetailBox>
                     <MoreDiv>
                         <MoreButton>
                             <StyledMoreBtn sx={{ fontSize: 32 }} onClick={toggleMoreBtn} />
@@ -61,7 +49,7 @@ const StorageProject = ({ project }: { project: ProjectThumbnailInfo }) => {
                         <ProjectName>{project.title}</ProjectName>
                         <DetailText>{project.description}</DetailText>
                     </TextBox>
-                </div>
+                </DetailBox>
             </ProjectBox>
             <DeleteProject
                 onClose={onClickItem}
@@ -98,6 +86,12 @@ const ProjectBox = styled.div<{ $color: string | null; $coverImageUrl: string | 
     position: relative;
 `;
 
+const DetailBox = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+`;
+
 const TextBox = styled.div`
     width: 300px;
     height: 96px;
@@ -110,7 +104,6 @@ const TextBox = styled.div`
     box-sizing: border-box;
     align-items: flex-start;
     gap: 8px;
-
     color: #000000;
     font-style: normal;
     line-height: normal;
@@ -139,7 +132,7 @@ const DetailText = styled.div`
     word-break: break-word;
 `;
 
-const MoreButton = styled.button`
+const MoreButton = styled.button.attrs({ type: 'button' })`
     background: none;
     border: none;
     padding: 0;
@@ -178,7 +171,13 @@ const MoreBox = styled.div`
     background: rgba(0, 0, 0, 0.3);
 `;
 
-const MoreItem = styled.button`
+const MoreWrapper = styled.div`
+    display: flex;
+    gap: 30px;
+    justify-content: center;
+`;
+
+const MoreItem = styled.button.attrs({ type: 'button' })`
     display: flex;
     flex-direction: column;
     gap: 4px;

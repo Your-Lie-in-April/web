@@ -126,7 +126,7 @@ const StyledCommonText = styled.div`
     text-overflow: ellipsis;
 `;
 
-const StyledEditButton = styled.button`
+const StyledEditButton = styled.button.attrs({ type: 'button' })`
     background: none;
     border: none;
     padding: 0;

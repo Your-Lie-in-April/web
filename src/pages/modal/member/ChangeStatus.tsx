@@ -161,7 +161,7 @@ const CommonButton = styled.button`
     align-items: center;
     gap: 8px;
     border-radius: 20px;
-    font-family: Pretendard;
+    font-family: 'Pretendard';
     font-size: 13px;
     font-weight: 500;
     line-height: normal;
@@ -184,7 +184,7 @@ const CancelBtn = styled(CommonButton)`
 const LimitText = styled.div`
     color: #a4a4a4;
     text-align: center;
-    font-family: Pretendard;
+    font-family: 'Pretendard';
     font-size: 10px;
     font-style: normal;
     font-weight: 300;

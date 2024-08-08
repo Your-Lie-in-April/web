@@ -143,7 +143,9 @@ const DetailText = styled.div`
     word-break: break-word;
 `;
 
-const StyledButton = styled.button`
+const StyledButton = styled.button.attrs({
+    type: 'button',
+})`
     background: none;
     border: none;
     padding: 0;

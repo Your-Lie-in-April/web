@@ -92,7 +92,7 @@ const Title = styled(CommonText)`
     flex-basis: 80%;
 `;
 
-const EditBtn = styled.button`
+const EditBtn = styled.button.attrs({ type: 'button' })`
     width: 51px;
     padding: 4px 8px;
     box-sizing: border-box;
@@ -100,9 +100,8 @@ const EditBtn = styled.button`
     align-items: center;
     border-radius: 15px;
     background: #633ae2;
-
     color: #ffffff;
-    font-family: Pretendard;
+    font-family: 'Pretendard';
     font-size: 10px;
     font-style: normal;
     font-weight: 400;

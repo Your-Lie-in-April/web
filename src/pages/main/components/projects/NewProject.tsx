@@ -2,7 +2,9 @@ import { FC } from 'react';
 import { useNavigate } from 'react-router';
 import styled from 'styled-components';
 
-const NewProjectDiv = styled.div`
+const NewProjectDiv = styled.button.attrs({
+    type: 'button',
+})`
     width: 149px;
     height: 70px;
     border-radius: 40px;
