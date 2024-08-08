@@ -22,17 +22,35 @@ const StorageProject = ({ project }: { project: ProjectThumbnailInfo }) => {
     };
     const { mutate: handleStored } = usePatchStoredMutation(project.projectId);
 
+    const onProjectClick = () => {
+        navigate(`/project/${project.projectId}`);
+    };
+
     return (
         <>
-            <ProjectBox $color={project.color} $coverImageUrl={project.thumbnailUrl}>
+            <ProjectBox
+                onClick={onProjectClick}
+                $color={project.color}
+                $coverImageUrl={project.thumbnailUrl}
+            >
                 {showMore && (
                     <MoreBox>
                         <MoreWrapper>
-                            <MoreItem onClick={() => handleStored()}>
+                            <MoreItem
+                                onClick={(event) => {
+                                    handleStored();
+                                    event.stopPropagation();
+                                }}
+                            >
                                 <RestartAltIcon sx={{ fontSize: 48, color: '#F1F1F1' }} />
                                 <MoreText>보관 취소</MoreText>
                             </MoreItem>
-                            <MoreItem onClick={onClickItem}>
+                            <MoreItem
+                                onClick={(event) => {
+                                    onClickItem();
+                                    event.stopPropagation();
+                                }}
+                            >
                                 <DeleteIcon sx={{ fontSize: 48, color: '#F1F1F1' }} />
                                 <MoreText>삭제하기</MoreText>
                             </MoreItem>
@@ -41,11 +59,16 @@ const StorageProject = ({ project }: { project: ProjectThumbnailInfo }) => {
                 )}
                 <DetailBox>
                     <MoreDiv>
-                        <MoreButton>
-                            <StyledMoreBtn sx={{ fontSize: 32 }} onClick={toggleMoreBtn} />
+                        <MoreButton
+                            onClick={(event) => {
+                                event.stopPropagation();
+                                toggleMoreBtn();
+                            }}
+                        >
+                            <StyledMoreBtn sx={{ fontSize: 32 }} />
                         </MoreButton>
                     </MoreDiv>
-                    <TextBox onClick={() => navigate(`/project/${project.projectId}`)}>
+                    <TextBox>
                         <ProjectName>{project.title}</ProjectName>
                         <DetailText>{project.description}</DetailText>
                     </TextBox>
@@ -84,6 +107,7 @@ const ProjectBox = styled.div<{ $color: string | null; $coverImageUrl: string | 
     border-radius: 16px;
     color: #ffffff;
     position: relative;
+    cursor: pointer;
 `;
 
 const DetailBox = styled.div`
@@ -108,7 +132,6 @@ const TextBox = styled.div`
     font-style: normal;
     line-height: normal;
     text-transform: uppercase;
-    cursor: pointer;
 `;
 
 const ProjectName = styled.div`
