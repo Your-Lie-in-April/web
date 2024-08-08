@@ -1,4 +1,3 @@
-import { AlarmEntity } from '@/types/alarmType';
 import useDeleteAlarmMutation from '@hooks/apis/mutations/alarm/useDeleteAlarmMutation';
 import usePatchAlarmMutation from '@hooks/apis/mutations/alarm/usePatchAlarmMutation';
 import useAlarmsQuery from '@hooks/apis/queries/alarm/useAlarmsQuery';
@@ -16,7 +15,7 @@ const Alarm: FC = () => {
     const [isDeleted, setIsDeleted] = useState<boolean>(false);
     const { projectId } = useParams();
 
-    const { uncheckedQuery, checkedQuery, isUncheckedComplete } = useAlarmsQuery(
+    const { allAlarms, isUncheckedComplete, uncheckedQuery, checkedQuery } = useAlarmsQuery(
         projectId ? Number(projectId) : undefined
     );
 
@@ -39,11 +38,6 @@ const Alarm: FC = () => {
         },
         [uncheckedQuery, checkedQuery, isUncheckedComplete]
     );
-
-    const allAlarms: AlarmEntity[] = [
-        ...(uncheckedQuery.data?.pages.flatMap((page) => page.data) || []),
-        ...(isUncheckedComplete ? checkedQuery.data?.pages.flatMap((page) => page.data) || [] : []),
-    ];
 
     // 알람 삭제
     const deleteAlarmMutation = useDeleteAlarmMutation();
@@ -89,7 +83,7 @@ const Alarm: FC = () => {
     return (
         <AlarmDiv>
             <TextStyle>알림</TextStyle>
-            {allAlarms.length > 0 && (
+            {allAlarms.size > 0 && (
                 <DeleteWrapper>
                     <StyledCheckBoxIcon
                         onClick={() => setIsIconVisible(!isIconVisible)}
@@ -103,9 +97,9 @@ const Alarm: FC = () => {
                     </DeleteNotification>
                 </DeleteWrapper>
             )}
-            {allAlarms.length > 0 && (
-                <ScrollableArea $hasMessages={allAlarms.length > 0}>
-                    {allAlarms.map((alarm, index) => (
+            {allAlarms.size > 0 && (
+                <ScrollableArea $hasMessages={allAlarms.size > 0}>
+                    {Array.from(allAlarms).map((alarm, index) => (
                         <NotificationBox
                             key={alarm.notificationId}
                             onClick={() =>
@@ -114,7 +108,7 @@ const Alarm: FC = () => {
                                     alarm.notificationId
                                 )
                             }
-                            ref={index === allAlarms.length - 1 ? lastAlarmRef : null}
+                            ref={index === Array.from(allAlarms).length - 1 ? lastAlarmRef : null}
                         >
                             <NotificationWrapper>
                                 {isIconVisible && (
@@ -145,7 +139,7 @@ const Alarm: FC = () => {
                     ))}
                 </ScrollableArea>
             )}
-            {allAlarms.length === 0 && <EmptyAlarmMessage>알림이 비었습니다</EmptyAlarmMessage>}
+            {allAlarms.size === 0 && <EmptyAlarmMessage>알림이 비었습니다</EmptyAlarmMessage>}
             {isDeleted && <ConfirmDeleteAlarm />}
         </AlarmDiv>
     );

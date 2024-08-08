@@ -1,13 +1,9 @@
-import { AlarmEntity } from '@/types/alarmType';
-import { QUERY_KEY } from '@constants/queryKey';
 import useDeleteAlarmMutation from '@hooks/apis/mutations/alarm/useDeleteAlarmMutation';
 import usePatchAlarmMutation from '@hooks/apis/mutations/alarm/usePatchAlarmMutation';
 import useAlarmsQuery from '@hooks/apis/queries/alarm/useAlarmsQuery';
-import { AlarmMessageType, useSSE } from '@hooks/useSSE';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import { Toast } from '@pages/layouts/Toast';
 import ConfirmDeleteAlarm from '@pages/modal/project/ConfirmDeleteAlarm';
-import { useQuery } from '@tanstack/react-query';
 import { FC, useCallback, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import 'react-toastify/dist/ReactToastify.css';
@@ -19,13 +15,7 @@ const Alarm: FC = () => {
     const [isDeleted, setIsDeleted] = useState<boolean>(false);
     const navigate = useNavigate();
 
-    const { uncheckedQuery, checkedQuery, isUncheckedComplete } = useAlarmsQuery();
-
-    const fetchSSEData = useSSE();
-    const { data: realTimeAlarms } = useQuery<AlarmMessageType[]>({
-        queryKey: QUERY_KEY.ALARM_SSE,
-        queryFn: fetchSSEData,
-    });
+    const { allAlarms, isUncheckedComplete, uncheckedQuery, checkedQuery } = useAlarmsQuery();
 
     const intObserver = useRef<IntersectionObserver | null>(null);
     const lastAlarmRef = useCallback(
@@ -41,16 +31,10 @@ const Alarm: FC = () => {
                     }
                 }
             });
-
             if (alarm) intObserver.current.observe(alarm);
         },
         [uncheckedQuery, checkedQuery, isUncheckedComplete]
     );
-
-    const allAlarms: AlarmEntity[] = [
-        ...(uncheckedQuery.data?.pages.flatMap((page) => page.data) || []),
-        ...(isUncheckedComplete ? checkedQuery.data?.pages.flatMap((page) => page.data) || [] : []),
-    ];
 
     // 알림 삭제
     const deleteAlarmMutation = useDeleteAlarmMutation();
@@ -96,7 +80,7 @@ const Alarm: FC = () => {
     return (
         <AlarmDiv>
             <Text>알림</Text>
-            {allAlarms.length > 0 && (
+            {allAlarms.size > 0 && (
                 <DeleteWrapper>
                     <StyledCheckBoxIcon
                         onClick={() => setIsIconVisible(!isIconVisible)}
@@ -111,55 +95,15 @@ const Alarm: FC = () => {
                 </DeleteWrapper>
             )}
             <ScrollableArea>
-                {realTimeAlarms?.length == 0 && allAlarms.length == 0 && (
-                    <EmptyAlarmMessage>알림이 비었습니다</EmptyAlarmMessage>
-                )}
-                {allAlarms.length > 0 && <Divider />}
-                {realTimeAlarms && realTimeAlarms.length > 0 && (
-                    <>
-                        {realTimeAlarms.map((alarm) => (
-                            <NotificationBox
-                                key={alarm.notificationId}
-                                onClick={() =>
-                                    handleNotificationClick(alarm.projectId, alarm.notificationId)
-                                }
-                            >
-                                <NotificationWrapper>
-                                    {isIconVisible && (
-                                        <CheckBoxIcon
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                handleCheckBoxClick(alarm.notificationId);
-                                            }}
-                                            style={{
-                                                color: checkedState[alarm.notificationId]
-                                                    ? '#633AE2'
-                                                    : '#A4A4A4',
-                                                marginLeft: -10,
-                                                fontSize: 20,
-                                                cursor: 'pointer',
-                                            }}
-                                        />
-                                    )}
-                                    <ContentWrapper>
-                                        <ProjectTitleContainer $isIconVisible={isIconVisible}>
-                                            <ProjectTitle>{alarm.projectTitle}</ProjectTitle>
-                                            <CreatedAt>{alarm.createdAt.slice(0, 10)}</CreatedAt>
-                                        </ProjectTitleContainer>
-                                        <NotificationContent>{alarm.message}</NotificationContent>
-                                    </ContentWrapper>
-                                </NotificationWrapper>
-                            </NotificationBox>
-                        ))}
-                    </>
-                )}
-                {allAlarms.map((alarm, index) => (
+                {allAlarms.size == 0 && <EmptyAlarmMessage>알림이 비었습니다</EmptyAlarmMessage>}
+                {allAlarms.size > 0 && <Divider />}
+                {Array.from(allAlarms).map((alarm, index) => (
                     <NotificationBox
                         key={alarm.notificationId}
                         onClick={() =>
                             handleNotificationClick(alarm.project.projectId, alarm.notificationId)
                         }
-                        ref={index === allAlarms.length - 1 ? lastAlarmRef : null}
+                        ref={index === Array.from(allAlarms).length - 1 ? lastAlarmRef : null}
                     >
                         <NotificationWrapper>
                             {isIconVisible && (
