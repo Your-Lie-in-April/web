@@ -22,9 +22,7 @@ export const patchAlarm = async (notificationId: number) => {
 /**
  * 이전 알림 조회
  * GET /v1/notifications
- * |
- * (프로젝트 내) 이전 알림 조회
- * GET /v1/projects/{projectId}/notifications
+ * 
  */
 export const getAlarmAll = async (
     cursor: string,
