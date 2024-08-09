@@ -59,7 +59,7 @@ const DeleteMember: React.FC<DeleteMemberProps> = ({
 export default DeleteMember;
 
 const Box = styled.div`
-    width: 406px;
+    min-width: 406px;
     height: 182px;
     border-radius: 20px;
     background: #f5f5f5;
@@ -95,16 +95,20 @@ const InfoCircleIcon = styled(InfoOutlinedIcon)`
     color: #eb5757;
 `;
 
-const CommonText = styled.text`
+const CommonText = styled.span`
     color: #000000;
     text-align: center;
-    font-family: Pretendard;
+    font-family: 'Pretendard';
     line-height: normal;
 `;
 
 const MemberNick = styled(CommonText)`
     font-size: 28px;
     font-weight: 700;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 8ch;
 `;
 
 const Title = styled(CommonText)`

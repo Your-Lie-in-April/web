@@ -73,26 +73,31 @@ const TransferAuthModal: React.FC<TransferAuthModalProps> = ({ isAuthClick, onIs
                                     <InfoCircleIcon sx={{ fontSize: '32px' }} />
                                     <MemPickDiv onClick={handleSetIsOpen}>
                                         <UlWrapper>
-                                            <UlStyled onClick={handleSetIsOpen}>
-                                                <li style={{width : '100%'}}>{selectMem}</li>
+                                            <UlStyled>
+                                                <LiSelectedStyled>{selectMem}</LiSelectedStyled>
                                             </UlStyled>
                                             {isOpen ? (
-                                                <StyledExpandLessIcon />
+                                                <StyledDiv>
+                                                    <ExpandLessIcon />
+                                                </StyledDiv>
                                             ) : (
-                                                <StyledExpandMoreIcon />
+                                                <StyledDiv>
+                                                    <ExpandMoreIcon />
+                                                </StyledDiv>
                                             )}
                                         </UlWrapper>
                                         {isOpen && nonPrivilegedMembers && (
                                             <MemDropdown>
-                                                {nonPrivilegedMembers.map((mem) => (
-                                                    <li
-                                                        key={mem.memberId}
-                                                        onClick={() => handleSetSelectMem(mem)}
-                                                        style={{ cursor: 'pointer' }}
-                                                    >
-                                                        {mem.nickname}
-                                                    </li>
-                                                ))}
+                                                <UlStyled>
+                                                    {nonPrivilegedMembers.map((mem) => (
+                                                        <LiSelectedStyled
+                                                            key={mem.memberId}
+                                                            onClick={() => handleSetSelectMem(mem)}
+                                                        >
+                                                            {mem.nickname}
+                                                        </LiSelectedStyled>
+                                                    ))}
+                                                </UlStyled>
                                             </MemDropdown>
                                         )}
                                     </MemPickDiv>
@@ -116,7 +121,7 @@ const TransferAuthModal: React.FC<TransferAuthModalProps> = ({ isAuthClick, onIs
 export default TransferAuthModal;
 
 const Box = styled.div`
-    width: 406px;
+    min-width: 406px;
     min-height: 181px;
     border-radius: 20px;
     background: #f5f5f5;
@@ -124,7 +129,7 @@ const Box = styled.div`
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    padding: 16px 0px 8px 0px;
+    padding: 16px 8px 8px 8px;
     box-sizing: border-box;
 `;
 
@@ -154,36 +159,42 @@ const InfoCircleIcon = styled(InfoOutlinedIcon)`
 
 const UlWrapper = styled.div`
     width: 100%;
+    max-width: 208px;
     display: flex;
     align-items: center;
     position: relative;
+    overflow: hidden;
+    cursor: pointer;
 `;
 
 const UlStyled = styled.ul`
-    max-width: 160px;
+    width: 100%;
     list-style: none;
     display: flex;
     justify-content: center;
     align-items: center;
+`;
+
+const LiSelectedStyled = styled.li`
+    width: 100%;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    cursor: pointer;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
 `;
 
-const StyledExpandLessIcon = styled(ExpandLessIcon)`
+const StyledDiv = styled.div`
     font-size: 12px;
     width: 20px;
     height: 20px;
+    margin-left: auto;
     position: absolute;
-    right: 10px;
-`;
-
-const StyledExpandMoreIcon = styled(ExpandMoreIcon)`
-    font-size: 12px;
-    width: 20px;
-    height: 20px;
-    position: absolute;
-    right: 10px;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
 `;
 
 const MemPickDiv = styled.div`
@@ -212,6 +223,10 @@ const MemDropdown = styled.div`
     top: 40px;
     right: 0;
     box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
 
     ::-webkit-scrollbar {
         display: none;
@@ -235,7 +250,7 @@ const MemDropdown = styled.div`
     }
 `;
 
-const CommonText = styled.text`
+const CommonText = styled.span`
     color: #000000;
     text-align: center;
     font-family: 'Pretendard';
@@ -249,6 +264,10 @@ const CommonText = styled.text`
 
 const MemberNick = styled(CommonText)`
     font-size: 20px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    max-width: 8ch;
 `;
 
 const Button = styled.button.attrs({ type: 'button' })`
