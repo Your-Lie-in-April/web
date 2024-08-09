@@ -75,7 +75,7 @@ const Alarm: FC = () => {
     return (
         <AlarmDiv>
             <TextStyle>알림</TextStyle>
-            {allAlarms.size > 0 && (
+            {allAlarms.length > 0 && (
                 <DeleteWrapper>
                     <StyledCheckBoxIcon
                         onClick={() => setIsIconVisible(!isIconVisible)}
@@ -89,8 +89,8 @@ const Alarm: FC = () => {
                     </DeleteNotification>
                 </DeleteWrapper>
             )}
-            {allAlarms.size > 0 && (
-                <ScrollableArea $hasMessages={allAlarms.size > 0}>
+            {allAlarms.length > 0 && (
+                <ScrollableArea $hasMessages={allAlarms.length > 0}>
                     {Array.from(allAlarms).map((alarm, index) => (
                         <NotificationBox
                             key={alarm.notificationId}
@@ -132,7 +132,7 @@ const Alarm: FC = () => {
                     ))}
                 </ScrollableArea>
             )}
-            {allAlarms.size === 0 && <EmptyAlarmMessage>알림이 비었습니다</EmptyAlarmMessage>}
+            {allAlarms.length === 0 && <EmptyAlarmMessage>알림이 비었습니다</EmptyAlarmMessage>}
             {isDeleted && <ConfirmDeleteAlarm />}
         </AlarmDiv>
     );

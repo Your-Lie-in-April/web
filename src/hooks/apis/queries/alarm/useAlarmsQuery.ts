@@ -9,61 +9,41 @@ import { QUERY_KEY } from '@constants/queryKey';
 const useAlarmsQuery = (projectId?: number) => {
     const [isUncheckedComplete, setIsUncheckedComplete] = useState<boolean>(false);
     const [isCheckedComplete, setIsCheckedComplete] = useState<boolean>(false);
-    const [allAlarms, setAllAlarms] = useState<Set<AlarmEntity>>(new Set());
+    const [allAlarms, setAllAlarms] = useState<AlarmEntity[]>([]);
     const queryClient = useQueryClient();
 
     const uncheckedQuery = useUncheckedAlarmsQuery(projectId);
     const checkedQuery = useCheckedAlarmsQuery(projectId);
-    const fetchSSEData = useSSE();
+    const { allAlarms: sseAlarms, fetchSSEData } = useSSE();
 
     useEffect(() => {
         const lastPage = uncheckedQuery.data?.pages[uncheckedQuery.data.pages.length - 1];
-        if (lastPage && lastPage.hasMore === false) {
-            setIsUncheckedComplete(true);
-        } else {
-            setIsUncheckedComplete(false);
-        }
+        setIsUncheckedComplete(lastPage?.hasMore === false);
     }, [uncheckedQuery.data]);
 
     useEffect(() => {
         const lastPage = checkedQuery.data?.pages[checkedQuery.data.pages.length - 1];
-        if (lastPage && lastPage.hasMore === false) {
-            setIsCheckedComplete(true);
-        } else {
-            setIsCheckedComplete(false);
-        }
+        setIsCheckedComplete(lastPage?.hasMore === false);
     }, [checkedQuery.data]);
 
     useEffect(() => {
-        fetchSSEData().then((newAlarms) => {
-            setAllAlarms((prev) => new Set([...newAlarms, ...prev]));
-        });
-    }, [fetchSSEData]);
+        const newAlarms = [
+            ...sseAlarms,
+            ...(uncheckedQuery.data?.pages.flatMap((page) => page.data) || []),
+            ...(checkedQuery.data?.pages.flatMap((page) => page.data) || []),
+        ];
 
-    useEffect(() => {
-        setAllAlarms((prev) => {
-            const newAlarms = [
-                ...(uncheckedQuery.data?.pages.flatMap((page) => page.data) || []),
-                ...(checkedQuery.data?.pages.flatMap((page) => page.data) || []),
-            ];
-            return new Set([...prev, ...newAlarms]);
-        });
-    }, [uncheckedQuery.data, checkedQuery.data]);
+        const uniqueAlarms = Array.from(
+            new Map(newAlarms.map(alarm => [alarm.notificationId, alarm])).values()
+        );
+
+        setAllAlarms(uniqueAlarms);
+    }, [sseAlarms, uncheckedQuery.data, checkedQuery.data]);
 
     const removeAlarm = useCallback((notificationId: number) => {
-        setAllAlarms((prev) => {
-            const newSet = new Set(prev);
-            for (const alarm of newSet) {
-                if (alarm.notificationId === notificationId) {
-                    newSet.delete(alarm);
-                    break;
-                }
-            }
-            return newSet;
-        });
+        setAllAlarms((prev) => prev.filter(alarm => alarm.notificationId !== notificationId));
 
-
-        queryClient.setQueryData(QUERY_KEY.ALARM_ALL(), (oldData: any) => {
+        const updateQueryData = (oldData: any) => {
             if (!oldData) return oldData;
             return {
                 ...oldData,
@@ -72,18 +52,21 @@ const useAlarmsQuery = (projectId?: number) => {
                     data: page.data.filter((alarm: AlarmEntity) => alarm.notificationId !== notificationId)
                 }))
             };
-        });
+        };
 
+        queryClient.setQueryData(QUERY_KEY.ALARM_ALL(), updateQueryData);
         if (projectId) {
-            queryClient.setQueryData(QUERY_KEY.ALARM_PROJECT(projectId), (oldData: any) => {
-                if (!oldData) return oldData;
-                return {
-                    ...oldData,
-                    pages: oldData.pages.map((page: any) => ({
-                        ...page,
-                        data: page.data.filter((alarm: AlarmEntity) => alarm.notificationId !== notificationId)
-                    }))
-                };
+            queryClient.setQueryData(QUERY_KEY.ALARM_PROJECT(projectId), updateQueryData);
+        }
+    }, [queryClient, projectId]);
+
+    const refetch = useCallback(() => {
+        void queryClient.invalidateQueries({
+            queryKey: QUERY_KEY.ALARM_ALL(),
+        });
+        if (projectId) {
+            void queryClient.invalidateQueries({
+                queryKey: QUERY_KEY.ALARM_PROJECT(projectId),
             });
         }
     }, [queryClient, projectId]);
@@ -96,14 +79,7 @@ const useAlarmsQuery = (projectId?: number) => {
         checkedQuery,
         fetchSSEData,
         removeAlarm,
-        refetch: () => {
-            void queryClient.invalidateQueries({
-                queryKey: QUERY_KEY.ALARM_ALL(),
-            });
-            void queryClient.invalidateQueries({
-                queryKey: QUERY_KEY.ALARM_PROJECT(projectId!),
-            });
-        },
+        refetch,
     };
 };
 

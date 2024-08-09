@@ -1,7 +1,7 @@
 import { AlarmEntity } from '@/types/alarmType';
 import { API } from '@constants/api';
 import { QUERY_KEY } from '@constants/queryKey';
-import { useQueryClient } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { EventSourcePolyfill } from 'event-source-polyfill';
 import { useCallback, useEffect, useState } from 'react';
 
@@ -46,13 +46,10 @@ export const useSSE = () => {
                     };
 
                     queryClient.setQueryData<AlarmEntity[]>(QUERY_KEY.ALARM_SSE, (oldData = []) => {
-                        const uniqueAlarms = [newAlarm, ...(oldData.filter(
-                            (alarm) => alarm.notificationId !== newAlarm.notificationId
-                        ))];
-                        return uniqueAlarms.slice(0, 5);
+                        return [newAlarm, ...oldData];
                     });
 
-                    resolve([newAlarm]);
+                    setAllAlarms((prevAlarms) => [newAlarm, ...prevAlarms]);
                 };
 
                 (eventSource as any).addEventListener('notification', handleNotification);
@@ -76,14 +73,21 @@ export const useSSE = () => {
         });
     }, [queryClient, accessToken]);
 
-    useEffect(() => {
-        fetchSSEData().then((newAlarms) => {
-            setAllAlarms((prev) => {
-                const uniqueAlarms = [...new Set([...prev, ...newAlarms])];
-                return uniqueAlarms;
-            });
-        });
-    }, [fetchSSEData]);
+    const { data } = useQuery({
+        queryKey: QUERY_KEY.ALARM_SSE,
+        queryFn: fetchSSEData,
+        staleTime: 60000,
+        gcTime: 5 * 60000,
+        refetchInterval: false,
+    });
 
-    return fetchSSEData;
+    useEffect(() => {
+        if (data) {
+            setAllAlarms((prev) => {
+                return Array.from(new Set([...data, ...prev]));
+            });
+        }
+    }, [data]);
+
+    return { allAlarms, fetchSSEData };
 };
