@@ -9,7 +9,7 @@ export const formatTimeAgo = (dateString: string): string => {
     if (diffInMinutes < 1) {
         return '지금';
     } else if (isToday(date)) {
-        return format(date, 'a h시 mm분', { locale: ko });
+        return format(date, 'a h:mm', { locale: ko });
     } else if (isYesterday(date)) {
         return '어제';
     } else {
