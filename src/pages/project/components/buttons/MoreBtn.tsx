@@ -6,14 +6,25 @@ import ModalPortal from '@utils/ModalPotal';
 import { useLayoutEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
-const MoreBtn = ({ toggleDeleteBtn }: { toggleDeleteBtn: () => void }) => {
+const MoreBtn = ({
+    toggleDeleteBtn,
+    showDeleteBtn,
+}: {
+    toggleDeleteBtn: () => void;
+    showDeleteBtn: boolean;
+}) => {
     const [isMoreClick, setIsMoreClick] = useState<boolean>(false);
     const [isAuthClick, setIsAuthClick] = useState<boolean>(false);
     const moreRef = useRef<HTMLButtonElement>(null);
     const [position, setPosition] = useState({ top: 0, left: 0 });
 
     const onIsMoreClick = () => {
-        setIsMoreClick(!isMoreClick);
+        const newIsMoreClick = !isMoreClick;
+        setIsMoreClick(newIsMoreClick);
+
+        if (!newIsMoreClick && showDeleteBtn) {
+            toggleDeleteBtn();
+        }
     };
 
     const onIsAuthClick = () => {
@@ -23,7 +34,7 @@ const MoreBtn = ({ toggleDeleteBtn }: { toggleDeleteBtn: () => void }) => {
     const updatePosition = () => {
         if (moreRef.current) {
             const { bottom, right } = moreRef.current.getBoundingClientRect();
-            setPosition({ top: bottom - 10, left: right - 31 });
+            setPosition({ top: bottom - 14, left: right - 31 });
         }
     };
 
