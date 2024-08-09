@@ -2,12 +2,16 @@ import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 const Container = styled.div<{ opacity: number }>`
-    position: relative;
-    top: -150px;
-    left: 100px;
-    transform: translate(-50%, -50%);
+    position: absolute;
+    top: 150px;
+    left: 50%;
+    transform: translateX(-50%);
     z-index: 1000;
     padding: 8px 12px;
+    min-width: 202px;
+    height: 40px;
+    white-space: nowrap;
+    box-sizing: border-box;
     justify-content: center;
     align-items: center;
     border-radius: 20px;
@@ -28,6 +32,7 @@ const ConfirmDeleteAlarm = () => {
     const [opacity, setOpacity] = useState(1);
 
     useEffect(() => {
+        setOpacity(1);
         const timer = setTimeout(() => {
             setOpacity(0);
         }, 1200);

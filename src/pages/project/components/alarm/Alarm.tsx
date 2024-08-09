@@ -12,13 +12,12 @@ import styled from 'styled-components';
 
 const Alarm: FC = () => {
     const [isIconVisible, setIsIconVisible] = useState<boolean>(false);
-    const [checkedState, setCheckedState] = useState<Record<number, boolean>>({});
+    const [checkedAlarm, setCheckedAlarm] = useState<number | null>(null);
     const [isDeleted, setIsDeleted] = useState<boolean>(false);
     const { projectId } = useParams();
 
-    const { allAlarms, isUncheckedComplete, uncheckedQuery, checkedQuery } = useAlarmsQuery(
-        projectId ? Number(projectId) : undefined
-    );
+    const { allAlarms, isUncheckedComplete, uncheckedQuery, checkedQuery, removeAlarm } =
+        useAlarmsQuery(projectId ? Number(projectId) : undefined);
 
     const intObserver = useRef<IntersectionObserver | null>(null);
     const lastAlarmRef = useCallback(
@@ -43,31 +42,23 @@ const Alarm: FC = () => {
     // 알람 삭제
     const deleteAlarmMutation = useDeleteAlarmMutation();
     const handleDeleteNotifications = async () => {
-        const notificationsToDelete = Object.entries(checkedState)
-            .filter(([_, isChecked]) => isChecked)
-            .map(([notificationId]) => parseInt(notificationId));
-
-        if (notificationsToDelete.length === 0) {
+        if (checkedAlarm === null) {
             Toast('삭제할 알림을 선택해주세요', 'warning');
             return;
         }
-
         try {
-            await Promise.all(
-                notificationsToDelete.map((id) => deleteAlarmMutation.mutateAsync(id))
-            );
-            setCheckedState({});
+            await deleteAlarmMutation.mutateAsync(checkedAlarm);
+            removeAlarm(checkedAlarm)
+            setCheckedAlarm(null);
             setIsDeleted(true);
+            setTimeout(() => setIsDeleted(false), 1000);
         } catch (error) {
-            console.error('Failed to delete notifications:', error);
+            console.error('Failed to delete notification:', error);
         }
     };
 
     const handleCheckBoxClick = (notificationId: number) => {
-        setCheckedState((prev) => ({
-            ...prev,
-            [notificationId]: !prev[notificationId],
-        }));
+        setCheckedAlarm((prevChecked) => (prevChecked === notificationId ? null : notificationId));
     };
 
     // 알람 읽음
@@ -119,9 +110,10 @@ const Alarm: FC = () => {
                                             handleCheckBoxClick(alarm.notificationId);
                                         }}
                                         style={{
-                                            color: checkedState[alarm.notificationId]
-                                                ? '#633AE2'
-                                                : '#A4A4A4',
+                                            color:
+                                                checkedAlarm === alarm.notificationId
+                                                    ? '#633AE2'
+                                                    : '#A4A4A4',
                                             marginLeft: -10,
                                             fontSize: 20,
                                             cursor: 'pointer',

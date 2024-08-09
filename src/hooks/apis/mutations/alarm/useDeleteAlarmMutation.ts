@@ -19,6 +19,12 @@ const useDeleteAlarmMutation = (projectId?: number) => {
             void queryClient.invalidateQueries({
                 queryKey: QUERY_KEY.ALARM_PROJECT(projectId!),
             });
+            queryClient.refetchQueries({
+                queryKey: QUERY_KEY.ALARM_ALL(),
+            });
+            queryClient.refetchQueries({
+                queryKey: QUERY_KEY.ALARM_PROJECT(projectId!),
+            });
         },
     });
 };
