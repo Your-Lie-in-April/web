@@ -29,7 +29,7 @@ const ProjectInfoDetail: React.FC<ProjectInfoDetailProps> = ({ onClick }) => {
 
     const hanldeSotredClick = () => {
         handleStored();
-        window.location.reload();
+        Toast('성공적으로 처리되었습니다', 'success');
     };
 
     return (

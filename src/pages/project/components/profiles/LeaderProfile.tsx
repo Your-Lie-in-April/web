@@ -8,11 +8,13 @@ const LeaderProfile = ({
     member,
     isCurrentUser,
     membersData,
+    showDeleteBtn
 }: {
     toggleDeleteBtn: () => void;
     member: MemberEntity;
     isCurrentUser: boolean;
     membersData: AllMemGetResDto | undefined;
+    showDeleteBtn : boolean
 }) => {
     return (
         <StyledLeaderProfileBox>
@@ -31,7 +33,7 @@ const LeaderProfile = ({
                     <StyledProfileSubText>{member?.state}</StyledProfileSubText>
                 </StyledProfileInfo>
                 {isCurrentUser && member?.isPrivileged && membersData && membersData.length > 1 && (
-                    <MoreBtn toggleDeleteBtn={toggleDeleteBtn} />
+                    <MoreBtn toggleDeleteBtn={toggleDeleteBtn} showDeleteBtn={showDeleteBtn} />
                 )}
             </StyledLeaderProfileDiv>
         </StyledLeaderProfileBox>

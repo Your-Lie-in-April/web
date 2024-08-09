@@ -38,6 +38,7 @@ const ProfileList = () => {
                             toggleDeleteBtn={toggleDeleteBtn}
                             isCurrentUser={member.memberId === myId}
                             membersData={membersData}
+                            showDeleteBtn={showDeleteBtn} 
                         />
                     ))}
                     {membersData

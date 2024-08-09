@@ -1,22 +1,18 @@
-export function formatTimeAgo(timestamp: string): string {
-    const date = new Date(timestamp);
+import { differenceInMinutes, format, isToday, isYesterday, parseISO } from 'date-fns';
+import { ko } from 'date-fns/locale';
+
+export const formatTimeAgo = (dateString: string): string => {
+    const date = parseISO(dateString);
     const now = new Date();
+    const diffInMinutes = differenceInMinutes(now, date);
 
-    const diffMs = now.getTime() - date.getTime();
-    const diffSeconds = Math.floor(diffMs / 1000);
-    const diffMinutes = Math.floor(diffSeconds / 60);
-    const diffHours = Math.floor(diffMinutes / 60);
-    const diffDays = Math.floor(diffHours / 24);
-
-    if (diffSeconds < 60) {
+    if (diffInMinutes < 1) {
         return '지금';
-    } else if (diffMinutes < 60) {
-        return `${diffMinutes}분 전`;
-    } else if (diffHours < 24) {
-        return `${diffHours}시간 전`;
-    } else if (diffDays < 7) {
-        return `${diffDays}일 전`;
+    } else if (isToday(date)) {
+        return format(date, 'a h:mm', { locale: ko });
+    } else if (isYesterday(date)) {
+        return '어제';
     } else {
-        return date.toLocaleDateString();
+        return format(date, 'yyyy-MM-dd');
     }
-}
+};

@@ -1,31 +1,23 @@
-import { AlarmEntity } from '@/types/alarmType';
-import { QUERY_KEY } from '@constants/queryKey';
 import useDeleteAlarmMutation from '@hooks/apis/mutations/alarm/useDeleteAlarmMutation';
 import usePatchAlarmMutation from '@hooks/apis/mutations/alarm/usePatchAlarmMutation';
 import useAlarmsQuery from '@hooks/apis/queries/alarm/useAlarmsQuery';
-import { AlarmMessageType, useSSE } from '@hooks/useSSE';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import { Toast } from '@pages/layouts/Toast';
 import ConfirmDeleteAlarm from '@pages/modal/project/ConfirmDeleteAlarm';
-import { useQuery } from '@tanstack/react-query';
 import { FC, useCallback, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import 'react-toastify/dist/ReactToastify.css';
 import styled from 'styled-components';
+import { formatTimeAgo } from './formatTimeAgo';
 
 const Alarm: FC = () => {
     const [isIconVisible, setIsIconVisible] = useState<boolean>(false);
-    const [checkedState, setCheckedState] = useState<Record<number, boolean>>({});
+    const [checkedAlarm, setCheckedAlarm] = useState<number | null>(null);
     const [isDeleted, setIsDeleted] = useState<boolean>(false);
     const navigate = useNavigate();
 
-    const { uncheckedQuery, checkedQuery, isUncheckedComplete } = useAlarmsQuery();
-
-    const fetchSSEData = useSSE();
-    const { data: realTimeAlarms } = useQuery<AlarmMessageType[]>({
-        queryKey: QUERY_KEY.ALARM_SSE,
-        queryFn: fetchSSEData,
-    });
+    const { allAlarms, isUncheckedComplete, uncheckedQuery, checkedQuery, removeAlarm } =
+        useAlarmsQuery();
 
     const intObserver = useRef<IntersectionObserver | null>(null);
     const lastAlarmRef = useCallback(
@@ -41,45 +33,32 @@ const Alarm: FC = () => {
                     }
                 }
             });
-
             if (alarm) intObserver.current.observe(alarm);
         },
         [uncheckedQuery, checkedQuery, isUncheckedComplete]
     );
 
-    const allAlarms: AlarmEntity[] = [
-        ...(uncheckedQuery.data?.pages.flatMap((page) => page.data) || []),
-        ...(isUncheckedComplete ? checkedQuery.data?.pages.flatMap((page) => page.data) || [] : []),
-    ];
-
     // 알림 삭제
     const deleteAlarmMutation = useDeleteAlarmMutation();
     const handleDeleteNotifications = async () => {
-        const notificationsToDelete = Object.entries(checkedState)
-            .filter(([_, isChecked]) => isChecked)
-            .map(([notificationId]) => parseInt(notificationId));
-
-        if (notificationsToDelete.length === 0) {
+        if (checkedAlarm === null) {
             Toast('삭제할 알림을 선택해주세요', 'warning');
             return;
         }
 
         try {
-            await Promise.all(
-                notificationsToDelete.map((id) => deleteAlarmMutation.mutateAsync(id))
-            );
-            setCheckedState({});
+            await deleteAlarmMutation.mutateAsync(checkedAlarm);
+            removeAlarm(checkedAlarm);
+            setCheckedAlarm(null);
             setIsDeleted(true);
+            setTimeout(() => setIsDeleted(false), 1000);
         } catch (error) {
-            console.error('Failed to delete notifications:', error);
+            console.error('Failed to delete notification:', error);
         }
     };
 
     const handleCheckBoxClick = (notificationId: number) => {
-        setCheckedState((prev) => ({
-            ...prev,
-            [notificationId]: !prev[notificationId],
-        }));
+        setCheckedAlarm((prevChecked) => (prevChecked === notificationId ? null : notificationId));
     };
 
     // 알림 읽음 처리
@@ -111,55 +90,15 @@ const Alarm: FC = () => {
                 </DeleteWrapper>
             )}
             <ScrollableArea>
-                {realTimeAlarms?.length == 0 && allAlarms.length == 0 && (
-                    <EmptyAlarmMessage>알림이 비었습니다</EmptyAlarmMessage>
-                )}
+                {allAlarms.length == 0 && <EmptyAlarmMessage>알림이 비었습니다</EmptyAlarmMessage>}
                 {allAlarms.length > 0 && <Divider />}
-                {realTimeAlarms && realTimeAlarms.length > 0 && (
-                    <>
-                        {realTimeAlarms.map((alarm) => (
-                            <NotificationBox
-                                key={alarm.notificationId}
-                                onClick={() =>
-                                    handleNotificationClick(alarm.projectId, alarm.notificationId)
-                                }
-                            >
-                                <NotificationWrapper>
-                                    {isIconVisible && (
-                                        <CheckBoxIcon
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                handleCheckBoxClick(alarm.notificationId);
-                                            }}
-                                            style={{
-                                                color: checkedState[alarm.notificationId]
-                                                    ? '#633AE2'
-                                                    : '#A4A4A4',
-                                                marginLeft: -10,
-                                                fontSize: 20,
-                                                cursor: 'pointer',
-                                            }}
-                                        />
-                                    )}
-                                    <ContentWrapper>
-                                        <ProjectTitleContainer $isIconVisible={isIconVisible}>
-                                            <ProjectTitle>{alarm.projectTitle}</ProjectTitle>
-                                            <CreatedAt>{alarm.createdAt.slice(0, 10)}</CreatedAt>
-                                        </ProjectTitleContainer>
-                                        <NotificationContent>{alarm.message}</NotificationContent>
-                                    </ContentWrapper>
-                                </NotificationWrapper>
-                            </NotificationBox>
-                        ))}
-                    </>
-                )}
-                {allAlarms.map((alarm, index) => (
+                {Array.from(allAlarms).map((alarm, index) => (
                     <NotificationBox
                         key={alarm.notificationId}
                         onClick={() =>
                             handleNotificationClick(alarm.project.projectId, alarm.notificationId)
                         }
-                        ref={index === allAlarms.length - 1 ? lastAlarmRef : null}
+                        ref={index === Array.from(allAlarms).length - 1 ? lastAlarmRef : null}
                     >
                         <NotificationWrapper>
                             {isIconVisible && (
@@ -169,9 +108,10 @@ const Alarm: FC = () => {
                                         handleCheckBoxClick(alarm.notificationId);
                                     }}
                                     style={{
-                                        color: checkedState[alarm.notificationId]
-                                            ? '#633AE2'
-                                            : '#A4A4A4',
+                                        color:
+                                            checkedAlarm === alarm.notificationId
+                                                ? '#633AE2'
+                                                : '#A4A4A4',
                                         marginLeft: -10,
                                         fontSize: 20,
                                         cursor: 'pointer',
@@ -181,7 +121,7 @@ const Alarm: FC = () => {
                             <ContentWrapper>
                                 <ProjectTitleContainer $isIconVisible={isIconVisible}>
                                     <ProjectTitle>{alarm.project.title}</ProjectTitle>
-                                    <CreatedAt>{alarm.createdAt.slice(0, 10)}</CreatedAt>
+                                    <CreatedAt>{formatTimeAgo(alarm.createdAt)}</CreatedAt>
                                 </ProjectTitleContainer>
                                 <NotificationContent>{alarm.message}</NotificationContent>
                             </ContentWrapper>
