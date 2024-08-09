@@ -8,6 +8,7 @@ import { FC, useCallback, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import 'react-toastify/dist/ReactToastify.css';
 import styled from 'styled-components';
+import { formatTimeAgo } from './formatTimeAgo';
 
 const Alarm: FC = () => {
     const [isIconVisible, setIsIconVisible] = useState<boolean>(false);
@@ -125,7 +126,7 @@ const Alarm: FC = () => {
                             <ContentWrapper>
                                 <ProjectTitleContainer $isIconVisible={isIconVisible}>
                                     <ProjectTitle>{alarm.project.title}</ProjectTitle>
-                                    <CreatedAt>{alarm.createdAt.slice(0, 10)}</CreatedAt>
+                                    <CreatedAt>{formatTimeAgo(alarm.createdAt)}</CreatedAt>
                                 </ProjectTitleContainer>
                                 <NotificationContent>{alarm.message}</NotificationContent>
                             </ContentWrapper>

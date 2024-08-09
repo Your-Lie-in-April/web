@@ -3,6 +3,7 @@ import usePatchAlarmMutation from '@hooks/apis/mutations/alarm/usePatchAlarmMuta
 import useAlarmsQuery from '@hooks/apis/queries/alarm/useAlarmsQuery';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import { Toast } from '@pages/layouts/Toast';
+import { formatTimeAgo } from '@pages/main/components/alarm/formatTimeAgo';
 import ConfirmDeleteAlarm from '@pages/modal/project/ConfirmDeleteAlarm';
 import { FC, useCallback, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
@@ -130,7 +131,7 @@ const Alarm: FC = () => {
                                 <ContentWrapper>
                                     <ProjectTitleContainer $isIconVisible={isIconVisible}>
                                         <ProjectTitle>{alarm.project.title}</ProjectTitle>
-                                        <CreatedAt>{alarm.createdAt.slice(0, 10)}</CreatedAt>
+                                        <CreatedAt>{formatTimeAgo(alarm.createdAt)}</CreatedAt>
                                     </ProjectTitleContainer>
                                     <NotificationContent>{alarm.message}</NotificationContent>
                                 </ContentWrapper>
