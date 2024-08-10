@@ -22,6 +22,12 @@ const TeamTimeBar: React.FC<TeamTimeBarProps> = ({ hours, schedule, memberCount 
         return schedule.filter((item) => {
             const itemStartTime = new Date(item.startTime);
             const itemEndTime = new Date(item.endTime);
+
+            // 자정시간 24로 간주
+            if (itemEndTime.getHours() === 0 && itemEndTime.getMinutes() === 0) {
+                itemEndTime.setHours(24, 0, 0, 0);
+            }
+
             const itemTime = new Date(itemStartTime);
             itemTime.setHours(hour, minute, 0, 0);
             return itemStartTime <= itemTime && itemEndTime > itemTime;

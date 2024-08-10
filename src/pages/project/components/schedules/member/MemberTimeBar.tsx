@@ -46,12 +46,18 @@ const MemberTimeBar: React.FC<MemberTimeBarProps> = ({ hours, schedule }) => {
                     {schedule
                         .filter((item) => {
                             const itemStartHour = new Date(item.startTime).getHours();
-                            const itemEndHour = new Date(item.endTime).getHours();
+                            const itemEndHour =
+                                new Date(item.endTime).getHours() === 0
+                                    ? 24
+                                    : new Date(item.endTime).getHours();
                             return itemStartHour <= hour && itemEndHour >= hour;
                         })
                         .map((item, index) => {
                             const itemStartHour = new Date(item.startTime).getHours();
-                            const itemEndHour = new Date(item.endTime).getHours();
+                            const itemEndHour =
+                                new Date(item.endTime).getHours() === 0
+                                    ? 24
+                                    : new Date(item.endTime).getHours();
                             const startMinute =
                                 itemStartHour === hour ? new Date(item.startTime).getMinutes() : 0;
                             const endMinute =
