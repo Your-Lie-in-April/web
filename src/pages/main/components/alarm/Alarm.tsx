@@ -89,9 +89,10 @@ const Alarm: FC = () => {
                     </DeleteNotification>
                 </DeleteWrapper>
             )}
+            <div style={{ height: '14px' }} />
+            {allAlarms.length > 0 && <Divider />}
             <ScrollableArea>
                 {allAlarms.length == 0 && <EmptyAlarmMessage>알림이 비었습니다</EmptyAlarmMessage>}
-                {allAlarms.length > 0 && <Divider />}
                 {Array.from(allAlarms).map((alarm, index) => (
                     <NotificationBox
                         key={alarm.notificationId}
@@ -151,7 +152,6 @@ const AlarmDiv = styled.div`
     border-radius: 10px;
     padding: 8px;
     padding-top: 14px;
-    gap: 8px;
     box-sizing: border-box;
     position: relative;
     overflow: hidden;
@@ -170,6 +170,8 @@ const Divider = styled.div`
     height: 0.8px;
     background-color: #7d7d7d;
     width: 275px;
+    padding: 0;
+    margin: 0;
 `;
 
 const EmptyAlarmMessage = styled.div`
@@ -197,9 +199,9 @@ const Text = styled.div`
 
 const DeleteWrapper = styled.div`
     display: flex;
-    gap: 4px;
+    gap: 220px;
     position: absolute;
-    left: 16px;
+    left: 17px;
     top: 25px;
     justify-content: center;
     align-items: center;

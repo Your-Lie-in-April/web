@@ -198,7 +198,7 @@ const TextStyle = styled.div`
 
 const DeleteWrapper = styled.div`
     display: flex;
-    gap: 4px;
+    gap: 218px;
     position: absolute;
     left: 7px;
     top: 34px;
