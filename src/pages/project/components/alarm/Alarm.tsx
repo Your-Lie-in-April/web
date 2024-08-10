@@ -101,7 +101,6 @@ const Alarm: FC = () => {
                                 )
                             }
                             ref={index === Array.from(allAlarms).length - 1 ? lastAlarmRef : null}
-                            $isSSE={alarm.isSSE ?? false}
                         >
                             <NotificationWrapper>
                                 {isIconVisible && (
@@ -207,7 +206,7 @@ const DeleteWrapper = styled.div`
     align-items: center;
 `;
 
-const NotificationBox = styled.div<{ $isSSE: boolean }>`
+const NotificationBox = styled.div`
     display: flex;
     width: 275px;
     height: 60px;
@@ -215,7 +214,7 @@ const NotificationBox = styled.div<{ $isSSE: boolean }>`
     box-sizing: border-box;
     flex-shrink: 0;
     background: #f5f5f5;
-    border-bottom: ${({ $isSSE }) => ($isSSE ? '1px solid #000000' : '1px solid #7d7d7d')};
+    border-bottom: 1px solid #7d7d7d;
     flex-direction: column;
     gap: 7px;
     overflow-y: scroll;
