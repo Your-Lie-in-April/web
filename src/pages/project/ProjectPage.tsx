@@ -12,7 +12,7 @@ import ProjectInfo from './components/info/ProjectInfo';
 import ProfileList from './components/profiles/ProfileList';
 import MemberScheduleGrid from './components/schedules/member/MemberScheduleGrid';
 import MySchedule from './components/schedules/my/MySchedule';
-import ScheduleCalendar from './components/schedules/ScheduleCalendar';
+import ScheduleCalendar from './components/calendar/ScheduleCalendar';
 import TeamSchedule from './components/schedules/team/TeamSchedule';
 
 const ProjectPage: React.FC = () => {
