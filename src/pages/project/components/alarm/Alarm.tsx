@@ -48,7 +48,7 @@ const Alarm: FC = () => {
         }
         try {
             await deleteAlarmMutation.mutateAsync(checkedAlarm);
-            removeAlarm(checkedAlarm)
+            removeAlarm(checkedAlarm);
             setCheckedAlarm(null);
             setIsDeleted(true);
             setTimeout(() => setIsDeleted(false), 1000);
@@ -101,6 +101,7 @@ const Alarm: FC = () => {
                                 )
                             }
                             ref={index === Array.from(allAlarms).length - 1 ? lastAlarmRef : null}
+                            $isSSE={alarm.isSSE ?? false}
                         >
                             <NotificationWrapper>
                                 {isIconVisible && (
@@ -122,10 +123,16 @@ const Alarm: FC = () => {
                                 )}
                                 <ContentWrapper>
                                     <ProjectTitleContainer $isIconVisible={isIconVisible}>
-                                        <ProjectTitle>{alarm.project.title}</ProjectTitle>
-                                        <CreatedAt>{formatTimeAgo(alarm.createdAt)}</CreatedAt>
+                                        <ProjectTitle $isSSE={alarm.isSSE ?? false}>
+                                            {alarm.project.title}
+                                        </ProjectTitle>
+                                        <CreatedAt $isSSE={alarm.isSSE ?? false}>
+                                            {formatTimeAgo(alarm.createdAt)}
+                                        </CreatedAt>
                                     </ProjectTitleContainer>
-                                    <NotificationContent>{alarm.message}</NotificationContent>
+                                    <NotificationContent $isSSE={alarm.isSSE ?? false}>
+                                        {alarm.message}
+                                    </NotificationContent>
                                 </ContentWrapper>
                             </NotificationWrapper>
                         </NotificationBox>
@@ -200,7 +207,7 @@ const DeleteWrapper = styled.div`
     align-items: center;
 `;
 
-const NotificationBox = styled.div`
+const NotificationBox = styled.div<{ $isSSE: boolean }>`
     display: flex;
     width: 275px;
     height: 60px;
@@ -208,7 +215,7 @@ const NotificationBox = styled.div`
     box-sizing: border-box;
     flex-shrink: 0;
     background: #f5f5f5;
-    border-bottom: 1px solid #7d7d7d;
+    border-bottom: ${({ $isSSE }) => ($isSSE ? '1px solid #000000' : '1px solid #7d7d7d')};
     flex-direction: column;
     gap: 7px;
     overflow-y: scroll;
@@ -227,9 +234,9 @@ const ContentWrapper = styled.div`
     margin-top: 4px;
 `;
 
-const ProjectTitle = styled.div`
-    color: #000000;
-    font-size: 10px;
+const ProjectTitle = styled.div<{ $isSSE: boolean }>`
+    color: ${({ $isSSE }) => ($isSSE ? ' #000000' : ' #a4a4a4')};
+    font-size: 12px;
     font-style: normal;
     font-weight: 400;
     line-height: normal;
@@ -238,21 +245,21 @@ const ProjectTitle = styled.div`
     text-overflow: ellipsis;
 `;
 
-const CreatedAt = styled.span`
-    color: #a4a4a4;
-    font-size: 6px;
+const CreatedAt = styled.span<{ $isSSE: boolean }>`
+    color: ${({ $isSSE }) => ($isSSE ? ' #000000' : ' #7d7d7d')};
+    font-size: 10px;
     font-style: normal;
     font-weight: 400;
     flex-shrink: 0;
 `;
 
-const NotificationContent = styled.div`
+const NotificationContent = styled.div<{ $isSSE: boolean }>`
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
-    color: #7d7d7d;
+    color: ${({ $isSSE }) => ($isSSE ? ' #000000' : ' #7d7d7d')};
     font-size: 10px;
     font-style: normal;
     font-weight: 400;

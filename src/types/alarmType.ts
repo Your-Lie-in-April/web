@@ -16,6 +16,7 @@ export type AlarmEntity = {
     type: string;
     isChecked: boolean;
     createdAt: string;
+    isSSE?: boolean;
 };
 
 export type AlarmEventEntity = {

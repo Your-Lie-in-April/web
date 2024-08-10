@@ -28,7 +28,7 @@ const useAlarmsQuery = (projectId?: number) => {
 
     useEffect(() => {
         const newAlarms = [
-            ...sseAlarms,
+            ...sseAlarms.map((alarm) => ({...alarm, isSSE : true})),
             ...(uncheckedQuery.data?.pages.flatMap((page) => page.data) || []),
             ...(checkedQuery.data?.pages.flatMap((page) => page.data) || []),
         ];
