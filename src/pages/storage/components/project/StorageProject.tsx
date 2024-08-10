@@ -131,7 +131,6 @@ const TextBox = styled.div`
     color: #000000;
     font-style: normal;
     line-height: normal;
-    text-transform: uppercase;
 `;
 
 const ProjectName = styled.div`

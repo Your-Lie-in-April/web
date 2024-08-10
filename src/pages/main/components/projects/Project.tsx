@@ -155,7 +155,6 @@ const TextBox = styled.div`
     font-family: 'Pretendard';
     font-style: normal;
     line-height: normal;
-    text-transform: uppercase;
 `;
 
 const ProjectName = styled.div`
