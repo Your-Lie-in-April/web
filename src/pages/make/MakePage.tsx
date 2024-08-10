@@ -29,9 +29,16 @@ const ProjectMakePage: FC = () => {
         if (ampm === 'PM' && hour !== 12) {
             hour += 12;
         } else if (ampm === 'AM' && hour === 12) {
-            hour = 24;
+            hour = 0;
         }
         return `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}:00`;
+    };
+
+    const addOneDay = (date: Date | null): Date | null => {
+        if (!date) return null;
+        const newDate = new Date(date);
+        newDate.setDate(newDate.getDate() + 1);
+        return newDate;
     };
 
     const mutate = usePostProjectMutation();
@@ -50,11 +57,16 @@ const ProjectMakePage: FC = () => {
             return;
         }
 
+        let adjustedEndDate = endDate;
+        if (endtime === 'AM 12:00') {
+            adjustedEndDate = addOneDay(endDate);
+        }
+
         const payload = {
             title: title,
             description: content,
             startDate: startDate?.toISOString().substring(0, 10) || '',
-            endDate: endDate?.toISOString().substring(0, 10) || '',
+            endDate: adjustedEndDate?.toISOString().substring(0, 10) || '',
             startTime: formatTime(starttime),
             endTime: formatTime(endtime),
             daysOfWeek: selectedDays,

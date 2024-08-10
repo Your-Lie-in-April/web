@@ -28,6 +28,9 @@ const MoreBtn = ({
     };
 
     const onIsAuthClick = () => {
+        if(showDeleteBtn){
+            toggleDeleteBtn();
+        }
         setIsAuthClick((prev) => !prev);
     };
 

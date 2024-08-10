@@ -120,10 +120,16 @@ const Alarm: FC = () => {
                             )}
                             <ContentWrapper>
                                 <ProjectTitleContainer $isIconVisible={isIconVisible}>
-                                    <ProjectTitle>{alarm.project.title}</ProjectTitle>
-                                    <CreatedAt>{formatTimeAgo(alarm.createdAt)}</CreatedAt>
+                                    <ProjectTitle $isSSE={alarm.isSSE ?? false}>
+                                        {alarm.project.title}
+                                    </ProjectTitle>
+                                    <CreatedAt $isSSE={alarm.isSSE ?? false}>
+                                        {formatTimeAgo(alarm.createdAt)}
+                                    </CreatedAt>
                                 </ProjectTitleContainer>
-                                <NotificationContent>{alarm.message}</NotificationContent>
+                                <NotificationContent $isSSE={alarm.isSSE ?? false}>
+                                    {alarm.message}
+                                </NotificationContent>
                             </ContentWrapper>
                         </NotificationWrapper>
                     </NotificationBox>
@@ -226,9 +232,9 @@ const ContentWrapper = styled.div`
     margin-top: 4px;
 `;
 
-const ProjectTitle = styled.div`
-    color: #000000;
-    font-size: 10px;
+const ProjectTitle = styled.div<{ $isSSE: boolean }>`
+    color: ${({ $isSSE }) => ($isSSE ? ' #000000' : ' #a4a4a4')};
+    font-size: 12px;
     font-style: normal;
     font-weight: 400;
     line-height: normal;
@@ -237,21 +243,21 @@ const ProjectTitle = styled.div`
     text-overflow: ellipsis;
 `;
 
-const CreatedAt = styled.span`
-    color: #a4a4a4;
-    font-size: 6px;
+const CreatedAt = styled.span<{ $isSSE: boolean }>`
+    color: ${({ $isSSE }) => ($isSSE ? ' #000000' : ' #7d7d7d')};
+    font-size: 10px;
     font-style: normal;
     font-weight: 400;
     flex-shrink: 0;
 `;
 
-const NotificationContent = styled.div`
+const NotificationContent = styled.div<{ $isSSE: boolean }>`
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
-    color: #7d7d7d;
+    color: ${({ $isSSE }) => ($isSSE ? ' #000000' : ' #7d7d7d')};
     font-size: 10px;
     font-style: normal;
     font-weight: 400;
