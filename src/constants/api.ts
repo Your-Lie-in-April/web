@@ -40,7 +40,7 @@ export const API = {
         `${Http}/v1/projects/${projectId ?? ':projectId'}/me`,
     COVER_IMG: (page: number) => `${Http}/v1/covers?page=${page}&size=10`,
     SEARCH: (memberId: number, keyword: string, page: number, size: number, isStored: boolean) =>
-        `${Http}/v1/projects/members/${memberId}/${encodeURIComponent(keyword)}?page=${page}&size=${size}&isStored=${isStored}`,
+        `${Http}/v2/projects/members/${memberId}?page=${page}&size=${size}&keyword=${encodeURIComponent(keyword)}&isStored=${isStored}`,
 
     // schedule-controller
     SCHEDULE_GET: (projectId?: number) =>
