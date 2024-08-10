@@ -1,14 +1,33 @@
 import { Http } from '@constants/api';
+import '@fontsource/roboto/700.css';
 import { BannerDown, BannerTop } from '@pages/layouts/Banner';
 import Layout from '@pages/layouts/Layout';
+import githubLogo from '@pics/github-login.svg';
 import googleLogo from '@pics/google-login.svg';
+import kakaoLogo from '@pics/kakao-login.svg';
 import { FC } from 'react';
 import styled, { createGlobalStyle } from 'styled-components';
 import GraphicIcons from './icons/GraphicIcons';
 
 const Login: FC = () => {
-    const oAuth = () => {
-        window.location.href = Http + '/oauth2/authorization/google';
+    const oAuth = (provider: string) => {
+        let path = '';
+        switch (provider) {
+            case 'google':
+                path = '/oauth2/authorization/google';
+                break;
+            case 'kakao':
+                path = '/oauth2/authorization/kakao';
+                break;
+
+            case 'githunb':
+                path = '/oauth2/authorization/gihub';
+                break;
+            default:
+                console.log('Invalid OAuth provider');
+                return;
+        }
+        window.location.href = Http + path;
     };
 
     return (
@@ -22,12 +41,30 @@ const Login: FC = () => {
                         <Spacer height='104px' />
                         <LoginBanner>
                             <Title>Sign up</Title>
-                            <Google onClick={oAuth}>
-                                <GoogleLogin>
-                                    <img src={googleLogo} alt='Google Logo' />
-                                    구글로그인
-                                </GoogleLogin>
-                            </Google>
+                            <BtnWrapper>
+                                <BtnBox onClick={() => oAuth('google')}>
+                                    <WrapperLogin style={{ gap: '46px' }}>
+                                        <img
+                                            src={googleLogo}
+                                            alt='Google Logo'
+                                            style={{ width: '48px', height: '48px' }}
+                                        />
+                                        구글 로그인
+                                    </WrapperLogin>
+                                </BtnBox>
+                                <BtnBox onClick={() => oAuth('kakao')}>
+                                    <WrapperLogin>
+                                        <img src={kakaoLogo} alt='Kako Logo' />
+                                        카카오 로그인
+                                    </WrapperLogin>
+                                </BtnBox>
+                                <BtnBox onClick={() => oAuth('github')}>
+                                    <WrapperLogin>
+                                        <img src={githubLogo} alt='Github Logo' />
+                                        깃허브 로그인
+                                    </WrapperLogin>
+                                </BtnBox>
+                            </BtnWrapper>
                         </LoginBanner>
                         <Spacer height='391px' />
                         <BannerDown />
@@ -89,29 +126,44 @@ const Title = styled.span`
     font-weight: 700;
 `;
 
-const Google = styled.button.attrs({
+const BtnWrapper = styled.div`
+    display: flex;
+    gap: 16px;
+`;
+
+const BtnBox = styled.button.attrs({
     type: 'button',
 })`
-    width: 440px;
-    height: 88px;
+    width: 320px;
+    height: 64px;
     border-radius: 60px;
     background: #fff;
     text-align: center;
-    font-family: Roboto, sans-serif;
-    font-size: 32px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 24px;
     font-style: normal;
     font-weight: 700;
     color: #000000;
     line-height: normal;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    padding-left: 14px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    box-sizing: border-box;
+
+    -webkit-text-stroke: 0.3px #000000;
+    letter-spacing: -0.5px;
 
     &:focus {
         outline: none;
     }
 `;
 
-const GoogleLogin = styled.div`
+const WrapperLogin = styled.div`
     display: flex;
     align-items: center;
-    gap: 86px;
+    gap: 36px;
     position: relative;
 `;
