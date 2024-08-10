@@ -19,9 +19,8 @@ const Login: FC = () => {
             case 'kakao':
                 path = '/oauth2/authorization/kakao';
                 break;
-
-            case 'githunb':
-                path = '/oauth2/authorization/gihub';
+            case 'github':
+                path = '/oauth2/authorization/github';
                 break;
             default:
                 console.log('Invalid OAuth provider');
