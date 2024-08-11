@@ -1,5 +1,5 @@
 import { Http } from '@constants/api';
-import '@fontsource/roboto/700.css';
+import '@fontsource/roboto/900.css';
 import { BannerDown, BannerTop } from '@pages/layouts/Banner';
 import Layout from '@pages/layouts/Layout';
 import githubLogo from '@pics/github-login.svg';
@@ -43,11 +43,7 @@ const Login: FC = () => {
                             <BtnWrapper>
                                 <BtnBox onClick={() => oAuth('google')}>
                                     <WrapperLogin style={{ gap: '46px' }}>
-                                        <img
-                                            src={googleLogo}
-                                            alt='Google'
-                                            style={{ width: '48px', height: '48px' }}
-                                        />
+                                        <img src={googleLogo} alt='Google' />
                                         구글 로그인
                                     </WrapperLogin>
                                 </BtnBox>
@@ -141,7 +137,7 @@ const BtnBox = styled.button.attrs({
     font-family: 'Roboto', sans-serif;
     font-size: 24px;
     font-style: normal;
-    font-weight: 700;
+    font-weight: 900;
     color: #000000;
     line-height: normal;
     padding-top: 8px;
@@ -151,10 +147,9 @@ const BtnBox = styled.button.attrs({
     justify-content: flex-start;
     align-items: center;
     box-sizing: border-box;
-
-    -webkit-text-stroke: 0.3px #000000;
     letter-spacing: -0.5px;
-
+    text-shadow: -0.2px -0.2px 0 #000, 0.2px -0.2px 0 #000, -0.2px 0.2px 0 #000, 0.2px 0.2px 0 #000;
+    
     &:focus {
         outline: none;
     }
