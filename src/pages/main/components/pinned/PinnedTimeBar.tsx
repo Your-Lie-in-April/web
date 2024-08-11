@@ -97,9 +97,11 @@ const PinnedTimeBar: React.FC<PinnedTimeBarProps> = ({ hours, schedule, memberCo
                                     left: '100%',
                                     width: '0.5px',
                                     height: '100%',
-                                    borderLeft: isColoredFirstHalf
-                                        ? '1px dashed #ffffff'
-                                        : '1px dashed #a4a4a4',
+                                    borderLeft: `1px dashed ${
+                                        isColoredFirstHalf || isColoredSecondHalf
+                                            ? '#ffffff'
+                                            : '#a4a4a4'
+                                    }`,
                                     transform: 'translateX(-50%)',
                                 }}
                             />
@@ -125,21 +127,7 @@ const PinnedTimeBar: React.FC<PinnedTimeBarProps> = ({ hours, schedule, memberCo
                                 borderTopRightRadius: '20px',
                                 borderBottomRightRadius: '20px',
                             }}
-                        >
-                            <div
-                                style={{
-                                    position: 'absolute',
-                                    top: 0,
-                                    left: '0%',
-                                    width: '0.5px',
-                                    height: '100%',
-                                    borderLeft: isColoredSecondHalf
-                                        ? '1px dashed #ffffff'
-                                        : '1px dashed #a4a4a4',
-                                    transform: 'translateX(-50%)',
-                                }}
-                            />
-                        </div>
+                        />
                     </div>
                 );
             })}
