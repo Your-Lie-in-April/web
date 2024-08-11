@@ -1,89 +1,6 @@
-import ArrowLeftIcon from '@mui/icons-material/ArrowLeft';
-import ArrowRightIcon from '@mui/icons-material/ArrowRight';
-import { isWithinInterval } from 'date-fns';
-import dayjs from 'dayjs';
-import { FC, useState } from 'react';
-import Calendar from 'react-calendar';
 import styled from 'styled-components';
-import '@styles/calendarcss.css';
 
-type ValuePiece = Date | null;
-type Value = ValuePiece | [ValuePiece, ValuePiece];
-
-type ProjectCalendarProps = {
-    startDate: Date | null;
-    endDate: Date | null;
-    selectRange: boolean;
-    onDateChange?: (startDate: Date | null, endDate: Date | null) => void;
-};
-
-const ProjectCalendar: FC<ProjectCalendarProps> = ({ startDate, endDate, onDateChange }) => {
-    const today = new Date();
-    const [date, setDate] = useState<Value>(today);
-
-    const handleDateChange = (newDate: Value) => {
-        setDate(newDate);
-        if (Array.isArray(newDate)) {
-            const [start, end] = newDate;
-            onDateChange?.(start, end);
-        } else {
-            onDateChange?.(newDate, newDate);
-        }
-    };
-    const isWithinRange = (currentDate: Date) => {
-        if (startDate && endDate) {
-            return isWithinInterval(currentDate, { start: startDate, end: endDate });
-        }
-        return false;
-    };
-
-    const tileContent = ({ date }: { date: Date; view: string }) => {
-        const isInRange = isWithinRange(date);
-        const isStartDate =
-            date.getDate() === startDate?.getDate() && date.getMonth() === startDate?.getMonth();
-        const isEndDate =
-            date.getDate() === endDate?.getDate() && date.getMonth() === endDate?.getMonth();
-
-        return (
-            <>
-                {isInRange && <div></div>}
-                {isStartDate && <div></div>}
-                {isEndDate && <div></div>}
-            </>
-        );
-    };
-    return (
-        <StyledCalendarWrapper style={{ display: 'flex', textAlign: 'center' }}>
-            <StyledCalendar
-                value={date}
-                onChange={handleDateChange}
-                formatDay={(locale, date) => dayjs(date).format('D')}
-                formatYear={(locale, date) => dayjs(date).format('YYYY')}
-                formatMonthYear={(locale, date) => dayjs(date).format('MM')}
-                formatShortWeekday={(locale, date) =>
-                    ['S', 'M', 'T', 'W', 'T', 'F', 'S'][date.getDay()]
-                }
-                showNeighboringMonth={false}
-                next2Label={null}
-                prev2Label={null}
-                minDetail='month'
-                calendarType='gregory'
-                selectRange={true}
-                tileContent={tileContent}
-                prevLabel={
-                    <ArrowLeftIcon sx={{ fill: '#D9D9D9', width: '36px', height: '36px' }} />
-                }
-                nextLabel={
-                    <ArrowRightIcon sx={{ fill: '#D9D9D9', width: '36px', height: '36px' }} />
-                }
-            />
-        </StyledCalendarWrapper>
-    );
-};
-
-export default ProjectCalendar;
-
-const StyledCalendarWrapper = styled.div`
+export const StyledProjectCalendar = styled.div`
     // 전체적 캘린더 틀
     .react-calendar {
         width: 390px;
@@ -186,22 +103,6 @@ const StyledCalendarWrapper = styled.div`
         border-radius: 5px;
     }
 
-    // 달력에서 월 선택 호버시
-    .react-calendar__year-view__months__month:hover {
-        background-color: transparent;
-        color: #000000;
-    }
-
-    // 월 선택 부분 스타일
-    .react-calendar__year-view__months__month {
-        border-radius: 10px;
-        padding: 0px;
-        height: 80px;
-        font-size: 32px;
-        background-color: transparent;
-        color: #000000;
-    }
-
     .react-calendar__year-view__months__month--active {
         border: none;
         outline: none;
@@ -237,6 +138,7 @@ const StyledCalendarWrapper = styled.div`
         font-size: 32px;
         font-weight: 700;
         color: #000000;
+        cursor: default !important;
     }
 
     .react-calendar__navigation__label__labelText {
@@ -244,6 +146,7 @@ const StyledCalendarWrapper = styled.div`
         font-weight: 700;
         color: #000000;
         padding: 0;
+        cursor: default !important;
     }
 
     .react-calendar__tile--rangeStart {
@@ -256,4 +159,3 @@ const StyledCalendarWrapper = styled.div`
         border-bottom-right-radius: 5px !important;
     }
 `;
-const StyledCalendar = styled(Calendar)``;
