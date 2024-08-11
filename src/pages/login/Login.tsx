@@ -23,7 +23,7 @@ const Login: FC = () => {
                 path = '/oauth2/authorization/github';
                 break;
             default:
-                console.log('Invalid OAuth provider');
+                console.error('Invalid OAuth provider');
                 return;
         }
         window.location.href = Http + path;
@@ -45,7 +45,7 @@ const Login: FC = () => {
                                     <WrapperLogin style={{ gap: '46px' }}>
                                         <img
                                             src={googleLogo}
-                                            alt='Google Logo'
+                                            alt='Google'
                                             style={{ width: '48px', height: '48px' }}
                                         />
                                         구글 로그인
@@ -53,13 +53,13 @@ const Login: FC = () => {
                                 </BtnBox>
                                 <BtnBox onClick={() => oAuth('kakao')}>
                                     <WrapperLogin>
-                                        <img src={kakaoLogo} alt='Kako Logo' />
+                                        <img src={kakaoLogo} alt='Kako' />
                                         카카오 로그인
                                     </WrapperLogin>
                                 </BtnBox>
                                 <BtnBox onClick={() => oAuth('github')}>
                                     <WrapperLogin>
-                                        <img src={githubLogo} alt='Github Logo' />
+                                        <img src={githubLogo} alt='Github' />
                                         깃허브 로그인
                                     </WrapperLogin>
                                 </BtnBox>

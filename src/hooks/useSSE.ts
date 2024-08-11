@@ -28,7 +28,7 @@ export const useSSE = () => {
                 });
 
                 eventSource.onopen = () => {
-                    console.log('SSE connect success!');
+                    console.log('%c📢 SSE connect success!', 'color: green; font-weight: bold;');
                 };
 
                 const handleNotification = (event: MessageEvent) => {
