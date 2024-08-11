@@ -30,13 +30,14 @@ const NewProjectText = styled.div`
 
 const NewProject: FC = () => {
     const navigate = useNavigate();
-    const handleNewProject = () => {
-        const accessToken = localStorage.getItem('access_token');
-        if (!accessToken) navigate('/login');
-        else navigate('/projectmake');
-    };
+    const clickPath = `/projectmake`;
+
     return (
-        <NewProjectDiv onClick={handleNewProject}>
+        <NewProjectDiv
+            onClick={() => {
+                navigate(clickPath);
+            }}
+        >
             <NewProjectText>
                 NEW
                 <br />
