@@ -5,9 +5,10 @@ import { FC, useState } from 'react';
 import { useNavigate } from 'react-router';
 import 'react-toastify/dist/ReactToastify.css';
 import styled, { createGlobalStyle } from 'styled-components';
-import Info from './components/Info';
-import ProjectCalendar from './components/ProjectCalendar';
-import ProjectTime from './components/ProjectTime';
+
+import ProjectCalendar from './components/calendar/ProjectCalendar';
+import Info from './components/info/Info';
+import ProjectTime from './components/time/ProjectTime';
 
 const ProjectMakePage: FC = () => {
     const [startDate, setStartDate] = useState<Date | null>(new Date());
@@ -97,7 +98,6 @@ const ProjectMakePage: FC = () => {
                     setImgId={setImgId}
                 />
                 <Divider height='24px' />
-
                 <Container>
                     <TimeContainer>
                         <ProjectCalendar

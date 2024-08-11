@@ -7,7 +7,7 @@ import styled, { createGlobalStyle } from 'styled-components';
 import { BannerDown, BannerTop } from '../layouts/Banner';
 import Alarm from './components/alarm/Alarm';
 import Pinned from './components/pinned/Pinned';
-import Profile from './components/Profile';
+import Profile from './components/profile/Profile';
 import MainPagination from './components/projects/MainPagination';
 import NewProject from './components/projects/NewProject';
 
