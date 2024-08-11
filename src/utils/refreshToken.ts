@@ -1,4 +1,4 @@
-import { Http } from '@constants/api';
+import { API } from '@constants/api';
 import axios from 'axios';
 
 export async function getRefreshToken() {
@@ -7,15 +7,11 @@ export async function getRefreshToken() {
         throw new Error('No refresh token');
     }
     try {
-        const response = await axios.post(
-            `${Http}/v1/auth/reissue`,
-            {},
-            {
-                headers: {
-                    Authorization: `Bearer ${refreshToken}`,
-                },
-            }
-        );
+        const response = await axios.post(API.TOKEN_REISSUE, {
+            headers: {
+                Authorization: `Bearer ${refreshToken}`,
+            },
+        });
         const { data } = response;
         localStorage.setItem('access_token', data.accessToken);
         localStorage.setItem('refresh_token', data.refreshToken);
