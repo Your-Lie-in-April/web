@@ -6,7 +6,9 @@ export const GlobalStyle = createGlobalStyle`
     height: 100vh;
     margin: 0 auto;
     background-color: #ffffff;
+    overflow: hidden;
     -ms-overflow-style: none;
+    scrollbar-width: none;
   }
   ::-webkit-scrollbar {
     display: none;
@@ -22,7 +24,10 @@ export const Container = styled.div`
     text-align: center;
     width: 500px;
     margin: 0 auto;
+    position: fixed;
     top: 160px;
+    left: 0;
+    right: 0;
 `;
 
 export const SvgIcon = styled.svg`
