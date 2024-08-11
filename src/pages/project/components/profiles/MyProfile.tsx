@@ -1,7 +1,7 @@
 import useAllMemberInfoQuery from '@hooks/apis/queries/member/useAllMemberInfoQuery';
 import { useUserContext } from '@hooks/context/userContext';
 import ChangeNickName from '@pages/modal/member/ChangeNickname';
-import defaultProfile from '@pics/default.png';
+import defaultProfile from '@pics/default-profile.svg';
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
