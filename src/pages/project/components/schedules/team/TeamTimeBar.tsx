@@ -61,7 +61,7 @@ const TeamTimeBar: React.FC<TeamTimeBarProps> = ({ hours, schedule, memberCount 
                         style={{
                             width: '40px',
                             height: '100%',
-                            backgroundColor: '#D9D9D9',
+                            backgroundColor: 'transparent',
                             position: 'relative',
                             borderRadius: '20px',
                             border: 'none',
@@ -73,23 +73,12 @@ const TeamTimeBar: React.FC<TeamTimeBarProps> = ({ hours, schedule, memberCount 
                             style={{
                                 position: 'absolute',
                                 top: 0,
-                                left: '50%',
-                                width: '0.5px',
-                                height: '100%',
-                                borderLeft: '1px dashed #a4a4a4',
-                                transform: 'translateX(-50%)',
-                            }}
-                        />
-                        <div
-                            style={{
-                                position: 'absolute',
-                                top: 0,
                                 left: '0%',
                                 width: '50%',
                                 height: '100%',
                                 backgroundColor: isColoredFirstHalf
                                     ? getColor(getMemberCountAtTime(hour, 0))
-                                    : 'transparent',
+                                    : '#d9d9d9',
                                 boxSizing: 'border-box',
                                 display: 'flex',
                                 justifyContent: 'center',
@@ -108,19 +97,19 @@ const TeamTimeBar: React.FC<TeamTimeBarProps> = ({ hours, schedule, memberCount 
                                 borderBottomLeftRadius: '20px',
                             }}
                         >
-                            {isColoredFirstHalf && (
-                                <div
-                                    style={{
-                                        position: 'absolute',
-                                        top: 0,
-                                        left: '100%',
-                                        width: '0.5px',
-                                        height: '100%',
-                                        borderLeft: '1px dashed #ffffff',
-                                        transform: 'translateX(-50%)',
-                                    }}
-                                />
-                            )}
+                            <div
+                                style={{
+                                    position: 'absolute',
+                                    top: 0,
+                                    left: '100%',
+                                    width: '0.5px',
+                                    height: '100%',
+                                    borderLeft: isColoredFirstHalf
+                                        ? '1px dashed #ffffff'
+                                        : '1px dashed #a4a4a4',
+                                    transform: 'translateX(-50%)',
+                                }}
+                            />
                         </div>
                         <div
                             style={{
@@ -131,7 +120,7 @@ const TeamTimeBar: React.FC<TeamTimeBarProps> = ({ hours, schedule, memberCount 
                                 height: '100%',
                                 backgroundColor: isColoredSecondHalf
                                     ? getColor(getMemberCountAtTime(hour, 30))
-                                    : 'transparent',
+                                    : '#d9d9d9',
                                 boxSizing: 'border-box',
                                 display: 'flex',
                                 justifyContent: 'center',
@@ -150,19 +139,19 @@ const TeamTimeBar: React.FC<TeamTimeBarProps> = ({ hours, schedule, memberCount 
                                 borderBottomRightRadius: '20px',
                             }}
                         >
-                            {isColoredSecondHalf && (
-                                <div
-                                    style={{
-                                        position: 'absolute',
-                                        top: 0,
-                                        left: '0%',
-                                        width: '0.5px',
-                                        height: '100%',
-                                        borderLeft: '1px dashed #ffffff',
-                                        transform: 'translateX(-50%)',
-                                    }}
-                                />
-                            )}
+                            <div
+                                style={{
+                                    position: 'absolute',
+                                    top: 0,
+                                    left: '0%',
+                                    width: '0.5px',
+                                    height: '100%',
+                                    borderLeft: isColoredSecondHalf
+                                        ? '1px dashed #ffffff'
+                                        : '1px dashed #a4a4a4',
+                                    transform: 'translateX(-50%)',
+                                }}
+                            />
                         </div>
                     </div>
                 );

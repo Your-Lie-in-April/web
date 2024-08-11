@@ -61,7 +61,7 @@ const PinnedTimeBar: React.FC<PinnedTimeBarProps> = ({ hours, schedule, memberCo
                         style={{
                             width: '40px',
                             height: '100%',
-                            backgroundColor: '#D9D9D9',
+                            backgroundColor: 'transparent',
                             position: 'relative',
                             borderRadius: '20px',
                             overflow: 'hidden',
@@ -72,23 +72,12 @@ const PinnedTimeBar: React.FC<PinnedTimeBarProps> = ({ hours, schedule, memberCo
                             style={{
                                 position: 'absolute',
                                 top: 0,
-                                left: '50%',
-                                width: '0.5px',
-                                height: '100%',
-                                borderLeft: '1px dashed #a4a4a4',
-                                transform: 'translateX(-50%)',
-                            }}
-                        />
-                        <div
-                            style={{
-                                position: 'absolute',
-                                top: 0,
                                 left: '0%',
                                 width: '50%',
                                 height: '100%',
                                 backgroundColor: isColoredFirstHalf
                                     ? getColor(getMemberCountAtTime(hour, 0))
-                                    : 'transparent',
+                                    : '#D9D9D9',
                                 boxSizing: 'border-box',
                                 display: 'flex',
                                 justifyContent: 'center',
@@ -101,19 +90,19 @@ const PinnedTimeBar: React.FC<PinnedTimeBarProps> = ({ hours, schedule, memberCo
                                 borderBottomLeftRadius: '20px',
                             }}
                         >
-                            {isColoredFirstHalf && (
-                                <div
-                                    style={{
-                                        position: 'absolute',
-                                        top: 0,
-                                        left: '100%',
-                                        width: '0.5px',
-                                        height: '100%',
-                                        borderLeft: '1px dashed #ffffff',
-                                        transform: 'translateX(-50%)',
-                                    }}
-                                />
-                            )}
+                            <div
+                                style={{
+                                    position: 'absolute',
+                                    top: 0,
+                                    left: '100%',
+                                    width: '0.5px',
+                                    height: '100%',
+                                    borderLeft: isColoredFirstHalf
+                                        ? '1px dashed #ffffff'
+                                        : '1px dashed #a4a4a4',
+                                    transform: 'translateX(-50%)',
+                                }}
+                            />
                         </div>
                         <div
                             style={{
@@ -124,7 +113,7 @@ const PinnedTimeBar: React.FC<PinnedTimeBarProps> = ({ hours, schedule, memberCo
                                 height: '100%',
                                 backgroundColor: isColoredSecondHalf
                                     ? getColor(getMemberCountAtTime(hour, 30))
-                                    : 'transparent',
+                                    : '#D9D9D9',
                                 boxSizing: 'border-box',
                                 display: 'flex',
                                 justifyContent: 'center',
@@ -137,19 +126,19 @@ const PinnedTimeBar: React.FC<PinnedTimeBarProps> = ({ hours, schedule, memberCo
                                 borderBottomRightRadius: '20px',
                             }}
                         >
-                            {isColoredSecondHalf && (
-                                <div
-                                    style={{
-                                        position: 'absolute',
-                                        top: 0,
-                                        left: '0%',
-                                        width: '0.5px',
-                                        height: '100%',
-                                        borderLeft: '1px dashed #ffffff',
-                                        transform: 'translateX(-50%)',
-                                    }}
-                                />
-                            )}
+                            <div
+                                style={{
+                                    position: 'absolute',
+                                    top: 0,
+                                    left: '0%',
+                                    width: '0.5px',
+                                    height: '100%',
+                                    borderLeft: isColoredSecondHalf
+                                        ? '1px dashed #ffffff'
+                                        : '1px dashed #a4a4a4',
+                                    transform: 'translateX(-50%)',
+                                }}
+                            />
                         </div>
                     </div>
                 );
