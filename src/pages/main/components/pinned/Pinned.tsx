@@ -3,7 +3,6 @@ import { ScheduleAllMembersResDto } from '@/types/scheduleType';
 import usePatchPinnedMutation from '@hooks/apis/mutations/member/usePatchPinnedMutation';
 import useProjectPinnedQuery from '@hooks/apis/queries/project/useProjectPinnedQuery';
 import PushPinOutlinedIcon from '@mui/icons-material/PushPinOutlined';
-import StyledLink from '@pages/layouts/StyledLink';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -32,42 +31,37 @@ const Pinned: React.FC = () => {
     const handlePinButtonClick = () => {
         handlePinned();
     };
-
-    const clickPath = `/project/${pinnedProjects?.projectId}`;
+    const handleNavigation = () => {
+        navigation(`/project/${pinnedProjects?.projectId}`);
+    };
 
     return pinnedProjects ? (
-        <StyledLink to={clickPath}>
-            <PinnedBox
-                onClick={() => {
-                    navigation(clickPath);
-                }}
-            >
-                <FlexColumn>
-                    <StyledButton>
-                        <PushPinOutlinedIcon
-                            sx={{ fontSize: 36 }}
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                handlePinButtonClick();
-                            }}
-                        />
-                    </StyledButton>
-                    <ProjectBox>
-                        <TextDiv>
-                            <ProjectText>{pinnedProjects.title}</ProjectText>
-                            <DetailText>멤버 {pinnedProjects.memberCount}명</DetailText>
-                            <DetailText>
-                                프로젝트 기간
-                                <span />
-                                {dayjs(pinnedProjects.startDate).format('YYYY.MM.DD')} ~{' '}
-                                {dayjs(pinnedProjects.endDate).format('YYYY.MM.DD')}
-                            </DetailText>
-                        </TextDiv>
-                        <PinnedSchedule scheduleData={pinSchedule} />
-                    </ProjectBox>
-                </FlexColumn>
-            </PinnedBox>
-        </StyledLink>
+        <PinnedBox onClick={handleNavigation}>
+            <FlexColumn>
+                <StyledButton>
+                    <PushPinOutlinedIcon
+                        sx={{ fontSize: 36 }}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            handlePinButtonClick();
+                        }}
+                    />
+                </StyledButton>
+                <ProjectBox>
+                    <TextDiv>
+                        <ProjectText>{pinnedProjects.title}</ProjectText>
+                        <DetailText>멤버 {pinnedProjects.memberCount}명</DetailText>
+                        <DetailText>
+                            프로젝트 기간
+                            <span />
+                            {dayjs(pinnedProjects.startDate).format('YYYY.MM.DD')} ~{' '}
+                            {dayjs(pinnedProjects.endDate).format('YYYY.MM.DD')}
+                        </DetailText>
+                    </TextDiv>
+                    <PinnedSchedule scheduleData={pinSchedule} />
+                </ProjectBox>
+            </FlexColumn>
+        </PinnedBox>
     ) : (
         <EmptyPinnedBox>
             <EmptyTitle>고정된 프로젝트가 없습니다</EmptyTitle>

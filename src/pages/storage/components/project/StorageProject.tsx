@@ -3,7 +3,6 @@ import usePatchStoredMutation from '@hooks/apis/mutations/member/usePatchStoredM
 import DeleteIcon from '@mui/icons-material/Delete';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
-import StyledLink from '@pages/layouts/StyledLink';
 import DeleteProject from '@pages/modal/project/DeleteProject';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -23,60 +22,58 @@ const StorageProject = ({ project }: { project: ProjectThumbnailInfo }) => {
     };
     const { mutate: handleStored } = usePatchStoredMutation(project.projectId);
 
-    const clickPath = `/project/${project.projectId}`;
+    const onProjectClick = () => {
+        navigate(`/project/${project.projectId}`);
+    };
 
     return (
         <>
-            <StyledLink to={clickPath}>
-                <ProjectBox
-                    onClick={() => {
-                        navigate(clickPath);
-                    }}
-                    $color={project.color}
-                    $coverImageUrl={project.thumbnailUrl}
-                >
-                    {showMore && (
-                        <MoreBox>
-                            <MoreWrapper>
-                                <MoreItem
-                                    onClick={(event) => {
-                                        handleStored();
-                                        event.stopPropagation();
-                                    }}
-                                >
-                                    <RestartAltIcon sx={{ fontSize: 48, color: '#F1F1F1' }} />
-                                    <MoreText>보관 취소</MoreText>
-                                </MoreItem>
-                                <MoreItem
-                                    onClick={(event) => {
-                                        onClickItem();
-                                        event.stopPropagation();
-                                    }}
-                                >
-                                    <DeleteIcon sx={{ fontSize: 48, color: '#F1F1F1' }} />
-                                    <MoreText>삭제하기</MoreText>
-                                </MoreItem>
-                            </MoreWrapper>
-                        </MoreBox>
-                    )}
-                    <DetailBox>
-                        <MoreDiv>
-                            <MoreButton
+            <ProjectBox
+                onClick={onProjectClick}
+                $color={project.color}
+                $coverImageUrl={project.thumbnailUrl}
+            >
+                {showMore && (
+                    <MoreBox>
+                        <MoreWrapper>
+                            <MoreItem
                                 onClick={(event) => {
+                                    handleStored();
                                     event.stopPropagation();
-                                    toggleMoreBtn();
                                 }}
                             >
-                                <StyledMoreBtn sx={{ fontSize: 32 }} />
-                            </MoreButton>
-                        </MoreDiv>
-                        <TextBox>
-                            <ProjectName>{project.title}</ProjectName>
-                            <DetailText>{project.description}</DetailText>
-                        </TextBox>
-                    </DetailBox>
-                </ProjectBox>
-            </StyledLink>
+                                <RestartAltIcon sx={{ fontSize: 48, color: '#F1F1F1' }} />
+                                <MoreText>보관 취소</MoreText>
+                            </MoreItem>
+                            <MoreItem
+                                onClick={(event) => {
+                                    onClickItem();
+                                    event.stopPropagation();
+                                }}
+                            >
+                                <DeleteIcon sx={{ fontSize: 48, color: '#F1F1F1' }} />
+                                <MoreText>삭제하기</MoreText>
+                            </MoreItem>
+                        </MoreWrapper>
+                    </MoreBox>
+                )}
+                <DetailBox>
+                    <MoreDiv>
+                        <MoreButton
+                            onClick={(event) => {
+                                event.stopPropagation();
+                                toggleMoreBtn();
+                            }}
+                        >
+                            <StyledMoreBtn sx={{ fontSize: 32 }} />
+                        </MoreButton>
+                    </MoreDiv>
+                    <TextBox>
+                        <ProjectName>{project.title}</ProjectName>
+                        <DetailText>{project.description}</DetailText>
+                    </TextBox>
+                </DetailBox>
+            </ProjectBox>
             <DeleteProject
                 onClose={onClickItem}
                 projectId={project.projectId}

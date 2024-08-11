@@ -5,7 +5,6 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import InboxOutlinedIcon from '@mui/icons-material/InboxOutlined';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import PushPinOutlinedIcon from '@mui/icons-material/PushPinOutlined';
-import StyledLink from '@pages/layouts/StyledLink';
 import LeaveProject from '@pages/modal/project/LeaveProject';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -35,68 +34,66 @@ const Project: React.FC<ProjectProps> = ({ project }) => {
     const { mutate: handlePinned } = usePatchPinnedMutation(project.projectId);
     const { mutate: handleStored } = usePatchStoredMutation(project.projectId);
 
-    const clickPath = `/project/${project.projectId}`;
+    const onProjectClick = () => {
+        navigate(`/project/${project.projectId}`);
+    };
 
     return (
         <>
-            <StyledLink to={clickPath}>
-                <ProjectBox
-                    onClick={() => {
-                        navigate(clickPath);
-                    }}
-                    $color={project.color}
-                    $coverImageUrl={project.thumbnailUrl}
-                >
-                    <ProjectWrapper>
-                        <MoreDiv>
-                            {showMore && (
-                                <>
-                                    <StyledButton
+            <ProjectBox
+                onClick={onProjectClick}
+                $color={project.color}
+                $coverImageUrl={project.thumbnailUrl}
+            >
+                <ProjectWrapper>
+                    <MoreDiv>
+                        {showMore && (
+                            <>
+                                <StyledButton
+                                    onClick={(event) => {
+                                        openLeaveModal();
+                                        event.stopPropagation();
+                                    }}
+                                >
+                                    <CancelBtn sx={{ fontSize: 36 }} />
+                                </StyledButton>
+                                <MoreBox>
+                                    <MoreItem
                                         onClick={(event) => {
-                                            openLeaveModal();
                                             event.stopPropagation();
+                                            handlePinned();
                                         }}
                                     >
-                                        <CancelBtn sx={{ fontSize: 36 }} />
-                                    </StyledButton>
-                                    <MoreBox>
-                                        <MoreItem
-                                            onClick={(event) => {
-                                                event.stopPropagation();
-                                                handlePinned();
-                                            }}
-                                        >
-                                            <PushPinOutlinedIcon sx={{ fontSize: 18 }} />
-                                            <MoreText>상단고정</MoreText>
-                                        </MoreItem>
-                                        <MoreItem
-                                            onClick={(event) => {
-                                                event.stopPropagation();
-                                                handleStored();
-                                            }}
-                                        >
-                                            <InboxOutlinedIcon sx={{ fontSize: 18 }} />
-                                            <MoreText>보관함이동</MoreText>
-                                        </MoreItem>
-                                    </MoreBox>
-                                </>
-                            )}
-                            <StyledButton
-                                onClick={(event) => {
-                                    event.stopPropagation();
-                                    toggleMoreBtn();
-                                }}
-                            >
-                                <StyledMoreBtn sx={{ fontSize: 32 }} />
-                            </StyledButton>
-                        </MoreDiv>
-                        <TextBox>
-                            <ProjectName>{project.title}</ProjectName>
-                            <DetailText>{project.description}</DetailText>
-                        </TextBox>
-                    </ProjectWrapper>
-                </ProjectBox>
-            </StyledLink>
+                                        <PushPinOutlinedIcon sx={{ fontSize: 18 }} />
+                                        <MoreText>상단고정</MoreText>
+                                    </MoreItem>
+                                    <MoreItem
+                                        onClick={(event) => {
+                                            event.stopPropagation();
+                                            handleStored();
+                                        }}
+                                    >
+                                        <InboxOutlinedIcon sx={{ fontSize: 18 }} />
+                                        <MoreText>보관함이동</MoreText>
+                                    </MoreItem>
+                                </MoreBox>
+                            </>
+                        )}
+                        <StyledButton
+                            onClick={(event) => {
+                                event.stopPropagation();
+                                toggleMoreBtn();
+                            }}
+                        >
+                            <StyledMoreBtn sx={{ fontSize: 32 }} />
+                        </StyledButton>
+                    </MoreDiv>
+                    <TextBox>
+                        <ProjectName>{project.title}</ProjectName>
+                        <DetailText>{project.description}</DetailText>
+                    </TextBox>
+                </ProjectWrapper>
+            </ProjectBox>
             <LeaveProject
                 projectId={project.projectId}
                 projectTitle={project.title}
