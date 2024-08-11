@@ -2,6 +2,7 @@ import { ProjectContext } from '@hooks/context/projectContext';
 import dayjs from 'dayjs';
 import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { isProjectHour } from '../../isProjectHour';
 import { TimeSlotLeft, TimeSlotRight } from './EditMyTimeCircle';
 
 const HoursOfDay = [...Array(15).keys()].map((_, index) => index + 9);
@@ -11,31 +12,6 @@ interface SelectedSlot {
     hour: number;
     minute: number;
 }
-
-const isProjectHour = (
-    date: string,
-    hour: number,
-    minute: number,
-    projectStartTime: string | undefined,
-    projectEndTime: string | undefined
-) => {
-    if (projectStartTime !== undefined && projectEndTime !== undefined) {
-        const [startHour, startMinute] = projectStartTime.split(':').map(Number);
-        const [endHour, endMinute] = projectEndTime.split(':').map(Number);
-
-        const slotDateTime = new Date(date);
-        slotDateTime.setHours(hour, minute);
-
-        const projectStartDateTime = new Date(date);
-        projectStartDateTime.setHours(startHour, startMinute);
-
-        const projectEndDateTime = new Date(date);
-        projectEndDateTime.setHours(endHour, endMinute);
-
-        return slotDateTime >= projectStartDateTime && slotDateTime < projectEndDateTime;
-    }
-    return false;
-};
 
 interface EditMyTimeProps {
     weekDates: string[];
@@ -79,8 +55,9 @@ const EditMyTime: React.FC<EditMyTimeProps> = ({ weekDates, selection, onSelecti
                 setFirstClickSlotState(true);
             }
             onSelectionChange(newSelection);
-
             setIsMouseDown(true);
+        } else {
+            setIsMouseDown(false);
         }
     };
 
@@ -119,6 +96,7 @@ const EditMyTime: React.FC<EditMyTimeProps> = ({ weekDates, selection, onSelecti
         if (Object.keys(selection).length === 0) {
             setFirstClickSlot(0);
         }
+        console.log(selection)
     }, [selection]);
 
     return (

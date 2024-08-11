@@ -1,12 +1,24 @@
 import dayjs from 'dayjs';
 import isBetween from 'dayjs/plugin/isBetween';
-
 dayjs.extend(isBetween);
 
 interface SelectedSlot {
     date: string;
     hour: number;
     minute: number;
+}
+
+interface ScheduleItem {
+    startTime: string;
+    endTime: string;
+}
+
+interface ScheduleDayRequest {
+    schedule: ScheduleItem[];
+}
+
+interface ScheduleData {
+    schedule: ScheduleDayRequest[];
 }
 
 export const formatScheduleData = (
@@ -18,13 +30,8 @@ export const formatScheduleData = (
     projectDaysOfWeek: string[] | undefined,
     projectStartDate: string | undefined,
     projectEndDate: string | undefined
-) => {
-    const scheduleData: {
-        schedule: {
-            startTime: string;
-            endTime: string;
-        }[];
-    }[] = [];
+): ScheduleData => {
+    const scheduleByDate: { [date: string]: ScheduleItem[] } = {};
 
     const selectedSlots = Object.values(selection);
     selectedSlots.sort((a, b) => {
@@ -38,57 +45,70 @@ export const formatScheduleData = (
     });
 
     let currentDate = '';
-    let currentSchedule: { startTime: string; endTime: string }[] = [];
-    let prevEndTime = '';
+    let currentStartTime = '';
 
-    selectedSlots.forEach((slot) => {
-        if (slot.date !== currentDate) {
-            if (currentSchedule.length > 0) {
-                scheduleData.push({ schedule: currentSchedule });
-            }
-            currentDate = slot.date;
-            currentSchedule = [];
-            prevEndTime = '';
-        }
+    selectedSlots.forEach((slot, index) => {
+        const slotTime = dayjs(
+            `${slot.date}T${slot.hour.toString().padStart(2, '0')}:${slot.minute
+                .toString()
+                .padStart(2, '0')}:00`
+        );
+        const nextSlotTime = slotTime.add(30, 'minute');
 
-        const startTime = dayjs(slot.date)
-            .hour(slot.hour)
-            .minute(slot.minute)
-            .format('YYYY-MM-DDTHH:mm:ss');
-        const endTime = dayjs(slot.date)
-            .hour(slot.hour)
-            .minute(slot.minute + 30)
-            .format('YYYY-MM-DDTHH:mm:ss');
-
-        const isValidStartTime = projectStartTime !== undefined && slot.hour >= projectStartTime;
-        const isValidEndTime = projectEndTime !== undefined && slot.hour <= projectEndTime;
         const isValidDate =
             projectStartDate &&
             projectEndDate &&
-            dayjs(slot.date).isBetween(projectStartDate, projectEndDate, 'day', '[]');
+            slotTime.isBetween(projectStartDate, projectEndDate, 'day', '[]');
         const isValidDayOfWeek =
             projectDaysOfWeek !== undefined &&
-            projectDaysOfWeek.includes(dayjs(slot.date).format('dddd').toUpperCase());
+            projectDaysOfWeek.includes(slotTime.format('dddd').toUpperCase());
 
-        if (
-            isValidStartTime &&
-            isValidEndTime &&
-            isValidDate &&
-            isValidDayOfWeek &&
-            dayjs(endTime).isAfter(dayjs(startTime))
-        ) {
-            if (prevEndTime === startTime) {
-                currentSchedule[currentSchedule.length - 1].endTime = endTime;
-            } else {
-                currentSchedule.push({ startTime, endTime });
+        if (isValidDate && isValidDayOfWeek) {
+            const projectStart = dayjs(slot.date)
+                .hour(projectStartTime || 0)
+                .minute(0);
+            const projectEnd = dayjs(slot.date)
+                .hour(projectEndTime || 24)
+                .minute(0);
+            if (projectEndTime === 0) projectEnd.add(1, 'day');
+
+            if (slotTime.isBetween(projectStart, projectEnd, 'minute', '[)')) {
+                if (!currentStartTime || slot.date !== currentDate) {
+                    currentDate = slot.date;
+                    currentStartTime = slotTime.format('YYYY-MM-DDTHH:mm:ss');
+                }
+
+                if (
+                    index === selectedSlots.length - 1 ||
+                    selectedSlots[index + 1].date !== slot.date ||
+                    !nextSlotTime.isSame(
+                        dayjs(
+                            `${selectedSlots[index + 1].date}T${selectedSlots[index + 1].hour
+                                .toString()
+                                .padStart(2, '0')}:${selectedSlots[index + 1].minute
+                                .toString()
+                                .padStart(2, '0')}:00`
+                        )
+                    )
+                ) {
+                    if (!scheduleByDate[currentDate]) {
+                        scheduleByDate[currentDate] = [];
+                    }
+                    scheduleByDate[currentDate].push({
+                        startTime: currentStartTime,
+                        endTime: nextSlotTime.format('YYYY-MM-DDTHH:mm:ss'),
+                    });
+                    currentStartTime = '';
+                }
             }
-            prevEndTime = endTime;
         }
     });
 
-    if (currentSchedule.length > 0) {
-        scheduleData.push({ schedule: currentSchedule });
-    }
+    const scheduleData: ScheduleData = {
+        schedule: Object.entries(scheduleByDate).map(([, scheduleItems]) => ({
+            schedule: scheduleItems,
+        })),
+    };
 
-    return { schedule: scheduleData };
+    return scheduleData;
 };
