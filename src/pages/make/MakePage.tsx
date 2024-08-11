@@ -57,6 +57,12 @@ const ProjectMakePage: FC = () => {
             return;
         }
 
+        const covertToLocalDate = (date: Date | null): string => {
+            if (!date) return '';
+            const localDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
+            return localDate.toISOString().split('T')[0];
+        };
+
         let adjustedEndDate = endDate;
         if (endtime === 'AM 12:00') {
             adjustedEndDate = addOneDay(endDate);
@@ -65,8 +71,8 @@ const ProjectMakePage: FC = () => {
         const payload = {
             title: title,
             description: content,
-            startDate: startDate?.toISOString().substring(0, 10) || '',
-            endDate: adjustedEndDate?.toISOString().substring(0, 10) || '',
+            startDate: covertToLocalDate(startDate),
+            endDate: covertToLocalDate(adjustedEndDate),
             startTime: formatTime(starttime),
             endTime: formatTime(endtime),
             daysOfWeek: selectedDays,
