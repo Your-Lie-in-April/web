@@ -58,17 +58,6 @@ const MyTimeBar: React.FC<MyTimeBarProps> = ({ hours, schedule }) => {
                             style={{
                                 position: 'absolute',
                                 top: 0,
-                                left: '50%',
-                                width: '0.5px',
-                                height: '100%',
-                                borderLeft: '1px dashed #a4a4a4',
-                                transform: 'translateX(-50%)',
-                            }}
-                        />
-                        <div
-                            style={{
-                                position: 'absolute',
-                                top: 0,
                                 left: '0%',
                                 width: '50%',
                                 height: '100%',
@@ -90,21 +79,7 @@ const MyTimeBar: React.FC<MyTimeBarProps> = ({ hours, schedule }) => {
                                 borderTopLeftRadius: '20px',
                                 borderBottomLeftRadius: '20px',
                             }}
-                        >
-                            {isScheduledFirstHalf && (
-                                <div
-                                    style={{
-                                        position: 'absolute',
-                                        top: 0,
-                                        left: '100%',
-                                        width: '0.5px',
-                                        height: '100%',
-                                        borderLeft: '1px dashed #ffffff',
-                                        transform: 'translateX(-50%)',
-                                    }}
-                                />
-                            )}
-                        </div>
+                        />
                         <div
                             style={{
                                 position: 'absolute',
@@ -131,19 +106,21 @@ const MyTimeBar: React.FC<MyTimeBarProps> = ({ hours, schedule }) => {
                                 borderBottomRightRadius: '20px',
                             }}
                         >
-                            {isScheduledSecondHalf && (
-                                <div
-                                    style={{
-                                        position: 'absolute',
-                                        top: 0,
-                                        left: '0%',
-                                        width: '0.5px',
-                                        height: '100%',
-                                        borderLeft: '1px dashed #ffffff',
-                                        transform: 'translateX(-50%)',
-                                    }}
-                                />
-                            )}
+                            <div
+                                style={{
+                                    position: 'absolute',
+                                    top: 0,
+                                    left: 0,
+                                    height: '100%',
+                                    width: '0.5px',
+                                    borderLeft: `1px dashed ${
+                                        isScheduledFirstHalf || isScheduledSecondHalf
+                                            ? '#ffffff'
+                                            : '#a4a4a4'
+                                    }`,
+                                    transform: 'translateX(-50%)',
+                                }}
+                            />
                         </div>
                     </div>
                 );
