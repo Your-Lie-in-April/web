@@ -7,7 +7,7 @@ import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
 import { FC, useContext, useMemo } from 'react';
 import Calendar from 'react-calendar';
-import { StyledProjectCalendar } from './ScheduleCalendar.styles';
+import { StyledScheduleCalendar } from './ScheduleCalendar.styles';
 
 dayjs.extend(isSameOrAfter);
 dayjs.extend(isSameOrBefore);
@@ -42,7 +42,9 @@ const ScheduleCalendar: FC = () => {
             // 프로젝트 기간 확인
             const isWithinProjectPeriod =
                 currentDate.isSameOrAfter(projectStart, 'day') &&
-                currentDate.isSameOrBefore(projectEnd, 'day');
+                (projectEnd.hour() === 0 && projectEnd.minute() === 0
+                    ? currentDate.isBefore(projectEnd, 'day')
+                    : currentDate.isSameOrBefore(projectEnd, 'day'));
             classes.push(isWithinProjectPeriod ? 'project-period' : 'out-of-project-period');
 
             if (currentDate.isSame(selected, 'day')) {
@@ -83,7 +85,7 @@ const ScheduleCalendar: FC = () => {
     };
 
     return (
-        <StyledProjectCalendar>
+        <StyledScheduleCalendar>
             <Calendar
                 value={selectedDate}
                 onChange={handleDateChange}
@@ -107,8 +109,7 @@ const ScheduleCalendar: FC = () => {
                     <ArrowRightIcon sx={{ fill: '#D9D9D9', width: '22px', height: '22px' }} />
                 }
             />
-        </StyledProjectCalendar>
+        </StyledScheduleCalendar>
     );
 };
 export default ScheduleCalendar;
-

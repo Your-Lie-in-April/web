@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const StyledProjectCalendar = styled.div`
+export const StyledScheduleCalendar = styled.div`
     // 날짜 범위 시작일의 테두리 반경을 없앰
     .react-calendar__tile--rangeStart {
         border-top-right-radius: 0 !important;
