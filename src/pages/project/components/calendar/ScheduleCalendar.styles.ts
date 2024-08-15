@@ -24,63 +24,6 @@ export const StyledScheduleCalendar = styled.div`
         border: none;
     }
 
-    // 선택 날짜 스타일
-    .selected-date {
-        position: relative;
-        background-color: transparent !important;
-        color: #ffffff !important;
-        z-index: 1;
-    }
-
-    .selected-date::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background-color: #b79fff;
-        z-index: -2;
-    }
-
-    .selected-date::after {
-        content: '';
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        width: 100%;
-        height: 100%;
-        background-color: #633ae2;
-        border-radius: 5px;
-        z-index: -1;
-    }
-
-    .selected-date.highlight.start-of-week::after,
-    .selected-date.highlight.end-of-week::after {
-        border-radius: 5px;
-    }
-
-    .highlight.start-of-week::before {
-        border-top-left-radius: 5px;
-        border-bottom-left-radius: 5px;
-    }
-
-    .highlight.end-of-week::before {
-        border-top-right-radius: 5px;
-        border-bottom-right-radius: 5px;
-    }
-
-    .highlight:first-child {
-        border-top-left-radius: 5px !important;
-        border-bottom-left-radius: 5px !important;
-    }
-
-    .highligh:last-child {
-        border-top-right-radius: 5px !important;
-        border-bottom-right-radius: 5px !important;
-    }
-
     // 비선택한 날짜 스타일
     .react-calendar__tile--active:not(.selected-date) {
         background: #633ae2;
@@ -162,45 +105,6 @@ export const StyledScheduleCalendar = styled.div`
         outline: none;
     }
 
-    // 월 선택 부분 스타일
-    .react-calendar__year-view__months__month {
-        border-radius: 10px;
-        padding: 0px;
-        height: 60px;
-        font-size: 22px;
-        background-color: transparent;
-        color: #000000;
-    }
-
-    .highlight.highlight-start {
-        border-top-left-radius: 5px !important;
-        border-bottom-left-radius: 5px !important;
-    }
-    .highlight.highlight-end {
-        border-top-right-radius: 5px !important;
-        border-bottom-right-radius: 5px !important;
-    }
-
-    .react-calendar__tile:first-child.highlight {
-        border-top-left-radius: 5px !important;
-        border-bottom-left-radius: 5px !important;
-    }
-
-    .react-calendar__tile:last-child.highlight {
-        border-top-right-radius: 5px !important;
-        border-bottom-right-radius: 5px !important;
-    }
-
-    .project-period.highlight:first-of-type {
-        border-top-left-radius: 5px !important;
-        border-bottom-left-radius: 5px !important;
-    }
-
-    .project-period.highlight:last-of-type {
-        border-top-right-radius: 5px !important;
-        border-bottom-right-radius: 5px !important;
-    }
-
     // 달력의 날짜 그리드 형식
     .react-calendar__month-view__days {
         height: 204px;
@@ -279,11 +183,6 @@ export const StyledScheduleCalendar = styled.div`
         pointer-events: none;
     }
 
-    .highlight.project-period,
-    .highlight.out-of-project-period {
-        color: #ffffff !important;
-    }
-
     // 일반적인 타일 호버 스타일
     .react-calendar__tile:not(.highlight):hover {
         cursor: pointer;
@@ -299,13 +198,74 @@ export const StyledScheduleCalendar = styled.div`
         border-radius: 0 !important;
     }
 
-    .highlight.highlight-start:hover {
+    .highlight.highlight-start {
         border-top-left-radius: 5px !important;
         border-bottom-left-radius: 5px !important;
     }
 
-    .highlight.highlight-end:hover {
+    .highlight.highlight-end {
         border-top-right-radius: 5px !important;
         border-bottom-right-radius: 5px !important;
+    }
+
+    .highlight {
+        background-color: #b79fff;
+        color: #ffffff !important;
+    }
+
+    .highlight.highlight-start {
+        border-top-left-radius: 5px !important;
+        border-bottom-left-radius: 5px !important;
+    }
+
+    .highlight.highlight-end {
+        border-top-right-radius: 5px !important;
+        border-bottom-right-radius: 5px !important;
+    }
+
+    .project-period.highlight {
+        color: #ffffff !important;
+    }
+
+    .out-of-project-period.highlight {
+        background-color: transparent;
+        color: #d9d9d9 !important;
+    }
+
+    // 선택 날짜 스타일
+    .selected-date {
+        position: relative;
+        color: #ffffff !important;
+        z-index: 1;
+        border-radius: 8px;
+    }
+
+    .selected-date::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #b79fff;
+        z-index: -2;
+    }
+
+    .selected-date::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 100%;
+        height: 101%;
+        background-color: #633ae2;
+        border-radius: 5px;
+        z-index: -1;
+    }
+
+    .selected-date.highlight.start-of-week::after,
+    .selected-date.highlight.end-of-week::after {
+        border-radius: 5px;
     }
 `;

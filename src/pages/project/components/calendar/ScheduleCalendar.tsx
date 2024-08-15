@@ -32,48 +32,43 @@ const ScheduleCalendar: FC = () => {
 
     const tileClassName = ({ date, view }: { date: Date; view: string }) => {
         if (view === 'month' && selectedDate) {
-            const selected = dayjs(selectedDate);
             const currentDate = dayjs(date);
+            const selected = dayjs(selectedDate);
             const projectStart = dayjs(projectData?.startDate);
             const projectEnd = dayjs(projectData?.endDate);
 
+            // 종료일이 00:00인 경우 전날로 조정
+            const adjustedProjectEnd =
+                projectEnd.hour() === 0 && projectEnd.minute() === 0
+                    ? projectEnd.subtract(1, 'day')
+                    : projectEnd;
+
             let classes = [];
 
-            // 프로젝트 기간 확인
             const isWithinProjectPeriod =
                 currentDate.isSameOrAfter(projectStart, 'day') &&
-                (projectEnd.hour() === 0 && projectEnd.minute() === 0
-                    ? currentDate.isBefore(projectEnd, 'day')
-                    : currentDate.isSameOrBefore(projectEnd, 'day'));
+                currentDate.isSameOrBefore(adjustedProjectEnd, 'day');
+
             classes.push(isWithinProjectPeriod ? 'project-period' : 'out-of-project-period');
 
-            if (currentDate.isSame(selected, 'day')) {
-                classes.push('selected-date', 'highlight');
-            } else if (
-                startDate &&
-                endDate &&
-                date >= startDate &&
-                date <= endDate &&
-                isWithinProjectPeriod
-            ) {
+            if (startDate && endDate && date >= startDate && date <= endDate) {
                 classes.push('highlight');
 
-                // 하이라이트 시작 부분 처리
-                if (
-                    date.toDateString() === startDate.toDateString() ||
-                    (currentDate.day() === 0 && isWithinProjectPeriod)
-                ) {
-                    classes.push('highlight-start');
-                }
+                const isStartOfWeek = currentDate.day() === 0;
+                const isEndOfWeek = currentDate.day() === 6;
+                const isProjectStart = currentDate.isSame(projectStart, 'day');
+                const isProjectEnd = currentDate.isSame(adjustedProjectEnd, 'day');
+                const isStartOfHighlight =
+                    date.getTime() === startDate.getTime() || isStartOfWeek || isProjectStart;
+                const isEndOfHighlight =
+                    date.getTime() === endDate.getTime() || isEndOfWeek || isProjectEnd;
 
-                // 하이라이트 끝 부분 처리
-                if (
-                    date.toDateString() === endDate.toDateString() ||
-                    (currentDate.day() === 6 && isWithinProjectPeriod) ||
-                    currentDate.isSame(projectEnd, 'day')
-                ) {
-                    classes.push('highlight-end');
-                }
+                if (isStartOfHighlight) classes.push('highlight-start');
+                if (isEndOfHighlight) classes.push('highlight-end');
+            }
+
+            if (currentDate.isSame(selected, 'day')) {
+                classes.push('selected-date');
             }
 
             return classes.join(' ');
