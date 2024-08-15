@@ -5,7 +5,6 @@ import { FC, useState } from 'react';
 import { useNavigate } from 'react-router';
 import 'react-toastify/dist/ReactToastify.css';
 import styled, { createGlobalStyle } from 'styled-components';
-
 import ProjectCalendar from './components/calendar/ProjectCalendar';
 import Info from './components/info/Info';
 import ProjectTime from './components/time/ProjectTime';
@@ -46,10 +45,6 @@ const ProjectMakePage: FC = () => {
     const makeProject = async () => {
         if (!title.trim()) {
             Toast('프로젝트 제목을 작성해주세요', 'error');
-            return;
-        }
-        if (!content.trim()) {
-            Toast('프로젝트 내용을 작성해주세요', 'error');
             return;
         }
 
