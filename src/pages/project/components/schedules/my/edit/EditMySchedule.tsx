@@ -7,7 +7,8 @@ import { ProjectContext } from '@hooks/context/projectContext';
 import { Toast } from '@pages/layouts/Toast';
 import ModalPortal from '@utils/ModalPotal';
 import useScrollLock from '@utils/useScrollLock';
-import React, { useContext, useState } from 'react';
+import dayjs from 'dayjs';
+import React, { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { formatScheduleData } from '../../formatScheduleData';
@@ -51,6 +52,44 @@ const EditMySchedule: React.FC<EditMyScheduleProps> = ({
     const { projectId } = useParams<{ projectId: string }>();
     const { weekDates } = useContext(DateContext) || {};
     const [selection, setSelection] = useState<{ [key: number]: SelectedSlot }>({});
+
+    const [initialSelection, setInitialSelection] = useState<{ [key: number]: SelectedSlot }>({});
+    useEffect(() => {
+        if (scheduleData && scheduleData.schedule) {
+            const newInitialSelection: { [key: number]: SelectedSlot } = {};
+
+            scheduleData.schedule.forEach((daySchedule) => {
+                const dayIndex = weekDates?.findIndex(
+                    (date) => dayjs(date).format('dddd').toUpperCase() === daySchedule.daysOfWeek
+                );
+
+                if (dayIndex !== undefined && dayIndex !== -1) {
+                    daySchedule.schedule.forEach((slot) => {
+                        const startTime = dayjs(slot.startTime);
+                        const endTime = dayjs(slot.endTime);
+                        for (
+                            let time = startTime;
+                            time.isBefore(endTime);
+                            time = time.add(30, 'minute')
+                        ) {
+                            const hour = time.hour();
+                            const minute = time.minute();
+                            const slotIndex =
+                                (dayIndex * 15 + (hour - 9)) * 2 + (minute === 30 ? 1 : 0) + 1;
+
+                            newInitialSelection[slotIndex] = {
+                                date: weekDates ? weekDates[dayIndex] : '',
+                                hour,
+                                minute,
+                            };
+                        }
+                    });
+                }
+            });
+            setInitialSelection(newInitialSelection);
+            setSelection(newInitialSelection);
+        }
+    }, [scheduleData, weekDates]);
 
     const postScheduleMutation = usePostScheduleMutation(Number(projectId));
     const postSchedule = async (scheduleData: ScheduleData) => {
@@ -120,7 +159,7 @@ const EditMySchedule: React.FC<EditMyScheduleProps> = ({
             } else {
                 await postSchedule(newScheduleData);
             }
-            setSelection({});
+            setSelection(initialSelection);
             onSetIsEditModal();
         } catch (error) {
             console.error('Error post/update schedule:', error);
@@ -130,7 +169,7 @@ const EditMySchedule: React.FC<EditMyScheduleProps> = ({
     useScrollLock(isEditModal);
 
     const handleCloseModal = () => {
-        setSelection({});
+        setSelection(initialSelection);
         onSetIsEditModal();
     };
 

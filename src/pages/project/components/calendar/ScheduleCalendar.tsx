@@ -49,17 +49,30 @@ const ScheduleCalendar: FC = () => {
 
             if (currentDate.isSame(selected, 'day')) {
                 classes.push('selected-date', 'highlight');
-                if (currentDate.isSame(selected.startOf('week'), 'day')) {
-                    classes.push('start-of-week');
-                } else if (currentDate.isSame(selected.endOf('week'), 'day')) {
-                    classes.push('end-of-week');
-                }
-            } else if (startDate && endDate && date >= startDate && date <= endDate) {
+            } else if (
+                startDate &&
+                endDate &&
+                date >= startDate &&
+                date <= endDate &&
+                isWithinProjectPeriod
+            ) {
                 classes.push('highlight');
-                if (date.toDateString() === startDate.toDateString()) {
-                    classes.push('start-of-week');
-                } else if (date.toDateString() === endDate.toDateString()) {
-                    classes.push('end-of-week');
+
+                // 하이라이트 시작 부분 처리
+                if (
+                    date.toDateString() === startDate.toDateString() ||
+                    (currentDate.day() === 0 && isWithinProjectPeriod)
+                ) {
+                    classes.push('highlight-start');
+                }
+
+                // 하이라이트 끝 부분 처리
+                if (
+                    date.toDateString() === endDate.toDateString() ||
+                    (currentDate.day() === 6 && isWithinProjectPeriod) ||
+                    currentDate.isSame(projectEnd, 'day')
+                ) {
+                    classes.push('highlight-end');
                 }
             }
 

@@ -20,7 +20,7 @@ export const StyledScheduleCalendar = styled.div`
         background-color: #b79fff;
         color: #ffffff !important;
         font-size: 24px;
-        border-radius: 0;
+        border-radius: 0 !important;
         border: none;
     }
 
@@ -69,6 +69,16 @@ export const StyledScheduleCalendar = styled.div`
     .highlight.end-of-week::before {
         border-top-right-radius: 5px;
         border-bottom-right-radius: 5px;
+    }
+
+    .highlight:first-child {
+        border-top-left-radius: 5px !important;
+        border-bottom-left-radius: 5px !important;
+    }
+
+    .highligh:last-child {
+        border-top-right-radius: 5px !important;
+        border-bottom-right-radius: 5px !important;
     }
 
     // 비선택한 날짜 스타일
@@ -162,14 +172,33 @@ export const StyledScheduleCalendar = styled.div`
         color: #000000;
     }
 
-    .highlight.start-of-week {
-        border-top-left-radius: 5px;
-        border-bottom-left-radius: 5px;
+    .highlight.highlight-start {
+        border-top-left-radius: 5px !important;
+        border-bottom-left-radius: 5px !important;
+    }
+    .highlight.highlight-end {
+        border-top-right-radius: 5px !important;
+        border-bottom-right-radius: 5px !important;
     }
 
-    .highlight.end-of-week {
-        border-top-right-radius: 5px;
-        border-bottom-right-radius: 5px;
+    .react-calendar__tile:first-child.highlight {
+        border-top-left-radius: 5px !important;
+        border-bottom-left-radius: 5px !important;
+    }
+
+    .react-calendar__tile:last-child.highlight {
+        border-top-right-radius: 5px !important;
+        border-bottom-right-radius: 5px !important;
+    }
+
+    .project-period.highlight:first-of-type {
+        border-top-left-radius: 5px !important;
+        border-bottom-left-radius: 5px !important;
+    }
+
+    .project-period.highlight:last-of-type {
+        border-top-right-radius: 5px !important;
+        border-bottom-right-radius: 5px !important;
     }
 
     // 달력의 날짜 그리드 형식
@@ -270,12 +299,12 @@ export const StyledScheduleCalendar = styled.div`
         border-radius: 0 !important;
     }
 
-    .highlight.start-of-week:hover {
+    .highlight.highlight-start:hover {
         border-top-left-radius: 5px !important;
         border-bottom-left-radius: 5px !important;
     }
 
-    .highlight.end-of-week:hover {
+    .highlight.highlight-end:hover {
         border-top-right-radius: 5px !important;
         border-bottom-right-radius: 5px !important;
     }
