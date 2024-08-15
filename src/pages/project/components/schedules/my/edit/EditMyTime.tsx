@@ -32,6 +32,23 @@ const EditMyTime: React.FC<EditMyTimeProps> = ({ weekDates, selection, onSelecti
     const [firstClickSlotState, setFirstClickSlotState] = useState<boolean>(false);
     const [isMouseDown, setIsMouseDown] = useState<boolean>(false);
 
+    const isWithinProjectPeriod = (date: string) => {
+        if (!projectData) return false;
+        const currentDate = dayjs(date);
+        const projectStart = dayjs(projectData.startDate);
+        const projectEnd = dayjs(projectData.endDate);
+        return (
+            currentDate.isSameOrAfter(projectStart, 'day') &&
+            currentDate.isSameOrBefore(projectEnd, 'day')
+        );
+    };
+
+    const isProjectDay = (date: string) => {
+        if (!projectData || !projectData.daysOfWeek) return false;
+        const dayOfWeek = dayjs(date).format('dddd').toUpperCase();
+        return projectData.daysOfWeek.includes(dayOfWeek);
+    };
+
     // 셀 마우스 클릭시
     const handleMouseClick = (id: number, date: string, hour: number, minute: number) => {
         const isWithinProjectTime = isProjectHour(
@@ -42,7 +59,7 @@ const EditMyTime: React.FC<EditMyTimeProps> = ({ weekDates, selection, onSelecti
             projectEndTime
         );
 
-        if (isWithinProjectTime) {
+        if (isWithinProjectTime && isProjectDay(date)) {
             setFirstClickSlot(id);
 
             const newSelection = { ...selection };
@@ -63,7 +80,7 @@ const EditMyTime: React.FC<EditMyTimeProps> = ({ weekDates, selection, onSelecti
 
     // 마우스가 셀 안에 들어올 경우 (드래그시)
     const handleMouseEnter = (id: number, date: string, hour: number, minute: number) => {
-        if (isMouseDown) {
+        if (isMouseDown && isProjectDay(date)) {
             const isWithinProjectTime = isProjectHour(
                 date,
                 hour,
@@ -96,7 +113,6 @@ const EditMyTime: React.FC<EditMyTimeProps> = ({ weekDates, selection, onSelecti
         if (Object.keys(selection).length === 0) {
             setFirstClickSlot(0);
         }
-        console.log(selection)
     }, [selection]);
 
     return (
@@ -157,6 +173,8 @@ const EditMyTime: React.FC<EditMyTimeProps> = ({ weekDates, selection, onSelecti
                                                 date={date}
                                                 hour={hour}
                                                 minute={0}
+                                                isProjectDay={isProjectDay(date)}
+                                                isWithinProjectPeriod={isWithinProjectPeriod(date)}
                                             />
                                             <TimeSlotRight
                                                 id={slotIdRight}
@@ -173,6 +191,8 @@ const EditMyTime: React.FC<EditMyTimeProps> = ({ weekDates, selection, onSelecti
                                                 date={date}
                                                 hour={hour}
                                                 minute={30}
+                                                isProjectDay={isProjectDay(date)}
+                                                isWithinProjectPeriod={isWithinProjectPeriod(date)}
                                             />
                                         </React.Fragment>
                                     );

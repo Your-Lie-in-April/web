@@ -11,6 +11,8 @@ interface TimeSlotProps {
     minute: number;
     projectStartTime: string | undefined;
     projectEndTime: string | undefined;
+    isProjectDay: boolean;
+    isWithinProjectPeriod: boolean;
 }
 
 export const TimeSlotLeft: React.FC<TimeSlotProps> = ({
@@ -23,16 +25,23 @@ export const TimeSlotLeft: React.FC<TimeSlotProps> = ({
     minute,
     projectStartTime,
     projectEndTime,
+    isProjectDay,
+    isWithinProjectPeriod,
 }) => {
     const handleMouseDown = () => {
-        onSelectSlot(id, date, hour, minute);
+        if (isProjectDay) {
+            onSelectSlot(id, date, hour, minute);
+        }
     };
 
     const handleMouseEnter = () => {
-        onMouseEnter();
+        if (isProjectDay) {
+            onMouseEnter();
+        }
     };
 
     const isProjectTime = isProjectHour(date, hour, minute, projectStartTime, projectEndTime);
+    const isDisabled = !isProjectDay || !isProjectTime || !isWithinProjectPeriod;
 
     return (
         <div
@@ -47,7 +56,7 @@ export const TimeSlotLeft: React.FC<TimeSlotProps> = ({
                 borderTop: '0.5px solid #a4a4a4',
                 borderLeft: '0.5px solid #a4a4a4',
                 borderBottom: '0.5px solid #a4a4a4',
-                background: isProjectTime ? (isSelected ? '#633AE2' : '#D9D9D9') : '#ffffff',
+                background: !isDisabled ? (isSelected ? '#633AE2' : '#D9D9D9') : '#ffffff',
                 boxSizing: 'border-box',
             }}
             onMouseDown={handleMouseDown}
@@ -66,16 +75,23 @@ export const TimeSlotRight: React.FC<TimeSlotProps> = ({
     minute,
     projectStartTime,
     projectEndTime,
+    isProjectDay,
+    isWithinProjectPeriod,
 }) => {
     const handleMouseDown = () => {
-        onSelectSlot(id, date, hour, minute);
+        if (isProjectDay) {
+            onSelectSlot(id, date, hour, minute);
+        }
     };
 
     const handleMouseEnter = () => {
-        onMouseEnter();
+        if (isProjectDay) {
+            onMouseEnter();
+        }
     };
 
     const isProjectTime = isProjectHour(date, hour, minute, projectStartTime, projectEndTime);
+    const isDisabled = !isProjectDay || !isProjectTime || !isWithinProjectPeriod;
 
     return (
         <div
@@ -89,7 +105,7 @@ export const TimeSlotRight: React.FC<TimeSlotProps> = ({
                 borderTop: '0.5px solid #a4a4a4',
                 borderRight: '0.5px solid #a4a4a4',
                 borderBottom: '0.5px solid #a4a4a4',
-                background: isProjectTime ? (isSelected ? '#633AE2' : '#D9D9D9') : '#ffffff',
+                background: !isDisabled ? (isSelected ? '#633AE2' : '#D9D9D9') : '#ffffff',
                 boxSizing: 'border-box',
             }}
             onMouseDown={handleMouseDown}
