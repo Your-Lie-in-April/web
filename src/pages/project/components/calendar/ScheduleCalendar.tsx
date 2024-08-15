@@ -36,20 +36,23 @@ const ScheduleCalendar: FC = () => {
             const selected = dayjs(selectedDate);
             const projectStart = dayjs(projectData?.startDate);
             const projectEnd = dayjs(projectData?.endDate);
-
-            // 종료일이 00:00인 경우 전날로 조정
-            const adjustedProjectEnd =
-                projectEnd.hour() === 0 && projectEnd.minute() === 0
-                    ? projectEnd.subtract(1, 'day')
-                    : projectEnd;
+            const today = dayjs();
 
             let classes = [];
 
             const isWithinProjectPeriod =
                 currentDate.isSameOrAfter(projectStart, 'day') &&
-                currentDate.isSameOrBefore(adjustedProjectEnd, 'day');
+                (currentDate.isBefore(projectEnd, 'day') ||
+                    (currentDate.isSame(projectEnd, 'day') && projectEnd.hour() !== 0));
 
             classes.push(isWithinProjectPeriod ? 'project-period' : 'out-of-project-period');
+
+            const isOutOfProjectPeriod = !isWithinProjectPeriod;
+            const isToday = currentDate.isSame(today, 'day');
+
+            if (isToday && isOutOfProjectPeriod && currentDate.isSame(selected, 'day')) {
+                classes.push('today-selected-out-of-project');
+            }
 
             if (startDate && endDate && date >= startDate && date <= endDate) {
                 classes.push('highlight');
@@ -57,7 +60,7 @@ const ScheduleCalendar: FC = () => {
                 const isStartOfWeek = currentDate.day() === 0;
                 const isEndOfWeek = currentDate.day() === 6;
                 const isProjectStart = currentDate.isSame(projectStart, 'day');
-                const isProjectEnd = currentDate.isSame(adjustedProjectEnd, 'day');
+                const isProjectEnd = currentDate.isSame(projectEnd.subtract(1, 'second'), 'day');
                 const isStartOfHighlight =
                     date.getTime() === startDate.getTime() || isStartOfWeek || isProjectStart;
                 const isEndOfHighlight =

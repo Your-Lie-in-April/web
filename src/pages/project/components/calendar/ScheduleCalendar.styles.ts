@@ -236,7 +236,7 @@ export const StyledScheduleCalendar = styled.div`
     .selected-date {
         position: relative;
         color: #ffffff !important;
-        z-index: 1;
+        z-index: 0;
         border-radius: 8px;
     }
 
@@ -267,5 +267,28 @@ export const StyledScheduleCalendar = styled.div`
     .selected-date.highlight.start-of-week::after,
     .selected-date.highlight.end-of-week::after {
         border-radius: 5px;
+    }
+
+    .today-selected-out-of-project {
+        position: relative;
+        color: #d9d9d9 !important;
+        z-index: 0;
+        border-radius: 5px !important;
+        cursor: default;
+        pointer-events: none;
+    }
+
+    .today-selected-out-of-project::before,
+    .today-selected-out-of-project::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 100%;
+        height: 101%;
+        background-color: transparent;
+        border-radius: 5px !important;
+        z-index: -1;
     }
 `;
