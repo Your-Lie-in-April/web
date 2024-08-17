@@ -36,7 +36,9 @@ const EditMyTime: React.FC<EditMyTimeProps> = ({ weekDates, selection, onSelecti
         if (!projectData) return false;
         const currentDate = dayjs(date);
         const projectStart = dayjs(projectData.startDate);
-        const projectEnd = dayjs(projectData.endDate);
+        let projectEnd = dayjs(projectData.endDate);
+        if (projectEnd.hour() === 0 && projectEnd.minute() === 0)
+            projectEnd = dayjs(projectData.endDate).subtract(1, 'day');
         return (
             currentDate.isSameOrAfter(projectStart, 'day') &&
             currentDate.isSameOrBefore(projectEnd, 'day')
