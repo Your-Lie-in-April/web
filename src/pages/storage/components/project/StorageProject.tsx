@@ -3,23 +3,28 @@ import usePatchStoredMutation from '@hooks/apis/mutations/member/usePatchStoredM
 import DeleteIcon from '@mui/icons-material/Delete';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
-import DeleteProject from '@pages/modal/project/DeleteProject';
+import LeaveProject from '@pages/modal/project/LeaveProject';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 const StorageProject = ({ project }: { project: ProjectThumbnailInfo }) => {
     const [showMore, setShowMore] = useState<boolean>(false);
-    const [isClick, setIsClick] = useState<boolean>(false);
+    const [isLeaveModalOpen, setIsLeaveModalOpen] = useState<boolean>(false);
     const navigate = useNavigate();
 
     const toggleMoreBtn = () => {
         setShowMore(!showMore);
     };
 
-    const onClickItem = () => {
-        setIsClick(!isClick);
+    const openLeaveModal = () => {
+        setIsLeaveModalOpen(true);
     };
+
+    const closeLeaveModal = () => {
+        setIsLeaveModalOpen(false);
+    };
+
     const { mutate: handleStored } = usePatchStoredMutation(project.projectId);
 
     const onProjectClick = () => {
@@ -47,7 +52,7 @@ const StorageProject = ({ project }: { project: ProjectThumbnailInfo }) => {
                             </MoreItem>
                             <MoreItem
                                 onClick={(event) => {
-                                    onClickItem();
+                                    openLeaveModal();
                                     event.stopPropagation();
                                 }}
                             >
@@ -74,11 +79,11 @@ const StorageProject = ({ project }: { project: ProjectThumbnailInfo }) => {
                     </TextBox>
                 </DetailBox>
             </ProjectBox>
-            <DeleteProject
-                onClose={onClickItem}
+            <LeaveProject
                 projectId={project.projectId}
-                title={project.title}
-                isClick={isClick}
+                projectTitle={project.title}
+                onClose={closeLeaveModal}
+                isOpen={isLeaveModalOpen}
             />
         </>
     );

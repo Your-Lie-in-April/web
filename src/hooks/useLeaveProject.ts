@@ -1,22 +1,23 @@
-import { ProjectMemberResDto } from '@/types/projectType';
 import { Toast } from '@pages/layouts/Toast';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import useDeleteProjectLeaveMutation from './apis/mutations/project/useDeleteProjectLeaveMutation';
 import useDeleteProjectMutation from './apis/mutations/project/useDeleteProjectMutation';
-import useProjectMemberQuery from './apis/queries/project/useProjectMemberQuery';
+import useAllMemberInfoQuery from './apis/queries/member/useAllMemberInfoQuery';
+import { useUserContext } from './context/userContext';
 
-export const useLeaveProject = (projectId: number, isModalOpen: boolean) => {
+export const useLeaveProject = (projectId: number) => {
     const [message, setMessage] = useState<string>('해당 프로젝트에서 나가겠습니까?');
+    const { userData } = useUserContext();
+    const myId = userData?.memberId;
 
-    const { data: members } = useProjectMemberQuery(projectId, {
-        enabled: isModalOpen,
-        onSuccess: (data: ProjectMemberResDto) => {
-            if (data.length === 1) {
-                setMessage('해당 프로젝트를 삭제하시겠습니까?');
-            }
-        },
-        gcTime: 0,
-    });
+    const { data: members } = useAllMemberInfoQuery(Number(projectId));
+    const privilegedMembers = members?.filter((member) => member.isPrivileged) ?? [];
+    const isMePrivileged = privilegedMembers.some((member) => member.memberId === myId);
+    useEffect(() => {
+        if (isMePrivileged) {
+            setMessage('해당 프로젝트를 삭제하시겠습니까?');
+        }
+    }, [isMePrivileged]);
 
     const { mutate: deleteProject } = useDeleteProjectMutation(projectId);
     const { mutate: leaveProject } = useDeleteProjectLeaveMutation(projectId);
@@ -27,16 +28,15 @@ export const useLeaveProject = (projectId: number, isModalOpen: boolean) => {
 
     const handleLeave = async (onClose: () => void) => {
         try {
-            if (members && members.length === 1) {
-                deleteProject();
+            if (isMePrivileged) {
+                if (members && members?.length > 1)
+                    Toast('권한 양도후, 다시 시도해주세요', 'error');
+                else deleteProject();
             } else {
                 leaveProject();
             }
         } catch (error) {
-            console.error('useLeaveProject Error:', error);
-            if (error instanceof Error && error.message.includes('400')) {
-                Toast('📣관리자는 나갈 수 없습니다', 'error');
-            }
+            console.log(error);
         }
         onClose();
     };

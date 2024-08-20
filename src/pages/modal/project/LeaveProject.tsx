@@ -18,7 +18,7 @@ const LeaveProject: React.FC<DeleteProjectProps> = ({
     projectId,
     projectTitle,
 }) => {
-    const { message, handleLeave, handleCancel } = useLeaveProject(projectId, isOpen);
+    const { message, handleLeave, handleCancel } = useLeaveProject(projectId);
 
     useScrollLock(isOpen);
 
