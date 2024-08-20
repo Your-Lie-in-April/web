@@ -89,53 +89,56 @@ const Alarm: FC = () => {
                     </DeleteNotification>
                 </DeleteWrapper>
             )}
-            <div style={{ height: '14px' }} />
-            {allAlarms.length > 0 && <Divider />}
-            <ScrollableArea>
-                {allAlarms.length == 0 && <EmptyAlarmMessage>알림이 비었습니다</EmptyAlarmMessage>}
-                {Array.from(allAlarms).map((alarm, index) => (
-                    <NotificationBox
-                        key={alarm.notificationId}
-                        onClick={() =>
-                            handleNotificationClick(alarm.project.projectId, alarm.notificationId)
-                        }
-                        ref={index === Array.from(allAlarms).length - 1 ? lastAlarmRef : null}
-                    >
-                        <NotificationWrapper>
-                            {isIconVisible && (
-                                <CheckBoxIcon
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        handleCheckBoxClick(alarm.notificationId);
-                                    }}
-                                    style={{
-                                        color:
-                                            checkedAlarm === alarm.notificationId
-                                                ? '#633AE2'
-                                                : '#A4A4A4',
-                                        marginLeft: -10,
-                                        fontSize: 20,
-                                        cursor: 'pointer',
-                                    }}
-                                />
-                            )}
-                            <ContentWrapper>
-                                <ProjectTitleContainer $isIconVisible={isIconVisible}>
-                                    <ProjectTitle $isSSE={alarm.isSSE ?? false}>
-                                        {alarm.project.title}
-                                    </ProjectTitle>
-                                    <CreatedAt $isSSE={alarm.isSSE ?? false}>
-                                        {formatTimeAgo(alarm.createdAt)}
-                                    </CreatedAt>
-                                </ProjectTitleContainer>
-                                <NotificationContent $isSSE={alarm.isSSE ?? false}>
-                                    {alarm.message}
-                                </NotificationContent>
-                            </ContentWrapper>
-                        </NotificationWrapper>
-                    </NotificationBox>
-                ))}
-            </ScrollableArea>
+            {allAlarms.length > 0 && (
+                <ScrollableArea $hasMessages={allAlarms.length > 0}>
+                    {Array.from(allAlarms).map((alarm, index) => (
+                        <NotificationBox
+                            key={alarm.notificationId}
+                            onClick={() =>
+                                handleNotificationClick(
+                                    alarm.project.projectId,
+                                    alarm.notificationId
+                                )
+                            }
+                            ref={index === Array.from(allAlarms).length - 1 ? lastAlarmRef : null}
+                        >
+                            <NotificationWrapper>
+                                {isIconVisible && (
+                                    <CheckBoxIcon
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            handleCheckBoxClick(alarm.notificationId);
+                                        }}
+                                        style={{
+                                            color:
+                                                checkedAlarm === alarm.notificationId
+                                                    ? '#633AE2'
+                                                    : '#A4A4A4',
+                                            marginLeft: -10,
+                                            fontSize: 20,
+                                            cursor: 'pointer',
+                                        }}
+                                    />
+                                )}
+                                <ContentWrapper>
+                                    <ProjectTitleContainer $isIconVisible={isIconVisible}>
+                                        <ProjectTitle $isSSE={alarm.isSSE ?? false}>
+                                            {alarm.project.title}
+                                        </ProjectTitle>
+                                        <CreatedAt $isSSE={alarm.isSSE ?? false}>
+                                            {formatTimeAgo(alarm.createdAt)}
+                                        </CreatedAt>
+                                    </ProjectTitleContainer>
+                                    <NotificationContent $isSSE={alarm.isSSE ?? false}>
+                                        {alarm.message}
+                                    </NotificationContent>
+                                </ContentWrapper>
+                            </NotificationWrapper>
+                        </NotificationBox>
+                    ))}
+                </ScrollableArea>
+            )}
+            {allAlarms.length == 0 && <EmptyAlarmMessage>알림이 비었습니다</EmptyAlarmMessage>}
             {isDeleted && <ConfirmDeleteAlarm />}
         </AlarmDiv>
     );
@@ -152,26 +155,10 @@ const AlarmDiv = styled.div`
     border-radius: 10px;
     padding: 8px;
     padding-top: 14px;
+    gap: 8px;
     box-sizing: border-box;
     position: relative;
     overflow: hidden;
-`;
-
-const ScrollableArea = styled.div`
-    overflow-y: auto;
-    flex-grow: 1;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-`;
-
-const Divider = styled.div`
-    height: 0.8px;
-    background-color: #7d7d7d;
-    width: 275px;
-    padding: 0;
-    margin: 0;
 `;
 
 const EmptyAlarmMessage = styled.div`
@@ -184,12 +171,24 @@ const EmptyAlarmMessage = styled.div`
     top: calc(48%);
 `;
 
+const ScrollableArea = styled.div<{ $hasMessages: boolean }>`
+    overflow-y: auto;
+    flex-grow: 1;
+    width: 275px;
+    display: flex;
+    flex-direction: column;
+    border-top: ${({ $hasMessages }) => ($hasMessages ? '1px solid #7d7d7d' : 'none')};
+    align-items: center;
+`;
+
 const Text = styled.div`
-    width: 100%;
+    color: #c4c4c4;
+    font-size: 22px;
     font-style: normal;
     font-weight: 500;
-    font-size: 22px;
-    color: #a4a4a4;
+    line-height: normal;
+    width: 100%;
+    font-style: normal;
     opacity: 0.9;
     white-space: nowrap;
     display: flex;
@@ -199,7 +198,7 @@ const Text = styled.div`
 
 const DeleteWrapper = styled.div`
     display: flex;
-    gap: 220px;
+    gap: 218px;
     position: absolute;
     left: 17px;
     top: 25px;
