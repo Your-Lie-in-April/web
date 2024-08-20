@@ -72,7 +72,7 @@ export const formatScheduleData = (
                 .minute(0);
             if (projectEndTime === 0) projectEnd.add(1, 'day');
 
-            if (slotTime.isBetween(projectStart, projectEnd, 'minute', '[)')) {
+            if (slotTime.isBetween(projectStart, projectEnd, 'minute', '[]')) {
                 if (!currentStartTime || slot.date !== currentDate) {
                     currentDate = slot.date;
                     currentStartTime = slotTime.format('YYYY-MM-DDTHH:mm:ss');

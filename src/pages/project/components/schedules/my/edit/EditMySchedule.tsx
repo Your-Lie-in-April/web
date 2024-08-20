@@ -1,10 +1,8 @@
 import { ScheduleData, ScheduleWeekResponse } from '@/types/scheduleType';
 import usePostScheduleMutation from '@hooks/apis/mutations/schedule/usePostScheduleMutation';
 import usePutScheduleMutation from '@hooks/apis/mutations/schedule/usePutScheduleMutation';
-import useProjectInfoQuery from '@hooks/apis/queries/project/useProjectInfoQuery';
 import { DateContext } from '@hooks/context/dateContext';
 import { ProjectContext } from '@hooks/context/projectContext';
-import { Toast } from '@pages/layouts/Toast';
 import ModalPortal from '@utils/ModalPotal';
 import useScrollLock from '@utils/useScrollLock';
 import dayjs from 'dayjs';
@@ -111,20 +109,6 @@ const EditMySchedule: React.FC<EditMyScheduleProps> = ({
         }
     };
 
-    const { data: project } = useProjectInfoQuery(Number(projectId));
-
-    const getDateText = () => {
-        let dates;
-        if (project?.startDate?.toString() === project?.endDate?.toString()) {
-            dates = project?.startDate?.toString().replace(/-/gi, '.');
-        } else {
-            const startDate = project?.startDate?.toString().replace(/-/gi, '.');
-            const endDate = project?.endDate?.toString().replace(/-/gi, '.').slice(5);
-            dates = startDate + '~' + endDate;
-        }
-        return dates;
-    };
-
     const handleConfirm = async () => {
         const projectStartDate = projectData?.startDate;
         const projectEndDate = projectData?.endDate;
@@ -144,14 +128,6 @@ const EditMySchedule: React.FC<EditMyScheduleProps> = ({
             projectStartDateString,
             projectEndDateString
         );
-
-        // 선택한 스케줄이 없거나 모두 프로젝트 기간/날짜에 포함되지 않는 경우
-        if (newScheduleData.schedule.length === 0) {
-            Toast(`${getDateText()}\n프로젝트 기간에 맞춰 시간표를 작성해주세요!`, 'warning');
-            setSelection({});
-            onSetIsEditModal();
-            return;
-        }
 
         try {
             if (scheduleData && scheduleData.schedule.length > 0) {
