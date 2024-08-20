@@ -3,7 +3,7 @@ import usePatchStoredMutation from '@hooks/apis/mutations/member/usePatchStoredM
 import DeleteIcon from '@mui/icons-material/Delete';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
-import LeaveProject from '@pages/modal/project/LeaveProject';
+import LeaveOrDeleteProject from '@pages/modal/project/LeaveOrDeleteProject';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
@@ -79,7 +79,7 @@ const StorageProject = ({ project }: { project: ProjectThumbnailInfo }) => {
                     </TextBox>
                 </DetailBox>
             </ProjectBox>
-            <LeaveProject
+            <LeaveOrDeleteProject
                 projectId={project.projectId}
                 projectTitle={project.title}
                 onClose={closeLeaveModal}

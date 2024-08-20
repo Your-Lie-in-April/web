@@ -5,7 +5,7 @@ import useDeleteProjectMutation from './apis/mutations/project/useDeleteProjectM
 import useAllMemberInfoQuery from './apis/queries/member/useAllMemberInfoQuery';
 import { useUserContext } from './context/userContext';
 
-export const useLeaveProject = (projectId: number) => {
+export const useLeaveOrDeleteProject = (projectId: number) => {
     const [message, setMessage] = useState<string>('해당 프로젝트에서 나가겠습니까?');
     const { userData } = useUserContext();
     const myId = userData?.memberId;

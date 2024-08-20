@@ -5,7 +5,7 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import InboxOutlinedIcon from '@mui/icons-material/InboxOutlined';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import PushPinOutlinedIcon from '@mui/icons-material/PushPinOutlined';
-import LeaveProject from '@pages/modal/project/LeaveProject';
+import LeaveOrDeleteProject from '@pages/modal/project/LeaveOrDeleteProject';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
@@ -94,7 +94,7 @@ const Project: React.FC<ProjectProps> = ({ project }) => {
                     </TextBox>
                 </ProjectWrapper>
             </ProjectBox>
-            <LeaveProject
+            <LeaveOrDeleteProject
                 projectId={project.projectId}
                 projectTitle={project.title}
                 onClose={closeLeaveModal}

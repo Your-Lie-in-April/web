@@ -1,24 +1,24 @@
-import { useLeaveProject } from '@hooks/useLeaveProject';
+import { useLeaveOrDeleteProject } from '@hooks/useLeaveOrDeleteProject';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import ModalPortal from '@utils/ModalPotal';
 import useScrollLock from '@utils/useScrollLock';
 import styled from 'styled-components';
 import { ModalBlackOut, ModalContainer } from '../ModalCommon';
 
-interface DeleteProjectProps {
+interface LeaveOrDeleteProjectProps {
     isOpen: boolean;
     onClose: () => void;
     projectId: number;
     projectTitle: string;
 }
 
-const LeaveProject: React.FC<DeleteProjectProps> = ({
+const LeaveOrDeleteProject: React.FC<LeaveOrDeleteProjectProps> = ({
     isOpen,
     onClose,
     projectId,
     projectTitle,
 }) => {
-    const { message, handleLeave, handleCancel } = useLeaveProject(projectId);
+    const { message, handleLeave, handleCancel } = useLeaveOrDeleteProject(projectId);
 
     useScrollLock(isOpen);
 
@@ -45,7 +45,7 @@ const LeaveProject: React.FC<DeleteProjectProps> = ({
         </ModalPortal>
     );
 };
-export default LeaveProject;
+export default LeaveOrDeleteProject;
 
 const Box = styled.div`
     width: 406px;
