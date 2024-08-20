@@ -44,6 +44,7 @@ axiosInstance.interceptors.response.use(
         // 400 오류
         if (statusCode === 400) {
             Toast(errorData.data, 'error');
+            return Promise.reject(errorData);
         }
 
         // 401 : 토큰 오류
