@@ -5,6 +5,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 /**
  * DELETE projects/{projectId}
  *
+ * 방장의 권한입니다.
  * 프로젝트를 삭제하는 api 입니다.
  */
 
