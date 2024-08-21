@@ -43,7 +43,7 @@ axiosInstance.interceptors.response.use(
 
         // 400 오류
         if (statusCode === 400) {
-            Toast(errorData.data, 'error');
+            // Toast(errorData.message, 'error');
             return Promise.reject(error);
         }
 
@@ -67,7 +67,7 @@ axiosInstance.interceptors.response.use(
 
         // 403 : 권한 오류
         if (statusCode === 403) {
-            Toast(errorData.data, 'error');
+            Toast(errorData.message, 'error');
             window.location.href = '/';
         }
 
