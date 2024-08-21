@@ -11,7 +11,7 @@ import BaseRoute from './routes/BaseRoute';
 function App() {
     return (
         <QueryClientProvider client={queryClient}>
-            <ToastContainer limit={1} />
+            <ToastContainer />
             <GlobalErrorBoundary>
                 <Router>
                     <ScrollToTop />
