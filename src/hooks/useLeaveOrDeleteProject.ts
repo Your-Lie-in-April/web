@@ -29,8 +29,7 @@ export const useLeaveOrDeleteProject = (projectId: number) => {
     const handleLeave = async (onClose: () => void) => {
         try {
             if (isMePrivileged) {
-                if (members && members?.length > 1)
-                    Toast('권한 양도후, 다시 시도해주세요', 'error');
+                if (members && members?.length > 1) Toast('관리자 권한을 양도해주세요', 'error');
                 else deleteProject();
             } else {
                 leaveProject();
