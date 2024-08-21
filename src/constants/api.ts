@@ -8,7 +8,7 @@ export const API = {
 
     MEMBER_STATE: (state?: string) => `${Http}/v1/members/${state ?? ':state'}`,
     MEMBER_STORAGE: (projectId?: number) =>
-        `${Http}/v1/members/storage/${projectId ?? ':projectId'}`,
+        `${Http}/v2/members/storage/${projectId ?? ':projectId'}`,
     MEMBER_PIN: (projectId?: number) => `${Http}/v1/members/pin/${projectId ?? ':projectId'}`,
 
     // project-controller

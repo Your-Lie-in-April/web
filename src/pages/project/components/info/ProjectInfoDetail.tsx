@@ -27,9 +27,16 @@ const ProjectInfoDetail: React.FC<ProjectInfoDetailProps> = ({ onClick }) => {
         isMePrivileged ? onClick() : Toast('관리자만 수정할 수 있습니다', 'warning');
     };
 
-    const hanldeSotredClick = () => {
-        handleStored();
-        Toast('성공적으로 처리되었습니다', 'success');
+    const handleOnStoreClick = () => {
+        handleStored(undefined, {
+            onSuccess: (data) => {
+                if (data) {
+                    Toast('보관함으로 이동하였습니다', 'success');
+                } else {
+                    Toast('프로젝트 보관을 취소하였습니다', 'success');
+                }
+            },
+        });
     };
 
     return (
@@ -45,7 +52,7 @@ const ProjectInfoDetail: React.FC<ProjectInfoDetailProps> = ({ onClick }) => {
                         <EditIcon />
                         커버 수정
                     </StyledSettingBtn>
-                    <StyledSettingBtn onClick={hanldeSotredClick}>
+                    <StyledSettingBtn onClick={handleOnStoreClick}>
                         <InboxOutlinedIcon style={{ fontSize: '18px' }} />
                         프로젝트 보관
                     </StyledSettingBtn>

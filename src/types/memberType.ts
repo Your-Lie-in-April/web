@@ -31,7 +31,7 @@ export type MemberPutNickReqDto = null;
 /**
  * PATCH /members/storage/${projectId}
  */
-export type MemberPatchStoredReqDto = null;
+export type MemberPatchStoredReqDto = boolean;
 
 /**
  * PATCH /members/pin/${projectId}
