@@ -34,14 +34,19 @@ const EditMyTime: React.FC<EditMyTimeProps> = ({ weekDates, selection, onSelecti
 
     const isWithinProjectPeriod = (date: string) => {
         if (!projectData) return false;
-        const currentDate = dayjs(date);
+        const selectedDate = dayjs(date);
         const projectStart = dayjs(projectData.startDate);
         let projectEnd = dayjs(projectData.endDate);
-        if (projectEnd.hour() === 0 && projectEnd.minute() === 0)
-            projectEnd = dayjs(projectData.endDate).subtract(1, 'day');
+        const endTime = projectData.endTime;
+        if (endTime) {
+            const [hours, minutes, seconds] = endTime.toString().split(':').map(Number);
+            if (hours === 0 && minutes === 0 && seconds === 0) {
+                projectEnd = dayjs(projectData.endDate).subtract(1, 'day');
+            }
+        }
         return (
-            currentDate.isSameOrAfter(projectStart, 'day') &&
-            currentDate.isSameOrBefore(projectEnd, 'day')
+            selectedDate.isSameOrAfter(projectStart, 'day') &&
+            selectedDate.isSameOrBefore(projectEnd, 'day')
         );
     };
 
