@@ -1,5 +1,6 @@
 import usePutMemberStatusMutation from '@hooks/apis/mutations/member/usePutMemberStatusMutation';
 import { useUserContext } from '@hooks/context/userContext';
+import { Toast } from '@pages/layouts/Toast';
 import ModalPortal from '@utils/ModalPotal';
 import useScrollLock from '@utils/useScrollLock';
 import { useEffect, useState } from 'react';
@@ -28,7 +29,7 @@ const ChangeStatus: React.FC<ChangeStatusProps> = ({ editStatusModal, onSetEditS
     const handleStatusUpdate = async (newStatus: string) => {
         const status = newStatus.trim();
         if (status.trim() === '') {
-            alert('상태 메세지를 입력해주세요 👀');
+            Toast('상태 메세지를 입력해주세요', 'warning');
             return;
         }
 
