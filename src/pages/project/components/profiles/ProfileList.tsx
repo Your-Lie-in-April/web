@@ -76,7 +76,7 @@ const Box = styled.div`
 
 const MoreBtnPortalTarget = styled.div`
     position: absolute;
-    top: 218px;
+    top: 214.5px;
     right: -32px;
 `;
 
