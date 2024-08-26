@@ -18,7 +18,7 @@ const LeaveOrDeleteProject: React.FC<LeaveOrDeleteProjectProps> = ({
     projectId,
     projectTitle,
 }) => {
-    const { message, handleLeave, handleCancel } = useLeaveOrDeleteProject(projectId);
+    const { handleLeave, handleCancel } = useLeaveOrDeleteProject(projectId);
 
     useScrollLock(isOpen);
 
@@ -33,7 +33,7 @@ const LeaveOrDeleteProject: React.FC<LeaveOrDeleteProjectProps> = ({
                         <InnerColumn>
                             <InfoCircleIcon sx={{ fontSize: '32px' }} />
                             <PeojectName>{projectTitle}</PeojectName>
-                            <Title>{message}</Title>
+                            <Title>해당 프로젝트에서 나가겠습니까?</Title>
                         </InnerColumn>
                         <ButtonsContainer style={{ alignSelf: 'flex-end' }}>
                             <ConfirmBtn onClick={() => handleLeave(onClose)}>확인</ConfirmBtn>
