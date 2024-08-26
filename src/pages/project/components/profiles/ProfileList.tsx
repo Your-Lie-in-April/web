@@ -38,7 +38,7 @@ const ProfileList = () => {
                             toggleDeleteBtn={toggleDeleteBtn}
                             isCurrentUser={member.memberId === myId}
                             membersData={membersData}
-                            showDeleteBtn={showDeleteBtn} 
+                            showDeleteBtn={showDeleteBtn}
                         />
                     ))}
                     {membersData
@@ -53,6 +53,7 @@ const ProfileList = () => {
                         ))}
                 </MemberList>
             </MemberListBox>
+            <MoreBtnPortalTarget id='leader-more-btn' />
         </Box>
     );
 };
@@ -70,6 +71,13 @@ const Box = styled.div`
     background: #212121;
     justify-content: space-evenly;
     box-sizing: border-box;
+    position: relative;
+`;
+
+const MoreBtnPortalTarget = styled.div`
+    position: absolute;
+    top: 218px;
+    right: -32px;
 `;
 
 const MemberListBox = styled.div`

@@ -3,7 +3,7 @@ import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
 import SyncAltIcon from '@mui/icons-material/SyncAlt';
 import TransferAuthModal from '@pages/modal/project/TransferAuth';
 import ModalPortal from '@utils/ModalPotal';
-import { useLayoutEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
 
 const MoreBtn = ({
@@ -15,8 +15,6 @@ const MoreBtn = ({
 }) => {
     const [isMoreClick, setIsMoreClick] = useState<boolean>(false);
     const [isAuthClick, setIsAuthClick] = useState<boolean>(false);
-    const moreRef = useRef<HTMLButtonElement>(null);
-    const [position, setPosition] = useState({ top: 0, left: 0 });
 
     const onIsMoreClick = () => {
         const newIsMoreClick = !isMoreClick;
@@ -28,35 +26,18 @@ const MoreBtn = ({
     };
 
     const onIsAuthClick = () => {
-        if(showDeleteBtn){
+        if (showDeleteBtn) {
             toggleDeleteBtn();
         }
         setIsAuthClick((prev) => !prev);
     };
 
-    const updatePosition = () => {
-        if (moreRef.current) {
-            const { bottom, right } = moreRef.current.getBoundingClientRect();
-            setPosition({ top: bottom - 14, left: right - 31 });
-        }
-    };
-
-    useLayoutEffect(() => {
-        updatePosition();
-
-        window.addEventListener('resize', updatePosition);
-
-        return () => {
-            window.removeEventListener('resize', updatePosition);
-        };
-    }, []);
-
     return (
-        <EditMemberBtn ref={moreRef}>
+        <EditMemberBtn>
             <MoreHorizIcon sx={{ fontSize: 32 }} onClick={onIsMoreClick} />
             {isMoreClick && (
-                <ModalPortal>
-                    <MoreDetailDiv style={{ top: position.top, left: position.left }}>
+                <ModalPortal targetId='leader-more-btn'>
+                    <MoreDetailDiv>
                         <ContentDiv onClick={toggleDeleteBtn}>
                             <PersonRemoveIcon sx={{ fontSize: 18 }} />
                             <CommonText>멤버수정</CommonText>
@@ -81,8 +62,6 @@ const EditMemberBtn = styled.button.attrs({ type: 'button' })`
     padding: 0;
     display: flex;
     align-items: center;
-    justify-content: center;
-    position: relative;
     flex-shrink: 0;
     box-sizing: border-box;
     cursor: pointer;
@@ -114,9 +93,6 @@ const MoreDetailDiv = styled.div`
     color: #7d7d7d;
     box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.25);
     z-index: 1;
-    position: absolute;
-    top: calc(100% + 8px);
-    right: -55px;
 `;
 
 const ContentDiv = styled.div`
