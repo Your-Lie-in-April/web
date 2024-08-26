@@ -94,12 +94,14 @@ const Project: React.FC<ProjectProps> = ({ project }) => {
                     </TextBox>
                 </ProjectWrapper>
             </ProjectBox>
-            <LeaveOrDeleteProject
-                projectId={project.projectId}
-                projectTitle={project.title}
-                onClose={closeLeaveModal}
-                isOpen={isLeaveModalOpen}
-            />
+            {isLeaveModalOpen && (
+                <LeaveOrDeleteProject
+                    projectId={project.projectId}
+                    projectTitle={project.title}
+                    onClose={closeLeaveModal}
+                    isOpen={isLeaveModalOpen}
+                />
+            )}
         </>
     );
 };
