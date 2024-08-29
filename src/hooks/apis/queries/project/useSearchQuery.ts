@@ -11,12 +11,12 @@ import { keepPreviousData, useQuery } from '@tanstack/react-query';
 const useSearchQuery = (
     memberId: number,
     keyword: string,
-    page: number = 0,
+    page?: number,
     size: number = 9,
     isStored: boolean = false
 ) => {
     return useQuery({
-        queryKey: QUERY_KEY.SEARCH(keyword),
+        queryKey: QUERY_KEY.SEARCH(isStored, keyword, page),
         queryFn: () => getProjectSearch(memberId, keyword, page, size, isStored),
         enabled: keyword.length > 0,
         placeholderData: keepPreviousData,

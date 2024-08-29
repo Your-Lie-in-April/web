@@ -5,12 +5,9 @@ import Project from './Project';
 
 interface ProjectListProps {
     projects: ProjectThumbnailInfo[];
-    isSearching: boolean;
 }
 
-const ProjectList: React.FC<ProjectListProps> = ({ projects, isSearching }) => {
-    if (isSearching) return <></>;
-
+const ProjectList: React.FC<ProjectListProps> = ({ projects }) => {
     return projects && projects.length > 0 ? (
         <GridContainer>
             {projects.map((ele) => (

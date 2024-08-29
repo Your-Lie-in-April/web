@@ -147,7 +147,7 @@ export const getProjectSearch = async (
     memberId: number,
     keyword: string,
     page : number = 0,
-    size: number = 30,
+    size: number = 6,
     isStored: boolean = false
 ) => {
     return await getAPIResponseData<ProjectThumbnailResDto>({

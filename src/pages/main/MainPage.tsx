@@ -8,8 +8,8 @@ import { BannerDown, BannerTop } from '../layouts/Banner';
 import Alarm from './components/alarm/Alarm';
 import Pinned from './components/pinned/Pinned';
 import Profile from './components/profile/Profile';
-import MainPagination from './components/projects/MainPagination';
 import NewProject from './components/projects/NewProject';
+import Pagination from './components/projects/Pagination';
 
 function useQuery() {
     const location = useLocation();
@@ -56,7 +56,7 @@ const MainPage: FC = () => {
                                 </RightTop>
                                 <Pinned />
                             </RightMid>
-                            <MainPagination />
+                            <Pagination />
                         </Rights>
                     </MainContainer>
                     <Spacer />

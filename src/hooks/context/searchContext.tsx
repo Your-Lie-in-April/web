@@ -20,7 +20,7 @@ const SearchContext = createContext<SearchContextType | undefined>(undefined);
 export const SearchProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [keyword, setKeyword] = useState('');
     const [page, setPage] = useState(0);
-    const [size, setSize] = useState(9);
+    const [size, setSize] = useState(6);
     const [isStored, setIsStored] = useState(false);
     const memberId = Number(localStorage.getItem('member_id'));
 
