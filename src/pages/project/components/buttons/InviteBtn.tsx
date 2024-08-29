@@ -18,7 +18,7 @@ const InviteBtn = () => {
 export default InviteBtn;
 
 const BtnContainer = styled.button.attrs({ type: 'button' })`
-    width: 52px;
+    min-width: 52px;
     height: 22px;
     display: flex;
     padding: 5px 4px;
