@@ -157,12 +157,17 @@ const ColumnWrapper = styled.div`
 `;
 
 const Title = styled.div`
+    width: 100%;
     color: #000000;
     font-family: 'Pretendard';
     font-size: 20px;
     font-style: normal;
     font-weight: 700;
     line-height: normal;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: center;
 `;
 
 const InviteField = styled.input`

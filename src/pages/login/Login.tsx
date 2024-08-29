@@ -5,11 +5,14 @@ import Layout from '@pages/layouts/Layout';
 import githubLogo from '@pics/github-login.svg';
 import googleLogo from '@pics/google-login.svg';
 import kakaoLogo from '@pics/kakao-login.svg';
+import { isMobileSetHeight } from '@utils/isMobileSetHeight';
 import { FC } from 'react';
 import styled, { createGlobalStyle } from 'styled-components';
 import GraphicIcons from './icons/GraphicIcons';
 
 const Login: FC = () => {
+    isMobileSetHeight();
+
     const oAuth = (provider: string) => {
         let path = '';
         switch (provider) {
@@ -149,7 +152,7 @@ const BtnBox = styled.button.attrs({
     box-sizing: border-box;
     letter-spacing: -0.5px;
     text-shadow: -0.2px -0.2px 0 #000, 0.2px -0.2px 0 #000, -0.2px 0.2px 0 #000, 0.2px 0.2px 0 #000;
-    
+
     &:focus {
         outline: none;
     }

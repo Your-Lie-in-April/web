@@ -4,15 +4,16 @@ import { ProjectProvider } from '@hooks/context/projectContext';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import Layout from '@pages/layouts/Layout';
+import { isMobileSetHeight } from '@utils/isMobileSetHeight';
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import styled, { createGlobalStyle } from 'styled-components';
 import Alarm from './components/alarm/Alarm';
+import ScheduleCalendar from './components/calendar/ScheduleCalendar';
 import ProjectInfo from './components/info/ProjectInfo';
 import ProfileList from './components/profiles/ProfileList';
 import MemberScheduleGrid from './components/schedules/member/MemberScheduleGrid';
 import MySchedule from './components/schedules/my/MySchedule';
-import ScheduleCalendar from './components/calendar/ScheduleCalendar';
 import TeamSchedule from './components/schedules/team/TeamSchedule';
 
 const ProjectPage: React.FC = () => {
@@ -25,6 +26,8 @@ const ProjectPage: React.FC = () => {
 
     const { projectId } = useParams();
     const { data: membersData } = useAllMemberInfoQuery(Number(projectId));
+
+    isMobileSetHeight();
 
     return (
         <ProjectProvider>
@@ -74,6 +77,8 @@ export default ProjectPage;
 
 const GlobalStyle = createGlobalStyle`
   body {
+    width : 100%;
+    min-width : 1366px;
     margin: 0;
     background-color: #FFFFFF;
     -ms-overflow-style: none;
