@@ -13,7 +13,7 @@
 }
 
 * {
-    overscroll-behavior-x: none;
+    overscroll-behavior: none;
 }
 
 a {
@@ -31,6 +31,7 @@ body {
     min-width: 100vw;
     min-height: 100vh;
 }
+
 
 h1 {
     font-size: 3.2em;
