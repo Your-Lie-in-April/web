@@ -3,6 +3,7 @@ import usePostScheduleMutation from '@hooks/apis/mutations/schedule/usePostSched
 import usePutScheduleMutation from '@hooks/apis/mutations/schedule/usePutScheduleMutation';
 import { DateContext } from '@hooks/context/dateContext';
 import { ProjectContext } from '@hooks/context/projectContext';
+import { Toast } from '@pages/layouts/Toast';
 import ModalPortal from '@utils/ModalPotal';
 import useScrollLock from '@utils/useScrollLock';
 import dayjs from 'dayjs';
@@ -129,16 +130,20 @@ const EditMySchedule: React.FC<EditMyScheduleProps> = ({
             projectEndDateString
         );
 
-        try {
-            if (scheduleData && scheduleData.schedule.length > 0) {
-                await putSchedule(newScheduleData);
-            } else {
-                await postSchedule(newScheduleData);
+        if (newScheduleData.schedule.length === 0) {
+            Toast('적어도 하나 이상의 스케줄을 등록해주세요', 'warning');
+        } else {
+            try {
+                if (scheduleData && scheduleData.schedule.length > 0) {
+                    await putSchedule(newScheduleData);
+                } else {
+                    await postSchedule(newScheduleData);
+                }
+                setSelection(initialSelection);
+                onSetIsEditModal();
+            } catch (error) {
+                console.error('Error post/update schedule:', error);
             }
-            setSelection(initialSelection);
-            onSetIsEditModal();
-        } catch (error) {
-            console.error('Error post/update schedule:', error);
         }
     };
 
