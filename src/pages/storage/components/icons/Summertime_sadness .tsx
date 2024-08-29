@@ -9,14 +9,6 @@ const IconWrapper = styled.div`
   overflow: hidden;
   width: 319px;
   height: 281px;
-
-  @media (max-width: 1200px) {
-    right: 1vw;
-  }
-
-  @media (max-width: 768px) {
-    right: 0.5vw;
-  }
 `;
 
 const SummertimeSadnessIcon: React.FC = () => {

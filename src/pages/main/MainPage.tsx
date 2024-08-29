@@ -1,6 +1,7 @@
 import { SearchProvider } from '@hooks/context/searchContext';
 import Layout from '@pages/layouts/Layout';
 import Search from '@pages/layouts/Search';
+import { isMobileSetHeight } from '@utils/isMobileSetHeight';
 import { FC, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import styled, { createGlobalStyle } from 'styled-components';
@@ -35,6 +36,8 @@ const MainPage: FC = () => {
             setIsLoggedIn(false);
         }
     }, []);
+
+    isMobileSetHeight();
 
     return (
         <>
