@@ -1,3 +1,4 @@
+import useResponsiveScale from '@hooks/useResponsiveScale';
 import { GlobalErrorBoundary } from '@pages/error/GlobalErrorBoundary';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
@@ -9,6 +10,7 @@ import './App.css';
 import BaseRoute from './routes/BaseRoute';
 
 function App() {
+    useResponsiveScale();
     return (
         <QueryClientProvider client={queryClient}>
             <ToastContainer />
