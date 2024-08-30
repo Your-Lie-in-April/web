@@ -10,7 +10,7 @@ import './App.css';
 import BaseRoute from './routes/BaseRoute';
 
 function App() {
-    useResponsiveScale();
+    // useResponsiveScale();
     return (
         <QueryClientProvider client={queryClient}>
             <ToastContainer />
