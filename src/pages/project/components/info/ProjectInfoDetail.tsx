@@ -50,7 +50,7 @@ const ProjectInfoDetail: React.FC<ProjectInfoDetailProps> = ({ onClick }) => {
                 <StyledSettingDiv>
                     <StyledSettingBtn onClick={handleOnEditClick}>
                         <EditIcon />
-                        커버 수정
+                        수정
                     </StyledSettingBtn>
                     <StyledSettingBtn onClick={handleOnStoreClick}>
                         <InboxOutlinedIcon style={{ fontSize: '18px' }} />
@@ -112,9 +112,9 @@ const StyledTitle = styled(StyledDescription)`
 
 const StyledSettingDiv = styled.div`
     position: absolute;
-    right: -110px;
+    right: -118px;
     bottom: 16px;
-    width: 221px;
+    width: 195px;
     height: 34px;
     display: flex;
     align-items: center;
