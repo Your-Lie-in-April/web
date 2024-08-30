@@ -10,11 +10,12 @@ import Info from './components/info/Info';
 import ProjectTime from './components/time/ProjectTime';
 
 const ProjectMakePage: FC = () => {
+    const colors = ['#D6CBEF', '#FFCB3C', '#A5CEF2', '#5BB2FF', '#C2D57A', '#EB5757'];
     const [startDate, setStartDate] = useState<Date | null>(new Date());
     const [endDate, setEndDate] = useState<Date | null>(new Date());
     const [content, setContent] = useState<string>('');
     const [title, setTitle] = useState<string>('');
-    const [color, setColor] = useState<string>('#D6CBEF');
+    const [color, setColor] = useState<string>(colors[Math.floor(Math.random() * colors.length)]);
     const [img, setImg] = useState<string>('');
     const [imgId, setImgId] = useState<string>('');
     const [starttime, setStartTime] = useState('AM 09:00');
