@@ -1,9 +1,8 @@
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import '@styles/projecttime.css';
-import { ko } from 'date-fns/locale/ko';
+import dayjs from 'dayjs';
 import { Dispatch, FC, SetStateAction, useEffect, useRef, useState } from 'react';
-import ReactDatePicker from 'react-datepicker';
 import styled from 'styled-components';
 
 interface ProjectTimeProps {
@@ -21,7 +20,6 @@ interface ProjectTimeProps {
 const ProjectTime: FC<ProjectTimeProps> = ({
     startDate,
     endDate,
-    onDateChange,
     starttime,
     setStartTime,
     endtime,
@@ -160,33 +158,12 @@ const ProjectTime: FC<ProjectTimeProps> = ({
             <DateWrapper>
                 <DateContainer style={{ display: 'flex' }}>
                     <Text>프로젝트 시작일</Text>
-                    <SDatePicker
-                        disabled
-                        locale={ko}
-                        dateFormat={'YYYY-MM-dd'}
-                        selected={startDate}
-                        selectsStart
-                        onChange={(date: Date) => {
-                            onDateChange?.(date, endDate);
-                        }}
-                        startDate={startDate}
-                    />
+                    <SDatePicker>{dayjs(startDate).format('YYYY-MM-DD')}</SDatePicker>
                 </DateContainer>
                 <Separator>~</Separator>
                 <DateContainer style={{ display: 'flex' }}>
                     <Text>프로젝트 종료일</Text>
-                    <SDatePicker
-                        disabled
-                        locale={ko}
-                        dateFormat={'YYYY-MM-dd'}
-                        selected={endDate}
-                        onChange={(date: Date) => {
-                            onDateChange?.(startDate, date);
-                        }}
-                        selectsEnd
-                        endDate={endDate}
-                        minDate={startDate}
-                    />
+                    <SDatePicker>{dayjs(endDate).format('YYYY-MM-DD')}</SDatePicker>
                 </DateContainer>
             </DateWrapper>
             <MakeWeekend>
@@ -203,7 +180,6 @@ const ProjectTime: FC<ProjectTimeProps> = ({
                     ))}
                 </WeekendContainer>
             </MakeWeekend>
-
             <TimeWrapper>
                 <DateContainer style={{ gap: '4px' }}>
                     <Text>시간표 시작시간</Text>
@@ -280,7 +256,7 @@ const DateContainer = styled.div`
     gap: 8px;
 `;
 
-const SDatePicker = styled(ReactDatePicker)`
+const SDatePicker = styled.div`
     width: 208px;
     height: 41px;
     padding: 4px;
@@ -290,6 +266,8 @@ const SDatePicker = styled(ReactDatePicker)`
     background: #f5f5f5;
     text-align: center;
     display: flex;
+    align-items: center;
+    justify-content: center;
     box-sizing: border-box;
     color: #000000;
     text-align: center;
