@@ -77,8 +77,13 @@ const ProjectMakePage: FC = () => {
             coverImageId: imgId,
         };
 
-        await mutate.mutateAsync(payload);
-        navigate('/');
+        try {
+            await mutate.mutateAsync(payload);
+            navigate('/');
+        } catch (error: any) {
+            const errorMessage = error.response?.data?.data;
+            Toast(errorMessage, 'error');
+        }
     };
 
     return (
