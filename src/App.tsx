@@ -1,4 +1,3 @@
-import useScrollToTop from '@hooks/useScrollToTop';
 import { GlobalErrorBoundary } from '@pages/errorPage/GlobalErrorBoundary';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
@@ -9,8 +8,6 @@ import './App.css';
 import BaseRoute from './routes/BaseRoute';
 
 function App() {
-    useScrollToTop();
-
     return (
         <QueryClientProvider client={queryClient}>
             <ToastContainer />
