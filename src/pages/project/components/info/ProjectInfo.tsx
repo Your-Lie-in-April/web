@@ -1,31 +1,13 @@
-import useClickOutside from '@hooks/useClickOutside';
-import React, { useRef, useState } from 'react';
-import InfoEdit from './InfoEdit';
+import MakePage from '@pages/makePage';
+import { useAppSelector } from '@redux/config/hook';
+import { RootState } from '@redux/config/store';
+import React from 'react';
 import ProjectInfoDetail from './ProjectInfoDetail';
 
 const ProjectInfo: React.FC = () => {
-    const [editMode, setEditMode] = useState(false);
-    const editRef = useRef<HTMLDivElement>(null);
+    const { isEdit } = useAppSelector((state: RootState) => state.mode);
 
-    useClickOutside(editRef, () => {
-        if (editMode) {
-            setEditMode(false);
-        }
-    });
-
-    const handleEditComplete = () => {
-        setEditMode(false);
-    };
-
-    return (
-        <div ref={editRef}>
-            {editMode ? (
-                <InfoEdit setEditMode={setEditMode} onEditComplete={handleEditComplete} />
-            ) : (
-                <ProjectInfoDetail onClick={() => setEditMode(true)} />
-            )}
-        </div>
-    );
+    return <>{isEdit ? <MakePage /> : <ProjectInfoDetail />}</>;
 };
 
 export default ProjectInfo;

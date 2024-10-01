@@ -1,5 +1,5 @@
-import useProjectInfoQuery from '@hooks/apis/queries/project/useProjectInfoQuery';
 import { ProjectEntity } from '@/types/projectType';
+import useProjectInfoQuery from '@hooks/apis/queries/project/useProjectInfoQuery';
 import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
