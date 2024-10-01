@@ -1,23 +1,23 @@
 import { Toast } from '@components/layout';
-import { formatTimeAgo } from '@components/mainPage/alarm/formatTimeAgo';
 import ConfirmDeleteAlarm from '@components/modal/projectModal/ConfirmDeleteAlarm';
 import useDeleteAlarmMutation from '@hooks/apis/mutations/alarm/useDeleteAlarmMutation';
 import usePatchAlarmMutation from '@hooks/apis/mutations/alarm/usePatchAlarmMutation';
 import useAlarmsQuery from '@hooks/apis/queries/alarm/useAlarmsQuery';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import { FC, useCallback, useRef, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import 'react-toastify/dist/ReactToastify.css';
 import styled from 'styled-components';
+import { formatTimeAgo } from './formatTimeAgo';
 
 const Alarm: FC = () => {
     const [isIconVisible, setIsIconVisible] = useState<boolean>(false);
     const [checkedAlarm, setCheckedAlarm] = useState<number | null>(null);
     const [isDeleted, setIsDeleted] = useState<boolean>(false);
-    const { projectId } = useParams();
+    const navigate = useNavigate();
 
     const { allAlarms, isUncheckedComplete, uncheckedQuery, checkedQuery, removeAlarm } =
-        useAlarmsQuery(projectId ? Number(projectId) : undefined);
+        useAlarmsQuery();
 
     const intObserver = useRef<IntersectionObserver | null>(null);
     const lastAlarmRef = useCallback(
@@ -33,19 +33,19 @@ const Alarm: FC = () => {
                     }
                 }
             });
-
             if (alarm) intObserver.current.observe(alarm);
         },
         [uncheckedQuery, checkedQuery, isUncheckedComplete]
     );
 
-    // 알람 삭제
+    // 알림 삭제
     const deleteAlarmMutation = useDeleteAlarmMutation();
     const handleDeleteNotifications = async () => {
         if (checkedAlarm === null) {
             Toast('삭제할 알림을 선택해주세요', 'warning');
             return;
         }
+
         try {
             await deleteAlarmMutation.mutateAsync(checkedAlarm);
             removeAlarm(checkedAlarm);
@@ -61,12 +61,12 @@ const Alarm: FC = () => {
         setCheckedAlarm((prevChecked) => (prevChecked === notificationId ? null : notificationId));
     };
 
-    // 알람 읽음
+    // 알림 읽음 처리
     const patchAlarm = usePatchAlarmMutation();
     const handleNotificationClick = async (projectId: number, notificationId: number) => {
         try {
             await patchAlarm.mutateAsync(notificationId);
-            Toast('알림을 확인했습니다', 'success');
+            navigate(`/project/${projectId}`);
         } catch (error) {
             console.error('Failed to patch notification:', error);
         }
@@ -74,7 +74,7 @@ const Alarm: FC = () => {
 
     return (
         <AlarmDiv>
-            <TextStyle>알림</TextStyle>
+            <Text>알림</Text>
             {allAlarms.length > 0 && (
                 <DeleteWrapper>
                     <StyledCheckBoxIcon
@@ -138,7 +138,7 @@ const Alarm: FC = () => {
                     ))}
                 </ScrollableArea>
             )}
-            {allAlarms.length === 0 && <EmptyAlarmMessage>알림이 비었습니다</EmptyAlarmMessage>}
+            {allAlarms.length == 0 && <EmptyAlarmMessage>알림이 비었습니다</EmptyAlarmMessage>}
             {isDeleted && <ConfirmDeleteAlarm />}
         </AlarmDiv>
     );
@@ -149,15 +149,14 @@ const AlarmDiv = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 291px;
-    height: 294px;
+    width: 312px;
+    height: 918px;
     background-color: #f5f5f5;
-    border-radius: 20px;
+    border-radius: 10px;
     padding: 8px;
-    padding-top: 20px;
+    padding-top: 14px;
     gap: 8px;
     box-sizing: border-box;
-    box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.25);
     position: relative;
     overflow: hidden;
 `;
@@ -165,7 +164,7 @@ const AlarmDiv = styled.div`
 const EmptyAlarmMessage = styled.div`
     font-weight: 500;
     color: #a4a4a4;
-    font-size: 18px;
+    font-size: 20px;
     display: flex;
     justify-content: center;
     position: absolute;
@@ -175,13 +174,14 @@ const EmptyAlarmMessage = styled.div`
 const ScrollableArea = styled.div<{ $hasMessages: boolean }>`
     overflow-y: auto;
     flex-grow: 1;
-    width: 100%;
+    width: 275px;
     display: flex;
     flex-direction: column;
     border-top: ${({ $hasMessages }) => ($hasMessages ? '1px solid #7d7d7d' : 'none')};
+    align-items: center;
 `;
 
-const TextStyle = styled.div`
+const Text = styled.div`
     color: #c4c4c4;
     font-size: 22px;
     font-style: normal;
@@ -200,8 +200,8 @@ const DeleteWrapper = styled.div`
     display: flex;
     gap: 218px;
     position: absolute;
-    left: 7px;
-    top: 34px;
+    left: 17px;
+    top: 25px;
     justify-content: center;
     align-items: center;
 `;
@@ -217,8 +217,8 @@ const NotificationBox = styled.div`
     border-bottom: 1px solid #7d7d7d;
     flex-direction: column;
     gap: 7px;
-    overflow-y: scroll;
     cursor: pointer;
+    overflow-y: scroll;
 `;
 
 const NotificationWrapper = styled.div`
@@ -263,7 +263,6 @@ const NotificationContent = styled.div<{ $isSSE: boolean }>`
     font-style: normal;
     font-weight: 400;
     line-height: normal;
-    overflow: hidden;
 `;
 
 const ProjectTitleContainer = styled.div<{ $isIconVisible: boolean }>`

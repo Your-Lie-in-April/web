@@ -5,7 +5,7 @@ import MyTimeSchedule from './MyTimeSchedule';
 const CommonText = styled.div`
     color: #000000;
     text-align: center;
-    font-family: Pretendard;
+    font-family: 'Pretendard';
     font-size: 18px;
     font-style: normal;
     font-weight: 400;

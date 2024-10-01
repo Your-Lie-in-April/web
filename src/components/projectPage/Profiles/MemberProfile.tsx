@@ -1,6 +1,6 @@
 import { MemberEntity } from '@/types/memberType';
+import DeleteMember from '@components/modal/projectModal/DeleteMember';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
-import DeleteMember from '@pages/modal/project/DeleteMember';
 import defaultProfile from '@pics/default-profile.svg';
 import { useState } from 'react';
 import styled from 'styled-components';

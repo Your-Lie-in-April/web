@@ -1,8 +1,8 @@
+import TransferAuthModal from '@components/modal/projectModal/TransferAuth';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
 import SyncAltIcon from '@mui/icons-material/SyncAlt';
-import TransferAuthModal from '@pages/modal/project/TransferAuth';
-import ModalPortal from '@utils/ModalPotal';
+import ModalPortal from '@utils/modalPortal';
 import { useState } from 'react';
 import styled from 'styled-components';
 

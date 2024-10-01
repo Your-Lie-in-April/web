@@ -1,4 +1,5 @@
-import ProjectFormLayout from '@components/layout/ProjectFormLayout';
+import ProjectFormLayout from '@components/common/ProjectFormLayout';
+import { Layout } from '@components/layout';
 import { Alarm, ProjectInfo, ScheduleCalendar } from '@components/projectPage';
 import { ProfileList } from '@components/projectPage/Profiles';
 import { MemberScheduleGrid, MySchedule, TeamSchedule } from '@components/projectPage/Schedules';
@@ -7,7 +8,6 @@ import { DateProvider } from '@hooks/context/dateContext';
 import { ProjectProvider } from '@hooks/context/projectContext';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
-import Layout from '@pages/layouts/Layout';
 import { useAppDispatch, useAppSelector } from '@redux/config/hook';
 import { RootState } from '@redux/config/store';
 import { setIsEdit } from '@redux/reducers/mode';

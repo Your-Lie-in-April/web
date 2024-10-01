@@ -1,4 +1,4 @@
-import InvitationLinkModal from '@pages/modal/project/InvitationLinkModal';
+import InvitationLinkModal from '@components/modal/projectModal/InvitationLinkModal';
 import { useState } from 'react';
 import styled from 'styled-components';
 

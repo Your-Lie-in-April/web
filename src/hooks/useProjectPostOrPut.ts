@@ -1,5 +1,5 @@
+import { Toast } from '@components/layout';
 import usePostProjectMutation from '@hooks/apis/mutations/project/usePostProjectMutation';
-import { Toast } from '@pages/layouts/Toast';
 import { useAppDispatch, useAppSelector } from '@redux/config/hook';
 import { RootState } from '@redux/config/store';
 import { resetEditState } from '@redux/reducers/edit';
