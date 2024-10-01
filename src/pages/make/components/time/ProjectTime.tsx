@@ -276,9 +276,6 @@ const SDatePicker = styled.div`
     font-style: normal;
     font-weight: 400;
     line-height: normal;
-    &:hover {
-        cursor: pointer;
-    }
 `;
 
 const TimePicker = styled.div`

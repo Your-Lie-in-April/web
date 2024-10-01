@@ -10,10 +10,12 @@
         "baseUrl": ".",
         "paths": {
             "@apis/*": ["src/apis/*"],
+            "@components/*": ["src/components/*"],
             "@hooks/*": ["src/hooks/*"],
             "@constants/*": ["src/constants/*"],
             "@pages/*": ["src/pages/*"],
             "@pics/*": ["src/pics/*"],
+            "@redux/*": ["src/redux/*"],
             "@routes/*": ["src/route/*"],
             "@styles/*": ["src/styles/*"],
             "@types/*": ["src/types/*"],
