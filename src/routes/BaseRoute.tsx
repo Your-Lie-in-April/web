@@ -1,7 +1,7 @@
 import { UserProvider } from '@hooks/context/userContext';
 import Login from '@pages/login/Login';
 import MainPage from '@pages/main/MainPage';
-import ProjectMakePage from '@pages/make/MakePage';
+import MakePage from '@pages/makePage';
 import InvitationAccept from '@pages/modal/project/InvitationAccept';
 import ProjectPage from '@pages/project/ProjectPage';
 import StoragePage from '@pages/storage/StoragePage';
@@ -58,7 +58,7 @@ export default function BaseRoute() {
                             </>
                         }
                     />
-                    <Route path='projectmake' element={<ProjectMakePage />} />
+                    <Route path='projectmake' element={<MakePage />} />
                     <Route path='project/:projectId' element={<ProjectPage />} />
                     <Route path='myproject' element={<StoragePage />} />
                 </Route>
