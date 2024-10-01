@@ -1,4 +1,4 @@
-import ProjectFormLayout from '@components/layout/ProjectFormLayout';
+import ProjectFormLayout from '@components/common/ProjectFormLayout';
 import { resetEditState } from '@redux/reducers/edit';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';

@@ -1,11 +1,11 @@
 import { ScheduleData, ScheduleWeekResponse } from '@/types/scheduleType';
+import { Toast } from '@components/layout';
 import usePostScheduleMutation from '@hooks/apis/mutations/schedule/usePostScheduleMutation';
 import usePutScheduleMutation from '@hooks/apis/mutations/schedule/usePutScheduleMutation';
 import { DateContext } from '@hooks/context/dateContext';
 import { ProjectContext } from '@hooks/context/projectContext';
-import { Toast } from '@pages/layouts/Toast';
-import ModalPortal from '@utils/ModalPotal';
-import useScrollLock from '@utils/useScrollLock';
+import useScrollLock from '@hooks/useScrollLock';
+import ModalPortal from '@utils/modalPortal';
 import dayjs from 'dayjs';
 import React, { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';

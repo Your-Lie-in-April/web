@@ -1,9 +1,10 @@
+import { Toast } from '@components/layout';
 import usePatchStoredMutation from '@hooks/apis/mutations/member/usePatchStoredMutation';
 import useAllMemberInfoQuery from '@hooks/apis/queries/member/useAllMemberInfoQuery';
 import { useProjectContext } from '@hooks/context/projectContext';
 import { useUserContext } from '@hooks/context/userContext';
 import InboxOutlinedIcon from '@mui/icons-material/InboxOutlined';
-import { Toast } from '@pages/layouts/Toast';
+
 import { useAppDispatch } from '@redux/config/hook';
 import { setIsEdit } from '@redux/reducers/mode';
 import { useParams } from 'react-router-dom';
