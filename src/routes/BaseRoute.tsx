@@ -3,7 +3,7 @@ import Login from '@pages/login/Login';
 import MainPage from '@pages/main/MainPage';
 import MakePage from '@pages/makePage';
 import InvitationAccept from '@pages/modal/project/InvitationAccept';
-import ProjectPage from '@pages/project/ProjectPage';
+import ProjectPage from '@pages/projectPage';
 import StoragePage from '@pages/storage/StoragePage';
 import { useEffect } from 'react';
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';

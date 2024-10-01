@@ -9,7 +9,7 @@ import { setIsEdit } from '@redux/reducers/mode';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
-const ProjectInfoDetail = () => {
+const ProjectInfo = () => {
     const { projectData } = useProjectContext();
     const { projectId } = useParams();
     const { mutate: handleStored } = usePatchStoredMutation(Number(projectId));
@@ -63,8 +63,7 @@ const ProjectInfoDetail = () => {
         </StyledContainer>
     );
 };
-
-export default ProjectInfoDetail;
+export default ProjectInfo;
 
 const StyledContainer = styled.div<{ color?: string; $imageUrl?: string | null }>`
     width: 100%;
