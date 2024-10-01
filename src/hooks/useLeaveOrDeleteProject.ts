@@ -1,4 +1,4 @@
-import { Toast } from '@pages/layouts/Toast';
+import { Toast } from '@components/layout';
 import useDeleteProjectLeaveMutation from './apis/mutations/project/useDeleteProjectLeaveMutation';
 import useDeleteProjectMutation from './apis/mutations/project/useDeleteProjectMutation';
 import useAllMemberInfoQuery from './apis/queries/member/useAllMemberInfoQuery';

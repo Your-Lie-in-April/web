@@ -1,10 +1,10 @@
+import InvitationAccept from '@components/modal/projectModal/InvitationAccept';
 import { UserProvider } from '@hooks/context/userContext';
-import Login from '@pages/login/Login';
-import MainPage from '@pages/main/MainPage';
-import ProjectMakePage from '@pages/make/MakePage';
-import InvitationAccept from '@pages/modal/project/InvitationAccept';
-import ProjectPage from '@pages/project/ProjectPage';
-import StoragePage from '@pages/storage/StoragePage';
+import LoginPage from '@pages/loginPage';
+import MainPage from '@pages/mainPage';
+import MakePage from '@pages/makePage';
+import ProjectPage from '@pages/projectPage';
+import StoragePage from '@pages/storagePage';
 import { useEffect } from 'react';
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import AuthRoute from './AuthRoute';
@@ -34,7 +34,7 @@ export default function BaseRoute() {
                     path='/login'
                     element={
                         <UnPrivateRoute>
-                            <Login />
+                            <LoginPage />
                         </UnPrivateRoute>
                     }
                 />
@@ -58,7 +58,7 @@ export default function BaseRoute() {
                             </>
                         }
                     />
-                    <Route path='projectmake' element={<ProjectMakePage />} />
+                    <Route path='projectmake' element={<MakePage />} />
                     <Route path='project/:projectId' element={<ProjectPage />} />
                     <Route path='myproject' element={<StoragePage />} />
                 </Route>
