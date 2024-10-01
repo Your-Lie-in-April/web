@@ -4,8 +4,13 @@ import { useAppDispatch, useAppSelector } from '@redux/config/hook';
 import { RootState } from '@redux/config/store';
 import { resetEditState } from '@redux/reducers/edit';
 import { setIsEdit } from '@redux/reducers/mode';
+import dayjs from 'dayjs';
+import timezone from 'dayjs/plugin/timezone';
+import utc from 'dayjs/plugin/utc';
 import { useNavigate, useParams } from 'react-router';
 import usePutProjectMutation from './apis/mutations/project/usePutProjectMutation';
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 export const useProjectPostOrPut = () => {
     const navigate = useNavigate();
@@ -60,7 +65,7 @@ export const useProjectPostOrPut = () => {
         const convertToLocalDate = (dateString: string | null): string => {
             if (!dateString) return '';
             const date = new Date(dateString);
-            return date.toISOString().split('T')[0];
+            return dayjs(date).tz('Asia/Seoul').format('YYYY-MM-DD');
         };
 
         let adjustedEndDate = endDate;
@@ -89,7 +94,6 @@ export const useProjectPostOrPut = () => {
                 await put.mutateAsync(payload);
                 dispatch(setIsEdit(false));
                 dispatch(resetEditState());
-                window.location.reload();
             }
         } catch (error: any) {
             const errorMessage = error.response?.data?.data;

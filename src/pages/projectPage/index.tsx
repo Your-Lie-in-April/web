@@ -1,4 +1,7 @@
 import ProjectFormLayout from '@components/layout/ProjectFormLayout';
+import { Alarm, ProjectInfo, ScheduleCalendar } from '@components/projectPage';
+import { ProfileList } from '@components/projectPage/Profiles';
+import { MemberScheduleGrid, MySchedule, TeamSchedule } from '@components/projectPage/Schedules';
 import useAllMemberInfoQuery from '@hooks/apis/queries/member/useAllMemberInfoQuery';
 import { DateProvider } from '@hooks/context/dateContext';
 import { ProjectProvider } from '@hooks/context/projectContext';
@@ -12,13 +15,6 @@ import { isMobileSetHeight } from '@utils/isMobileSetHeight';
 import { useEffect, useState } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import styled, { createGlobalStyle } from 'styled-components';
-import Alarm from './components/alarm/Alarm';
-import ScheduleCalendar from './components/calendar/ScheduleCalendar';
-import ProjectInfoDetail from './components/info/ProjectInfoDetail';
-import ProfileList from './components/profiles/ProfileList';
-import MemberScheduleGrid from './components/schedules/member/MemberScheduleGrid';
-import MySchedule from './components/schedules/my/MySchedule';
-import TeamSchedule from './components/schedules/team/TeamSchedule';
 
 const ProjectPage: React.FC = () => {
     const [seeMemTime, setSeeMemTime] = useState(true);
@@ -41,6 +37,7 @@ const ProjectPage: React.FC = () => {
     useEffect(() => {
         dispatch(setIsEdit(false));
     }, [location, dispatch]);
+
     return (
         <ProjectProvider>
             <DateProvider>
@@ -51,7 +48,7 @@ const ProjectPage: React.FC = () => {
                         <GlobalStyle />
                         <Layout>
                             <Divider />
-                            <ProjectInfoDetail />
+                            <ProjectInfo />
                             <Box>
                                 <OuterColumn>
                                     <MainBox>
@@ -71,13 +68,14 @@ const ProjectPage: React.FC = () => {
                                     {membersData && membersData.length > 1 && (
                                         <>
                                             <MemTimeBtn onClick={toggleMemTime}>
-                                                {seeMemTime
-                                                    ? '멤버 시간표 닫기'
-                                                    : '멤버 시간표 열기'}
                                                 {seeMemTime ? (
-                                                    <ArrowDropUpIcon className='icon' />
+                                                    <>
+                                                        멤버 시간표 닫기 <ArrowDropUpIcon />
+                                                    </>
                                                 ) : (
-                                                    <ArrowDropDownIcon className='icon' />
+                                                    <>
+                                                        멤버 시간표 열기 <ArrowDropDownIcon />
+                                                    </>
                                                 )}
                                             </MemTimeBtn>
                                             {seeMemTime && <MemberScheduleGrid />}

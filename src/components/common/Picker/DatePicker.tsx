@@ -7,8 +7,13 @@ import '@styles/calendarcss.css';
 import { StyledDatePicker } from '@styles/DatePicker.styles';
 import { isWithinInterval } from 'date-fns';
 import dayjs from 'dayjs';
-import { useState } from 'react';
+import timezone from 'dayjs/plugin/timezone';
+import utc from 'dayjs/plugin/utc';
+import { useEffect, useState } from 'react';
 import Calendar from 'react-calendar';
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 type Value = Date | [Date | null, Date | null] | null;
 
@@ -18,41 +23,40 @@ const DatePicker = () => {
         (state: RootState) => state.edit
     );
 
-    const startDate = startDateString ? new Date(startDateString) : new Date();
-    const endDate = endDateString ? new Date(endDateString) : new Date();
+    const [date, setDate] = useState<Value>(null);
 
-    const [date, setDate] = useState<Value>(new Date());
+    useEffect(() => {
+        if (startDateString && endDateString) {
+            setDate([new Date(startDateString), new Date(endDateString)]);
+        }
+    }, [startDateString, endDateString]);
 
     const handleDateChange = (newDate: Value) => {
         setDate(newDate);
+
         if (Array.isArray(newDate) && newDate[0] && newDate[1]) {
-            dispatch(setStartDate(newDate[0].toISOString()));
-            dispatch(setEndDate(newDate[1].toISOString()));
+            const startDate = dayjs(newDate[0]).tz('Asia/Seoul').format('YYYY-MM-DDTHH:mm:ss');
+            const endDate = dayjs(newDate[1]).tz('Asia/Seoul').format('YYYY-MM-DDTHH:mm:ss');
+            dispatch(setStartDate(startDate));
+            dispatch(setEndDate(endDate));
         } else if (newDate instanceof Date) {
-            dispatch(setStartDate(newDate.toISOString()));
-            dispatch(setEndDate(newDate.toISOString()));
+            const selectedDate = dayjs(newDate).tz('Asia/Seoul').format('YYYY-MM-DDTHH:mm:ss');
+            dispatch(setStartDate(selectedDate));
+            dispatch(setEndDate(selectedDate));
         }
     };
 
-    const isWithinRange = (currentDate: Date) => {
-        if (startDate && endDate)
-            return isWithinInterval(currentDate, { start: startDate, end: endDate });
-        return false;
+    const tileClassName = ({ date, view }: { date: Date; view: string }) => {
+        if (view === 'month' && Array.isArray(date) && date[0] && date[1]) {
+            const start = new Date(date[0]);
+            const end = new Date(date[1]);
+            if (isWithinInterval(date, { start, end })) {
+                return 'highlighted';
+            }
+        }
+        return null;
     };
 
-    const tileContent = ({ date }: { date: Date; view: string }) => {
-        const isInRange = isWithinRange(date);
-        const isStartDate = date.toDateString() === startDate.toDateString();
-        const isEndDate = date.toDateString() === endDate.toDateString();
-
-        return (
-            <>
-                {isInRange && <div></div>}
-                {isStartDate && <div></div>}
-                {isEndDate && <div></div>}
-            </>
-        );
-    };
     return (
         <StyledDatePicker style={{ display: 'flex', textAlign: 'center' }}>
             <Calendar
@@ -70,7 +74,7 @@ const DatePicker = () => {
                 minDetail='month'
                 calendarType='gregory'
                 selectRange={true}
-                tileContent={tileContent}
+                tileClassName={tileClassName}
                 prevLabel={
                     <ArrowLeftIcon sx={{ fill: '#D9D9D9', width: '36px', height: '36px' }} />
                 }
@@ -81,4 +85,5 @@ const DatePicker = () => {
         </StyledDatePicker>
     );
 };
+
 export default DatePicker;
