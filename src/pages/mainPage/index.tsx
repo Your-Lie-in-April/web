@@ -1,8 +1,7 @@
 import { BannerDown, BannerTop, Layout, Search } from '@components/layout';
-import { NewProject, Profile } from '@components/mainPage';
-import Pinned from '@components/mainPage/pinned/Pinned';
+import { Alarm, NewProject, Profile } from '@components/mainPage';
 import { Pagination } from '@components/mainPage/pagination';
-import { Alarm } from '@components/projectPage';
+import Pinned from '@components/mainPage/pinned/Pinned';
 import { SearchProvider } from '@hooks/context/searchContext';
 import { isMobileSetHeight } from '@utils/isMobileSetHeight';
 import { FC, useEffect, useState } from 'react';
