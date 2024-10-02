@@ -7,8 +7,10 @@ import { setIsEdit } from '@redux/reducers/mode';
 import dayjs from 'dayjs';
 import timezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
+import { useMemo } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import usePutProjectMutation from './apis/mutations/project/usePutProjectMutation';
+import { useProjectContext } from './context/projectContext';
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
@@ -51,6 +53,54 @@ export const useProjectPostOrPut = () => {
         return date.toISOString().split('T')[0];
     };
 
+    const convertToLocalDate = (dateString: string | null): string => {
+        if (!dateString) return '';
+        const date = new Date(dateString);
+        return dayjs(date).tz('Asia/Seoul').format('YYYY-MM-DD');
+    };
+
+    const { projectData } = useProjectContext();
+    const originalPayload = useMemo(() => {
+        if (!projectData) return null;
+
+        return {
+            title: projectData.title?.trim() || '',
+            description: projectData.description || '',
+            startDate: projectData.startDate || '',
+            endDate: projectData.endDate || '',
+            startTime: projectData.startTime || '',
+            endTime: projectData.endTime || '',
+            daysOfWeek: projectData.daysOfWeek || [],
+            color: projectData.color || '',
+            coverImageId: projectData.coverInfo?.id || '',
+        };
+    }, [projectData]);
+
+    const currentPayload = useMemo(() => {
+        let adjustedEndDate = endDate;
+        if (endTime === 'AM 12:00') {
+            adjustedEndDate = addOneDay(endDate);
+        }
+
+        return {
+            title: title.trim(),
+            description: content,
+            startDate: convertToLocalDate(startDate),
+            endDate: convertToLocalDate(adjustedEndDate),
+            startTime: formatTime(startTime),
+            endTime: formatTime(endTime),
+            daysOfWeek: dayOfWeek,
+            color: color,
+            coverImageId: coverImageId,
+        };
+    }, [title, content, startDate, endDate, startTime, endTime, dayOfWeek, color, coverImageId]);
+
+    const hasChanges = useMemo(() => {
+        if (!isEdit || !originalPayload) return true;
+
+        return JSON.stringify(currentPayload) !== JSON.stringify(originalPayload);
+    }, [currentPayload, originalPayload, isEdit]);
+
     const actionProject = async () => {
         if (!title.trim()) {
             Toast('프로젝트 제목을 작성해주세요', 'error');
@@ -62,42 +112,21 @@ export const useProjectPostOrPut = () => {
             return;
         }
 
-        const convertToLocalDate = (dateString: string | null): string => {
-            if (!dateString) return '';
-            const date = new Date(dateString);
-            return dayjs(date).tz('Asia/Seoul').format('YYYY-MM-DD');
-        };
-
-        let adjustedEndDate = endDate;
-        if (endTime === 'AM 12:00') {
-            adjustedEndDate = addOneDay(endDate);
-        }
-
-        const payload = {
-            title: title,
-            description: content,
-            startDate: convertToLocalDate(startDate),
-            endDate: convertToLocalDate(adjustedEndDate),
-            startTime: formatTime(startTime),
-            endTime: formatTime(endTime),
-            daysOfWeek: dayOfWeek,
-            color: color,
-            coverImageId: coverImageId,
-        };
-
         try {
             if (!isEdit) {
-                await post.mutateAsync(payload);
+                await post.mutateAsync(currentPayload);
                 dispatch(resetEditState());
                 navigate('/');
             } else {
-                await put.mutateAsync(payload);
+                if (hasChanges) {
+                    await put.mutateAsync(currentPayload);
+                }
                 dispatch(setIsEdit(false));
                 dispatch(resetEditState());
             }
         } catch (error: any) {
             const errorMessage = error.response?.data?.data;
-            Toast(errorMessage, 'error');
+            console.error(errorMessage);
         }
     };
 
