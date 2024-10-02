@@ -5,13 +5,14 @@ import { setCoverClick } from '@redux/reducers/mode';
 import { useCallback, useRef } from 'react';
 import styled from 'styled-components';
 import { CoverBtn } from '../Button';
+import BackBtn from '../Button/BackBtn';
 import { CoverPicker } from '../Picker';
 import ContentEdit from './ContentEdit';
 import TitleEdit from './TitleEdit';
 
 const InfoEdit = () => {
     const { color, img } = useAppSelector((state: RootState) => state.edit);
-    const { isCoverClick } = useAppSelector((state: RootState) => state.mode);
+    const { isCoverClick, isEdit } = useAppSelector((state: RootState) => state.mode);
     const dispatch = useAppDispatch();
 
     const pickerRef = useRef<HTMLDivElement>(null);
@@ -28,6 +29,7 @@ const InfoEdit = () => {
     return (
         <InfoEditLayout $selectedColor={color} $selectedImageUrl={img}>
             <InfoEditBox>
+                {isEdit ? <BackBtn /> : <div style={{ width: '145px' }} />}
                 <EditBox>
                     <TitleEdit />
                     <ContentEdit />
@@ -70,11 +72,10 @@ const InfoEditLayout = styled.div<{
 `;
 
 const InfoEditBox = styled.div`
-    width: 1043px;
-    height: 164px;
+    width: 100%;
     display: flex;
-    justify-content: space-between;
-    margin-left: 200px;
+    justify-content: center;
+    gap: 80px;
 `;
 
 const EditBox = styled.div`
