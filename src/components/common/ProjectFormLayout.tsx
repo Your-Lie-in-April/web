@@ -4,12 +4,18 @@ import { ProjectActionBtn } from '@components/common/Button';
 import { Layout } from '@components/layout';
 import { useProjectContext } from '@hooks/context/projectContext';
 import useDispatchProjectData from '@hooks/useDispatchProject';
+import { useEffect } from 'react';
 import 'react-toastify/dist/ReactToastify.css';
 import styled, { createGlobalStyle } from 'styled-components';
 
 const ProjectFormLayout = () => {
     const { projectData } = useProjectContext();
-    useDispatchProjectData(projectData);
+    const dispatchProject = useDispatchProjectData();
+    useEffect(() => {
+        if (projectData) {
+            dispatchProject(projectData);
+        }
+    }, [projectData, dispatchProject]);
 
     return (
         <>
