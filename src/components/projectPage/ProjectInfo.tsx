@@ -4,9 +4,8 @@ import useAllMemberInfoQuery from '@hooks/apis/queries/member/useAllMemberInfoQu
 import { useProjectContext } from '@hooks/context/projectContext';
 import { useUserContext } from '@hooks/context/userContext';
 import InboxOutlinedIcon from '@mui/icons-material/InboxOutlined';
-
 import { useAppDispatch } from '@redux/config/hook';
-import { setIsEdit } from '@redux/reducers/mode';
+import { setIsEdit } from '@redux/slice/mode';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 

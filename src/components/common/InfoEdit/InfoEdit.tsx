@@ -1,7 +1,7 @@
 import useClickOutside from '@hooks/useClickOutside';
 import { useAppDispatch, useAppSelector } from '@redux/config/hook';
 import { RootState } from '@redux/config/store';
-import { setCoverClick } from '@redux/reducers/mode';
+import { setCoverClick } from '@redux/slice/mode';
 import { useCallback, useRef } from 'react';
 import styled from 'styled-components';
 import { CoverBtn } from '../Button';

@@ -1,6 +1,6 @@
 import { useAppDispatch } from '@redux/config/hook';
-import { resetEditState } from '@redux/reducers/edit';
-import { setIsEdit } from '@redux/reducers/mode';
+import { resetEditState } from '@redux/slice/edit';
+import { setIsEdit } from '@redux/slice/mode';
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
@@ -15,6 +15,5 @@ export const useResetState = () => {
         };
 
         resetState();
-
     }, [location.pathname, dispatch]);
 };

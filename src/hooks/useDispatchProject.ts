@@ -10,7 +10,7 @@ import {
     setStartDate,
     setStartTime,
     setTitle,
-} from '@redux/reducers/edit';
+} from '@redux/slice/edit';
 import { useCallback } from 'react';
 
 const useDispatchProjectData = () => {
