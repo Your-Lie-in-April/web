@@ -5,7 +5,6 @@ import { RootState } from '@redux/config/store';
 import { setEndDate, setStartDate } from '@redux/reducers/edit';
 import '@styles/calendarcss.css';
 import { StyledDatePicker } from '@styles/DatePicker.styles';
-import { isWithinInterval } from 'date-fns';
 import dayjs from 'dayjs';
 import timezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
@@ -22,18 +21,18 @@ const DatePicker = () => {
     const { startDate: startDateString, endDate: endDateString } = useAppSelector(
         (state: RootState) => state.edit
     );
+    const { isEdit } = useAppSelector((state: RootState) => state.mode);
 
-    const [date, setDate] = useState<Value>(null);
+    const [date, setDate] = useState<Value>(new Date());
 
     useEffect(() => {
-        if (startDateString && endDateString) {
+        if (isEdit && startDateString && endDateString) {
             setDate([new Date(startDateString), new Date(endDateString)]);
         }
-    }, [startDateString, endDateString]);
+    }, [isEdit, startDateString, endDateString]);
 
     const handleDateChange = (newDate: Value) => {
         setDate(newDate);
-
         if (Array.isArray(newDate) && newDate[0] && newDate[1]) {
             const startDate = dayjs(newDate[0]).tz('Asia/Seoul').format('YYYY-MM-DDTHH:mm:ss');
             const endDate = dayjs(newDate[1]).tz('Asia/Seoul').format('YYYY-MM-DDTHH:mm:ss');
@@ -44,17 +43,6 @@ const DatePicker = () => {
             dispatch(setStartDate(selectedDate));
             dispatch(setEndDate(selectedDate));
         }
-    };
-
-    const tileClassName = ({ date, view }: { date: Date; view: string }) => {
-        if (view === 'month' && Array.isArray(date) && date[0] && date[1]) {
-            const start = new Date(date[0]);
-            const end = new Date(date[1]);
-            if (isWithinInterval(date, { start, end })) {
-                return 'highlighted';
-            }
-        }
-        return null;
     };
 
     return (
@@ -74,7 +62,6 @@ const DatePicker = () => {
                 minDetail='month'
                 calendarType='gregory'
                 selectRange={true}
-                tileClassName={tileClassName}
                 prevLabel={
                     <ArrowLeftIcon sx={{ fill: '#D9D9D9', width: '36px', height: '36px' }} />
                 }

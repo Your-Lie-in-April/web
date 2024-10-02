@@ -158,9 +158,8 @@ export const StyledDatePicker = styled.div`
         border-top-right-radius: 5px !important;
         border-bottom-right-radius: 5px !important;
     }
-    
-    .highlighted {
-        background-color: #e6f4ff;
-        color: #1890ff;
+
+    .react-calendar__tile--range:hover {
+        border-radius: 0;
     }
 `;
