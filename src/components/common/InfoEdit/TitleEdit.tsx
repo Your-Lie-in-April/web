@@ -1,6 +1,6 @@
 import { useAppDispatch, useAppSelector } from '@redux/config/hook';
 import { RootState } from '@redux/config/store';
-import { setTitle } from '@redux/reducers/edit';
+import { setTitle } from '@redux/slice/edit';
 import { useState } from 'react';
 import styled from 'styled-components';
 

@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from '@redux/config/hook';
-import { setDayOfWeek } from '@redux/reducers/edit';
+import { setDayOfWeek } from '@redux/slice/edit';
 import styled from 'styled-components';
 
 const DayPicker = () => {

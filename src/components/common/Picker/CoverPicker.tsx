@@ -2,7 +2,7 @@ import useCoverImgQuery from '@hooks/apis/queries/project/useCoverImgQuery';
 import AddCircleRoundedIcon from '@mui/icons-material/AddCircleRounded';
 import { useAppDispatch, useAppSelector } from '@redux/config/hook';
 import { RootState } from '@redux/config/store';
-import { setColor, setCoverImageId, setImg } from '@redux/reducers/edit';
+import { setColor, setCoverImageId, setImg } from '@redux/slice/edit';
 import { useCallback, useState } from 'react';
 import { ChromePicker, ColorResult } from 'react-color';
 import styled from 'styled-components';
@@ -14,7 +14,6 @@ const CoverPicker = () => {
     const singleColors = ['#633AE2', '#FFCB3B', '#64AFF5', '#C2D57A', '#EB5757', '#212121'];
     const [openHex, setOpenHex] = useState<boolean>(false);
     const { data: images } = useCoverImgQuery();
-    
 
     const handleColorClick = (selectedColor: string) => {
         dispatch(setColor(selectedColor));

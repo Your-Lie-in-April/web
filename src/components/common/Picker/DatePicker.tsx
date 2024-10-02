@@ -2,7 +2,7 @@ import ArrowLeftIcon from '@mui/icons-material/ArrowLeft';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import { useAppDispatch, useAppSelector } from '@redux/config/hook';
 import { RootState } from '@redux/config/store';
-import { setEndDate, setStartDate } from '@redux/reducers/edit';
+import { setEndDate, setStartDate } from '@redux/slice/edit';
 import '@styles/calendarcss.css';
 import { StyledDatePicker } from '@styles/DatePicker.styles';
 import dayjs from 'dayjs';

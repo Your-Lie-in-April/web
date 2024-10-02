@@ -2,7 +2,7 @@ import useClickOutside from '@hooks/useClickOutside';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useAppDispatch, useAppSelector } from '@redux/config/hook';
-import { setEndTime, setStartTime } from '@redux/reducers/edit';
+import { setEndTime, setStartTime } from '@redux/slice/edit';
 import '@styles/projecttime.css';
 import { useRef, useState } from 'react';
 import styled from 'styled-components';

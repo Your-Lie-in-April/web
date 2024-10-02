@@ -10,10 +10,10 @@ import {
     setStartDate,
     setStartTime,
     setTitle,
-} from '@redux/reducers/edit';
-import { useEffect } from 'react';
+} from '@redux/slice/edit';
+import { useCallback } from 'react';
 
-const useDispatchProjectData = (projectData: any) => {
+const useDispatchProjectData = () => {
     const dispatch = useAppDispatch();
 
     const formatTimeToText = (timeString: string): string => {
@@ -23,26 +23,33 @@ const useDispatchProjectData = (projectData: any) => {
         return `${period} ${formattedHours}:${minutes}`;
     };
 
-    useEffect(() => {
-        if (projectData) {
-            dispatch(setTitle(projectData.title || ''));
-            dispatch(setContent(projectData.description || ''));
-            dispatch(setStartDate(projectData.startDate ? projectData.startDate : null));
-            dispatch(setEndDate(projectData.endDate ? projectData.endDate : null));
-            dispatch(
-                setStartTime(
-                    projectData.startTime ? formatTimeToText(projectData.startTime) : 'AM 09:00'
-                )
-            );
-            dispatch(
-                setEndTime(projectData.endTime ? formatTimeToText(projectData.endTime) : 'AM 09:30')
-            );
-            dispatch(setDayOfWeek(projectData.daysOfWeek || []));
-            dispatch(setColor(projectData?.color || ''));
-            dispatch(setCoverImageId(projectData.coverInfo?.id || ''));
-            dispatch(setImg(projectData.coverInfo?.coverImageUrl || ''));
-        }
-    }, [projectData, dispatch]);
+    const dispatchProject = useCallback(
+        (projectData: any) => {
+            if (projectData) {
+                dispatch(setTitle(projectData.title || ''));
+                dispatch(setContent(projectData.description || ''));
+                dispatch(setStartDate(projectData.startDate ? projectData.startDate : null));
+                dispatch(setEndDate(projectData.endDate ? projectData.endDate : null));
+                dispatch(
+                    setStartTime(
+                        projectData.startTime ? formatTimeToText(projectData.startTime) : 'AM 09:00'
+                    )
+                );
+                dispatch(
+                    setEndTime(
+                        projectData.endTime ? formatTimeToText(projectData.endTime) : 'AM 09:30'
+                    )
+                );
+                dispatch(setDayOfWeek(projectData.daysOfWeek || []));
+                dispatch(setColor(projectData?.color || ''));
+                dispatch(setCoverImageId(projectData.coverInfo?.id || ''));
+                dispatch(setImg(projectData.coverInfo?.coverImageUrl || ''));
+            }
+        },
+        [dispatch]
+    );
+
+    return dispatchProject;
 };
 
 export default useDispatchProjectData;
