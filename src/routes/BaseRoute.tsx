@@ -1,5 +1,7 @@
 import InvitationAccept from '@components/modal/projectModal/InvitationAccept';
 import { UserProvider } from '@hooks/context/userContext';
+import { useResetState } from '@hooks/useResetState';
+import useScrollToTop from '@hooks/useScrollToTop';
 import LoginPage from '@pages/loginPage';
 import MainPage from '@pages/mainPage';
 import MakePage from '@pages/makePage';
@@ -13,6 +15,9 @@ import PrivateRoute from './PrivateRoute';
 import UnPrivateRoute from './UnPrivateRoute';
 
 export default function BaseRoute() {
+    useResetState();
+    useScrollToTop();
+
     const navigate = useNavigate();
     const location = useLocation();
     const background = location.state && location.state.background;

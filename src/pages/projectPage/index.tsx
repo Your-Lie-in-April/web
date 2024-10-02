@@ -8,12 +8,11 @@ import { DateProvider } from '@hooks/context/dateContext';
 import { ProjectProvider } from '@hooks/context/projectContext';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
-import { useAppDispatch, useAppSelector } from '@redux/config/hook';
+import { useAppSelector } from '@redux/config/hook';
 import { RootState } from '@redux/config/store';
-import { setIsEdit } from '@redux/reducers/mode';
 import { isMobileSetHeight } from '@utils/isMobileSetHeight';
-import { useEffect, useState } from 'react';
-import { useLocation, useParams } from 'react-router-dom';
+import { useState } from 'react';
+import { useParams } from 'react-router-dom';
 import styled, { createGlobalStyle } from 'styled-components';
 
 const ProjectPage: React.FC = () => {
@@ -29,14 +28,7 @@ const ProjectPage: React.FC = () => {
 
     isMobileSetHeight();
 
-    const dispatch = useAppDispatch();
     const { isEdit } = useAppSelector((state: RootState) => state.mode);
-
-    const location = useLocation();
-
-    useEffect(() => {
-        dispatch(setIsEdit(false));
-    }, [location, dispatch]);
 
     return (
         <ProjectProvider>
