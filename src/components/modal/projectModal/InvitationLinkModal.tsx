@@ -40,7 +40,7 @@ const InvitationLinkModal: React.FC<InvitationLinkModalProps> = ({ toggleBtn }) 
 
     const baseUrl =
         process.env.NODE_ENV === 'development'
-            ? 'http://localhost:5173'
+            ? `http://localhost:${window.location.port}`
             : 'https://timepiece.inuappcenter.kr';
 
     const { projectId } = useParams();
@@ -73,6 +73,10 @@ const InvitationLinkModal: React.FC<InvitationLinkModalProps> = ({ toggleBtn }) 
 
     // Clipboard API를 이용해 초대링크 복사
     const onClickCopyLink = async (url: string) => {
+        if (url === '') {
+            Toast('초대 링크를 생성해 주세요', 'warning');
+            return;
+        }
         try {
             await navigator.clipboard.writeText(url);
             setIsBtnClick(true);
