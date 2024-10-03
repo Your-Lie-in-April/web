@@ -126,7 +126,7 @@ export const useProjectPostOrPut = () => {
             }
         } catch (error: any) {
             const errorMessage = error.response?.data?.data;
-            console.error(errorMessage);
+            Toast(errorMessage, 'error');
         }
     };
 
