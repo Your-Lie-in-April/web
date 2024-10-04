@@ -30,12 +30,11 @@ const NewProjectText = styled.div`
 
 const NewProject: FC = () => {
     const navigate = useNavigate();
-    const clickPath = `/projectmake`;
 
     return (
         <NewProjectDiv
             onClick={() => {
-                navigate(clickPath);
+                navigate(`/make`);
             }}
         >
             <NewProjectText>

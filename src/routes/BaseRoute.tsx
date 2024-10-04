@@ -54,9 +54,9 @@ export default function BaseRoute() {
                             </>
                         }
                     />
-                    <Route path='projectmake' element={<MakePage />} />
+                    <Route path='make' element={<MakePage />} />
                     <Route path='project/:projectId' element={<ProjectPage />} />
-                    <Route path='myproject' element={<StoragePage />} />
+                    <Route path='storage' element={<StoragePage />} />
                 </Route>
                 <Route path='*' element={<NotFoundRoute />} />
             </Routes>

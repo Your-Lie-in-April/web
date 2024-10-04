@@ -21,7 +21,7 @@ const MyPageModal: React.FC<MyPageModalProps> = ({ onSetIsMyPageModal, onSetIsLo
 
     const navigate = useNavigate();
     const handlemyproject = () => {
-        navigate('/myproject');
+        navigate('/storage');
     };
 
     return (
