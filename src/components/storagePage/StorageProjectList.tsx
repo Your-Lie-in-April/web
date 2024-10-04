@@ -17,7 +17,11 @@ interface StorageProjectListProps {
 
 const StorageProjectList: React.FC<StorageProjectListProps> = ({ projects }) => {
     if (!projects || projects.length === 0) {
-        return <NoProject />;
+        return (
+            <div style={{ marginTop: '60px' }}>
+                <NoProject />
+            </div>
+        );
     }
 
     return (
