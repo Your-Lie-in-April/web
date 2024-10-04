@@ -3,38 +3,9 @@ import { Alarm, NewProject, Profile } from '@components/mainPage';
 import { Pagination } from '@components/mainPage/pagination';
 import Pinned from '@components/mainPage/pinned/Pinned';
 import { SearchProvider } from '@hooks/context/searchContext';
-import { isMobileSetHeight } from '@utils/isMobileSetHeight';
-import { FC, useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
 import styled, { createGlobalStyle } from 'styled-components';
 
-function useQuery() {
-    const location = useLocation();
-    return new URLSearchParams(location.search);
-}
-
-const MainPage: FC = () => {
-    const query = useQuery();
-    const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
-
-    useEffect(() => {
-        const accessToken = query.get('access_token') || localStorage.getItem('access_token');
-        const refreshToken = query.get('refresh_token') || localStorage.getItem('refresh_token');
-        const memberId = query.get('member_id') || localStorage.getItem('member_id');
-
-        if (accessToken) localStorage.setItem('access_token', accessToken);
-        if (refreshToken) localStorage.setItem('refresh_token', refreshToken);
-        if (memberId) localStorage.setItem('member_id', memberId);
-
-        if (accessToken && refreshToken) {
-            setIsLoggedIn(true);
-        } else {
-            setIsLoggedIn(false);
-        }
-    }, []);
-
-    isMobileSetHeight();
-
+const MainPage = () => {
     return (
         <>
             <GlobalStyle />
