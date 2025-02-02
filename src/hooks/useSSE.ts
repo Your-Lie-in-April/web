@@ -3,12 +3,13 @@ import { API } from '@constants/api';
 import { QUERY_KEY } from '@constants/queryKey';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { EventSourcePolyfill } from 'event-source-polyfill';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState, useRef } from 'react';
 
 export const useSSE = () => {
     const queryClient = useQueryClient();
     const accessToken = localStorage.getItem('access_token');
     const [allAlarms, setAllAlarms] = useState<AlarmEntity[]>([]);
+    const lastNotificationIdRef = useRef<string | null>(null);
 
     const fetchSSEData = useCallback(() => {
         return new Promise<AlarmEntity[]>((resolve) => {
@@ -18,7 +19,12 @@ export const useSSE = () => {
             }
 
             const connect = () => {
-                const eventSource = new EventSourcePolyfill(API.NOTIFICATION_SSE, {
+                const baseUrl = API.NOTIFICATION_SSE;
+                const url = lastNotificationIdRef.current
+                    ? `${baseUrl}?lastEventId=${lastNotificationIdRef.current}`
+                    : baseUrl;
+
+                const eventSource = new EventSourcePolyfill(url, {
                     headers: {
                         Authorization: `Bearer ${accessToken}`,
                         Connection: 'keep-alive',
@@ -45,6 +51,9 @@ export const useSSE = () => {
                         createdAt: data.createdAt,
                     };
 
+                    // Update last notification ID
+                    lastNotificationIdRef.current = newAlarm.notificationId;
+
                     queryClient.setQueryData<AlarmEntity[]>(QUERY_KEY.ALARM_SSE, (oldData = []) => {
                         return [newAlarm, ...oldData];
                     });
@@ -52,7 +61,7 @@ export const useSSE = () => {
                     setAllAlarms((prevAlarms) => [newAlarm, ...prevAlarms]);
                 };
 
-                (eventSource as any).addEventListener('notification', handleNotification);
+                eventSource.addEventListener('notification', handleNotification);
 
                 eventSource.onerror = (err) => {
                     console.error('SSE EventSource failed:', err);
