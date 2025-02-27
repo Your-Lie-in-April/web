@@ -18,6 +18,12 @@ body {
     margin: 0 auto;
     padding: 0;
     min-height: 100vh;
+    min-width: 1366px;
+    -ms-overflow-style: none;
+}
+
+::-webkit-scrollbar {
+    display: none;
 }
 
 * {

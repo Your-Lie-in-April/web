@@ -87,15 +87,7 @@ export default ProjectPage;
 
 const GlobalStyle = createGlobalStyle`
   body {
-    width : 100%;
-    min-width : 1366px;
-    margin: 0;
-    background-color: #FFFFFF;
-    -ms-overflow-style: none;
-  }
-
-  ::-webkit-scrollbar {
-    display: none;
+    background-color: #FFFFFF; 
   }
 `;
 
