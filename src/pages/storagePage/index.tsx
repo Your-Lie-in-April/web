@@ -1,13 +1,12 @@
 import { Layout, Search } from '@components/layout';
 import { SearchProvider } from '@hooks/context/searchContext';
-import styled, { createGlobalStyle } from 'styled-components';
+import styled from 'styled-components';
 import StorageInfinite from '../../components/storagePage/StorageInfinite';
 import GraphicIcons from '../../components/storagePage/icons/GraphicIcons';
 
 const StoragePage = () => {
     return (
         <>
-            <GlobalStyle />
             <Layout>
                 <GraphicIcons />
                 <SearchProvider>
@@ -27,21 +26,6 @@ const StoragePage = () => {
     );
 };
 export default StoragePage;
-
-const GlobalStyle = createGlobalStyle`
-body {
-  width : 100%;
-  min-width : 1366px;
-  min-height : 1573px;
-  margin: 0 auto;
-  background-color: #212121;
-  -ms-overflow-style: none;
-}
-
-  ::-webkit-scrollbar {
-    display: none;
-  }
-`;
 
 const Title = styled.div`
     color: #ffffff;

@@ -3,12 +3,11 @@ import { Alarm, NewProject, Profile } from '@components/mainPage';
 import { Pagination } from '@components/mainPage/pagination';
 import Pinned from '@components/mainPage/pinned/Pinned';
 import { SearchProvider } from '@hooks/context/searchContext';
-import styled, { createGlobalStyle } from 'styled-components';
+import styled from 'styled-components';
 
 const MainPage = () => {
     return (
         <>
-            <GlobalStyle />
             <Layout>
                 <BannerTop />
                 <BannerDown />
@@ -37,20 +36,6 @@ const MainPage = () => {
 };
 
 export default MainPage;
-
-const GlobalStyle = createGlobalStyle`
-  body {
-    width : 100%;
-    min-width : 1366px;
-    margin: 0 auto;
-    background-color: #212121;
-    -ms-overflow-style: none;
-  }
-
-  ::-webkit-scrollbar {
-    display: none;
-  }
-`;
 
 const MainContainer = styled.div`
     position: relative;
