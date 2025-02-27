@@ -5,13 +5,10 @@ import '@fontsource/roboto/900.css';
 import githubLogo from '@pics/github-login.svg';
 import googleLogo from '@pics/google-login.svg';
 import kakaoLogo from '@pics/kakao-login.svg';
-import { isMobileSetHeight } from '@utils/isMobileSetHeight';
 import { FC } from 'react';
 import styled from 'styled-components';
 
 const LoginPage: FC = () => {
-    isMobileSetHeight();
-
     const oAuth = (provider: string) => {
         let path = '';
         switch (provider) {

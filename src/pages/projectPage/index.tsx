@@ -10,7 +10,6 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import { useAppSelector } from '@redux/config/hook';
 import { RootState } from '@redux/config/store';
-import { isMobileSetHeight } from '@utils/isMobileSetHeight';
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import styled, { createGlobalStyle } from 'styled-components';
@@ -25,8 +24,6 @@ const ProjectPage: React.FC = () => {
 
     const { projectId } = useParams();
     const { data: membersData } = useAllMemberInfoQuery(Number(projectId));
-
-    isMobileSetHeight();
 
     const { isEdit } = useAppSelector((state: RootState) => state.mode);
 
