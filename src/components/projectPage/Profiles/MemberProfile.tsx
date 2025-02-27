@@ -27,10 +27,14 @@ const MemberProfile = ({
             <MemberProfileBox>
                 <MemberProfileDiv>
                     <MemberImg>
-                        <StyledImage
-                            src={member?.profileImageUrl || defaultProfile}
-                            alt='Profile Image'
-                        />
+                        {member?.profileImageUrl ? (
+                            <StyledImage
+                                src={member.profileImageUrl || defaultProfile}
+                                alt='Profile Image'
+                            />
+                        ) : (
+                            <StyledImage src={defaultProfile} alt='Default Image' />
+                        )}
                     </MemberImg>
                     <TextContainer>
                         <NicknameText>

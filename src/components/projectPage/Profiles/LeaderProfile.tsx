@@ -20,10 +20,14 @@ const LeaderProfile = ({
         <StyledLeaderProfileBox>
             <StyledLeaderProfileDiv>
                 <LeaderImg>
-                    <StyledImage
-                        src={member?.profileImageUrl || defaultProfile}
-                        alt='Profile Image'
-                    />
+                    {member?.profileImageUrl ? (
+                        <StyledImage
+                            src={member.profileImageUrl || defaultProfile}
+                            alt='Profile Image'
+                        />
+                    ) : (
+                        <StyledImage src={defaultProfile} alt='Default Image' />
+                    )}
                 </LeaderImg>
                 <StyledProfileInfo>
                     <StyledProfileText>

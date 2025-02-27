@@ -24,10 +24,14 @@ const MyProfile = () => {
             <StyledMyProfileBox>
                 <StyledProfileContainer>
                     <StyledImageDiv>
-                        <StyledImage
-                            src={userData?.profileImageUrl || defaultProfile}
-                            alt='Profile Image'
-                        />
+                        {userData?.profileImageUrl ? (
+                            <StyledImage
+                                src={userData.profileImageUrl || defaultProfile}
+                                alt='Profile Image'
+                            />
+                        ) : (
+                            <StyledImage src={defaultProfile} alt='Default Image' />
+                        )}
                     </StyledImageDiv>
                     <StyledProfileInfo>
                         <StyledProfileNick>

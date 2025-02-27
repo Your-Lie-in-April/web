@@ -16,7 +16,7 @@ const Profile: React.FC = () => {
                         alt='Profile Image'
                     />
                 ) : (
-                    <StyledImage alt='Default Image' />
+                    <StyledImage src={defaultProfile} alt='Default Image' />
                 )}
             </ImageDiv>
             <CommonText>{userData?.email}</CommonText>

@@ -1,6 +1,7 @@
 import { useUserContext } from '@hooks/context/userContext';
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
+import defaultProfile from '@pics/default-profile.svg';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
@@ -32,7 +33,14 @@ const MyPageModal: React.FC<MyPageModalProps> = ({ onSetIsMyPageModal, onSetIsLo
                 </CloseButton>
                 <CenteredColumn>
                     <MyImg>
-                        <StyledImage src={userData?.profileImageUrl} />
+                        {userData?.profileImageUrl ? (
+                            <StyledImage
+                                src={userData.profileImageUrl || defaultProfile}
+                                alt='Profile Image'
+                            />
+                        ) : (
+                            <StyledImage src={defaultProfile} alt='Default Image' />
+                        )}
                     </MyImg>
                     <MyEmailText>{userData?.email}</MyEmailText>
                 </CenteredColumn>
