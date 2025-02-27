@@ -1,7 +1,6 @@
 import { BannerDown, BannerTop, Layout } from '@components/layout';
 import { GraphicIcons } from '@components/loginPage';
 import { Http } from '@constants/api';
-import '@fontsource/roboto/900.css';
 import githubLogo from '@pics/github-login.svg';
 import googleLogo from '@pics/google-login.svg';
 import kakaoLogo from '@pics/kakao-login.svg';
@@ -117,7 +116,7 @@ const BtnBox = styled.button.attrs({
     border-radius: 60px;
     background: #fff;
     text-align: center;
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Roboto';
     font-size: 24px;
     font-style: normal;
     font-weight: 900;
@@ -131,7 +130,6 @@ const BtnBox = styled.button.attrs({
     align-items: center;
     box-sizing: border-box;
     letter-spacing: -0.5px;
-    text-shadow: -0.2px -0.2px 0 #000, 0.2px -0.2px 0 #000, -0.2px 0.2px 0 #000, 0.2px 0.2px 0 #000;
 
     &:focus {
         outline: none;

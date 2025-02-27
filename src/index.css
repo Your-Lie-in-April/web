@@ -26,6 +26,11 @@
         url('../public/fonts/Pretendard-ExtraBold.woff2') format('woff2');
 }
 
+@font-face {
+    font-family: 'Roboto';
+    src: local('Roboto Bold'), url('../public/fonts/Roboto-Bold.woff2') format('woff2');
+}
+
 :root {
     font-family: 'Pretendard';
     line-height: 1.5;
