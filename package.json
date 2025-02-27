@@ -10,9 +10,12 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
     "@fontsource/roboto": "^5.0.14",
     "@mui/icons-material": "^5.15.7",
     "@mui/material": "^5.15.7",
+    "@mui/styled-engine-sc": "^6.4.6",
     "@reduxjs/toolkit": "^2.2.7",
     "@tanstack/react-query": "^5.29.2",
     "@tanstack/react-query-devtools": "^5.29.2",
@@ -33,7 +36,7 @@
     "react-router-dom": "^6.22.3",
     "react-toastify": "^10.0.5",
     "redux": "^5.0.1",
-    "styled-components": "^6.1.8"
+    "styled-components": "^6.1.15"
   },
   "devDependencies": {
     "@types/event-source-polyfill": "^1.0.5",
