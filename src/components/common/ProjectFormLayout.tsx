@@ -6,7 +6,7 @@ import { useProjectContext } from '@hooks/context/projectContext';
 import useDispatchProjectData from '@hooks/useDispatchProject';
 import { useEffect } from 'react';
 import 'react-toastify/dist/ReactToastify.css';
-import styled, { createGlobalStyle } from 'styled-components';
+import styled from 'styled-components';
 
 const ProjectFormLayout = () => {
     const { projectData } = useProjectContext();
@@ -19,7 +19,6 @@ const ProjectFormLayout = () => {
 
     return (
         <>
-            <GlobalStyle />
             <Layout>
                 <Divider height='28px' />
                 <InfoEdit />
@@ -41,21 +40,6 @@ const ProjectFormLayout = () => {
     );
 };
 export default ProjectFormLayout;
-
-const GlobalStyle = createGlobalStyle`
-  body {
-    width : 100%;
-    min-width : 1366px;
-    max-height : 1920px;
-    margin: 0 auto;
-    background-color: #212121;
-    -ms-overflow-style: none;
-  }
-
-  ::-webkit-scrollbar {
-    display: none;
-  }
-`;
 
 const Divider = styled.div<{ height: string }>`
     height: ${(props) => props.height};

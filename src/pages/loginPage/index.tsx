@@ -7,7 +7,7 @@ import googleLogo from '@pics/google-login.svg';
 import kakaoLogo from '@pics/kakao-login.svg';
 import { isMobileSetHeight } from '@utils/isMobileSetHeight';
 import { FC } from 'react';
-import styled, { createGlobalStyle } from 'styled-components';
+import styled from 'styled-components';
 
 const LoginPage: FC = () => {
     isMobileSetHeight();
@@ -33,7 +33,6 @@ const LoginPage: FC = () => {
 
     return (
         <>
-            <GlobalStyle />
             <Layout>
                 <Container>
                     <GraphicIcons />
@@ -73,21 +72,6 @@ const LoginPage: FC = () => {
 };
 
 export default LoginPage;
-
-const GlobalStyle = createGlobalStyle`
-  body {
-    width: 100%;
-    min-width: 1366px;
-    min-height: 1366px;
-    margin: 0 auto;
-    background-color: #212121;
-    -ms-overflow-style: none;
-  }
-
-  ::-webkit-scrollbar {
-    display: none;
-  }
-`;
 
 const Container = styled.div`
     position: relative;
