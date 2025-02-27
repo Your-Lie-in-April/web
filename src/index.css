@@ -1,5 +1,31 @@
 @import './reset.css';
 
+@font-face {
+    font-family: 'Pretendard';
+    font-weight: 400;
+    src: local('Pretendard Regular'),
+        url('../public/fonts/Pretendard-Regular.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'Pretendard';
+    font-weight: 500;
+    src: local('Pretendard Medium'), url('../public/fonts/Pretendard-Medium.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'Pretendard';
+    font-weight: 700;
+    src: local('Pretendard Bold'), url('../public/fonts/Pretendard-Bold.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'Pretendard';
+    font-weight: 800;
+    src: local('Pretendard Extra Bold'),
+        url('../public/fonts/Pretendard-ExtraBold.woff2') format('woff2');
+}
+
 :root {
     font-family: 'Pretendard';
     line-height: 1.5;
