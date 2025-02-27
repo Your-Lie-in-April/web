@@ -12,7 +12,6 @@
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
-    "@fontsource/roboto": "^5.0.14",
     "@mui/icons-material": "^5.15.7",
     "@mui/material": "^5.15.7",
     "@mui/styled-engine-sc": "^6.4.6",
@@ -24,7 +23,6 @@
     "date-fns": "^3.6.0",
     "dayjs": "^1.11.12",
     "event-source-polyfill": "^1.0.31",
-    "mobile-detect": "^1.4.5",
     "react": "^18.2.0",
     "react-calendar": "^4.8.0",
     "react-color": "^2.19.3",
