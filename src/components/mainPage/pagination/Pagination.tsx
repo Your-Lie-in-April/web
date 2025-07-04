@@ -1,4 +1,4 @@
-import { useSearch } from '@hooks/context/searchContext';
+import useSearch from '@hooks/useSearch';
 import React from 'react';
 import MainPagination from './MainPagination';
 import SearchPagination from './SearchPagination';

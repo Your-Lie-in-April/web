@@ -1,4 +1,4 @@
-import { useSearch } from '@hooks/context/searchContext';
+import useSearch from '@hooks/useSearch';
 import { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 

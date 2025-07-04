@@ -1,5 +1,5 @@
 import useSearchQuery from '@hooks/apis/queries/project/useSearchQuery';
-import { useSearch } from '@hooks/context/searchContext';
+import useSearch from '@hooks/useSearch';
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import Paging from './Paging';

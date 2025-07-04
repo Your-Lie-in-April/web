@@ -11,7 +11,6 @@ const MainPage = () => {
             <Layout>
                 <BannerTop />
                 <BannerDown />
-                <SearchProvider>
                     <MainContainer>
                         <Lefts>
                             <Profile />
@@ -29,7 +28,6 @@ const MainPage = () => {
                         </Rights>
                     </MainContainer>
                     <Spacer />
-                </SearchProvider>
             </Layout>
         </>
     );

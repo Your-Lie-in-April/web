@@ -1,5 +1,4 @@
 import { Layout, Search } from '@components/layout';
-import { SearchProvider } from '@hooks/context/searchContext';
 import styled from 'styled-components';
 import StorageInfinite from '../../components/storagePage/StorageInfinite';
 import GraphicIcons from '../../components/storagePage/icons/GraphicIcons';
@@ -9,17 +8,15 @@ const StoragePage = () => {
         <>
             <Layout>
                 <GraphicIcons />
-                <SearchProvider>
-                    <Container>
-                        <Content>
-                            <InnerContent>
-                                <Title>프로젝트 보관함</Title>
-                                <Search />
-                            </InnerContent>
-                            <StorageInfinite />
-                        </Content>
-                    </Container>
-                </SearchProvider>
+                <Container>
+                    <Content>
+                        <InnerContent>
+                            <Title>프로젝트 보관함</Title>
+                            <Search />
+                        </InnerContent>
+                        <StorageInfinite />
+                    </Content>
+                </Container>
                 <Spacer />
             </Layout>
         </>
