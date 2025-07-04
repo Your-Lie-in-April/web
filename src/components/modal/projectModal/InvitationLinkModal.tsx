@@ -1,10 +1,11 @@
 import { Toast } from '@components/layout';
 import usePostLinkMutation from '@hooks/apis/mutations/project/usePostLinkMutation';
 import { useInvitationContext } from '@hooks/context/invitationContext';
-import { useProjectContext } from '@hooks/context/projectContext';
 import useScrollLock from '@hooks/useScrollLock';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { useAppSelector } from '@redux/config/hook';
+import { RootState } from '@redux/config/store';
 import ModalPortal from '@utils/modalPortal';
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
@@ -27,7 +28,7 @@ const InvitationLinkModal: React.FC<InvitationLinkModalProps> = ({ toggleBtn }) 
     const expireTimeList = ['30분', '1시간', '6시간', '1일', '7일', '만료기간 없음'];
     const [expireTime, setExpireTime] = useState<string>(expireTimeList[expireTimeList.length - 1]);
 
-    const { projectData } = useProjectContext();
+    const projectData = useAppSelector((state: RootState) => state.project.projectData);
 
     const handleSetIsDropOpen = () => {
         setIsDropOpen(!isDropOpen);

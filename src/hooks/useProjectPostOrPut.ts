@@ -10,7 +10,6 @@ import utc from 'dayjs/plugin/utc';
 import { useMemo } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import usePutProjectMutation from './apis/mutations/project/usePutProjectMutation';
-import { useProjectContext } from './context/projectContext';
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
@@ -59,7 +58,7 @@ export const useProjectPostOrPut = () => {
         return dayjs(date).tz('Asia/Seoul').format('YYYY-MM-DD');
     };
 
-    const { projectData } = useProjectContext();
+    const projectData = useAppSelector((state: RootState) => state.project.projectData);
     const originalPayload = useMemo(() => {
         if (!projectData) return null;
 

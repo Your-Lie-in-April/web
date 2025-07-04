@@ -4,17 +4,20 @@ import { Alarm, ProjectInfo, ScheduleCalendar } from '@components/projectPage';
 import { ProfileList } from '@components/projectPage/Profiles';
 import { MemberScheduleGrid, MySchedule, TeamSchedule } from '@components/projectPage/Schedules';
 import useAllMemberInfoQuery from '@hooks/apis/queries/member/useAllMemberInfoQuery';
+import useProjectInfoQuery from '@hooks/apis/queries/project/useProjectInfoQuery';
 import { DateProvider } from '@hooks/context/dateContext';
-import { ProjectProvider } from '@hooks/context/projectContext';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
-import { useAppSelector } from '@redux/config/hook';
+import { useAppDispatch, useAppSelector } from '@redux/config/hook';
 import { RootState } from '@redux/config/store';
-import { useState } from 'react';
+import { setProjectData } from '@redux/slice/project';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import styled, { createGlobalStyle } from 'styled-components';
 
 const ProjectPage: React.FC = () => {
+    const dispatch = useAppDispatch();
+
     const [seeMemTime, setSeeMemTime] = useState(true);
     const [isEditModal, setIsEditModal] = useState(false);
 
@@ -24,60 +27,65 @@ const ProjectPage: React.FC = () => {
 
     const { projectId } = useParams();
     const { data: membersData } = useAllMemberInfoQuery(Number(projectId));
+    const { data: projectData } = useProjectInfoQuery(Number(projectId));
 
     const { isEdit } = useAppSelector((state: RootState) => state.mode);
 
+    useEffect(() => {
+        if (projectData) {
+            dispatch(setProjectData(projectData));
+        }
+    }, [projectId, dispatch, projectData]);
+
     return (
-        <ProjectProvider>
-            <DateProvider>
-                {isEdit ? (
-                    <ProjectFormLayout />
-                ) : (
-                    <>
-                        <GlobalStyle />
-                        <Layout>
-                            <Divider />
-                            <ProjectInfo />
-                            <Box>
-                                <OuterColumn>
-                                    <MainBox>
-                                        <ProfileList />
-                                        <InnerColumn>
-                                            <TeamSchedule />
-                                            <MySchedule
-                                                isEditModal={isEditModal}
-                                                setIsEditModal={setIsEditModal}
-                                            />
-                                        </InnerColumn>
-                                        <InnerColumn>
-                                            <ScheduleCalendar />
-                                            <Alarm />
-                                        </InnerColumn>
-                                    </MainBox>
-                                    {membersData && membersData.length > 1 && (
-                                        <>
-                                            <MemTimeBtn onClick={toggleMemTime}>
-                                                {seeMemTime ? (
-                                                    <>
-                                                        멤버 시간표 닫기 <ArrowDropUpIcon />
-                                                    </>
-                                                ) : (
-                                                    <>
-                                                        멤버 시간표 열기 <ArrowDropDownIcon />
-                                                    </>
-                                                )}
-                                            </MemTimeBtn>
-                                            {seeMemTime && <MemberScheduleGrid />}
-                                        </>
-                                    )}
-                                </OuterColumn>
-                            </Box>
-                            <div style={{ height: '400px' }} />
-                        </Layout>
-                    </>
-                )}
-            </DateProvider>
-        </ProjectProvider>
+        <DateProvider>
+            {isEdit ? (
+                <ProjectFormLayout />
+            ) : (
+                <>
+                    <GlobalStyle />
+                    <Layout>
+                        <Divider />
+                        <ProjectInfo />
+                        <Box>
+                            <OuterColumn>
+                                <MainBox>
+                                    <ProfileList />
+                                    <InnerColumn>
+                                        <TeamSchedule />
+                                        <MySchedule
+                                            isEditModal={isEditModal}
+                                            setIsEditModal={setIsEditModal}
+                                        />
+                                    </InnerColumn>
+                                    <InnerColumn>
+                                        <ScheduleCalendar />
+                                        <Alarm />
+                                    </InnerColumn>
+                                </MainBox>
+                                {membersData && membersData.length > 1 && (
+                                    <>
+                                        <MemTimeBtn onClick={toggleMemTime}>
+                                            {seeMemTime ? (
+                                                <>
+                                                    멤버 시간표 닫기 <ArrowDropUpIcon />
+                                                </>
+                                            ) : (
+                                                <>
+                                                    멤버 시간표 열기 <ArrowDropDownIcon />
+                                                </>
+                                            )}
+                                        </MemTimeBtn>
+                                        {seeMemTime && <MemberScheduleGrid />}
+                                    </>
+                                )}
+                            </OuterColumn>
+                        </Box>
+                        <div style={{ height: '400px' }} />
+                    </Layout>
+                </>
+            )}
+        </DateProvider>
     );
 };
 export default ProjectPage;

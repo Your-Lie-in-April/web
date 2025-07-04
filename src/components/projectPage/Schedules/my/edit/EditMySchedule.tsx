@@ -3,8 +3,9 @@ import { Toast } from '@components/layout';
 import usePostScheduleMutation from '@hooks/apis/mutations/schedule/usePostScheduleMutation';
 import usePutScheduleMutation from '@hooks/apis/mutations/schedule/usePutScheduleMutation';
 import { DateContext } from '@hooks/context/dateContext';
-import { ProjectContext } from '@hooks/context/projectContext';
 import useScrollLock from '@hooks/useScrollLock';
+import { useAppSelector } from '@redux/config/hook';
+import { RootState } from '@redux/config/store';
 import ModalPortal from '@utils/modalPortal';
 import dayjs from 'dayjs';
 import React, { useContext, useEffect, useState } from 'react';
@@ -30,7 +31,7 @@ const EditMySchedule: React.FC<EditMyScheduleProps> = ({
     onSetIsEditModal,
     scheduleData,
 }) => {
-    const { projectData } = useContext(ProjectContext);
+    const projectData = useAppSelector((state: RootState) => state.project.projectData);
     const startDateString = projectData?.startDate;
     const endDateString = projectData?.endDate;
     const startTimeString = projectData?.startTime;

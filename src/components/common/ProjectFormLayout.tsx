@@ -2,14 +2,15 @@ import { InfoEdit } from '@/components/common/InfoEdit';
 import { DatePicker, DateShow, DayPicker, TimePicker } from '@/components/common/Picker';
 import { ProjectActionBtn } from '@components/common/Button';
 import { Layout } from '@components/layout';
-import { useProjectContext } from '@hooks/context/projectContext';
 import useDispatchProjectData from '@hooks/useDispatchProject';
+import { useAppSelector } from '@redux/config/hook';
+import { RootState } from '@redux/config/store';
 import { useEffect } from 'react';
 import 'react-toastify/dist/ReactToastify.css';
 import styled from 'styled-components';
 
 const ProjectFormLayout = () => {
-    const { projectData } = useProjectContext();
+    const projectData = useAppSelector((state: RootState) => state.project.projectData);
     const dispatchProject = useDispatchProjectData();
     useEffect(() => {
         if (projectData) {

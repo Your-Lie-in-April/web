@@ -1,6 +1,7 @@
-import { ProjectContext } from '@hooks/context/projectContext';
+import { useAppSelector } from '@redux/config/hook';
+import { RootState } from '@redux/config/store';
 import dayjs from 'dayjs';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { isProjectHour } from '../../isProjectHour';
 import { TimeSlotLeft, TimeSlotRight } from './EditMyTimeCircle';
@@ -20,7 +21,7 @@ interface EditMyTimeProps {
 }
 
 const EditMyTime: React.FC<EditMyTimeProps> = ({ weekDates, selection, onSelectionChange }) => {
-    const { projectData } = useContext(ProjectContext);
+    const projectData = useAppSelector((state: RootState) => state.project.projectData);
 
     const startTimeString = projectData?.startTime?.toString();
     const endTimeString = projectData?.endTime?.toString();

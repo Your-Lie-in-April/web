@@ -1,10 +1,11 @@
-import { editSlice, modeSlice } from '@redux/slice';
+import { editSlice, modeSlice, projectSlice } from '@redux/slice';
 import { configureStore } from '@reduxjs/toolkit';
 
 export const store = configureStore({
     reducer: {
         edit: editSlice,
         mode: modeSlice,
+        project: projectSlice,
     },
 });
 

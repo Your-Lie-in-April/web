@@ -1,11 +1,12 @@
-import { useProjectContext } from '@hooks/context/projectContext';
 import useDispatchProjectData from '@hooks/useDispatchProject';
 import BackBtnSvg from '@pics/back-btn.svg';
+import { useAppSelector } from '@redux/config/hook';
+import { RootState } from '@redux/config/store';
 import { useCallback } from 'react';
 import styled from 'styled-components';
 
 const BackBtn = () => {
-    const { projectData } = useProjectContext();
+    const projectData = useAppSelector((state: RootState) => state.project.projectData);
     const dispatchProjectData = useDispatchProjectData();
 
     const handleClick = useCallback(

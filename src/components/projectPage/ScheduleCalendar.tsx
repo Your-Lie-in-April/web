@@ -1,7 +1,8 @@
 import { DateContext } from '@hooks/context/dateContext';
-import { useProjectContext } from '@hooks/context/projectContext';
 import ArrowLeftIcon from '@mui/icons-material/ArrowLeft';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
+import { useAppSelector } from '@redux/config/hook';
+import { RootState } from '@redux/config/store';
 import dayjs from 'dayjs';
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
@@ -24,7 +25,7 @@ type Value = ValuePiece | [ValuePiece, ValuePiece];
 
 const ScheduleCalendar: FC = () => {
     const { selectedDate, setSelectedDate } = useContext(DateContext) || {};
-    const { projectData } = useProjectContext();
+    const projectData = useAppSelector((state: RootState) => state.project.projectData);
 
     function formatDate(date: Date): string {
         const year = date.getFullYear();
