@@ -1,11 +1,11 @@
 import { Toast } from '@components/layout';
 import usePostLinkMutation from '@hooks/apis/mutations/project/usePostLinkMutation';
-import { useInvitationContext } from '@hooks/context/invitationContext';
 import useScrollLock from '@hooks/useScrollLock';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { useAppSelector } from '@redux/config/hook';
+import { useAppDispatch, useAppSelector } from '@redux/config/hook';
 import { RootState } from '@redux/config/store';
+import { setInvitationLink } from '@redux/slice/invite';
 import ModalPortal from '@utils/modalPortal';
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
@@ -17,7 +17,7 @@ interface InvitationLinkModalProps {
 }
 
 const InvitationLinkModal: React.FC<InvitationLinkModalProps> = ({ toggleBtn }) => {
-    const { setInvitationLink } = useInvitationContext();
+    const dispatch = useAppDispatch();
     const [link, setLink] = useState<string>('');
     const [isModalOpen, setIsModalOpen] = useState<boolean>(true);
     const [isBtnClick, setIsBtnClick] = useState<boolean>(false);
@@ -51,7 +51,7 @@ const InvitationLinkModal: React.FC<InvitationLinkModalProps> = ({ toggleBtn }) 
             onSuccess: (data) => {
                 const newLink = `${baseUrl}/invitation/${data.link}`;
                 setLink(newLink);
-                setInvitationLink(newLink);
+                dispatch(setInvitationLink(newLink));
             },
         });
     };

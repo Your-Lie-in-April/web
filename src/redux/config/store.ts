@@ -1,4 +1,4 @@
-import { editSlice, modeSlice, projectSlice } from '@redux/slice';
+import { editSlice, invitetSlice, modeSlice, projectSlice } from '@redux/slice';
 import { configureStore } from '@reduxjs/toolkit';
 
 export const store = configureStore({
@@ -6,6 +6,7 @@ export const store = configureStore({
         edit: editSlice,
         mode: modeSlice,
         project: projectSlice,
+        invite: invitetSlice,
     },
 });
 
