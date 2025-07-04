@@ -1,8 +1,8 @@
 import InvitationAccept from '@components/modal/projectModal/InvitationAccept';
-import { UserProvider } from '@hooks/context/userContext';
 import { useAuth } from '@hooks/useAuth';
 import { useResetState } from '@hooks/useResetState';
 import useScrollToTop from '@hooks/useScrollToTop';
+import useUser from '@hooks/useUser';
 import LoginPage from '@pages/loginPage';
 import MainPage from '@pages/mainPage';
 import MakePage from '@pages/makePage';
@@ -16,6 +16,7 @@ import UnPrivateRoute from './UnPrivateRoute';
 
 export default function BaseRoute() {
     useAuth();
+    useUser();
 
     useResetState();
     useScrollToTop();
@@ -37,11 +38,9 @@ export default function BaseRoute() {
                 <Route
                     path='/'
                     element={
-                        <UserProvider>
-                            <PrivateRoute>
-                                <AuthRoute />
-                            </PrivateRoute>
-                        </UserProvider>
+                        <PrivateRoute>
+                            <AuthRoute />
+                        </PrivateRoute>
                     }
                 >
                     <Route index element={<MainPage />} />

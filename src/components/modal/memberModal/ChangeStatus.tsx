@@ -1,7 +1,7 @@
 import { Toast } from '@components/layout';
 import usePutMemberStatusMutation from '@hooks/apis/mutations/member/usePutMemberStatusMutation';
-import { useUserContext } from '@hooks/context/userContext';
 import useScrollLock from '@hooks/useScrollLock';
+import { useAppSelector } from '@redux/config/hook';
 import ModalPortal from '@utils/modalPortal';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
@@ -15,7 +15,7 @@ interface ChangeStatusProps {
 
 const ChangeStatus: React.FC<ChangeStatusProps> = ({ editStatusModal, onSetEditStatusModal }) => {
     const [newState, setNewState] = useState('');
-    const { userData } = useUserContext();
+    const userData = useAppSelector((state) => state.user.userData);
     const { projectId } = useParams();
 
     const handleStatusChange = (e: React.ChangeEvent<HTMLInputElement>) => {

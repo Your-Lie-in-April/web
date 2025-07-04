@@ -11,13 +11,12 @@ import {
 } from '@redux/slice/search';
 import { useEffect } from 'react';
 import useSearchQuery from './apis/queries/project/useSearchQuery';
-import { useUserContext } from './context/userContext';
 
 const useSearch = () => {
     const dispatch = useAppDispatch();
     const { keyword, page, size, isStored } = useAppSelector((state: RootState) => state.search);
 
-    const { userData } = useUserContext();
+    const userData = useAppSelector((state) => state.user.userData);
     const memberId = Number(userData?.memberId);
 
     const { data, isLoading } = useSearchQuery(memberId, keyword, page, size, isStored);

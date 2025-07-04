@@ -1,14 +1,14 @@
 import ChangeNickName from '@components/modal/memberModal/ChangeNickname';
 import useAllMemberInfoQuery from '@hooks/apis/queries/member/useAllMemberInfoQuery';
-import { useUserContext } from '@hooks/context/userContext';
 import defaultProfile from '@pics/default-profile.svg';
+import { useAppSelector } from '@redux/config/hook';
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 const MyProfile = () => {
     const [isEditModal, setIsEditModal] = useState(false);
-    const { userData } = useUserContext();
+    const userData = useAppSelector((state) => state.user.userData);
     const myId = userData?.memberId;
 
     const { projectId } = useParams();

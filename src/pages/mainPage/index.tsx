@@ -2,7 +2,6 @@ import { BannerDown, BannerTop, Layout, Search } from '@components/layout';
 import { Alarm, NewProject, Profile } from '@components/mainPage';
 import { Pagination } from '@components/mainPage/pagination';
 import Pinned from '@components/mainPage/pinned/Pinned';
-import { SearchProvider } from '@hooks/context/searchContext';
 import styled from 'styled-components';
 
 const MainPage = () => {
@@ -11,23 +10,23 @@ const MainPage = () => {
             <Layout>
                 <BannerTop />
                 <BannerDown />
-                    <MainContainer>
-                        <Lefts>
-                            <Profile />
-                            <Alarm />
-                        </Lefts>
-                        <Rights>
-                            <RightMid>
-                                <RightTop>
-                                    <Search />
-                                    <NewProject />
-                                </RightTop>
-                                <Pinned />
-                            </RightMid>
-                            <Pagination />
-                        </Rights>
-                    </MainContainer>
-                    <Spacer />
+                <MainContainer>
+                    <Lefts>
+                        <Profile />
+                        <Alarm />
+                    </Lefts>
+                    <Rights>
+                        <RightMid>
+                            <RightTop>
+                                <Search />
+                                <NewProject />
+                            </RightTop>
+                            <Pinned />
+                        </RightMid>
+                        <Pagination />
+                    </Rights>
+                </MainContainer>
+                <Spacer />
             </Layout>
         </>
     );

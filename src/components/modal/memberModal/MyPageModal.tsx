@@ -1,7 +1,7 @@
-import { useUserContext } from '@hooks/context/userContext';
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import defaultProfile from '@pics/default-profile.svg';
+import { useAppSelector } from '@redux/config/hook';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
@@ -14,7 +14,7 @@ interface MyPageModalProps {
 
 const MyPageModal: React.FC<MyPageModalProps> = ({ onSetIsMyPageModal, onSetIsLogout }) => {
     const [editStatusModal, setEditStatusModal] = useState(false);
-    const { userData } = useUserContext();
+    const userData = useAppSelector((state) => state.user.userData);
 
     const onSetEditStatusModal = () => {
         setEditStatusModal((prev) => !prev);

@@ -5,6 +5,7 @@ import {
     modeSlice,
     projectSlice,
     searchSlice,
+    userSlice,
 } from '@redux/slice';
 import { configureStore } from '@reduxjs/toolkit';
 
@@ -16,6 +17,7 @@ export const store = configureStore({
         invite: invitetSlice,
         search: searchSlice,
         date: dateSlice,
+        user: userSlice,
     },
 });
 

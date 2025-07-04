@@ -1,9 +1,9 @@
-import { useUserContext } from '@hooks/context/userContext';
 import defaultProfile from '@pics/default-profile.svg';
+import { useAppSelector } from '@redux/config/hook';
 import styled from 'styled-components';
 
 const Profile: React.FC = () => {
-    const { userData } = useUserContext();
+    const userData = useAppSelector((state) => state.user.userData);
     const isLoggedIn = !!userData;
     const hasStatus = isLoggedIn && !!userData.state;
 

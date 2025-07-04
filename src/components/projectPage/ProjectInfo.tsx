@@ -1,7 +1,6 @@
 import { Toast } from '@components/layout';
 import usePatchStoredMutation from '@hooks/apis/mutations/member/usePatchStoredMutation';
 import useAllMemberInfoQuery from '@hooks/apis/queries/member/useAllMemberInfoQuery';
-import { useUserContext } from '@hooks/context/userContext';
 import InboxOutlinedIcon from '@mui/icons-material/InboxOutlined';
 import { useAppDispatch, useAppSelector } from '@redux/config/hook';
 import { RootState } from '@redux/config/store';
@@ -14,7 +13,7 @@ const ProjectInfo = () => {
     const { projectId } = useParams();
     const { mutate: handleStored } = usePatchStoredMutation(Number(projectId));
 
-    const { userData } = useUserContext();
+    const userData = useAppSelector((state) => state.user.userData);
     const { data: membersData } = useAllMemberInfoQuery(Number(projectId));
     const privilegedMembers = membersData?.filter((member) => member.isPrivileged) ?? [];
     const isMePrivileged = privilegedMembers.some(

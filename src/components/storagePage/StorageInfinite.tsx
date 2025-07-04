@@ -1,13 +1,13 @@
 import { useSearchInfiniteQuery } from '@hooks/apis/queries/project/useSearchInfiniteQuery ';
 import { useStoredInfiniteQuery } from '@hooks/apis/queries/project/useStoredInfiniteQuery';
-import { useUserContext } from '@hooks/context/userContext';
 import useSearch from '@hooks/useSearch';
+import { useAppSelector } from '@redux/config/hook';
 import { useEffect } from 'react';
 import InfiniteScroll from 'react-infinite-scroller';
 import StorageProjectList from './StorageProjectList';
 
 const StorageInfinite = () => {
-    const { userData } = useUserContext();
+    const userData = useAppSelector((state) => state.user.userData);
     const memberId = Number(userData?.memberId);
     const { keyword, setSize, setIsStored } = useSearch();
 

@@ -1,11 +1,11 @@
 import { Toast } from '@components/layout';
+import { useAppSelector } from '@redux/config/hook';
 import useDeleteProjectLeaveMutation from './apis/mutations/project/useDeleteProjectLeaveMutation';
 import useDeleteProjectMutation from './apis/mutations/project/useDeleteProjectMutation';
 import useAllMemberInfoQuery from './apis/queries/member/useAllMemberInfoQuery';
-import { useUserContext } from './context/userContext';
 
 export const useLeaveOrDeleteProject = (projectId: number) => {
-    const { userData } = useUserContext();
+    const userData = useAppSelector((state) => state.user.userData);
     const myId = userData?.memberId;
 
     const { data: members } = useAllMemberInfoQuery(Number(projectId));
