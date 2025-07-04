@@ -1,14 +1,14 @@
-import { DateContext } from '@hooks/context/dateContext';
 import ArrowLeftIcon from '@mui/icons-material/ArrowLeft';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
-import { useAppSelector } from '@redux/config/hook';
+import { useAppDispatch, useAppSelector } from '@redux/config/hook';
 import { RootState } from '@redux/config/store';
+import { setSelectedDate } from '@redux/slice/date';
 import dayjs from 'dayjs';
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
 import timezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
-import { FC, useContext, useMemo } from 'react';
+import { FC, useMemo } from 'react';
 import Calendar from 'react-calendar';
 import { StyledScheduleCalendar } from '../../styles/ScheduleCalendar.styles';
 
@@ -24,7 +24,8 @@ type ValuePiece = Date | null;
 type Value = ValuePiece | [ValuePiece, ValuePiece];
 
 const ScheduleCalendar: FC = () => {
-    const { selectedDate, setSelectedDate } = useContext(DateContext) || {};
+    const dispatch = useAppDispatch();
+    const selectedDate = useAppSelector((state) => state.date.selectedDate);
     const projectData = useAppSelector((state: RootState) => state.project.projectData);
 
     function formatDate(date: Date): string {
@@ -115,7 +116,7 @@ const ScheduleCalendar: FC = () => {
     };
 
     const handleDateChange = (date: Value) => {
-        if (date instanceof Date && setSelectedDate) {
+        if (date instanceof Date) {
             const selectedDate = dayjs(date).tz();
             const projectStart = projectData?.startDate ? dayjs(projectData.startDate) : null;
 
@@ -125,7 +126,7 @@ const ScheduleCalendar: FC = () => {
                 selectedDate.isSameOrAfter(projectStart, 'day') &&
                 selectedDate.isSameOrBefore(projectEnd, 'day')
             ) {
-                setSelectedDate(date.toISOString());
+                dispatch(setSelectedDate(date.toISOString()));
             }
         }
     };
@@ -133,7 +134,7 @@ const ScheduleCalendar: FC = () => {
     return (
         <StyledScheduleCalendar>
             <Calendar
-                value={selectedDate}
+                value={selectedDate ? new Date(selectedDate) : null}
                 onChange={handleDateChange}
                 formatDay={(locale, date) => dayjs(date).format('D')}
                 formatYear={(locale, date) => dayjs(date).format('YYYY')}

@@ -5,7 +5,6 @@ import { ProfileList } from '@components/projectPage/Profiles';
 import { MemberScheduleGrid, MySchedule, TeamSchedule } from '@components/projectPage/Schedules';
 import useAllMemberInfoQuery from '@hooks/apis/queries/member/useAllMemberInfoQuery';
 import useProjectInfoQuery from '@hooks/apis/queries/project/useProjectInfoQuery';
-import { DateProvider } from '@hooks/context/dateContext';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import { useAppDispatch, useAppSelector } from '@redux/config/hook';
@@ -38,7 +37,7 @@ const ProjectPage: React.FC = () => {
     }, [projectId, dispatch, projectData]);
 
     return (
-        <DateProvider>
+        <>
             {isEdit ? (
                 <ProjectFormLayout />
             ) : (
@@ -85,7 +84,7 @@ const ProjectPage: React.FC = () => {
                     </Layout>
                 </>
             )}
-        </DateProvider>
+        </>
     );
 };
 export default ProjectPage;

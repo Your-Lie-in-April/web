@@ -1,7 +1,7 @@
 import useScheduleMemberQuery from '@hooks/apis/queries/schedule/useScheduleMemberQuery';
-import { DateContext } from '@hooks/context/dateContext';
+import { useAppSelector } from '@redux/config/hook';
+import { RootState } from '@redux/config/store';
 import dayjs from 'dayjs';
-import { useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import EditMySchedule from './edit/EditMySchedule';
@@ -20,8 +20,8 @@ const MySchedule: React.FC<MyScheduleProps> = ({ isEditModal, setIsEditModal }) 
     const memberId = Number(localStorage.getItem('member_id'));
     const { projectId } = useParams();
 
-    const date = useContext(DateContext);
-    const condition = dayjs(date?.selectedDate).format('YYYY-MM-DD') ?? '';
+    const selectedDate = useAppSelector((state: RootState) => state.date.selectedDate);
+    const condition = dayjs(selectedDate).format('YYYY-MM-DD') ?? '';
 
     const { data: scheduleData } = useScheduleMemberQuery(Number(projectId), memberId, condition);
 

@@ -1,7 +1,7 @@
 import useScheduleAllMemberQuery from '@hooks/apis/queries/schedule/useScheduleAllMemberQuery';
-import { DateContext } from '@hooks/context/dateContext';
+import { useAppSelector } from '@redux/config/hook';
+import { RootState } from '@redux/config/store';
 import dayjs from 'dayjs';
-import { useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import MemberSchedule from './MemberSchedule';
@@ -16,8 +16,8 @@ const GridContainer = styled.div`
 
 const MemberScheduleGrid = () => {
     const { projectId } = useParams();
-    const date = useContext(DateContext);
-    const condition = dayjs(date?.selectedDate).format('YYYY-MM-DD') ?? '';
+    const selectedDate = useAppSelector((state: RootState) => state.date.selectedDate);
+    const condition = dayjs(selectedDate).format('YYYY-MM-DD') ?? '';
     const { data: scheduleData } = useScheduleAllMemberQuery(Number(projectId), condition);
 
     return (

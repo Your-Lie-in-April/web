@@ -1,9 +1,7 @@
 import useScheduleTeamQuery from '@hooks/apis/queries/schedule/useScheduleTeamQuery';
-import { DateContext } from '@hooks/context/dateContext';
 import { useAppSelector } from '@redux/config/hook';
 import { RootState } from '@redux/config/store';
 import dayjs from 'dayjs';
-import { useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import TeamTime from './TeamTime';
@@ -12,8 +10,8 @@ const TeamSchedule = () => {
     const { projectId } = useParams();
     const projectData = useAppSelector((state: RootState) => state.project.projectData);
 
-    const date = useContext(DateContext);
-    const condition = dayjs(date?.selectedDate).format('YYYY-MM-DD') ?? '';
+    const selectedDate = useAppSelector((state: RootState) => state.date.selectedDate);
+    const condition = dayjs(selectedDate).format('YYYY-MM-DD') ?? '';
 
     const { data: scheduleData } = useScheduleTeamQuery(Number(projectId), condition);
 

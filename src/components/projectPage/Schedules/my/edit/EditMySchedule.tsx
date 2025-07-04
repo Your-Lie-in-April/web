@@ -2,13 +2,12 @@ import { ScheduleData, ScheduleWeekResponse } from '@/types/scheduleType';
 import { Toast } from '@components/layout';
 import usePostScheduleMutation from '@hooks/apis/mutations/schedule/usePostScheduleMutation';
 import usePutScheduleMutation from '@hooks/apis/mutations/schedule/usePutScheduleMutation';
-import { DateContext } from '@hooks/context/dateContext';
 import useScrollLock from '@hooks/useScrollLock';
 import { useAppSelector } from '@redux/config/hook';
 import { RootState } from '@redux/config/store';
 import ModalPortal from '@utils/modalPortal';
 import dayjs from 'dayjs';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { formatScheduleData } from '../../formatScheduleData';
@@ -50,7 +49,7 @@ const EditMySchedule: React.FC<EditMyScheduleProps> = ({
     const projectEndTime = endDateTime ? endDateTime.getHours() : undefined;
 
     const { projectId } = useParams<{ projectId: string }>();
-    const { weekDates } = useContext(DateContext) || {};
+    const weekDates = useAppSelector((state) => state.date.weekDates);
     const [selection, setSelection] = useState<{ [key: number]: SelectedSlot }>({});
 
     const [initialSelection, setInitialSelection] = useState<{ [key: number]: SelectedSlot }>({});
