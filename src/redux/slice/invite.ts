@@ -1,10 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-interface ProjectState {
+interface inviteState {
     invitationLink: string;
 }
 
-const initialState: ProjectState = {
+const initialState: inviteState = {
     invitationLink: '',
 };
 
