@@ -1,4 +1,5 @@
 import {
+    alarmSlice,
     dateSlice,
     editSlice,
     invitetSlice,
@@ -18,6 +19,7 @@ export const store = configureStore({
         search: searchSlice,
         date: dateSlice,
         user: userSlice,
+        alarm: alarmSlice,
     },
 });
 

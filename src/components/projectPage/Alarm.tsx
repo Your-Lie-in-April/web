@@ -5,7 +5,9 @@ import useDeleteAlarmMutation from '@hooks/apis/mutations/alarm/useDeleteAlarmMu
 import usePatchAlarmMutation from '@hooks/apis/mutations/alarm/usePatchAlarmMutation';
 import useAlarmsQuery from '@hooks/apis/queries/alarm/useAlarmsQuery';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
-import { FC, useCallback, useRef, useState } from 'react';
+import { useAppDispatch, useAppSelector } from '@redux/config/hook';
+import { removeProjectLastAlarmId, setProjectLastAlarmId } from '@redux/slice/alarm';
+import { FC, useCallback, useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import 'react-toastify/dist/ReactToastify.css';
 import styled from 'styled-components';
@@ -15,6 +17,11 @@ const Alarm: FC = () => {
     const [checkedAlarm, setCheckedAlarm] = useState<number | null>(null);
     const [isDeleted, setIsDeleted] = useState<boolean>(false);
     const { projectId } = useParams();
+    const dispatch = useAppDispatch();
+
+    const projectLastAlarmId = useAppSelector((state) =>
+        projectId ? state.alarm.projectLastAlarmId[Number(projectId)] : null
+    );
 
     const { allAlarms, isUncheckedComplete, uncheckedQuery, checkedQuery, removeAlarm } =
         useAlarmsQuery(projectId ? Number(projectId) : undefined);
@@ -39,6 +46,14 @@ const Alarm: FC = () => {
         [uncheckedQuery, checkedQuery, isUncheckedComplete]
     );
 
+    useEffect(() => {
+        return () => {
+            if (projectId) {
+                dispatch(removeProjectLastAlarmId({ projectId: Number(projectId) }));
+            }
+        };
+    }, [projectId, dispatch]);
+
     // 알람 삭제
     const deleteAlarmMutation = useDeleteAlarmMutation();
     const handleDeleteNotifications = async () => {
@@ -52,6 +67,20 @@ const Alarm: FC = () => {
             setCheckedAlarm(null);
             setIsDeleted(true);
             setTimeout(() => setIsDeleted(false), 1000);
+
+            if (allAlarms.length > 1 && projectId) {
+                const remainingAlarms = allAlarms.filter(
+                    (alarm) => alarm.notificationId !== checkedAlarm
+                );
+                if (remainingAlarms.length > 0) {
+                    dispatch(
+                        setProjectLastAlarmId({
+                            projectId: Number(projectId),
+                            alarmId: remainingAlarms[0].notificationId,
+                        })
+                    );
+                }
+            }
         } catch (error) {
             console.error('Failed to delete notification:', error);
         }

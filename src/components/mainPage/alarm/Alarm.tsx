@@ -52,6 +52,20 @@ const Alarm: FC = () => {
             setCheckedAlarm(null);
             setIsDeleted(true);
             setTimeout(() => setIsDeleted(false), 1000);
+
+            if (allAlarms.length > 1) {
+                const remainingAlarms = allAlarms.filter(
+                    (alarm) => alarm.notificationId !== checkedAlarm
+                );
+                if (remainingAlarms.length > 0) {
+                    localStorage.setItem(
+                        'mainLastAlarmId',
+                        String(remainingAlarms[0].notificationId)
+                    );
+                }
+            } else {
+                localStorage.removeItem('mainLastAlarmId');
+            }
         } catch (error) {
             console.error('Failed to delete notification:', error);
         }
