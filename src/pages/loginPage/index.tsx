@@ -4,10 +4,15 @@ import { Http } from '@constants/api';
 import githubLogo from '@pics/github-login.svg';
 import googleLogo from '@pics/google-login.svg';
 import kakaoLogo from '@pics/kakao-login.svg';
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import styled from 'styled-components';
 
 const LoginPage: FC = () => {
+    useEffect(() => {
+        localStorage.removeItem('member_id');
+        localStorage.removeItem('mainLastAlarmId');
+    }, []);
+
     const oAuth = (provider: string) => {
         let path = '';
         switch (provider) {
